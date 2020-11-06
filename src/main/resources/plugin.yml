@@ -1,0 +1,20 @@
+name: ExplodeAny
+main: io.github.guillex7.explodeany.ExplodeAny
+version: 1.0.0
+api-version: 1.16
+description: Allows to break any unbreakable block with explosions!
+author: GuilleX7
+website: https://github.com/GuilleX7/ExplodeAny
+softdepend: [Cannons]
+commands:
+    explodeany:
+        description: "General command"
+permissions:
+    explodeany.*:
+        description: "Gives all permissions to a player"
+        default: op
+        children:
+            obsidianbreaker.reload: true
+    explodeany.reload:
+        description: "Gives permission to use reload command"
+        default: op

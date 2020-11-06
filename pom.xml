@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.github.guillex7</groupId>
+    <artifactId>ExplodeAny</artifactId>
+    <version>1.0.0</version>
+    <name>ExplodeAny</name>
+    <description>Let explosions damage any block!</description>
+    <developers>
+	    <developer>
+	        <name>GuilleX7</name>
+	        <email>GuillermoX7@gmail.com</email>
+	        <roles>
+	            <role>Author</role>
+	        </roles>
+	    </developer>
+    </developers>
+  
+  	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+			     <groupId>org.apache.maven.plugins</groupId>
+			     <artifactId>maven-install-plugin</artifactId>
+			     <version>2.5.2</version>
+			     <executions>
+			         <execution>
+			             <id>install-cannons-dependency</id>
+			             <phase>clean</phase>
+			             <goals>
+			                 <goal>install-file</goal>
+			             </goals>
+			             <configuration>
+			                 <file>lib/Cannons.jar</file>
+			                 <groupId>at.parlov</groupId>
+			                 <artifactId>Cannons</artifactId>
+			                 <version>2.5.8</version>
+			                 <packaging>jar</packaging>
+			             </configuration>
+			         </execution>
+			     </executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+	    <repository>
+	        <id>spigot-repo</id>
+	        <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+	    </repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.16.3-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>at.parlov</groupId>
+			<artifactId>Cannons</artifactId>
+			<version>2.5.8</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>
