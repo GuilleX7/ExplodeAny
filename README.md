@@ -4,7 +4,7 @@ It supports all Vanilla explosions and some other plugins' explosions, though th
 
 ## Features
  - Allows to configure the breakage of **vanilla-unbreakable** blocks
- - Each pair of type of explosion and damaged block can be **completely customized** easily
+ - Each pair of type of explosion and damaged block can be easily **customized**
  - **Easy** to configure
  - Lightweight, **performance** oriented
  - Support for **other plugins**
@@ -18,3 +18,4 @@ Although they're **NOT** necessary for the plugin to work, ExplodeAny will enabl
 This project uses Maven for building. However, some dependencies (Cannons) have to be supplied in a local repository. This proccess in completely automated.
 
 For compiling, just type `mvn clean` in order to install dependencies in the local Maven repository, and then type `mvn install`.
+
