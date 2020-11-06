@@ -18,7 +18,11 @@ VanillaEntity:                                  # Vanilla entities that explode,
     PRIMED_TNT:
         OBSIDIAN:                               # Material affected by the entity, valid values are all materials listed
                                                 # in https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
-                                                # BED is also a valid material that expands to all beds, no matter the color.
+                                                # Special keywords are:
+                                                # ALLCOLOR: expands to every color
+                                                # Example: EVERYCOLOR_WOOL will expand to BLUE_WOOL, WHITE_WOOL, BLACK_WOOL...
+                                                # ALLWOODTYPE: expands to every wood type
+                                                # Example: EVERYWOODTYPE_WOOD will expand to BIRCH_WOOD, JUNGLE_WOOD, SPRUCE_WOOD...
                                                 
             Damage: 50.0                        # Regular damage taken when impacted by the explosion.
                                                 # Minimum is 0.0, which means the block isn't affected
