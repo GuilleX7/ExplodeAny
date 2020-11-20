@@ -65,5 +65,17 @@ CannonProjectile:                               # Cannon projectile IDs
             DistanceAttenuationFactor: 0.0
             ExplosionRadiusFactor: 0.5
             
+# All colors and modifier are available for locale messages.
+# For ChecktoolUse, you can use some variables:
+#   %MATERIAL% represents the clicked block's type,
+#   %DURABILITY% the clicked block's durability and
+#   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability)
+# For ChecktoolNotHandled, only %MATERIAL% is allowed.
 Locale:
     NotAllowed: "You are not allowed to perform this action!"
+    OnlyPlayerAllowed: "Only players can perform this action!"
+    EnterChecktoolMode: "You can now right-click a block with your bare hand to display block durability"
+    LeaveChecktoolMode: "You can no longer check for a block durability"
+    ChecktoolUse: "Material: %MATERIAL%, durability: %DURABILITY% / %MAX_DURABILITY%"
+    ChecktoolNotHandled: "%MATERIAL% is not handled by the current configuration"
+    Reloaded: "Reloaded successfully!"

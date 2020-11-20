@@ -12,18 +12,18 @@ import io.github.guillex7.explodeany.configuration.loadable.CannonProjectileConf
 import io.github.guillex7.explodeany.configuration.loadable.VanillaEntityConfiguration;
 import io.github.guillex7.explodeany.listener.BlockListener;
 import io.github.guillex7.explodeany.listener.CommandListener;
+import io.github.guillex7.explodeany.listener.EntityListener;
 import io.github.guillex7.explodeany.listener.ExplosionListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.VanillaExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.CannonExplosionListener;
 
 public class ExplodeAny extends JavaPlugin {
-	private final String pluginName = "ExplodeAny";
 	private final String databaseFilename = "blockDatabase.json";
 	
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		getLogger().log(Level.INFO, String.format("%s is LOADING now!", pluginName));
+		getLogger().log(Level.INFO, String.format("%s is LOADING now!", getDescription().getName()));
 		loadConfiguration();
 		loadDatabase();
 		registerListeners();
@@ -32,7 +32,7 @@ public class ExplodeAny extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		getLogger().log(Level.INFO, String.format("%s is UNLOADING now!", pluginName));
+		getLogger().log(Level.INFO, String.format("%s is UNLOADING now!", getDescription().getName()));
 		unregisterListeners();
 		saveDatabase();
 		unloadConfiguration();
@@ -41,6 +41,7 @@ public class ExplodeAny extends JavaPlugin {
 	public void loadConfiguration() {
 		saveDefaultConfig();
 		reloadConfig();
+		ConfigurationManager.getInstance().colorizeLocale();
 		ConfigurationManager.getInstance().registerEntityConfiguration(VanillaEntityConfiguration.getInstance());
 		ConfigurationManager.getInstance().registerEntityConfiguration(CannonProjectileConfiguration.getInstance());
 		ConfigurationManager.getInstance().loadAllEntityConfigurations();
@@ -59,6 +60,7 @@ public class ExplodeAny extends JavaPlugin {
 		ExplosionListenerManager.getInstance().registerExplosionListener(CannonExplosionListener.getInstance());
 		ExplosionListenerManager.getInstance().loadAllExplosionListeners();
 		Bukkit.getServer().getPluginManager().registerEvents(new BlockListener(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new EntityListener(), this);
 		getCommand("explodeany").setExecutor(new CommandListener());
 	}
 	
@@ -74,10 +76,6 @@ public class ExplodeAny extends JavaPlugin {
 	
 	public void unregisterListeners() {
 		ExplosionListenerManager.getInstance().unloadAllExplosionListeners();
-	}
-	
-	public String getPluginName() {
-		return pluginName;
 	}
 
 	public String getDatabaseFilename() {

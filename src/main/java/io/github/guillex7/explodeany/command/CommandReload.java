@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.utils.MessageFormatter;
 
 public class CommandReload {
 	private final static String RELOAD_PERMISSION_NODE = "explodeany.reload";
@@ -14,9 +15,9 @@ public class CommandReload {
 		if (sender.hasPermission(RELOAD_PERMISSION_NODE)) {
 			ExplodeAny.getInstance().onDisable();
 			ExplodeAny.getInstance().onEnable();
-			sender.sendMessage("[ExplodeAny] Reloaded successfully");
+			sender.sendMessage(MessageFormatter.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.RELOADED)));
 		} else {
-			sender.sendMessage(String.format("[ExplodeAny] %s", ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED)));
+			sender.sendMessage(MessageFormatter.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED)));
 		}
 	}
 }

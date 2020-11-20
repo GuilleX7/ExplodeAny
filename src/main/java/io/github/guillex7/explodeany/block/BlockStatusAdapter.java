@@ -19,7 +19,7 @@ public class BlockStatusAdapter extends TypeAdapter<BlockStatus> {
 		
 		out.beginArray();
 		out.value(value.getDurability());
-		out.value(value.getMaterial().ordinal());
+		out.value(value.getMaterial().name());
 		out.endArray();
 	}
 

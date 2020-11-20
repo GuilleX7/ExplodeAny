@@ -8,10 +8,12 @@ import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableSectionConfiguration;
+import io.github.guillex7.explodeany.utils.MessageFormatter;
 
 public final class ConfigurationManager {
 	private class ConfigurationKeys {
@@ -57,6 +59,18 @@ public final class ConfigurationManager {
 	
 	public Double getBlockDurability() {
 		return ExplodeAny.getInstance().getConfig().getDouble(ConfigurationKeys.BLOCK_DURABILITY_ITEM, 100.0d);
+	}
+	
+	public void colorizeLocale() {
+		ConfigurationSection localeSection = ExplodeAny.getInstance().getConfig()
+				.getConfigurationSection(ConfigurationKeys.LOCALE_SECTION);
+		if (localeSection != null) {
+			for (String path : localeSection.getValues(false).keySet()) {
+				if (localeSection.isString(path)) {
+					localeSection.set(path, MessageFormatter.colorize(localeSection.getString(path)));
+				}
+			}
+		}
 	}
 	
 	public String getLocale(ConfigurationLocale locale) {

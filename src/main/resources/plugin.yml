@@ -1,6 +1,6 @@
 name: ExplodeAny
 main: io.github.guillex7.explodeany.ExplodeAny
-version: 1.0.0
+version: 1.1.0
 api-version: 1.16
 description: Allows to break any unbreakable block with explosions!
 author: GuilleX7
@@ -14,7 +14,15 @@ permissions:
         description: "Gives all permissions to a player"
         default: op
         children:
-            obsidianbreaker.reload: true
+            explodeany.checktool: true
+            explodeany.reload: true
+            explodeany.about: true
+    explodeany.checktool:
+        description: "Gives permission to use checktool command"
+        default: op
     explodeany.reload:
         description: "Gives permission to use reload command"
         default: op
+    explodeany.about:
+        description: "Gives permission to use about command"
+        default: true

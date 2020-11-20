@@ -36,11 +36,17 @@ public class BlockDatabase {
 	}
 	
 	public BlockStatus getBlockStatus(Block block) {
+		return getBlockStatus(block, true);
+	}
+	
+	public BlockStatus getBlockStatus(Block block, Boolean putIfAbsent) {
 		BlockLocation blockLocation = BlockLocation.fromBlock(block);
 		BlockStatus blockStatus = getDatabase().get(blockLocation);
 		if (blockStatus == null || !blockStatus.isCongruentWith(block)) {
 			blockStatus = BlockStatus.defaultForBlock(block);
-			getDatabase().put(blockLocation, blockStatus);
+			if (putIfAbsent) {
+				getDatabase().put(blockLocation, blockStatus);
+			}
 		}
 		return blockStatus;
 	}
@@ -68,7 +74,7 @@ public class BlockDatabase {
 			}
 		}
 		
-		serializeDatabaseFile(databaseFile, database);
+		serializeDatabaseFile(databaseFile, getDatabase());
 	}
 	
 	public void sanitize() {
@@ -146,7 +152,8 @@ public class BlockDatabase {
 			gsonBuilder.registerTypeAdapter(BlockStatus.class, new BlockStatusAdapter());
 			gsonBuilder.enableComplexMapKeySerialization();
 			Gson gson = gsonBuilder.create();
-			gson.toJson(database, getDatabaseTypeToken().getType(), fw);
+			ExplodeAny.getInstance().getLogger().log(Level.INFO, gson.toJson(database, getDatabaseTypeToken().getType()));
+			fw.write(gson.toJson(database, getDatabaseTypeToken().getType()));
 			fw.close();
 			getLogger().log(Level.INFO, "Database saved successfully");
 		} catch (Exception e) {
