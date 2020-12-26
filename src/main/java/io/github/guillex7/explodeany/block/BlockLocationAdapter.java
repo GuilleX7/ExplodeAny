@@ -15,15 +15,9 @@ public class BlockLocationAdapter extends TypeAdapter<BlockLocation> {
 			out.nullValue();
 			return;
 		}
-		
-		out.value(
-				String.format("%s:%d:%d:%d",
-						value.getWorldUUID().toString(),
-						value.getX(),
-						value.getY(),
-						value.getZ()
-						)
-				);
+
+		out.value(String.format("%s:%d:%d:%d", value.getWorldUUID().toString(), value.getX(), value.getY(),
+				value.getZ()));
 	}
 
 	@Override
@@ -32,13 +26,9 @@ public class BlockLocationAdapter extends TypeAdapter<BlockLocation> {
 			in.nextNull();
 			return null;
 		}
-		
+
 		String parts[] = in.nextString().split(":");
-		return BlockLocation.of(
-				UUID.fromString(parts[0]),
-				Integer.parseInt(parts[1]),
-				Integer.parseInt(parts[2]),
-				Integer.parseInt(parts[3])
-				);
+		return BlockLocation.of(UUID.fromString(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
+				Integer.parseInt(parts[3]));
 	}
 }

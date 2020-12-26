@@ -10,42 +10,46 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import io.github.guillex7.explodeany.configuration.EntityMaterialConfiguration;
-import io.github.guillex7.explodeany.configuration.loadable.VanillaEntityConfiguration;
+import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.configuration.loadable.EntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.LoadableSectionConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
-public final class VanillaExplosionListener implements LoadableExplosionListener {
-	private static VanillaExplosionListener instance;
-	
-	private VanillaExplosionListener() {}
-	
-	public static VanillaExplosionListener getInstance() {
-		if (instance == null) {
-			instance = new VanillaExplosionListener();
-		}
-		return instance;
+public final class VanillaExplosionListener implements LoadableListener {
+	private VanillaExplosionListener() {
+		super();
+	}
+
+	public static VanillaExplosionListener empty() {
+		return new VanillaExplosionListener();
 	}
 
 	@Override
 	public String getName() {
-		return "Vanilla";
+		return "Vanilla explosions";
 	}
-	
+
 	@Override
 	public boolean shouldBeLoaded() {
-		return VanillaEntityConfiguration.getInstance().shouldBeLoaded();
+		return ConfigurationManager.getInstance().getRegisteredEntityConfiguration("VanillaEntity").shouldBeLoaded();
 	}
-	
+
+	@Override
+	public boolean isAdvisable() {
+		return true;
+	}
+
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
 	public void onEntityExplode(EntityExplodeEvent event) {
 		if (event.getEntity() == null) {
 			return;
 		}
-		
+
 		String entityTypeName = event.getEntityType().toString();
 		boolean isCharged = false;
 		Map<Material, EntityMaterialConfiguration> materialConfigurations = null;
-		
+
 		// Special cases
 		if (event.getEntityType().equals(EntityType.CREEPER)) {
 			Creeper creeper = (Creeper) event.getEntity();
@@ -60,13 +64,18 @@ public final class VanillaExplosionListener implements LoadableExplosionListener
 				isCharged = true;
 			}
 		}
-		
-		materialConfigurations = VanillaEntityConfiguration.getInstance()
-			.getEntityMaterialConfigurations().get(entityTypeName);
+
+		LoadableSectionConfiguration<?> vanillaEntityConfiguration = ConfigurationManager.getInstance()
+				.getRegisteredEntityConfiguration("VanillaEntity");
+
+		materialConfigurations = vanillaEntityConfiguration.getEntityMaterialConfigurations().get(entityTypeName);
 		if (materialConfigurations == null) {
 			return;
 		}
-		
+
+		EntityConfiguration entityConfiguration = vanillaEntityConfiguration.getEntityConfigurations()
+				.get(entityTypeName);
+
 		// Magic values come from https://minecraft.gamepedia.com/Explosion
 		int explosionRadius = 0;
 		switch (event.getEntityType()) {
@@ -91,13 +100,13 @@ public final class VanillaExplosionListener implements LoadableExplosionListener
 		default:
 			break; // Unsupported entity type
 		}
-		
+
 		if (explosionRadius <= 0) {
 			return;
 		}
-		
-		ExplosionManager.removeHandledBlocksFromList(materialConfigurations, event.blockList());
-		ExplosionManager.manageExplosion(materialConfigurations, event.getLocation(), explosionRadius);
+
+		ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList());
+		ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration, event.getLocation(), explosionRadius);
 	}
 
 	@Override

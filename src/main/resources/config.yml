@@ -1,77 +1,15 @@
-UseBlockDatabase: false                         # Choose whether to use a database or not. It's not necessary at all.
-                                                # The database will store block information so damaged blocks will remain
-                                                # damaged after a server restart. However, database file can grow a lot, so
-                                                # it's up to you.
+UseBlockDatabase: false
+CheckBlockDatabaseAtStartup: false                                
+BlockDurability: 100.0
+FancyUnderwaterDetection: false
 
-CheckBlockDatabaseAtStartup: false                     # Only if database is enabled.
-                                                # This will remove blocks that have disappeared from the database or have been replaced.
-                                                # This may load those chunks where the blocks were located.
-                                                # Can help reducing database size.
-                                                # Not enabling it will never lead to any bug, because any incongruence
-                                                # will always be detected at runtime anyways.
-                                                 
-BlockDurability: 100.0                          # Maximum durability of every block.
+Groups: {}
 
-VanillaEntity:                                  # Vanilla entities that explode, allowed entities are:
-                                                # WITHER, ENDER_CRYSTAL, PRIMED_TNT, CREEPER, CHARGED_CREEPER,
-                                                # FIREBALL, DRAGON_FIREBALL, SMALL_FIREBALL, WITHER_SKULL, CHARGED_WITHER_SKULL
-    PRIMED_TNT:
-        OBSIDIAN:                               # Material affected by the entity, valid values are all materials listed
-                                                # in https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
-                                                # Special keywords are:
-                                                # ALLCOLOR: expands to every color
-                                                # Example: EVERYCOLOR_WOOL will expand to BLUE_WOOL, WHITE_WOOL, BLACK_WOOL...
-                                                # ALLWOODTYPE: expands to every wood type
-                                                # Example: EVERYWOODTYPE_WOOD will expand to BIRCH_WOOD, JUNGLE_WOOD, SPRUCE_WOOD...
-                                                
-            Damage: 50.0                        # Regular damage taken when impacted by the explosion.
-                                                # Minimum is 0.0, which means the block isn't affected
-                                                # by the explosion (disabled).
-                                                # A value greater than BlockDurability is allowed
+VanillaEntity: {}
             
-            UnderwaterDamageFactor: 1.0         # Damage will be multiplied by this factor when explosion
-                                                # takes place underwater.
-                                                # Minimum is 0.0, which means it will disable underwater damage.
-                                                # Default is 1.0, which means that water doesn't affect damage.
-                                                # A value greater than 1.0 means damage underwater is magnified.
-                                                
-            DropChance: 0.0                     # Chance of dropping this block as an item when it breaks.
-                                                # Maximum is 100.0 (always drop), minimum [default] is 0.0 (never drops).
-                                                
-            DistanceAttenuationFactor: 0.0      # Indicates how much should be taken into account the distance
-                                                # from the center of the explosion in the damage estimation.
-                                                # Minimum [default] is 0.0, which means that all blocks in range will
-                                                # take the same amount of damage.
-                                                # Maximum is 1.0, which means that damage decreases
-                                                # linearly with respect to distance. (not very recommended)
-            
-            ExplosionRadiusFactor: 0.5          # Allows to change the radius of the explosion for this block, so that
-                                                # every block whose distance from the center is greater than the explosion radius
-                                                # multiplied by this factor is not affected by the explosion.
-                                                # Minimum is 0.0, which makes the effective radius equal 0 (no damage)
-                                                # Maximum is 1.0, which means the effective radius equals the explosion
-                                                # radius.
-                                                # Default is 0.5
-            
-CannonProjectile:                               # Cannon projectile IDs
-                                                # This section can be configured for use with Cannon's. This plugin
-                                                # doesn't require Cannons at all, but it will detect whether it's loaded
-                                                # or not and enable support automatically.
-    diamond:
-        OBSIDIAN:
-            Damage: 50.0
-            UnderwaterDamageFactor: 1.0
-            DropChance: 0.0
-            DistanceAttenuationFactor: 0.0
-            ExplosionRadiusFactor: 0.5
-            
-# All colors and modifier are available for locale messages.
-# For ChecktoolUse, you can use some variables:
-#   %MATERIAL% represents the clicked block's type,
-#   %DURABILITY% the clicked block's durability and
-#   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability)
-# For ChecktoolNotHandled, only %MATERIAL% is allowed.
-Locale:
+CannonProjectile: {}
+
+Locale:                                 
     NotAllowed: "You are not allowed to perform this action!"
     OnlyPlayerAllowed: "Only players can perform this action!"
     EnterChecktoolMode: "You can now right-click a block with your bare hand to display block durability"

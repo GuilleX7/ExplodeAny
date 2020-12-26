@@ -11,7 +11,7 @@ import io.github.guillex7.explodeany.command.CommandAbout;
 import io.github.guillex7.explodeany.command.CommandChecktool;
 import io.github.guillex7.explodeany.command.CommandReload;
 
-public class CommandListener implements TabExecutor {
+public class CommandExecutor implements TabExecutor {
 	private final static String[] subcommands = { "reload", "checktool", "about" };
 	
 	@Override

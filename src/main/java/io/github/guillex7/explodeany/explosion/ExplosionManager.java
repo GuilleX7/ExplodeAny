@@ -1,5 +1,6 @@
 package io.github.guillex7.explodeany.explosion;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -7,14 +8,28 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
-import io.github.guillex7.explodeany.configuration.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.EntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.EntityMaterialConfiguration;
 
 public class ExplosionManager {
-	public static void removeHandledBlocksFromList(Map<Material, EntityMaterialConfiguration> materialConfigurations,
+	private static ExplosionManager instance;
+
+	private ExplosionManager() {
+	}
+
+	public static ExplosionManager getInstance() {
+		if (instance == null) {
+			instance = new ExplosionManager();
+		}
+		return instance;
+	}
+
+	public void removeHandledBlocksFromList(Map<Material, EntityMaterialConfiguration> materialConfigurations,
 			List<Block> blockList) {
 		Iterator<Block> iterator = blockList.iterator();
 		while (iterator.hasNext()) {
@@ -24,9 +39,9 @@ public class ExplosionManager {
 			}
 		}
 	}
-	
-	public static void manageExplosion(Map<Material, EntityMaterialConfiguration> materialConfigurations,
-			Location sourceLocation, int explosionRadius) {
+
+	public void manageExplosion(Map<Material, EntityMaterialConfiguration> materialConfigurations,
+			EntityConfiguration entityConfiguration, Location sourceLocation, int explosionRadius) {
 		int cx = sourceLocation.getBlockX();
 		int cy = sourceLocation.getBlockY();
 		int cz = sourceLocation.getBlockZ();
@@ -35,38 +50,52 @@ public class ExplosionManager {
 		int cypr = cy + explosionRadius;
 		int czpr = cz + explosionRadius;
 		int squaredExplosionRadius = explosionRadius * explosionRadius;
+
+		List<Block> waterBlocks = new ArrayList<Block>();
 		
 		for (int x = cx - explosionRadius; x < cxpr; x++) {
 			for (int y = cy - explosionRadius; y < cypr; y++) {
 				for (int z = cz - explosionRadius; z < czpr; z++) {
 					double squaredDistance = sourceVector.distanceSquared(new Vector(x, y, z));
-					if (squaredExplosionRadius >= squaredDistance) {
-						Block block = sourceLocation.getWorld().getBlockAt(x, y, z);
-						tryDamageBlock(materialConfigurations, block, sourceLocation, squaredExplosionRadius, squaredDistance);
+					if (squaredExplosionRadius < squaredDistance) {
+						continue;
 					}
+					
+					Block block = sourceLocation.getWorld().getBlockAt(x, y, z);
+					EntityMaterialConfiguration materialConfiguration = materialConfigurations.get(block.getType());
+					if (materialConfiguration == null) {
+						if (block.getType().equals(Material.WATER)) {
+							waterBlocks.add(block);
+						}
+						continue;
+					}
+					
+					damageBlock(materialConfiguration, block, sourceLocation, squaredExplosionRadius,
+							squaredDistance);
 				}
+			}
+		}
+		
+		if (entityConfiguration.isRemoveNearWaterOnExplosion()) {
+			for (Block waterBlock : waterBlocks) {
+				waterBlock.setType(Material.AIR);
 			}
 		}
 	}
 
-	public static void tryDamageBlock(Map<Material, EntityMaterialConfiguration> materialConfigurations, Block targetBlock,
+	public void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
 			Location sourceLocation, int squaredExplosionRadius, double squaredDistance) {
-		EntityMaterialConfiguration materialConfiguration = materialConfigurations.get(targetBlock.getType());
-		if (materialConfiguration == null) {
-			return;
-		}
-		
 		double effectiveDamage = materialConfiguration.getDamage();
-		
+
 		// Underwater attenuation
-		if (materialConfiguration.isUnderwaterAffected() &&
-				isLiquidInLocation(sourceLocation)) {
+		if (materialConfiguration.isUnderwaterAffected()
+				&& performUnderwaterDetection(materialConfiguration, sourceLocation, targetBlock.getLocation())) {
 			effectiveDamage *= materialConfiguration.getUnderwaterDamageFactor();
 		}
-		
+
 		// Linear distance attenuation
-		// damageFactor = 1 - c*(d-1)/dmax 	if 1 <= d < dmax
-		// 				  0 		   		if dmax <= d     
+		// damageFactor = 1 - c*(d-1)/dmax if 1 <= d < dmax
+		// 0 if dmax <= d
 		// c = distance attenuation factor
 		// d = distance from the center (always >= 1)
 		// dmax = maximum distance
@@ -75,9 +104,8 @@ public class ExplosionManager {
 		if (squaredDistance > maximumSquaredDistance) {
 			return;
 		}
-		effectiveDamage *=
-				1 - materialConfiguration.getDistanceAttenuationFactor() *
-				(squaredDistance - 1) / maximumSquaredDistance;
+		effectiveDamage *= 1
+				- materialConfiguration.getDistanceAttenuationFactor() * (squaredDistance - 1) / maximumSquaredDistance;
 
 		BlockStatus affectedBlockStatus = BlockDatabase.getInstance().getBlockStatus(targetBlock);
 		affectedBlockStatus.damage(effectiveDamage);
@@ -90,8 +118,29 @@ public class ExplosionManager {
 			BlockDatabase.getInstance().removeBlockStatus(targetBlock);
 		}
 	}
-	
-	public static boolean isLiquidInLocation(Location location) {
+
+	private boolean performUnderwaterDetection(EntityMaterialConfiguration materialConfiguration, Location source,
+			Location target) {
+		return materialConfiguration.isFancyUnderwaterDetection() ? isLiquidInTrajectory(source, target)
+				: isLiquidInLocation(source);
+	}
+
+	private boolean isLiquidInLocation(Location location) {
 		return location.getBlock().isLiquid();
+	}
+
+	private boolean isLiquidInTrajectory(Location source, Location target) {
+		if (source.equals(target)) {
+			return isLiquidInLocation(source);
+		}
+		
+		BlockIterator it = new BlockIterator(source.getWorld(), source.toVector(), target.toVector().subtract(source.toVector()),
+				0, (int) source.distance(target));
+		while (it.hasNext()) {
+			if (it.next().isLiquid()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -15,9 +15,11 @@ public class CommandReload {
 		if (sender.hasPermission(RELOAD_PERMISSION_NODE)) {
 			ExplodeAny.getInstance().onDisable();
 			ExplodeAny.getInstance().onEnable();
-			sender.sendMessage(MessageFormatter.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.RELOADED)));
+			sender.sendMessage(
+					MessageFormatter.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.RELOADED)));
 		} else {
-			sender.sendMessage(MessageFormatter.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED)));
+			sender.sendMessage(MessageFormatter
+					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED)));
 		}
 	}
 }

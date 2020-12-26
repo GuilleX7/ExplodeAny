@@ -8,41 +8,41 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 public class BlockStatus {
 	private Material material;
 	private double durability;
-	
+
 	public static BlockStatus of(Material material, double durability) {
 		return new BlockStatus(material, durability);
 	}
-	
+
 	public static BlockStatus defaultForBlock(Block block) {
 		return BlockStatus.of(block.getType(), getDefaultDurability());
 	}
-	
+
 	public static double getDefaultDurability() {
 		return ConfigurationManager.getInstance().getBlockDurability();
 	}
-	
+
 	private BlockStatus(Material material, double durability) {
 		super();
 		this.material = material;
 		this.durability = durability;
 	}
-	
+
 	public boolean isCongruentWith(Block block) {
 		return block.getType().equals(getMaterial());
 	}
-	
+
 	public boolean damage(double damage) {
 		setDurability(getDurability() - damage);
 		return shouldBreak();
 	}
-	
+
 	public boolean shouldBreak() {
 		if (getDurability() <= 0.0) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public void sanitize() {
 		if (getDurability() > getDefaultDurability()) {
 			setDurability(getDefaultDurability());
@@ -60,7 +60,7 @@ public class BlockStatus {
 	public double getDurability() {
 		return durability;
 	}
-	
+
 	public void setDurability(double durability) {
 		this.durability = durability;
 	}

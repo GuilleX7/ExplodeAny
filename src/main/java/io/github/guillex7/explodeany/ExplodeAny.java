@@ -3,85 +3,87 @@ package io.github.guillex7.explodeany;
 import java.io.File;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.CannonProjectileConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.VanillaEntityConfiguration;
-import io.github.guillex7.explodeany.listener.BlockListener;
-import io.github.guillex7.explodeany.listener.CommandListener;
-import io.github.guillex7.explodeany.listener.EntityListener;
-import io.github.guillex7.explodeany.listener.ExplosionListenerManager;
-import io.github.guillex7.explodeany.listener.loadable.VanillaExplosionListener;
+import io.github.guillex7.explodeany.listener.CommandExecutor;
+import io.github.guillex7.explodeany.listener.ListenerManager;
+import io.github.guillex7.explodeany.listener.loadable.BlockListener;
 import io.github.guillex7.explodeany.listener.loadable.CannonExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.EntityListener;
+import io.github.guillex7.explodeany.listener.loadable.VanillaExplosionListener;
 
 public class ExplodeAny extends JavaPlugin {
 	private final String databaseFilename = "blockDatabase.json";
-	
+
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		getLogger().log(Level.INFO, String.format("%s is LOADING now!", getDescription().getName()));
+		getLogger().log(Level.INFO,
+				String.format("%s v%s is LOADING now!", getDescription().getName(), getDescription().getVersion()));
 		loadConfiguration();
 		loadDatabase();
 		registerListeners();
 	}
-	
+
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		getLogger().log(Level.INFO, String.format("%s is UNLOADING now!", getDescription().getName()));
+		getLogger().log(Level.INFO,
+				String.format("%s v%s is UNLOADING now!", getDescription().getName(), getDescription().getVersion()));
 		unregisterListeners();
-		saveDatabase();
+		unloadDatabase();
 		unloadConfiguration();
 	}
-	
+
 	public void loadConfiguration() {
-		saveDefaultConfig();
-		reloadConfig();
-		ConfigurationManager.getInstance().colorizeLocale();
-		ConfigurationManager.getInstance().registerEntityConfiguration(VanillaEntityConfiguration.getInstance());
-		ConfigurationManager.getInstance().registerEntityConfiguration(CannonProjectileConfiguration.getInstance());
-		ConfigurationManager.getInstance().loadAllEntityConfigurations();
+		ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+		configurationManager.loadConfiguration();
+		configurationManager.registerEntityConfiguration(VanillaEntityConfiguration.empty());
+		configurationManager.registerEntityConfiguration(CannonProjectileConfiguration.empty());
+		configurationManager.loadAllEntityConfigurations();
 	}
-	
+
 	public void loadDatabase() {
 		if (ConfigurationManager.getInstance().doUseBlockDatabase()) {
-			BlockDatabase.getInstance().loadFromFile(new File(getDataFolder(), getDatabaseFilename()));
-			BlockDatabase.getInstance().sanitize();
-			saveDatabase();
+			BlockDatabase blockDatabase = BlockDatabase.getInstance();
+			blockDatabase.loadFromFile(new File(getDataFolder(), getDatabaseFilename()));
+			blockDatabase.sanitize();
+			unloadDatabase();
 		}
 	}
-	
+
 	public void registerListeners() {
-		ExplosionListenerManager.getInstance().registerExplosionListener(VanillaExplosionListener.getInstance());
-		ExplosionListenerManager.getInstance().registerExplosionListener(CannonExplosionListener.getInstance());
-		ExplosionListenerManager.getInstance().loadAllExplosionListeners();
-		Bukkit.getServer().getPluginManager().registerEvents(new BlockListener(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new EntityListener(), this);
-		getCommand("explodeany").setExecutor(new CommandListener());
+		ListenerManager listenerManager = ListenerManager.getInstance();
+		listenerManager.registerListener(VanillaExplosionListener.empty());
+		listenerManager.registerListener(CannonExplosionListener.empty());
+		listenerManager.registerListener(BlockListener.empty());
+		listenerManager.registerListener(EntityListener.empty());
+		listenerManager.loadAllListeners();
+		getCommand("explodeany").setExecutor(new CommandExecutor());
 	}
-	
+
 	public void unloadConfiguration() {
 		ConfigurationManager.getInstance().unloadAllEntityConfigurations();
 	}
-	
-	public void saveDatabase() {
+
+	public void unloadDatabase() {
 		if (ConfigurationManager.getInstance().doUseBlockDatabase()) {
 			BlockDatabase.getInstance().saveToFile(new File(getDataFolder(), getDatabaseFilename()));
 		}
 	}
-	
+
 	public void unregisterListeners() {
-		ExplosionListenerManager.getInstance().unloadAllExplosionListeners();
+		ListenerManager.getInstance().unloadAllListeners();
 	}
 
 	public String getDatabaseFilename() {
 		return databaseFilename;
 	}
-	
+
 	public static ExplodeAny getInstance() {
 		return JavaPlugin.getPlugin(ExplodeAny.class);
 	}

@@ -4,11 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class VanillaEntityConfiguration extends LoadableSectionConfiguration<String> {
-	private static VanillaEntityConfiguration instance;
-	
 	private final Set<String> validEntities = new HashSet<>();
 	
 	private VanillaEntityConfiguration () {
+		super();
 		validEntities.add("WITHER");
 		validEntities.add("ENDER_CRYSTAL");
 		validEntities.add("PRIMED_TNT");
@@ -21,11 +20,8 @@ public final class VanillaEntityConfiguration extends LoadableSectionConfigurati
 		validEntities.add("CHARGED_WITHER_SKULL");
 	};
 	
-	public static VanillaEntityConfiguration getInstance() {
-		if (instance == null) {
-			instance = new VanillaEntityConfiguration();
-		}
-		return instance;
+	public static VanillaEntityConfiguration empty() {
+		return new VanillaEntityConfiguration();
 	}
 
 	@Override
@@ -45,6 +41,6 @@ public final class VanillaEntityConfiguration extends LoadableSectionConfigurati
 
 	@Override
 	public boolean checkEntityTypeIsValid(String entity) {
-		return validEntities.contains(entity);
+		return entity != null && validEntities.contains(entity);
 	}
 }

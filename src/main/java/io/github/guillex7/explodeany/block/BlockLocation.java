@@ -12,19 +12,19 @@ public class BlockLocation {
 	private int x;
 	private int y;
 	private int z;
-	
+
 	public static BlockLocation of(UUID worldUUID, int x, int y, int z) {
 		return new BlockLocation(worldUUID, x, y, z);
 	}
-	
+
 	public static BlockLocation fromLocation(Location location) {
 		return of(location.getWorld().getUID(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
-	
+
 	public static BlockLocation fromBlock(Block block) {
 		return of(block.getWorld().getUID(), block.getX(), block.getY(), block.getZ());
 	}
-	
+
 	private BlockLocation(UUID worldUUID, int x, int y, int z) {
 		super();
 		this.worldUUID = worldUUID;
@@ -32,7 +32,7 @@ public class BlockLocation {
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	public World getWorld() {
 		return Bukkit.getServer().getWorld(worldUUID);
 	}
@@ -44,7 +44,7 @@ public class BlockLocation {
 		}
 		return new Location(world, x, y, z);
 	}
-	
+
 	public Block toBlock() {
 		World world = getWorld();
 		if (world == null) {
@@ -52,7 +52,7 @@ public class BlockLocation {
 		}
 		return world.getBlockAt(x, y, z);
 	}
-	
+
 	public UUID getWorldUUID() {
 		return worldUUID;
 	}

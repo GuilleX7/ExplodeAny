@@ -16,7 +16,7 @@ public class BlockStatusAdapter extends TypeAdapter<BlockStatus> {
 			out.nullValue();
 			return;
 		}
-		
+
 		out.beginArray();
 		out.value(value.getDurability());
 		out.value(value.getMaterial().name());
@@ -29,12 +29,12 @@ public class BlockStatusAdapter extends TypeAdapter<BlockStatus> {
 			in.nextNull();
 			return null;
 		}
-		
+
 		in.beginArray();
 		double durability = in.nextDouble();
 		String materialName = in.nextString();
 		in.endArray();
-		
+
 		return BlockStatus.of(Material.valueOf(materialName), durability);
 	}
 }

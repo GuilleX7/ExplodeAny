@@ -10,60 +10,72 @@ import org.bukkit.event.EventPriority;
 
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
-import io.github.guillex7.explodeany.configuration.EntityMaterialConfiguration;
-import io.github.guillex7.explodeany.configuration.loadable.CannonProjectileConfiguration;
+import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.configuration.loadable.EntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.LoadableSectionConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
-public final class CannonExplosionListener implements LoadableExplosionListener {
-	private static CannonExplosionListener instance;
-	
-	private CannonExplosionListener() {}
-	
-	public static CannonExplosionListener getInstance() {
-		if (instance == null) {
-			instance = new CannonExplosionListener();
-		}
-		return instance;
+public final class CannonExplosionListener implements LoadableListener {
+	private CannonExplosionListener() {
+		super();
+	}
+
+	public static CannonExplosionListener empty() {
+		return new CannonExplosionListener();
 	}
 
 	@Override
 	public String getName() {
-		return "Cannons";
+		return "Cannons explosions";
 	}
-	
+
 	@Override
 	public boolean shouldBeLoaded() {
-		return CannonProjectileConfiguration.getInstance().shouldBeLoaded();
+		return ConfigurationManager.getInstance().getRegisteredEntityConfiguration("CannonProjectile").shouldBeLoaded();
 	}
-	
+
+	@Override
+	public boolean isAdvisable() {
+		return true;
+	}
+
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
 	public void onProjectileImpact(ProjectileImpactEvent event) {
 		if (event.getProjectile() == null) {
 			return;
 		}
+		String projectileId = event.getProjectile().getProjectileId();
 		
-		Map<Material, EntityMaterialConfiguration> materialConfigurations = CannonProjectileConfiguration.getInstance()
-				.getEntityMaterialConfigurations().get(event.getProjectile().getProjectileId());
+		LoadableSectionConfiguration<?> cannonProjectileConfiguration = ConfigurationManager.getInstance()
+				.getRegisteredEntityConfiguration("CannonProjectile");
+		
+		Map<Material, EntityMaterialConfiguration> materialConfigurations = cannonProjectileConfiguration
+				.getEntityMaterialConfigurations().get(projectileId);
 		if (materialConfigurations == null) {
 			return;
 		}
-		
-		ExplosionManager.manageExplosion(materialConfigurations, event.getImpactLocation(),
-				(int) event.getProjectile().getExplosionPower());
+
+		EntityConfiguration entityConfiguration = cannonProjectileConfiguration.getEntityConfigurations()
+				.get(projectileId);
+
+		ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
+				event.getImpactLocation(), (int) event.getProjectile().getExplosionPower());
 	}
-	
+
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
 	public void onProjectilePiercing(ProjectilePiercingEvent event) {
 		if (event.getProjectile() == null) {
 			return;
 		}
-		
-		Map<Material, EntityMaterialConfiguration> materialConfigurations = CannonProjectileConfiguration.getInstance()
-				.getEntityMaterialConfigurations().get(event.getProjectile().getProjectileId());
+
+		Map<Material, EntityMaterialConfiguration> materialConfigurations = ConfigurationManager.getInstance()
+				.getRegisteredEntityConfiguration("CannonProjectile").getEntityMaterialConfigurations()
+				.get(event.getProjectile().getProjectileId());
 		if (materialConfigurations == null) {
 			return;
 		}
-		
+
 		Iterator<Block> iterator = event.getBlockList().iterator();
 		while (iterator.hasNext()) {
 			Block block = iterator.next();
@@ -74,7 +86,7 @@ public final class CannonExplosionListener implements LoadableExplosionListener 
 				break;
 			}
 		}
-		
+
 		// Remove all blocks after the first handled block
 		while (iterator.hasNext()) {
 			iterator.next();
