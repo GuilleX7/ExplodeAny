@@ -1,7 +1,6 @@
 UseBlockDatabase: false
 CheckBlockDatabaseAtStartup: false                                
 BlockDurability: 100.0
-FancyUnderwaterDetection: false
 
 Groups: {}
 
@@ -14,6 +13,6 @@ Locale:
     OnlyPlayerAllowed: "Only players can perform this action!"
     EnterChecktoolMode: "You can now right-click a block with your bare hand to display block durability"
     LeaveChecktoolMode: "You can no longer check for a block durability"
-    ChecktoolUse: "Material: %MATERIAL%, durability: %DURABILITY% / %MAX_DURABILITY%"
+    ChecktoolUse: "%B_X% / %B_Y% / %B_Z% -- %MATERIAL% (%DURABILITY% / %MAX_DURABILITY%)"
     ChecktoolNotHandled: "%MATERIAL% is not handled by the current configuration"
     Reloaded: "Reloaded successfully!"

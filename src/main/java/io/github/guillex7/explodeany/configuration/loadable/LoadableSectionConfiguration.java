@@ -124,21 +124,21 @@ public abstract class LoadableSectionConfiguration<T> {
 				continue;
 			}
 
-			Map<Material, EntityMaterialConfiguration> materialConfigurations;
+			Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<Material, EntityMaterialConfiguration>();
 			EntityConfiguration entityConfiguration = EntityConfiguration.byDefault();
 			ConfigurationSection materialsSection = entitySection.getConfigurationSection(MATERIALS_SECTION);
+			ConfigurationSection propertiesSection = entitySection.getConfigurationSection(PROPERTIES_SECTION);
+			boolean hasSections = false;
 			if (materialsSection != null) {
 				materialConfigurations = fetchMaterials(materialsSection);
-				ConfigurationSection propertiesSection = entitySection.getConfigurationSection(PROPERTIES_SECTION);
-				if (propertiesSection != null) {
-					entityConfiguration = EntityConfiguration.fromConfigurationSection(propertiesSection);
-				}
-			} else {
-				materialConfigurations = fetchMaterials(entitySection);
+				hasSections = true;
 			}
-
-			if (materialConfigurations.isEmpty()) {
-				continue;
+			if (propertiesSection != null) {
+				entityConfiguration = EntityConfiguration.fromConfigurationSection(propertiesSection);
+				hasSections = true;
+			}
+			if (!hasSections) {
+				materialConfigurations = fetchMaterials(entitySection);
 			}
 
 			for (T fetchedEntity : fetchedEntities) {

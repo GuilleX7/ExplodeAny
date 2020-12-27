@@ -59,31 +59,32 @@ VanillaEntity:
         Properties:                                 # This section allows to configure some properties of the exploding entity itself.
                                                     # It is not mandatory.
                                                     
-            RemoveNearWaterOnExplosion: true        # Removes near water AFTER the damage to blocks has been calculated (so the underwater
-                                                    # detection is able to apply underwater modifiers yet) and BEFORE the Vanilla explosion
-                                                    # take place. This allows the Vanilla explosion to damage blocks that are underwater as
-                                                    # if they were in the overworld.
+            AllowUnderwaterVanillaExplosion: true   # Removes near water AFTER the damage to blocks has been calculated (so the underwater
+                                                    # detection is able to apply underwater modifiers yet) and BEFORE a Vanilla explosion
+                                                    # take place in replacement of the original explosion -Vanilla, Cannons or whatever-.
+                                                    # This allows the to damage blocks that are underwater.
+                                                    # NOTE: this explosion WON'T be affected by ExplodeAny. It is purely a Vanilla explosion.
+                                                    
+            UnderwaterVanillaExplosionFactor: 0.5   # Vanilla explosion power will be the same as the explosion power of the original
+                                                    # explosion, but you may want to change it as explosion takes place underwater.
+                                                    # It will be multiplied by this factor when AllowUnderwaterVanillaExplosion
+                                                    # is enabled and the explosion takes place underwater.
+                                                    # Minimum is 0.0, which means it will disabled
+                                                    # Default is 1.0, which means that water doesn't affect Vanilla explosion power
                                                 
         Materials:                                  # This section contains the materials that are affected by the exploding entity.
                                                     # It is not mandatory: if this section doesn't exist, the plugin will understand that
-                                                    # every section in the entity is a material itself. This can be used as a shortcut when
-                                                    # you don't want to add entity properties, but to list directly the affected materials and
-                                                    # their properties.
+                                                    # every section in the entity is a material. That can be used as a shortcut when
+                                                    # you don't want to add entity properties, but to list directly the affected materials.
                                                     
-            OBSIDIAN:                               # Material affected by the entity, valid values are all materials listed
+            OBSIDIAN:                               # Materials affected by the entity, valid values are all materials listed
                                                     # in https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.
                                                     # Groups can also be used here.
                                                     
                 Damage: 50.0                        # Regular damage taken when impacted by the explosion.
-                                                    # Minimum is 0.0, which means the block isn't affected
-                                                    # by the explosion (disabled).
+                                                    # Minimum is 0.0, which means the block isn't affected by the explosion (disabled).
                                                     # A value greater than BlockDurability is allowed.
-    
-                UnderwaterDamageFactor: 1.0         # Damage will be multiplied by this factor when explosion
-                                                    # takes place underwater.
-                                                    # Minimum is 0.0, which means it will disable underwater damage.
-                                                    # Default is 1.0, which means that water doesn't affect damage.
-                                                    # A value greater than 1.0 means damage underwater is magnified.
+                                                    # Default is BlockDurability.
                                                     
                 DropChance: 0.0                     # Chance of dropping this block as an item when it breaks.
                                                     # Maximum is 100.0 (always drop), minimum [default] is 0.0 (never drops).
@@ -110,6 +111,11 @@ VanillaEntity:
                                                     # d = distance from the center (always greater or equal 1)
                                                     # dmax = radius of the explosion (after applying explosionRadiusFactor).
                 
+                UnderwaterDamageFactor: 1.0         # Damage will be multiplied by this factor when explosion takes place underwater.
+                                                    # Minimum is 0.0, which means it will disable underwater damage.
+                                                    # Default is 1.0, which means that water doesn't affect damage.
+                                                    # A value greater than 1.0 means damage underwater is magnified.
+                
                 FancyUnderwaterDetection: false     # Sets the underwater detection procedure to use.
                                                     # False means that a explosion will be considered to happen underwater
                                                     # if and only if the centre of the explosion is a block of water, so every
@@ -123,12 +129,17 @@ CannonProjectile:
                                                     # This section can be configured for use with Cannons plugin. This plugin
                                                     # doesn't require Cannons at all, but it will detect whether it's loaded
                                                     # or not and enable support automatically.
-        OBSIDIAN:
-            Damage: 50.0
-            UnderwaterDamageFactor: 1.0
-            DropChance: 0.0
-            DistanceAttenuationFactor: 0.0
-            ExplosionRadiusFactor: 0.5
+        Properties:
+            AllowUnderwaterVanillaExplosion: true
+            UnderwaterVanillaExplosionFactor: 0.5
+        Materials:
+            OBSIDIAN:
+                Damage: 50.0
+                DropChance: 0.0
+                DistanceAttenuationFactor: 0.0
+                ExplosionRadiusFactor: 0.5
+                UnderwaterDamageFactor: 1.0
+                FancyUnderwaterDetection: false
             
 Locale:                                             # All colors and modifiers are available for locale messages.
                                                     # For ChecktoolUse and ChecktoolNotHandled, you can use some variables:
@@ -144,6 +155,6 @@ Locale:                                             # All colors and modifiers a
     OnlyPlayerAllowed: "Only players can perform this action!"
     EnterChecktoolMode: "You can now right-click a block with your bare hand to display block durability"
     LeaveChecktoolMode: "You can no longer check for a block durability"
-    ChecktoolUse: "(%B_X%:%B_Y%:%B_Z%): %MATERIAL%, durability: %DURABILITY% / %MAX_DURABILITY%"
+    ChecktoolUse: "%B_X% / %B_Y% / %B_Z% // %MATERIAL% (%DURABILITY% / %MAX_DURABILITY%)"
     ChecktoolNotHandled: "%MATERIAL% is not handled by the current configuration"
     Reloaded: "Reloaded successfully!"

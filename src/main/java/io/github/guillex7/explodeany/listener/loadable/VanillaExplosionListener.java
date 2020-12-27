@@ -78,24 +78,30 @@ public final class VanillaExplosionListener implements LoadableListener {
 
 		// Magic values come from https://minecraft.gamepedia.com/Explosion
 		int explosionRadius = 0;
+		float explosionPower = 0f;
 		switch (event.getEntityType()) {
 		case WITHER: // Wither spawn or destroy
 			explosionRadius = 7;
+			explosionPower = 7f;
 			break;
 		case ENDER_CRYSTAL: // End crystal
 			explosionRadius = 6;
+			explosionPower = 6f;
 			break;
 		case PRIMED_TNT:
 			explosionRadius = 4; // TNT
+			explosionPower = 4f;
 			break;
 		case CREEPER: // Creeper explosion
 			explosionRadius = (isCharged) ? 4 : 3;
+			explosionPower = (isCharged) ? 6f : 3f;
 			break;
 		case FIREBALL: // Large fireball (Ghast)
 		case DRAGON_FIREBALL: // Dragon fireball
 		case SMALL_FIREBALL: // Blaze fireball
 		case WITHER_SKULL: // Wither skull explosion
 			explosionRadius = 1;
+			explosionPower = 1f;
 			break;
 		default:
 			break; // Unsupported entity type
@@ -106,7 +112,10 @@ public final class VanillaExplosionListener implements LoadableListener {
 		}
 
 		ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList());
-		ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration, event.getLocation(), explosionRadius);
+		if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
+				event.getLocation(), explosionRadius, explosionPower)) {
+			event.setCancelled(true);
+		}
 	}
 
 	@Override

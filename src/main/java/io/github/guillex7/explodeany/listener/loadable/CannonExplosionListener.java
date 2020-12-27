@@ -59,8 +59,11 @@ public final class CannonExplosionListener implements LoadableListener {
 		EntityConfiguration entityConfiguration = cannonProjectileConfiguration.getEntityConfigurations()
 				.get(projectileId);
 
-		ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-				event.getImpactLocation(), (int) event.getProjectile().getExplosionPower());
+		float explosionPower = event.getProjectile().getExplosionPower();
+		if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
+				event.getImpactLocation(), (int) explosionPower, explosionPower)) {
+			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)

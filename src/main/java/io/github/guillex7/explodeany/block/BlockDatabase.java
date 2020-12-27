@@ -122,8 +122,6 @@ public class BlockDatabase {
 			gsonBuilder.registerTypeAdapter(BlockStatus.class, new BlockStatusAdapter());
 			gsonBuilder.enableComplexMapKeySerialization();
 			Gson gson = gsonBuilder.create();
-			getPlugin().getLogger().log(Level.INFO,
-					gson.toJson(database, getDatabaseTypeToken().getType()));
 			fw.write(gson.toJson(database, getDatabaseTypeToken().getType()));
 			fw.close();
 			getPlugin().getLogger().log(Level.INFO, "Database saved successfully");

@@ -11,31 +11,31 @@ public class EntityMaterialConfiguration {
 	private static final String DISTANCE_ATTENUATION_FACTOR_PATH = "DistanceAttenuationFactor";
 	private static final String EXPLOSION_RADIUS_FACTOR_PATH = "ExplosionRadiusFactor";
 	private static final String FANCY_UNDERWATER_DETECTION_PATH = "FancyUnderwaterDetection";
-	
+
 	private double damage;
 	private double underwaterDamageFactor;
 	private double dropChance;
 	private double distanceAttenuationFactor;
 	private double explosionRadiusFactor;
 	private boolean fancyUnderwaterDetection;
-	
+
 	public static EntityMaterialConfiguration of(double damage, double underwaterDamageFactor, double dropChance,
 			double distanceAttenuationFactor, double explosionRadiusFactor, boolean fancyUnderwaterDetection) {
 		return new EntityMaterialConfiguration(damage, underwaterDamageFactor, dropChance, distanceAttenuationFactor,
 				explosionRadiusFactor, fancyUnderwaterDetection);
 	}
-	
+
 	public static EntityMaterialConfiguration fromConfigurationSection(ConfigurationSection section) {
 		return EntityMaterialConfiguration.of(
-				ConfigurationManager.ensureMin(section.getDouble(DAMAGE_PATH, 0.0d), 0.0d),
+				ConfigurationManager.ensureMin(
+						section.getDouble(DAMAGE_PATH, ConfigurationManager.getInstance().getBlockDurability()), 0.0d),
 				ConfigurationManager.ensureMin(section.getDouble(UNDERWATER_DAMAGE_FACTOR_PATH, 1.0d), 0.0d),
 				ConfigurationManager.ensureRange(section.getDouble(DROP_CHANCE_PATH, 0.0d), 100.0d, 0.0d) / 100.0,
 				ConfigurationManager.ensureRange(section.getDouble(DISTANCE_ATTENUATION_FACTOR_PATH, 0.0d), 1.0d, 0.0d),
 				ConfigurationManager.ensureMin(section.getDouble(EXPLOSION_RADIUS_FACTOR_PATH, 0.5d), 0.0d),
-				section.getBoolean(FANCY_UNDERWATER_DETECTION_PATH, false)
-				);
+				section.getBoolean(FANCY_UNDERWATER_DETECTION_PATH, false));
 	}
-	
+
 	private EntityMaterialConfiguration(double damage, double underwaterDamageFactor, double dropChance,
 			double distanceAttenuationFactor, double explosionRadiusFactor, boolean fancyUnderwaterDetection) {
 		super();
@@ -50,11 +50,11 @@ public class EntityMaterialConfiguration {
 	public double getDamage() {
 		return damage;
 	}
-	
+
 	public double getUnderwaterDamageFactor() {
 		return underwaterDamageFactor;
 	}
-	
+
 	public boolean isUnderwaterAffected() {
 		return getUnderwaterDamageFactor() != 1.0;
 	}
@@ -62,7 +62,7 @@ public class EntityMaterialConfiguration {
 	public double getDropChance() {
 		return dropChance;
 	}
-	
+
 	public boolean shouldBeDropped() {
 		return Math.random() <= getDropChance();
 	}
@@ -129,8 +129,8 @@ public class EntityMaterialConfiguration {
 
 	@Override
 	public String toString() {
-		return "EntityMaterialConfiguration [d=" + damage + ", uDF=" + underwaterDamageFactor
-				+ ", dC=" + dropChance + ", dAF=" + distanceAttenuationFactor
-				+ ", eRF=" + explosionRadiusFactor + ", fUD=" + fancyUnderwaterDetection + "]";
+		return "EntityMaterialConfiguration [d=" + damage + ", uDF=" + underwaterDamageFactor + ", dC=" + dropChance
+				+ ", dAF=" + distanceAttenuationFactor + ", eRF=" + explosionRadiusFactor + ", fUD="
+				+ fancyUnderwaterDetection + "]";
 	}
 }
