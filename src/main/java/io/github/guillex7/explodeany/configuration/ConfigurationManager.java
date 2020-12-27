@@ -1,15 +1,10 @@
 package io.github.guillex7.explodeany.configuration;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -90,9 +85,10 @@ public final class ConfigurationManager {
 	public Double getBlockDurability() {
 		return ensureMin(getPlugin().getConfig().getDouble(ConfigurationKeys.BLOCK_DURABILITY_ITEM), 1);
 	}
-	
+
 	public Map<String, List<String>> getGroups() {
-		ConfigurationSection groupsSection = getPlugin().getConfig().getConfigurationSection(ConfigurationKeys.GROUPS_SECTION);
+		ConfigurationSection groupsSection = getPlugin().getConfig()
+				.getConfigurationSection(ConfigurationKeys.GROUPS_SECTION);
 		Map<String, List<String>> groups = new HashMap<String, List<String>>();
 		for (String groupName : groupsSection.getKeys(false)) {
 			groups.put(groupName, groupsSection.getStringList(groupName));
@@ -101,17 +97,11 @@ public final class ConfigurationManager {
 	}
 
 	public void loadConfiguration() {
-		try {
-			Path exampleConfigPath = Paths.get(getPlugin().getDataFolder().getPath(), "exampleConfig.yml");
-			Files.deleteIfExists(exampleConfigPath);
-			Files.copy(getPlugin().getResource("exampleConfig.yml"), exampleConfigPath);
-		} catch (IOException e) {
-			getPlugin().getLogger().log(Level.WARNING, "Couldn't regenerate the example configuration file!");
-		}
 		getPlugin().saveDefaultConfig();
 		getPlugin().reloadConfig();
 		getPlugin().getConfig().options().copyDefaults(true);
 		getPlugin().saveConfig();
+		getPlugin().saveResource("exampleConfig.yml", true);
 		colorizeLocale();
 	}
 
@@ -128,8 +118,8 @@ public final class ConfigurationManager {
 	}
 
 	public String getLocale(ConfigurationLocale locale) {
-		return getPlugin().getConfig().getString(
-				String.format("%s.%s", ConfigurationKeys.LOCALE_SECTION, locale.getPath()));
+		return getPlugin().getConfig()
+				.getString(String.format("%s.%s", ConfigurationKeys.LOCALE_SECTION, locale.getPath()));
 	}
 
 	public void registerEntityConfiguration(LoadableSectionConfiguration<?> entityConfiguration) {
