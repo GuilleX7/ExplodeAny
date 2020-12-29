@@ -81,6 +81,11 @@ public class ExplosionManager {
 
 	public void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
 			Location sourceLocation, int squaredExplosionRadius, double squaredDistance) {
+		final double maximumSquaredDistance = squaredExplosionRadius * materialConfiguration.getExplosionRadiusFactor();
+		if (squaredDistance > maximumSquaredDistance) {
+			return;
+		}
+
 		double effectiveDamage = materialConfiguration.getDamage();
 
 		// Underwater attenuation
@@ -96,10 +101,7 @@ public class ExplosionManager {
 		// d = distance from the center (always >= 1)
 		// dmax = maximum distance
 		// Use squared distance to avoid sqrt overhead
-		double maximumSquaredDistance = squaredExplosionRadius * materialConfiguration.getExplosionRadiusFactor();
-		if (squaredDistance > maximumSquaredDistance) {
-			return;
-		}
+		// Distance attenuation
 		effectiveDamage *= 1
 				- materialConfiguration.getDistanceAttenuationFactor() * (squaredDistance - 1) / maximumSquaredDistance;
 

@@ -46,12 +46,11 @@ Groups:                                             # Named groups of materials,
         - OBSIDIAN
         - CRYING_OBSIDIAN
         - BEDROCK
-    dangerousEntities:
+    dangerousEntity:
         - PRIMED_TNT
-        - CREEPER
 
 VanillaEntity:
-    PRIMED_TNT:                                     # Vanilla entities that explode, allowed entities are:
+    dangerousEntity:                                # Vanilla entities that explode, allowed entities are:
                                                     # WITHER, ENDER_CRYSTAL, PRIMED_TNT, CREEPER, CHARGED_CREEPER,
                                                     # FIREBALL, DRAGON_FIREBALL, SMALL_FIREBALL, WITHER_SKULL, CHARGED_WITHER_SKULL
                                                     # Groups can also be used here.
@@ -59,17 +58,19 @@ VanillaEntity:
         Properties:                                 # This section allows to configure some properties of the exploding entity itself.
                                                     # It is not mandatory.
                                                     
-            ExplosionDamageBlocksUnderliquid: true  # Overrides the explosion caused by this entity when it takes place under any liquid.
+            ExplosionDamageBlocksUnderliquid: false # Overrides the explosion caused by this entity when it takes place under any liquid.
                                                     # It will be replaced with a explosion that can damage blocks, even underwater.
                                                     # This allows to break, for example, any block that would normally break in the
                                                     # overworld. Blocks managed by ExplodeAny will keep their behaviour!
+                                                    # [Default] is false.
                                                     
             UnderliquidExplosionFactor: 0.5         # The explosion power of the overriding explosion will be the same as the original,
                                                     # but you may want to change it as it takes place under a liquid.
                                                     # Explosion power will be multiplied by this factor when UnderliquidExplosionFactor
                                                     # is enabled and the explosion takes place underwater.
                                                     # Minimum is 0.0, which means it will disabled
-                                                    # Default is 1.0, which means that water doesn't affect explosion power
+                                                    # [Default] is 0.5, which reduces the explosion power to half its original value.
+                                                    # A value of 1.0 means that water doesn't affect explosion power
                                                 
         Materials:                                  # This section contains the materials that will be managed by the plugin.
                                                     # It is not mandatory: if this section doesn't exist, the plugin will understand that
@@ -80,7 +81,7 @@ VanillaEntity:
                                                     # that would break in a regular Vanilla explosion, meaning that you could make them
                                                     # indestructibles.
                                                     
-            OBSIDIAN:                               # Valid values are all materials listed in
+            unbreakableBlocks:                      # Valid values are all materials listed in
                                                     # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.
                                                     # WATER and LAVA are not allowed. Blocks managed by this plugin will be damaged as
                                                     # set below even underwater, and for those which are unmanaged in this section, see
@@ -90,7 +91,7 @@ VanillaEntity:
                 Damage: 50.0                        # Regular damage taken when impacted by the explosion.
                                                     # Minimum is 0.0, which means the block isn't affected by the explosion (disabled).
                                                     # A value greater than BlockDurability is allowed.
-                                                    # Default is BlockDurability.
+                                                    # [Default] is BlockDurability.
                                                     
                 DropChance: 0.0                     # Chance of dropping this block as an item when it breaks.
                                                     # Maximum is 100.0 (always drop), minimum [default] is 0.0 (never drops).
@@ -106,9 +107,9 @@ VanillaEntity:
                                                     # every block whose distance from the center is greater than the explosion radius
                                                     # multiplied by this factor is not affected by the explosion.
                                                     # Minimum is 0.0, which makes the effective radius equal 0 (no damage)
-                                                    # A value of 1.0 would mean the effective radius equals the explosion
-                                                    # radius.
-                                                    # Default is 0.5.
+                                                    # [Default] is 0.5, which means the effective radius is half the original
+                                                    # A value of 1.0 means the effective radius equals the explosion radius
+                                                    # Values greater than 1.0 are allowed.
                                                     
                                                     # Effective damage is calculated with the following formula:
                                                     # finalDamage =  damage * (1 - c(d - 1) / dmax)  if 1 <= d < dmax
@@ -117,18 +118,22 @@ VanillaEntity:
                                                     # d = distance from the center (always greater or equal 1)
                                                     # dmax = radius of the explosion (after applying explosionRadiusFactor).
                 
-                UnderwaterDamageFactor: 1.0         # Damage will be multiplied by this factor when explosion takes place underliquid.
-                                                    # Minimum is 0.0, which means it will disable underliquid damage.
-                                                    # Default is 1.0, which means that water doesn't affect damage.
-                                                    # A value greater than 1.0 means damage underliquid is magnified.
+                UnderwaterDamageFactor: 0.5         # Damage will be multiplied by this factor when explosion takes place underliquid.
+                                                    # Minimum is 0.0, which means it will disable damage taken under liquid.
+                                                    # [Default] is 0.5, which reduces the damage taken under liquid.
+                                                    # A value of 1.0 means that liquids doesn't affect damage.
+                                                    # A value greater than 1.0 means damage under liquid is magnified.
                 
                 FancyUnderwaterDetection: false     # Sets the underliquid detection procedure to use.
-                                                    # False means that the UnderwaterDamageFactor will be applied if and only if the
+                                                    # False [default] means that the UnderwaterDamageFactor will be applied if and only if the
                                                     # centre of the explosion is a block of liquid, so every block will be affected or
                                                     # not depending only on the explosion. (faster)
                                                     # True means that, for each block, a scan of its trajectory will be performed in
                                                     # search of liquid. This allows to apply UnderwaterDamageFactor on every block independently,
                                                     # and also improves the detection in general. (slower)
+                                                    
+            DIRT:
+                Damage: 0.0                         # See that setting damage to 0.0 means that it will never break with this explosion.
             
 CannonProjectile:                                   # This section can be configured for use with Cannons plugin. This plugin
                                                     # doesn't require Cannons at all, but it will detect whether it's loaded
@@ -143,7 +148,7 @@ CannonProjectile:                                   # This section can be config
         Materials:                                  # Contrary to what happens in the VanillaEntity section, and in an unfortunate way,
                                                     # we can't override the behaviour of blocks that would break in regular conditions
                                                     # when a Cannon projectile explodes. That means that putting breakable materials here
-                                                    # won't have the desired effect. We are working to improve this.
+                                                    # (like DIRT) won't have the desired effect. We are working to improve this.
             OBSIDIAN:
                 Damage: 50.0
                 DropChance: 0.0

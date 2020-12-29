@@ -16,7 +16,7 @@ public class EntityConfiguration {
 	}
 	
 	public static EntityConfiguration byDefault() {
-		return EntityConfiguration.of(false, 1.0d);
+		return EntityConfiguration.of(false, 0.5d);
 	}
 	
 	public static EntityConfiguration fromConfigurationSection(ConfigurationSection section) {
