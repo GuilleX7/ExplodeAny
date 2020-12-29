@@ -14,7 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.loadable.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableSectionConfiguration;
-import io.github.guillex7.explodeany.utils.MessageFormatter;
+import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public final class ConfigurationManager {
 	private class ConfigurationKeys {

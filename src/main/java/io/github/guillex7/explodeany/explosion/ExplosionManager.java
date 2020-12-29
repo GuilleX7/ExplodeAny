@@ -70,10 +70,10 @@ public class ExplosionManager {
 			}
 		}
 
-		if (isLiquidInLocation(sourceLocation) && entityConfiguration.isAllowUnderwaterVanillaExplosion()) {
+		if (isLiquidInLocation(sourceLocation) && entityConfiguration.isExplosionDamageBlocksUnderliquid()) {
 			sourceLocation.getBlock().setType(Material.AIR);
 			return sourceLocation.getWorld().createExplosion(sourceLocation,
-					explosionPower * entityConfiguration.getUnderwaterVanillaExplosionFactor().floatValue());
+					explosionPower * entityConfiguration.getUnderliquidExplosionFactor().floatValue());
 		}
 
 		return false;

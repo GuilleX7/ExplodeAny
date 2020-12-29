@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.utils.MessageFormatter;
+import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandChecktool {
 	private final static String CHECKTOOL_PERMISSION_NODE = "explodeany.checktool";

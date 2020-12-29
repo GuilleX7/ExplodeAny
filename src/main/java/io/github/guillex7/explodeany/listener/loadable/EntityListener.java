@@ -13,7 +13,7 @@ import io.github.guillex7.explodeany.block.BlockStatus;
 import io.github.guillex7.explodeany.command.CommandChecktool;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.utils.MessageFormatter;
+import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class EntityListener implements LoadableListener {
 	private EntityListener() {

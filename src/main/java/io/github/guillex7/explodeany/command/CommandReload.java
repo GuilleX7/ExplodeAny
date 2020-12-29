@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.utils.MessageFormatter;
+import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandReload {
 	private final static String RELOAD_PERMISSION_NODE = "explodeany.reload";

@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.utils;
+package io.github.guillex7.explodeany.util;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 

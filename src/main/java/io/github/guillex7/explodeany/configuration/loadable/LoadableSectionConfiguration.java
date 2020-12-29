@@ -161,7 +161,7 @@ public abstract class LoadableSectionConfiguration<T> {
 	}
 
 	private final boolean checkMaterialIsValid(Material material) {
-		return material != null && material != Material.WATER;
+		return material != null && material.equals(Material.WATER) && material.equals(Material.LAVA);
 	}
 
 	private final Map<Material, EntityMaterialConfiguration> fetchMaterials(ConfigurationSection entitySection) {

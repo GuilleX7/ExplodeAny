@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.utils.MessageFormatter;
+import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandAbout {
 	public static void executor(CommandSender sender, Command cmd, String label, String[] args) {
