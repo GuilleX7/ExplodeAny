@@ -70,10 +70,10 @@ public class ExplosionManager {
 			}
 		}
 
-		if (isLiquidInLocation(sourceLocation) && entityConfiguration.isExplosionDamageBlocksUnderliquid()) {
+		if (entityConfiguration.isExplosionDamageBlocksUnderwater() && sourceLocation.getBlock().isLiquid()) {
 			sourceLocation.getBlock().setType(Material.AIR);
 			return sourceLocation.getWorld().createExplosion(sourceLocation,
-					explosionPower * entityConfiguration.getUnderliquidExplosionFactor().floatValue());
+					explosionPower * entityConfiguration.getUnderwaterExplosionFactor().floatValue());
 		}
 
 		return false;
@@ -120,16 +120,12 @@ public class ExplosionManager {
 	private boolean performUnderwaterDetection(EntityMaterialConfiguration materialConfiguration, Location source,
 			Location target) {
 		return materialConfiguration.isFancyUnderwaterDetection() ? isLiquidInTrajectory(source, target)
-				: isLiquidInLocation(source);
-	}
-
-	private boolean isLiquidInLocation(Location location) {
-		return location.getBlock().isLiquid();
+				: source.getBlock().isLiquid();
 	}
 
 	private boolean isLiquidInTrajectory(Location source, Location target) {
 		if (source.equals(target)) {
-			return isLiquidInLocation(source);
+			return source.getBlock().isLiquid();
 		}
 
 		BlockIterator it = new BlockIterator(source.getWorld(), source.toVector(),

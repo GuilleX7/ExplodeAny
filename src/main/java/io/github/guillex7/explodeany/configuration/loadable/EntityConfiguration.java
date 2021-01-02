@@ -5,14 +5,14 @@ import org.bukkit.configuration.ConfigurationSection;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 
 public class EntityConfiguration {
-	private static final String ExplosionDamageBlocksUnderliquid = "ExplosionDamageBlocksUnderliquid";
-	private static final String UnderliquidExplosionFactor = "UnderliquidExplosionFactor";
+	private static final String ExplosionDamageBlocksUnderwater = "ExplosionDamageBlocksUnderwater";
+	private static final String UnderwaterExplosionFactor = "UnderwaterExplosionFactor";
 	
-	private boolean explosionDamageBlocksUnderliquid;
-	private Double underliquidExplosionFactor;
+	private boolean explosionDamageBlocksUnderwater;
+	private Double underwaterExplosionFactor;
 
-	public static EntityConfiguration of(boolean explosionDamageBlocksUnderliquid, Double underliquidExplosionFactor) {
-		return new EntityConfiguration(explosionDamageBlocksUnderliquid, underliquidExplosionFactor);
+	public static EntityConfiguration of(boolean explosionDamageBlocksUnderwater, Double underwaterExplosionFactor) {
+		return new EntityConfiguration(explosionDamageBlocksUnderwater, underwaterExplosionFactor);
 	}
 	
 	public static EntityConfiguration byDefault() {
@@ -22,39 +22,39 @@ public class EntityConfiguration {
 	public static EntityConfiguration fromConfigurationSection(ConfigurationSection section) {
 		EntityConfiguration defaults = EntityConfiguration.byDefault();
 		return EntityConfiguration.of(
-				section.getBoolean(ExplosionDamageBlocksUnderliquid, defaults.isExplosionDamageBlocksUnderliquid()),
-				ConfigurationManager.ensureMin(section.getDouble(UnderliquidExplosionFactor, defaults.getUnderliquidExplosionFactor()), 0.0d)
+				section.getBoolean(ExplosionDamageBlocksUnderwater, defaults.isExplosionDamageBlocksUnderwater()),
+				ConfigurationManager.ensureMin(section.getDouble(UnderwaterExplosionFactor, defaults.getUnderwaterExplosionFactor()), 0.0d)
 				);
 	}
 
-	private EntityConfiguration(boolean explosionDamageBlocksUnderliquid, Double underliquidExplosionFactor) {
+	private EntityConfiguration(boolean explosionDamageBlocksUnderwater, Double underwaterExplosionFactor) {
 		super();
-		this.explosionDamageBlocksUnderliquid = explosionDamageBlocksUnderliquid;
-		this.underliquidExplosionFactor = underliquidExplosionFactor;
+		this.explosionDamageBlocksUnderwater = explosionDamageBlocksUnderwater;
+		this.underwaterExplosionFactor = underwaterExplosionFactor;
 	}
 
-	public boolean isExplosionDamageBlocksUnderliquid() {
-		return explosionDamageBlocksUnderliquid;
+	public boolean isExplosionDamageBlocksUnderwater() {
+		return explosionDamageBlocksUnderwater;
 	}
 
-	public void setExplosionDamageBlocksUnderliquid(boolean explosionDamageBlocksUnderliquid) {
-		this.explosionDamageBlocksUnderliquid = explosionDamageBlocksUnderliquid;
+	public void setExplosionDamageBlocksUnderwater(boolean explosionDamageBlocksUnderwater) {
+		this.explosionDamageBlocksUnderwater = explosionDamageBlocksUnderwater;
 	}
 
-	public Double getUnderliquidExplosionFactor() {
-		return underliquidExplosionFactor;
+	public Double getUnderwaterExplosionFactor() {
+		return underwaterExplosionFactor;
 	}
 
-	public void setUnderliquidExplosionFactor(Double underliquidExplosionFactor) {
-		this.underliquidExplosionFactor = underliquidExplosionFactor;
+	public void setUnderwaterExplosionFactor(Double underwaterExplosionFactor) {
+		this.underwaterExplosionFactor = underwaterExplosionFactor;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (explosionDamageBlocksUnderliquid ? 1231 : 1237);
-		result = prime * result + ((underliquidExplosionFactor == null) ? 0 : underliquidExplosionFactor.hashCode());
+		result = prime * result + (explosionDamageBlocksUnderwater ? 1231 : 1237);
+		result = prime * result + ((underwaterExplosionFactor == null) ? 0 : underwaterExplosionFactor.hashCode());
 		return result;
 	}
 
@@ -67,19 +67,19 @@ public class EntityConfiguration {
 		if (getClass() != obj.getClass())
 			return false;
 		EntityConfiguration other = (EntityConfiguration) obj;
-		if (explosionDamageBlocksUnderliquid != other.explosionDamageBlocksUnderliquid)
+		if (explosionDamageBlocksUnderwater != other.explosionDamageBlocksUnderwater)
 			return false;
-		if (underliquidExplosionFactor == null) {
-			if (other.underliquidExplosionFactor != null)
+		if (underwaterExplosionFactor == null) {
+			if (other.underwaterExplosionFactor != null)
 				return false;
-		} else if (!underliquidExplosionFactor.equals(other.underliquidExplosionFactor))
+		} else if (!underwaterExplosionFactor.equals(other.underwaterExplosionFactor))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "EntityConfiguration [eDBU=" + explosionDamageBlocksUnderliquid
-				+ ", uEF=" + underliquidExplosionFactor + "]";
+		return "EntityConfiguration [eDBU=" + explosionDamageBlocksUnderwater
+				+ ", uEF=" + underwaterExplosionFactor + "]";
 	}
 }

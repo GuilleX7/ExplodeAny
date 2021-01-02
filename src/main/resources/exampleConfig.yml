@@ -58,13 +58,13 @@ VanillaEntity:
         Properties:                                 # This section allows to configure some properties of the exploding entity itself.
                                                     # It is not mandatory.
                                                     
-            ExplosionDamageBlocksUnderliquid: false # Overrides the explosion caused by this entity when it takes place under any liquid.
+            ExplosionDamageBlocksUnderwater: false  # Overrides the explosion caused by this entity when it takes place under any liquid.
                                                     # It will be replaced with a explosion that can damage blocks, even underwater.
                                                     # This allows to break, for example, any block that would normally break in the
                                                     # overworld. Blocks managed by ExplodeAny will keep their behaviour!
                                                     # [Default] is false.
                                                     
-            UnderliquidExplosionFactor: 0.5         # The explosion power of the overriding explosion will be the same as the original,
+            UnderwaterExplosionFactor: 0.5          # The explosion power of the overriding explosion will be the same as the original,
                                                     # but you may want to change it as it takes place under a liquid.
                                                     # Explosion power will be multiplied by this factor when UnderliquidExplosionFactor
                                                     # is enabled and the explosion takes place underwater.
