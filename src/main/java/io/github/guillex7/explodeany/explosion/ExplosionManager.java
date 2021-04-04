@@ -3,6 +3,7 @@ package io.github.guillex7.explodeany.explosion;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,10 +11,12 @@ import org.bukkit.block.Block;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
 import io.github.guillex7.explodeany.configuration.loadable.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.SoundConfiguration;
 
 public class ExplosionManager {
 	private static ExplosionManager instance;
@@ -108,11 +111,18 @@ public class ExplosionManager {
 		BlockStatus affectedBlockStatus = BlockDatabase.getInstance().getBlockStatus(targetBlock);
 		affectedBlockStatus.damage(effectiveDamage);
 		if (affectedBlockStatus.shouldBreak()) {
+			SoundConfiguration soundConfiguration = materialConfiguration.getSoundConfiguration();
+			if (soundConfiguration.getSound() != null) {
+				targetBlock.getWorld().playSound(targetBlock.getLocation(), soundConfiguration.getSound(),
+						soundConfiguration.getVolume().floatValue(), soundConfiguration.getPitch().floatValue());
+			}
+			
 			if (materialConfiguration.shouldBeDropped()) {
 				targetBlock.breakNaturally();
 			} else {
 				targetBlock.setType(Material.AIR);
 			}
+
 			BlockDatabase.getInstance().removeBlockStatus(targetBlock);
 		}
 	}

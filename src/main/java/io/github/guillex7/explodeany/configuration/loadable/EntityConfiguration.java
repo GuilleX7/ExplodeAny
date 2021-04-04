@@ -5,8 +5,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 
 public class EntityConfiguration {
-	private static final String ExplosionDamageBlocksUnderwater = "ExplosionDamageBlocksUnderwater";
-	private static final String UnderwaterExplosionFactor = "UnderwaterExplosionFactor";
+	private static final String EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH = "ExplosionDamageBlocksUnderwater";
+	private static final String UNDERWATER_EXPLOSION_FACTOR_PATH = "UnderwaterExplosionFactor";
 	
 	private boolean explosionDamageBlocksUnderwater;
 	private Double underwaterExplosionFactor;
@@ -22,8 +22,8 @@ public class EntityConfiguration {
 	public static EntityConfiguration fromConfigurationSection(ConfigurationSection section) {
 		EntityConfiguration defaults = EntityConfiguration.byDefault();
 		return EntityConfiguration.of(
-				section.getBoolean(ExplosionDamageBlocksUnderwater, defaults.isExplosionDamageBlocksUnderwater()),
-				ConfigurationManager.ensureMin(section.getDouble(UnderwaterExplosionFactor, defaults.getUnderwaterExplosionFactor()), 0.0d)
+				section.getBoolean(EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH, defaults.isExplosionDamageBlocksUnderwater()),
+				ConfigurationManager.ensureMin(section.getDouble(UNDERWATER_EXPLOSION_FACTOR_PATH, defaults.getUnderwaterExplosionFactor()), 0.0d)
 				);
 	}
 
