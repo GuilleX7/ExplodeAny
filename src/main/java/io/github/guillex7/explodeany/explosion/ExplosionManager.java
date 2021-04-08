@@ -3,7 +3,6 @@ package io.github.guillex7.explodeany.explosion;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,12 +10,12 @@ import org.bukkit.block.Block;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
-import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
-import io.github.guillex7.explodeany.configuration.loadable.EntityConfiguration;
-import io.github.guillex7.explodeany.configuration.loadable.EntityMaterialConfiguration;
-import io.github.guillex7.explodeany.configuration.loadable.SoundConfiguration;
+import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
+import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.configuration.section.ParticleConfiguration;
+import io.github.guillex7.explodeany.configuration.section.SoundConfiguration;
 
 public class ExplosionManager {
 	private static ExplosionManager instance;
@@ -78,7 +77,22 @@ public class ExplosionManager {
 			return sourceLocation.getWorld().createExplosion(sourceLocation,
 					explosionPower * entityConfiguration.getUnderwaterExplosionFactor().floatValue());
 		}
-
+		
+		SoundConfiguration soundConfiguration = entityConfiguration.getSoundConfiguration();
+		if (soundConfiguration.getSound() != null) {
+			sourceLocation.getWorld().playSound(sourceLocation, soundConfiguration.getSound(),
+					soundConfiguration.getVolume().floatValue(), soundConfiguration.getPitch().floatValue());
+		}
+		
+		ParticleConfiguration particleConfiguration = entityConfiguration.getParticleConfiguration();
+		if (particleConfiguration.getParticle() != null) {
+			sourceLocation.getWorld().spawnParticle(
+					particleConfiguration.getParticle(),
+					sourceLocation.getX(), sourceLocation.getY(), sourceLocation.getZ(),
+					particleConfiguration.getAmount(), particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(), particleConfiguration.getDeltaZ(),
+					particleConfiguration.getSpeed(), particleConfiguration.getOptions(), particleConfiguration.isForce());
+		}
+		
 		return false;
 	}
 
@@ -104,7 +118,6 @@ public class ExplosionManager {
 		// d = distance from the center (always >= 1)
 		// dmax = maximum distance
 		// Use squared distance to avoid sqrt overhead
-		// Distance attenuation
 		effectiveDamage *= 1
 				- materialConfiguration.getDistanceAttenuationFactor() * (squaredDistance - 1) / maximumSquaredDistance;
 
@@ -115,6 +128,15 @@ public class ExplosionManager {
 			if (soundConfiguration.getSound() != null) {
 				targetBlock.getWorld().playSound(targetBlock.getLocation(), soundConfiguration.getSound(),
 						soundConfiguration.getVolume().floatValue(), soundConfiguration.getPitch().floatValue());
+			}
+			
+			ParticleConfiguration particleConfiguration = materialConfiguration.getParticleConfiguration();
+			if (particleConfiguration.getParticle() != null) {
+				targetBlock.getWorld().spawnParticle(
+						particleConfiguration.getParticle(),
+						targetBlock.getLocation().getX(), targetBlock.getLocation().getY(), targetBlock.getLocation().getZ(),
+						particleConfiguration.getAmount(), particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(), particleConfiguration.getDeltaZ(),
+						particleConfiguration.getSpeed(), particleConfiguration.getOptions(), particleConfiguration.isForce());
 			}
 			
 			if (materialConfiguration.shouldBeDropped()) {

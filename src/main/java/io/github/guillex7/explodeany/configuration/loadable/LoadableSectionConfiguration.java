@@ -12,6 +12,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
+import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 
 public abstract class LoadableSectionConfiguration<T> {
 	private static final String MATERIALS_SECTION = "Materials";

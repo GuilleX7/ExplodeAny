@@ -11,9 +11,9 @@ import org.bukkit.event.EventPriority;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.EntityConfiguration;
-import io.github.guillex7.explodeany.configuration.loadable.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableSectionConfiguration;
+import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
+import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
 public final class CannonExplosionListener implements LoadableListener {

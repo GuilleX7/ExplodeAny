@@ -1,4 +1,6 @@
-package io.github.guillex7.explodeany.configuration.loadable;
+package io.github.guillex7.explodeany.configuration.section;
+
+import java.util.Locale;
 
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,7 +30,7 @@ public class SoundConfiguration {
 		
 		Sound sound;
 		try {
-			sound = Sound.valueOf(section.getString(NAME_PATH));
+			sound = Sound.valueOf(section.getString(NAME_PATH).toUpperCase(Locale.ROOT));
 		} catch (Exception e) {
 			sound = null;
 		}

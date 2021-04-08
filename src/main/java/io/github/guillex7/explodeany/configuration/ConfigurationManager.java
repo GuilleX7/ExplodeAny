@@ -12,18 +12,16 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.configuration.loadable.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableSectionConfiguration;
+import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public final class ConfigurationManager {
-	private class ConfigurationKeys {
-		public final static String USE_BLOCK_DATABASE_ITEM = "UseBlockDatabase";
-		public final static String CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM = "CheckBlockDatabaseAtStartup";
-		public final static String BLOCK_DURABILITY_ITEM = "BlockDurability";
-		public final static String GROUPS_SECTION = "Groups";
-		public final static String LOCALE_SECTION = "Locale";
-	}
+	private final static String USE_BLOCK_DATABASE_ITEM = "UseBlockDatabase";
+	private final static String CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM = "CheckBlockDatabaseAtStartup";
+	private final static String BLOCK_DURABILITY_ITEM = "BlockDurability";
+	private final static String GROUPS_SECTION = "Groups";
+	private final static String LOCALE_SECTION = "Locale";
 
 	private static ConfigurationManager instance;
 
@@ -58,6 +56,18 @@ public final class ConfigurationManager {
 		return Math.max(value, min);
 	}
 
+	public static int ensureRange(int value, int max, int min) {
+		return Math.min(Math.max(value, min), max);
+	}
+
+	public static int ensureMax(int value, int max) {
+		return Math.min(value, max);
+	}
+
+	public static int ensureMin(int value, int min) {
+		return Math.max(value, min);
+	}
+	
 	public Map<String, LoadableSectionConfiguration<?>> getRegisteredEntityConfigurations() {
 		return registeredEntityConfigurations;
 	}
@@ -75,20 +85,20 @@ public final class ConfigurationManager {
 	}
 
 	public boolean doUseBlockDatabase() {
-		return getPlugin().getConfig().getBoolean(ConfigurationKeys.USE_BLOCK_DATABASE_ITEM);
+		return getPlugin().getConfig().getBoolean(USE_BLOCK_DATABASE_ITEM);
 	}
 
 	public boolean doCheckBlockDatabaseAtStartup() {
-		return getPlugin().getConfig().getBoolean(ConfigurationKeys.CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
+		return getPlugin().getConfig().getBoolean(CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
 	}
 
 	public Double getBlockDurability() {
-		return ensureMin(getPlugin().getConfig().getDouble(ConfigurationKeys.BLOCK_DURABILITY_ITEM), 1);
+		return ensureMin(getPlugin().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
 	}
 
 	public Map<String, List<String>> getGroups() {
 		ConfigurationSection groupsSection = getPlugin().getConfig()
-				.getConfigurationSection(ConfigurationKeys.GROUPS_SECTION);
+				.getConfigurationSection(GROUPS_SECTION);
 		Map<String, List<String>> groups = new HashMap<String, List<String>>();
 		for (String groupName : groupsSection.getKeys(false)) {
 			groups.put(groupName, groupsSection.getStringList(groupName));
@@ -107,7 +117,7 @@ public final class ConfigurationManager {
 
 	private void colorizeLocale() {
 		ConfigurationSection localeSection = getPlugin().getConfig()
-				.getConfigurationSection(ConfigurationKeys.LOCALE_SECTION);
+				.getConfigurationSection(LOCALE_SECTION);
 		if (localeSection != null) {
 			for (String path : localeSection.getValues(false).keySet()) {
 				if (localeSection.isString(path)) {
@@ -119,7 +129,7 @@ public final class ConfigurationManager {
 
 	public String getLocale(ConfigurationLocale locale) {
 		return getPlugin().getConfig()
-				.getString(String.format("%s.%s", ConfigurationKeys.LOCALE_SECTION, locale.getPath()));
+				.getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
 	}
 
 	public void registerEntityConfiguration(LoadableSectionConfiguration<?> entityConfiguration) {
