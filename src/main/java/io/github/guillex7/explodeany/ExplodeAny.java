@@ -77,7 +77,9 @@ public class ExplodeAny extends JavaPlugin {
 	}
 
 	public void unregisterListeners() {
-		ListenerManager.getInstance().unloadAllListeners();
+		ListenerManager listenerManager = ListenerManager.getInstance();
+		listenerManager.unloadAllListeners();
+		listenerManager.unregisterAllListeners();
 	}
 
 	public String getDatabaseFilename() {
