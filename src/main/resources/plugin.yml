@@ -9,6 +9,7 @@ softdepend: [Cannons]
 commands:
     explodeany:
         description: "General command"
+        aliases: [eany]
 permissions:
     explodeany.*:
         description: "Gives all permissions to a player"
