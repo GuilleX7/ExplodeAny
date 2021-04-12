@@ -6,10 +6,12 @@ import java.util.logging.Level;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
+import io.github.guillex7.explodeany.command.CommandManager;
+import io.github.guillex7.explodeany.command.registrable.CommandEany;
+import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.CannonProjectileConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.VanillaEntityConfiguration;
-import io.github.guillex7.explodeany.listener.CommandExecutor;
 import io.github.guillex7.explodeany.listener.ListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.BlockListener;
 import io.github.guillex7.explodeany.listener.loadable.CannonExplosionListener;
@@ -27,6 +29,7 @@ public class ExplodeAny extends JavaPlugin {
 		loadConfiguration();
 		loadDatabase();
 		registerListeners();
+		registerCommands();
 	}
 
 	@Override
@@ -63,7 +66,15 @@ public class ExplodeAny extends JavaPlugin {
 		listenerManager.registerListener(BlockListener.empty());
 		listenerManager.registerListener(EntityListener.empty());
 		listenerManager.loadAllListeners();
-		getCommand("explodeany").setExecutor(new CommandExecutor());
+	}
+	
+	public void registerCommands() {
+		CommandManager commandManager = CommandManager.getInstance();
+		commandManager.registerCommand(CommandEany.empty());
+		
+		for (RegistrableCommand command : commandManager.getRegisteredCommands().values()) {
+			getCommand(command.getName()).setExecutor(commandManager);
+		}
 	}
 
 	public void unloadConfiguration() {

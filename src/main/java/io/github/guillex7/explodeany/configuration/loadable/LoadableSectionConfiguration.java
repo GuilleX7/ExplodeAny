@@ -23,6 +23,7 @@ public abstract class LoadableSectionConfiguration<T> {
 	private Map<T, EntityConfiguration> entityConfigurations;
 
 	protected LoadableSectionConfiguration() {
+		super();
 		entityMaterialConfigurations = new HashMap<T, Map<Material, EntityMaterialConfiguration>>();
 		entityConfigurations = new HashMap<T, EntityConfiguration>();
 	}

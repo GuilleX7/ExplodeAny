@@ -10,7 +10,7 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
-import io.github.guillex7.explodeany.command.CommandChecktool;
+import io.github.guillex7.explodeany.command.registrable.CommandChecktool;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MessageFormatter;
