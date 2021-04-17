@@ -24,11 +24,6 @@ public class CommandReload extends RegistrableCommand {
 	public String getName() {
 		return "reload";
 	}
-
-	@Override
-	public String getUsage() {
-		return "";
-	}
 	
 	@Override
 	public List<String> getRequiredPermissions() {

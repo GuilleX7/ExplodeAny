@@ -17,7 +17,9 @@ public abstract class RegistrableCommand {
 	
 	public abstract String getName();
 
-	public abstract String getUsage();
+	public String getUsage() {
+		return "";
+	}
 
 	public List<String> getRequiredPermissions() {
 		return new ArrayList<String>();

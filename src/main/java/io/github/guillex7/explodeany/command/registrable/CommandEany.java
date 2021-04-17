@@ -20,7 +20,7 @@ public class CommandEany extends RegistrableCommand {
 
 	@Override
 	public String getUsage() {
-		return "[reload | about | checktool]";
+		return "[reload|about|checktool]";
 	}
 	
 	@Override

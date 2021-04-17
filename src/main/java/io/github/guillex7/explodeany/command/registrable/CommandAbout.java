@@ -21,11 +21,6 @@ public class CommandAbout extends RegistrableCommand {
 	}
 
 	@Override
-	public String getUsage() {
-		return "";
-	}
-	
-	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		PluginDescriptionFile description = ExplodeAny.getInstance().getDescription();
 		sender.sendMessage(MessageFormatter.sign(

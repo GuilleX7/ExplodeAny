@@ -29,11 +29,6 @@ public class CommandChecktoolToggle extends RegistrableCommand {
 	}
 
 	@Override
-	public String getUsage() {
-		return "";
-	}
-	
-	@Override
 	public List<String> getRequiredPermissions() {
 		return new ArrayList<String>(Arrays.asList("explodeany.checktool"));
 	}

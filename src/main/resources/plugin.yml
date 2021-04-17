@@ -12,14 +12,31 @@ commands:
         aliases: [eany]
 permissions:
     explodeany.*:
-        description: "Gives all permissions to a player"
+        description: "Gives all permissions"
         default: op
         children:
-            explodeany.checktool: true
+            explodeany.checktool.*: true
             explodeany.reload: true
             explodeany.about: true
-    explodeany.checktool:
-        description: "Gives permission to use checktool command"
+    explodeany.checktool.*:
+        description: "Gives all permissions about checktool"
+        default: op
+        children:
+            explodeany.checktool.use: true
+            explodeany.checktool.give: true
+            explodeany.checktool.set: true
+            explodeany.checktool.reset: true
+    explodeany.checktool.use:
+        description: "Gives permission to use checktool"
+        default: op
+    explodeany.checktool.give:
+        description: "Gives permission to give checktool items"
+        default: op
+    explodeany.checktool.set:
+        description: "Gives permission to set checktool item"
+        default: op
+    explodeany.checktool.reset:
+        description: "Gives permission to reset checktool item"
         default: op
     explodeany.reload:
         description: "Gives permission to use reload command"

@@ -77,7 +77,7 @@ public class CommandManager implements TabExecutor {
 		if (!rootCommand.execute(sender, Arrays.copyOfRange(args, i, args.length))) {
 			sender.sendMessage(MessageFormatter.sign(
 					String.format("Usage: /%s %s", breadcrumbs, rootCommand.getUsage())
-					));
+				));
 		}
 		return true;
 	}
