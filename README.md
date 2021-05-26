@@ -1,4 +1,4 @@
-![ExplodeAny logo](https://raw.githubusercontent.com/GuilleX7/ExplodeAny/main/etc/logo.png)
+![ExplodeAny logo](https://raw.githubusercontent.com/GuilleX7/ExplodeAny/main/etc/logo-1-1.png)
 # ExplodeAny
 Bukkit plugin that **allows to control any explosion.** It focuses on allowing certain types of explosions damage **vanilla-unbreakable blocks,** or even disabling damage for blocks that would break in regular conditions!
 It supports all Vanilla explosions and some other plugins' explosions, though there is only support for Cannons currently. Suggestions for adding compatibility with other plugins (or any other kind of suggestion/question/whatever) are welcome!
