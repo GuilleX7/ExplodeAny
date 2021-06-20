@@ -1,7 +1,6 @@
 package io.github.guillex7.explodeany;
 
 import java.io.File;
-import java.util.logging.Level;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,7 +23,7 @@ public class ExplodeAny extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		getLogger().log(Level.INFO,
+		getLogger().info(
 				String.format("%s v%s is LOADING now!", getDescription().getName(), getDescription().getVersion()));
 		loadConfiguration();
 		loadDatabase();
@@ -35,7 +34,7 @@ public class ExplodeAny extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		getLogger().log(Level.INFO,
+		getLogger().info(
 				String.format("%s v%s is UNLOADING now!", getDescription().getName(), getDescription().getVersion()));
 		unregisterListeners();
 		unloadDatabase();
@@ -67,11 +66,11 @@ public class ExplodeAny extends JavaPlugin {
 		listenerManager.registerListener(EntityListener.empty());
 		listenerManager.loadAllListeners();
 	}
-	
+
 	public void registerCommands() {
 		CommandManager commandManager = CommandManager.getInstance();
 		commandManager.registerCommand(CommandEany.empty());
-		
+
 		for (RegistrableCommand command : commandManager.getRegisteredCommands().values()) {
 			getCommand(command.getName()).setExecutor(commandManager);
 		}

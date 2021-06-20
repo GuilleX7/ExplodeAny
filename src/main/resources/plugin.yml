@@ -23,11 +23,15 @@ permissions:
         default: op
         children:
             explodeany.checktool.use: true
+            explodeany.checktool.toggle: true
             explodeany.checktool.give: true
             explodeany.checktool.set: true
             explodeany.checktool.reset: true
     explodeany.checktool.use:
         description: "Gives permission to use checktool"
+        default: op
+    explodeany.checktool.toggle:
+        description: "Gives permission to toggle checktool use"
         default: op
     explodeany.checktool.give:
         description: "Gives permission to give checktool items"

@@ -1,13 +1,11 @@
 package io.github.guillex7.explodeany.configuration;
 
 public enum ConfigurationLocale {
-	NOT_ALLOWED("NotAllowed"),
-	ONLY_PLAYER_ALLOWED("OnlyPlayerAllowed"),
-	ENTER_CHECKTOOL_MODE("EnterChecktoolMode"),
-	LEAVE_CHECKTOOL_MODE("LeaveChecktoolMode"),
-	CHECKTOOL_USE("ChecktoolUse"),
-	CHECKTOOL_NOT_HANDLED("ChecktoolNotHandled"),
-	RELOADED("Reloaded");
+	NOT_ALLOWED("NotAllowed"), ONLY_PLAYER_ALLOWED("OnlyPlayerAllowed"), PLAYER_DOESNT_EXIST("PlayerDoesntExist"),
+	PLAYER_IS_OFFLINE("PlayerIsOffline"), ENTER_CHECKTOOL_MODE("EnterChecktoolMode"),
+	LEAVE_CHECKTOOL_MODE("LeaveChecktoolMode"), CHECKTOOL_USE("ChecktoolUse"), CHECKTOOL_SET("ChecktoolSet"),
+	CHECKTOOL_NOT_PERSISTED("ChecktoolNotPersisted"), CHECKTOOL_GIVEN("ChecktoolGiven"),
+	CHECKTOOL_RESET("ChecktoolReset"), CHECKTOOL_NOT_HANDLED("ChecktoolNotHandled"), RELOADED("Reloaded");
 
 	private final String path;
 

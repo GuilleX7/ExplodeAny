@@ -20,35 +20,43 @@ public class EntityMaterialConfiguration {
 	private boolean fancyUnderwaterDetection;
 	private SoundConfiguration soundConfiguration;
 	private ParticleConfiguration particleConfiguration;
-	
+
 	public static EntityMaterialConfiguration of(double damage, double dropChance, double distanceAttenuationFactor,
-			double explosionRadiusFactor, double underwaterDamageFactor, boolean fancyUnderwaterDetection, SoundConfiguration soundConfiguration,
-			ParticleConfiguration particleConfiguration) {
+			double explosionRadiusFactor, double underwaterDamageFactor, boolean fancyUnderwaterDetection,
+			SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
 		return new EntityMaterialConfiguration(damage, dropChance, distanceAttenuationFactor, explosionRadiusFactor,
 				underwaterDamageFactor, fancyUnderwaterDetection, soundConfiguration, particleConfiguration);
 	}
-	
+
 	public static EntityMaterialConfiguration byDefault() {
-		return EntityMaterialConfiguration.of(ConfigurationManager.getInstance().getBlockDurability(), 0.0d, 0.0d, 0.5d, 0.5d, false,
-				SoundConfiguration.byDefault(), ParticleConfiguration.byDefault());
+		return EntityMaterialConfiguration.of(ConfigurationManager.getInstance().getBlockDurability(), 0.0d, 0.0d, 0.5d,
+				0.5d, false, SoundConfiguration.byDefault(), ParticleConfiguration.byDefault());
 	}
 
 	public static EntityMaterialConfiguration fromConfigurationSection(ConfigurationSection section) {
 		EntityMaterialConfiguration defaults = EntityMaterialConfiguration.byDefault();
 		ConfigurationSection soundConfigurationSection = section.getConfigurationSection(SoundConfiguration.ROOT_PATH);
-		ConfigurationSection particleConfigurationSection = section.getConfigurationSection(ParticleConfiguration.ROOT_PATH);
-		
+		ConfigurationSection particleConfigurationSection = section
+				.getConfigurationSection(ParticleConfiguration.ROOT_PATH);
+
 		return EntityMaterialConfiguration.of(
+				ConfigurationManager.ensureMin(section.getDouble(DAMAGE_PATH, defaults.getDamage()), 0.0d),
+				ConfigurationManager.ensureRange(section.getDouble(DROP_CHANCE_PATH, defaults.getDropChance()), 100.0d,
+						0.0d) / 100.0,
+				ConfigurationManager.ensureRange(
+						section.getDouble(DISTANCE_ATTENUATION_FACTOR_PATH, defaults.getDistanceAttenuationFactor()),
+						1.0d, 0.0d),
 				ConfigurationManager.ensureMin(
-						section.getDouble(DAMAGE_PATH, defaults.getDamage()), 0.0d),
-				ConfigurationManager.ensureRange(section.getDouble(DROP_CHANCE_PATH, defaults.getDropChance()), 100.0d, 0.0d) / 100.0,
-				ConfigurationManager.ensureRange(section.getDouble(DISTANCE_ATTENUATION_FACTOR_PATH, defaults.getDistanceAttenuationFactor()), 1.0d, 0.0d),
-				ConfigurationManager.ensureMin(section.getDouble(EXPLOSION_RADIUS_FACTOR_PATH, defaults.getExplosionRadiusFactor()), 0.0d),
-				ConfigurationManager.ensureMin(section.getDouble(UNDERWATER_DAMAGE_FACTOR_PATH, defaults.getUnderwaterDamageFactor()), 0.0d),
+						section.getDouble(EXPLOSION_RADIUS_FACTOR_PATH, defaults.getExplosionRadiusFactor()), 0.0d),
+				ConfigurationManager.ensureMin(
+						section.getDouble(UNDERWATER_DAMAGE_FACTOR_PATH, defaults.getUnderwaterDamageFactor()), 0.0d),
 				section.getBoolean(FANCY_UNDERWATER_DETECTION_PATH, defaults.isFancyUnderwaterDetection()),
-				(soundConfigurationSection != null) ? SoundConfiguration.fromConfigurationSection(soundConfigurationSection) : SoundConfiguration.byDefault(),
-				(particleConfigurationSection != null) ? ParticleConfiguration.fromConfigurationSection(particleConfigurationSection) : ParticleConfiguration.byDefault()
-			);
+				(soundConfigurationSection != null)
+						? SoundConfiguration.fromConfigurationSection(soundConfigurationSection)
+						: SoundConfiguration.byDefault(),
+				(particleConfigurationSection != null)
+						? ParticleConfiguration.fromConfigurationSection(particleConfigurationSection)
+						: ParticleConfiguration.byDefault());
 	}
 
 	private EntityMaterialConfiguration(double damage, double dropChance, double distanceAttenuationFactor,
@@ -80,7 +88,7 @@ public class EntityMaterialConfiguration {
 	public boolean shouldBeDropped() {
 		return Math.random() <= getDropChance();
 	}
-	
+
 	public void setDropChance(double dropChance) {
 		this.dropChance = dropChance;
 	}
@@ -104,7 +112,7 @@ public class EntityMaterialConfiguration {
 	public double getUnderwaterDamageFactor() {
 		return underwaterDamageFactor;
 	}
-	
+
 	public boolean isUnderwaterAffected() {
 		return getUnderwaterDamageFactor() != 1.0;
 	}

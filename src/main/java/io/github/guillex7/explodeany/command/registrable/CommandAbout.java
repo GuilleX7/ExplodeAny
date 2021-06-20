@@ -10,11 +10,11 @@ public class CommandAbout extends RegistrableCommand {
 	private CommandAbout() {
 		super();
 	}
-	
+
 	public static CommandAbout empty() {
 		return new CommandAbout();
 	}
-	
+
 	@Override
 	public String getName() {
 		return "about";

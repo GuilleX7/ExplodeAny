@@ -67,7 +67,7 @@ public final class ConfigurationManager {
 	public static int ensureMin(int value, int min) {
 		return Math.max(value, min);
 	}
-	
+
 	public Map<String, LoadableSectionConfiguration<?>> getRegisteredEntityConfigurations() {
 		return registeredEntityConfigurations;
 	}
@@ -97,8 +97,7 @@ public final class ConfigurationManager {
 	}
 
 	public Map<String, List<String>> getGroups() {
-		ConfigurationSection groupsSection = getPlugin().getConfig()
-				.getConfigurationSection(GROUPS_SECTION);
+		ConfigurationSection groupsSection = getPlugin().getConfig().getConfigurationSection(GROUPS_SECTION);
 		Map<String, List<String>> groups = new HashMap<String, List<String>>();
 		for (String groupName : groupsSection.getKeys(false)) {
 			groups.put(groupName, groupsSection.getStringList(groupName));
@@ -116,8 +115,7 @@ public final class ConfigurationManager {
 	}
 
 	private void colorizeLocale() {
-		ConfigurationSection localeSection = getPlugin().getConfig()
-				.getConfigurationSection(LOCALE_SECTION);
+		ConfigurationSection localeSection = getPlugin().getConfig().getConfigurationSection(LOCALE_SECTION);
 		if (localeSection != null) {
 			for (String path : localeSection.getValues(false).keySet()) {
 				if (localeSection.isString(path)) {
@@ -128,8 +126,7 @@ public final class ConfigurationManager {
 	}
 
 	public String getLocale(ConfigurationLocale locale) {
-		return getPlugin().getConfig()
-				.getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
+		return getPlugin().getConfig().getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
 	}
 
 	public void registerEntityConfiguration(LoadableSectionConfiguration<?> entityConfiguration) {

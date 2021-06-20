@@ -1,7 +1,6 @@
 package io.github.guillex7.explodeany.configuration.section;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -14,7 +13,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 
 public class ParticleConfiguration {
-	private static final Set<Particle> particlesWithData = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Particle.REDSTONE)));
+	private static final Set<Particle> particlesWithData = new HashSet<>(Arrays.asList(Particle.REDSTONE));
 
 	public static final String ROOT_PATH = "Particles";
 	private static final String NAME_PATH = "Name";
@@ -49,38 +48,36 @@ public class ParticleConfiguration {
 
 	public static ParticleConfiguration fromConfigurationSection(ConfigurationSection section) {
 		ParticleConfiguration defaults = ParticleConfiguration.byDefault();
-		
+
 		Particle particle;
 		try {
 			particle = Particle.valueOf(section.getString(NAME_PATH).toUpperCase(Locale.ROOT));
 		} catch (Exception e) {
 			particle = null;
 		}
-		
+
 		DustOptions options;
 		if (particlesWithData.contains(particle)) {
 			options = new DustOptions(
-				Color.fromRGB(
-					ConfigurationManager.ensureRange(section.getInt(RED_PATH, defaults.getOptions().getColor().getRed()), 255, 0),
-					ConfigurationManager.ensureRange(section.getInt(GREEN_PATH, defaults.getOptions().getColor().getGreen()), 255, 0),
-					ConfigurationManager.ensureRange(section.getInt(BLUE_PATH, defaults.getOptions().getColor().getBlue()), 255, 0)
-				),
-				(float) ConfigurationManager.ensureMin(section.getDouble(SIZE_PATH, defaults.getOptions().getSize()), 0)
-			);
+					Color.fromRGB(
+							ConfigurationManager.ensureRange(
+									section.getInt(RED_PATH, defaults.getOptions().getColor().getRed()), 255, 0),
+							ConfigurationManager.ensureRange(
+									section.getInt(GREEN_PATH, defaults.getOptions().getColor().getGreen()), 255, 0),
+							ConfigurationManager.ensureRange(
+									section.getInt(BLUE_PATH, defaults.getOptions().getColor().getBlue()), 255, 0)),
+					(float) ConfigurationManager
+							.ensureMin(section.getDouble(SIZE_PATH, defaults.getOptions().getSize()), 0));
 		} else {
 			options = null;
 		}
-		
-		return ParticleConfiguration.of(
-				particle,
-				section.getDouble(DELTA_X_PATH, defaults.getDeltaX()),
+
+		return ParticleConfiguration.of(particle, section.getDouble(DELTA_X_PATH, defaults.getDeltaX()),
 				section.getDouble(DELTA_Y_PATH, defaults.getDeltaY()),
 				section.getDouble(DELTA_Z_PATH, defaults.getDeltaZ()),
 				ConfigurationManager.ensureMin(section.getInt(AMOUNT_PATH, defaults.getAmount()), 0),
 				ConfigurationManager.ensureMin(section.getDouble(SPEED_PATH, defaults.getSpeed()), 0),
-				section.getBoolean(FORCE_PATH, defaults.isForce()),
-				options
-			);
+				section.getBoolean(FORCE_PATH, defaults.isForce()), options);
 	}
 
 	public ParticleConfiguration(Particle particle, Double deltaX, Double deltaY, Double deltaZ, Integer amount,

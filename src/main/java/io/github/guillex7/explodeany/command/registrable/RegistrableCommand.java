@@ -9,12 +9,12 @@ import org.bukkit.command.CommandSender;
 
 public abstract class RegistrableCommand {
 	private Map<String, RegistrableCommand> mappedSubcommands = null;
-	
+
 	protected RegistrableCommand() {
 		super();
 		mapSubcommands();
 	}
-	
+
 	public abstract String getName();
 
 	public String getUsage() {
@@ -28,19 +28,19 @@ public abstract class RegistrableCommand {
 	public List<RegistrableCommand> getSubcommands() {
 		return new ArrayList<RegistrableCommand>();
 	}
-	
+
 	private final void mapSubcommands() {
 		if (mappedSubcommands == null) {
 			mappedSubcommands = new HashMap<String, RegistrableCommand>();
 		} else {
 			mappedSubcommands.clear();
 		}
-		
+
 		for (RegistrableCommand subcommand : getSubcommands()) {
 			mappedSubcommands.put(subcommand.getName(), subcommand);
 		}
 	}
-	
+
 	public final Map<String, RegistrableCommand> getMappedSubcommands() {
 		return mappedSubcommands;
 	}

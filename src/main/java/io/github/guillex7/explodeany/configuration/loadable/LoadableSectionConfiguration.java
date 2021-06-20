@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -114,15 +113,14 @@ public abstract class LoadableSectionConfiguration<T> {
 			}
 
 			if (fetchedEntities.isEmpty()) {
-				getPlugin().getLogger().log(Level.WARNING,
-						String.format("%s is not a valid %s nor %s group and won't be loaded", entityName,
-								getSectionPath(), getSectionPath()));
+				getPlugin().getLogger().warning(String.format("%s is not a valid %s nor %s group and won't be loaded",
+						entityName, getSectionPath(), getSectionPath()));
 				continue;
 			}
 
 			ConfigurationSection entitySection = entitiesSection.getConfigurationSection(entityName);
 			if (entitySection == null) {
-				getPlugin().getLogger().log(Level.WARNING,
+				getPlugin().getLogger().warning(
 						String.format("%s.%s section is invalid and won't be loaded", getSectionPath(), entityName));
 				continue;
 			}
@@ -191,15 +189,15 @@ public abstract class LoadableSectionConfiguration<T> {
 			}
 
 			if (fetchedMaterials.isEmpty()) {
-				getPlugin().getLogger().log(Level.WARNING,
-						String.format("%s is an invalid material or material group for %s and won't be loaded",
+				getPlugin().getLogger()
+						.warning(String.format("%s is an invalid material or material group for %s and won't be loaded",
 								materialName, entitySection.getName()));
 				continue;
 			}
 
 			ConfigurationSection materialSection = entitySection.getConfigurationSection(materialName);
 			if (materialSection == null) {
-				getPlugin().getLogger().log(Level.WARNING, String.format("%s.%s.%s is invalid and won't be loaded",
+				getPlugin().getLogger().warning(String.format("%s.%s.%s is invalid and won't be loaded",
 						getSectionPath(), entitySection.getName(), materialName));
 				continue;
 			}

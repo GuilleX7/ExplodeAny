@@ -7,33 +7,40 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 public class EntityConfiguration {
 	private static final String EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH = "ExplosionDamageBlocksUnderwater";
 	private static final String UNDERWATER_EXPLOSION_FACTOR_PATH = "UnderwaterExplosionFactor";
-	
+
 	private boolean explosionDamageBlocksUnderwater;
 	private Double underwaterExplosionFactor;
 	private SoundConfiguration soundConfiguration;
 	private ParticleConfiguration particleConfiguration;
-	
+
 	public static EntityConfiguration of(boolean explosionDamageBlocksUnderwater, Double underwaterExplosionFactor,
 			SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
-		return new EntityConfiguration(explosionDamageBlocksUnderwater, underwaterExplosionFactor,
-				soundConfiguration, particleConfiguration);
+		return new EntityConfiguration(explosionDamageBlocksUnderwater, underwaterExplosionFactor, soundConfiguration,
+				particleConfiguration);
 	}
-	
+
 	public static EntityConfiguration byDefault() {
 		return EntityConfiguration.of(false, 0.5d, SoundConfiguration.byDefault(), ParticleConfiguration.byDefault());
 	}
-	
+
 	public static EntityConfiguration fromConfigurationSection(ConfigurationSection section) {
 		EntityConfiguration defaults = EntityConfiguration.byDefault();
 		ConfigurationSection soundConfigurationSection = section.getConfigurationSection(SoundConfiguration.ROOT_PATH);
-		ConfigurationSection particleConfigurationSection = section.getConfigurationSection(ParticleConfiguration.ROOT_PATH);
-		
+		ConfigurationSection particleConfigurationSection = section
+				.getConfigurationSection(ParticleConfiguration.ROOT_PATH);
+
 		return EntityConfiguration.of(
-				section.getBoolean(EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH, defaults.isExplosionDamageBlocksUnderwater()),
-				ConfigurationManager.ensureMin(section.getDouble(UNDERWATER_EXPLOSION_FACTOR_PATH, defaults.getUnderwaterExplosionFactor()), 0.0d),
-				(soundConfigurationSection != null) ? SoundConfiguration.fromConfigurationSection(soundConfigurationSection) : SoundConfiguration.byDefault(),
-				(particleConfigurationSection != null) ? ParticleConfiguration.fromConfigurationSection(particleConfigurationSection) : ParticleConfiguration.byDefault()
-			);
+				section.getBoolean(EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH,
+						defaults.isExplosionDamageBlocksUnderwater()),
+				ConfigurationManager.ensureMin(
+						section.getDouble(UNDERWATER_EXPLOSION_FACTOR_PATH, defaults.getUnderwaterExplosionFactor()),
+						0.0d),
+				(soundConfigurationSection != null)
+						? SoundConfiguration.fromConfigurationSection(soundConfigurationSection)
+						: SoundConfiguration.byDefault(),
+				(particleConfigurationSection != null)
+						? ParticleConfiguration.fromConfigurationSection(particleConfigurationSection)
+						: ParticleConfiguration.byDefault());
 	}
 
 	private EntityConfiguration(boolean explosionDamageBlocksUnderwater, Double underwaterExplosionFactor,

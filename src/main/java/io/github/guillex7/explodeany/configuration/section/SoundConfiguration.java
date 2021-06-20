@@ -12,11 +12,11 @@ public class SoundConfiguration {
 	private static final String NAME_PATH = "Name";
 	private static final String VOLUME_PATH = "Volume";
 	private static final String PITCH_PATH = "Pitch";
-	
+
 	private Sound sound;
 	private Double volume;
 	private Double pitch;
-	
+
 	public static SoundConfiguration of(Sound sound, Double volume, Double pitch) {
 		return new SoundConfiguration(sound, volume, pitch);
 	}
@@ -24,24 +24,22 @@ public class SoundConfiguration {
 	public static SoundConfiguration byDefault() {
 		return SoundConfiguration.of(null, 1.0d, 1.0d);
 	}
-	
+
 	public static SoundConfiguration fromConfigurationSection(ConfigurationSection section) {
 		SoundConfiguration defaults = SoundConfiguration.byDefault();
-		
+
 		Sound sound;
 		try {
 			sound = Sound.valueOf(section.getString(NAME_PATH).toUpperCase(Locale.ROOT));
 		} catch (Exception e) {
 			sound = null;
 		}
-		
-		return SoundConfiguration.of(
-				sound,
+
+		return SoundConfiguration.of(sound,
 				ConfigurationManager.ensureMin(section.getDouble(VOLUME_PATH, defaults.getVolume()), 0.0d),
-				ConfigurationManager.ensureRange(section.getDouble(PITCH_PATH, defaults.getPitch()), 2.0d, 0.5d)
-			);
+				ConfigurationManager.ensureRange(section.getDouble(PITCH_PATH, defaults.getPitch()), 2.0d, 0.5d));
 	}
-	
+
 	private SoundConfiguration(Sound sound, Double volume, Double pitch) {
 		super();
 		this.sound = sound;

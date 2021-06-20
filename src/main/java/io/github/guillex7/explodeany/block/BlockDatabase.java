@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
 import org.bukkit.block.Block;
 
@@ -29,7 +28,7 @@ public class BlockDatabase {
 	private static TypeToken<Map<BlockLocation, BlockStatus>> getDatabaseTypeToken() {
 		return databaseTypeToken;
 	}
-	
+
 	private BlockDatabase() {
 		database = new HashMap<BlockLocation, BlockStatus>();
 	}
@@ -75,7 +74,7 @@ public class BlockDatabase {
 
 	public void loadFromFile(File databaseFile) {
 		if (!databaseFile.exists() || !databaseFile.canRead()) {
-			getPlugin().getLogger().log(Level.INFO, "Database doesn't exist yet, will create a new database");
+			getPlugin().getLogger().info("Database doesn't exist yet, will create a new database");
 			return;
 		}
 
@@ -93,9 +92,9 @@ public class BlockDatabase {
 			Gson gson = gsonBuilder.create();
 			loadedDatabase = gson.fromJson(fr, getDatabaseTypeToken().getType());
 			fr.close();
-			getPlugin().getLogger().log(Level.INFO, "Database loaded successfully");
+			getPlugin().getLogger().info("Database loaded successfully");
 		} catch (Exception e) {
-			getPlugin().getLogger().log(Level.WARNING, "Couldn't load database, creating an empty one");
+			getPlugin().getLogger().warning("Couldn't load database, creating an empty one");
 		}
 
 		return loadedDatabase;
@@ -106,7 +105,7 @@ public class BlockDatabase {
 			try {
 				databaseFile.createNewFile();
 			} catch (IOException e) {
-				getPlugin().getLogger().log(Level.WARNING, "Couldn't create a new database file! Database won't be saved");
+				getPlugin().getLogger().warning("Couldn't create a new database file! Database won't be saved");
 				return;
 			}
 		}
@@ -124,9 +123,9 @@ public class BlockDatabase {
 			Gson gson = gsonBuilder.create();
 			fw.write(gson.toJson(database, getDatabaseTypeToken().getType()));
 			fw.close();
-			getPlugin().getLogger().log(Level.INFO, "Database saved successfully");
+			getPlugin().getLogger().info("Database saved successfully");
 		} catch (Exception e) {
-			getPlugin().getLogger().log(Level.WARNING, "Couldn't save database");
+			getPlugin().getLogger().warning("Couldn't save database");
 		}
 	}
 

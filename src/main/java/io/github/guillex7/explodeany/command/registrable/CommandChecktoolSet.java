@@ -6,28 +6,29 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
-public class CommandChecktoolToggle extends RegistrableCommand {
-	private CommandChecktoolToggle() {
+public class CommandChecktoolSet extends RegistrableCommand {
+	private CommandChecktoolSet() {
 		super();
 	}
 
-	public static CommandChecktoolToggle empty() {
-		return new CommandChecktoolToggle();
+	public static CommandChecktoolSet empty() {
+		return new CommandChecktoolSet();
 	}
 
 	@Override
 	public String getName() {
-		return "toggle";
+		return "set";
 	}
 
 	@Override
 	public List<String> getRequiredPermissions() {
-		return new ArrayList<String>(Arrays.asList("explodeany.checktool.toggle"));
+		return new ArrayList<String>(Arrays.asList("explodeany.checktool.set"));
 	}
 
 	@Override
@@ -39,15 +40,14 @@ public class CommandChecktoolToggle extends RegistrableCommand {
 		}
 
 		Player player = (Player) sender;
-
-		if (CommandChecktool.getPlayersUsingChecktool().contains(player)) {
-			CommandChecktool.getPlayersUsingChecktool().remove(player);
-			player.sendMessage(MessageFormatter
-					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.LEAVE_CHECKTOOL_MODE)));
+		ItemStack newTool = new ItemStack(player.getInventory().getItemInMainHand());
+		newTool.setAmount(1);
+		if (CommandChecktool.setChecktool(newTool)) {
+			sender.sendMessage(MessageFormatter
+					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.CHECKTOOL_SET)));
 		} else {
-			CommandChecktool.getPlayersUsingChecktool().add(player);
-			player.sendMessage(MessageFormatter
-					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ENTER_CHECKTOOL_MODE)));
+			sender.sendMessage(MessageFormatter
+					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.CHECKTOOL_NOT_PERSISTED)));
 		}
 		return true;
 	}

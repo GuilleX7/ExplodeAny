@@ -8,21 +8,21 @@ public final class CannonProjectileConfiguration extends LoadableSectionConfigur
 	private CannonProjectileConfiguration() {
 		super();
 	}
-	
+
 	public static CannonProjectileConfiguration empty() {
 		return new CannonProjectileConfiguration();
 	}
-	
+
 	@Override
 	public boolean shouldBeLoaded() {
 		return Bukkit.getPluginManager().isPluginEnabled("Cannons");
 	}
-	
+
 	@Override
 	public String getEntityName(String entity) {
 		return entity;
 	}
-	
+
 	@Override
 	public String getSectionPath() {
 		return "CannonProjectile";

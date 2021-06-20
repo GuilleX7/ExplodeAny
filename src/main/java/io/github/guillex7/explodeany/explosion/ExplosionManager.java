@@ -77,22 +77,22 @@ public class ExplosionManager {
 			return sourceLocation.getWorld().createExplosion(sourceLocation,
 					explosionPower * entityConfiguration.getUnderwaterExplosionFactor().floatValue());
 		}
-		
+
 		SoundConfiguration soundConfiguration = entityConfiguration.getSoundConfiguration();
 		if (soundConfiguration.getSound() != null) {
 			sourceLocation.getWorld().playSound(sourceLocation, soundConfiguration.getSound(),
 					soundConfiguration.getVolume().floatValue(), soundConfiguration.getPitch().floatValue());
 		}
-		
+
 		ParticleConfiguration particleConfiguration = entityConfiguration.getParticleConfiguration();
 		if (particleConfiguration.getParticle() != null) {
-			sourceLocation.getWorld().spawnParticle(
-					particleConfiguration.getParticle(),
-					sourceLocation.getX(), sourceLocation.getY(), sourceLocation.getZ(),
-					particleConfiguration.getAmount(), particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(), particleConfiguration.getDeltaZ(),
-					particleConfiguration.getSpeed(), particleConfiguration.getOptions(), particleConfiguration.isForce());
+			sourceLocation.getWorld().spawnParticle(particleConfiguration.getParticle(), sourceLocation.getX(),
+					sourceLocation.getY(), sourceLocation.getZ(), particleConfiguration.getAmount(),
+					particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(),
+					particleConfiguration.getDeltaZ(), particleConfiguration.getSpeed(),
+					particleConfiguration.getOptions(), particleConfiguration.isForce());
 		}
-		
+
 		return false;
 	}
 
@@ -129,16 +129,17 @@ public class ExplosionManager {
 				targetBlock.getWorld().playSound(targetBlock.getLocation(), soundConfiguration.getSound(),
 						soundConfiguration.getVolume().floatValue(), soundConfiguration.getPitch().floatValue());
 			}
-			
+
 			ParticleConfiguration particleConfiguration = materialConfiguration.getParticleConfiguration();
 			if (particleConfiguration.getParticle() != null) {
-				targetBlock.getWorld().spawnParticle(
-						particleConfiguration.getParticle(),
-						targetBlock.getLocation().getX(), targetBlock.getLocation().getY(), targetBlock.getLocation().getZ(),
-						particleConfiguration.getAmount(), particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(), particleConfiguration.getDeltaZ(),
-						particleConfiguration.getSpeed(), particleConfiguration.getOptions(), particleConfiguration.isForce());
+				targetBlock.getWorld().spawnParticle(particleConfiguration.getParticle(),
+						targetBlock.getLocation().getX(), targetBlock.getLocation().getY(),
+						targetBlock.getLocation().getZ(), particleConfiguration.getAmount(),
+						particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(),
+						particleConfiguration.getDeltaZ(), particleConfiguration.getSpeed(),
+						particleConfiguration.getOptions(), particleConfiguration.isForce());
 			}
-			
+
 			if (materialConfiguration.shouldBeDropped()) {
 				targetBlock.breakNaturally();
 			} else {

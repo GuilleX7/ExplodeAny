@@ -46,10 +46,10 @@ public final class CannonExplosionListener implements LoadableListener {
 			return;
 		}
 		String projectileId = event.getProjectile().getProjectileId();
-		
+
 		LoadableSectionConfiguration<?> cannonProjectileConfiguration = ConfigurationManager.getInstance()
 				.getRegisteredEntityConfiguration("CannonProjectile");
-		
+
 		Map<Material, EntityMaterialConfiguration> materialConfigurations = cannonProjectileConfiguration
 				.getEntityMaterialConfigurations().get(projectileId);
 		if (materialConfigurations == null) {

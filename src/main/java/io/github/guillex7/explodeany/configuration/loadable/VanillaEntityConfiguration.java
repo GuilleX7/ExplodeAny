@@ -1,25 +1,18 @@
 package io.github.guillex7.explodeany.configuration.loadable;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public final class VanillaEntityConfiguration extends LoadableSectionConfiguration<String> {
-	private final Set<String> validEntities = new HashSet<>();
-	
-	private VanillaEntityConfiguration () {
+	private final Set<String> validEntities = new HashSet<>(
+			Arrays.asList("WITHER", "ENDER_CRYSTAL", "PRIMED_TNT", "CREEPER", "CHARGED_CREEPER", "FIREBALL",
+					"DRAGON_FIREBALL", "SMALL_FIREBALL", "WITHER_SKULL", "CHARGED_WITHER_SKULL"));
+
+	private VanillaEntityConfiguration() {
 		super();
-		validEntities.add("WITHER");
-		validEntities.add("ENDER_CRYSTAL");
-		validEntities.add("PRIMED_TNT");
-		validEntities.add("CREEPER");
-		validEntities.add("CHARGED_CREEPER");
-		validEntities.add("FIREBALL");
-		validEntities.add("DRAGON_FIREBALL");
-		validEntities.add("SMALL_FIREBALL");
-		validEntities.add("WITHER_SKULL");
-		validEntities.add("CHARGED_WITHER_SKULL");
 	};
-	
+
 	public static VanillaEntityConfiguration empty() {
 		return new VanillaEntityConfiguration();
 	}
