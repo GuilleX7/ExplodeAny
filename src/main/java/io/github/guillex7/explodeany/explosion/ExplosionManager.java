@@ -72,12 +72,6 @@ public class ExplosionManager {
 			}
 		}
 
-		if (entityConfiguration.isExplosionDamageBlocksUnderwater() && sourceLocation.getBlock().isLiquid()) {
-			sourceLocation.getBlock().setType(Material.AIR);
-			return sourceLocation.getWorld().createExplosion(sourceLocation,
-					explosionPower * entityConfiguration.getUnderwaterExplosionFactor().floatValue());
-		}
-
 		SoundConfiguration soundConfiguration = entityConfiguration.getSoundConfiguration();
 		if (soundConfiguration.getSound() != null) {
 			sourceLocation.getWorld().playSound(sourceLocation, soundConfiguration.getSound(),
@@ -91,6 +85,12 @@ public class ExplosionManager {
 					particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(),
 					particleConfiguration.getDeltaZ(), particleConfiguration.getSpeed(),
 					particleConfiguration.getOptions(), particleConfiguration.isForce());
+		}
+		
+		if (entityConfiguration.isExplosionDamageBlocksUnderwater() && sourceLocation.getBlock().isLiquid()) {
+			sourceLocation.getBlock().setType(Material.AIR);
+			return sourceLocation.getWorld().createExplosion(sourceLocation,
+					explosionPower * entityConfiguration.getUnderwaterExplosionFactor().floatValue());
 		}
 
 		return false;

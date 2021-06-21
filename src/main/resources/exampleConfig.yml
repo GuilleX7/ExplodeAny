@@ -71,7 +71,33 @@ VanillaEntity:
                                                     # Minimum is 0.0, which means it will disabled
                                                     # [Default] is 0.5, which reduces the explosion power to half its original value.
                                                     # A value of 1.0 means that water doesn't affect explosion power
-                                                
+
+            Particles:                              # This section allows to specify the particles that will spawn in every
+                                                    # explosion of this entity.
+                Name: REDSTONE                      # Name of the particles to be spawned. Valid values are listed in
+                                                    # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+                DeltaX: 2.0                         # Size of the cube that will contain the particles
+                DeltaY: 2.0
+                DeltaZ: 2.0
+                Amount: 2000                        # Amount of particles to be spawned. Be careful, larger values could cause FPS drops.
+                Speed: 1.0                          # Speed of the particles to be spawned. Must be a positive value or zero.
+                Force: true                         # Allows the particles to be seen up to 256 blocks away.
+                Red: 255                            # Color of the particles. Only applicable when particle's name is REDSTONE
+                Blue: 0
+                Green: 255
+                Size: 2.0                           # Size of the particles. Must be a positive value. Only applicable when particle's
+                                                    # name is REDSTONE
+
+            Sound:                                  # This section allows to specify the sound to be played in every
+                                                    # explosion of this entity
+                Name: ENTITY_OCELOT_HURT            # Name of the sound to be played. Valid values are listed in
+                                                    # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+                Volume: 1.0                         # Volume of the sound to be played. Must be a positive value. Values greater than
+                                                    # 1.0 will not increase the loudness of the sound, but it will be heared in a greater
+                                                    # distance.
+                Pitch: 1.0                          # Pitch of the sound. Must be between 0.5 and 2.0, and allows to specify the speed
+                                                    # the sound is played at.
+
         Materials:                                  # This section contains the materials that will be managed by the plugin.
                                                     # It is not mandatory: if this section doesn't exist, the plugin will understand that
                                                     # every section in the entity is a material. That can be used as a shortcut when
