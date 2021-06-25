@@ -157,7 +157,20 @@ VanillaEntity:
                                                     # True means that, for each block, a scan of its trajectory will be performed in
                                                     # search of liquid. This allows to apply UnderwaterDamageFactor on every block independently,
                                                     # and also improves the detection in general. (slower)
-                                                    
+
+                Particles:                          # Note how Particles and Sound sections can also be placed here, in the material section.
+                    Name: WATER_SPLASH
+                    DeltaX: 5.0
+                    DeltaY: 5.0
+                    DeltaZ: 5.0
+                    Amount: 2000
+                    Speed: 1.0
+                    Force: true
+                Sound:
+                    Name: BLOCK_SAND_BREAK
+                    Volume: 1.0                         
+                    Pitch: 1.0                          
+
             DIRT:
                 Damage: 0.0                         # See that setting damage to 0.0 means that it will never break with this explosion.
             
@@ -192,6 +205,8 @@ Locale:                                             # All colors and modifiers a
                                                     # These are only available for ChecktoolUse message:
                                                     #   %DURABILITY% the clicked block's durability and
                                                     #   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability)
+                                                    # For ChecktoolGiven message:
+                                                    #   %NAME% the player's name
                                                 
     NotAllowed: "You are not allowed to perform this action!"
     OnlyPlayerAllowed: "Only players can perform this action!"
