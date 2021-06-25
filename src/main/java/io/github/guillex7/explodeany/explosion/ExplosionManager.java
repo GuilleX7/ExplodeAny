@@ -74,19 +74,14 @@ public class ExplosionManager {
 
 		SoundConfiguration soundConfiguration = entityConfiguration.getSoundConfiguration();
 		if (soundConfiguration.getSound() != null) {
-			sourceLocation.getWorld().playSound(sourceLocation, soundConfiguration.getSound(),
-					soundConfiguration.getVolume().floatValue(), soundConfiguration.getPitch().floatValue());
+			playSound(soundConfiguration, sourceLocation);
 		}
 
 		ParticleConfiguration particleConfiguration = entityConfiguration.getParticleConfiguration();
 		if (particleConfiguration.getParticle() != null) {
-			sourceLocation.getWorld().spawnParticle(particleConfiguration.getParticle(), sourceLocation.getX(),
-					sourceLocation.getY(), sourceLocation.getZ(), particleConfiguration.getAmount(),
-					particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(),
-					particleConfiguration.getDeltaZ(), particleConfiguration.getSpeed(),
-					particleConfiguration.getOptions(), particleConfiguration.isForce());
+			spawnParticles(particleConfiguration, sourceLocation);
 		}
-		
+
 		if (entityConfiguration.isExplosionDamageBlocksUnderwater() && sourceLocation.getBlock().isLiquid()) {
 			sourceLocation.getBlock().setType(Material.AIR);
 			return sourceLocation.getWorld().createExplosion(sourceLocation,
@@ -126,18 +121,12 @@ public class ExplosionManager {
 		if (affectedBlockStatus.shouldBreak()) {
 			SoundConfiguration soundConfiguration = materialConfiguration.getSoundConfiguration();
 			if (soundConfiguration.getSound() != null) {
-				targetBlock.getWorld().playSound(targetBlock.getLocation(), soundConfiguration.getSound(),
-						soundConfiguration.getVolume().floatValue(), soundConfiguration.getPitch().floatValue());
+				playSound(soundConfiguration, targetBlock.getLocation());
 			}
 
 			ParticleConfiguration particleConfiguration = materialConfiguration.getParticleConfiguration();
 			if (particleConfiguration.getParticle() != null) {
-				targetBlock.getWorld().spawnParticle(particleConfiguration.getParticle(),
-						targetBlock.getLocation().getX(), targetBlock.getLocation().getY(),
-						targetBlock.getLocation().getZ(), particleConfiguration.getAmount(),
-						particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(),
-						particleConfiguration.getDeltaZ(), particleConfiguration.getSpeed(),
-						particleConfiguration.getOptions(), particleConfiguration.isForce());
+				spawnParticles(particleConfiguration, targetBlock.getLocation());
 			}
 
 			if (materialConfiguration.shouldBeDropped()) {
@@ -169,5 +158,17 @@ public class ExplosionManager {
 			}
 		}
 		return false;
+	}
+
+	private void spawnParticles(ParticleConfiguration particleConfiguration, Location at) {
+		at.getWorld().spawnParticle(particleConfiguration.getParticle(), at.getX(), at.getY(), at.getZ(),
+				particleConfiguration.getAmount(), particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(),
+				particleConfiguration.getDeltaZ(), particleConfiguration.getSpeed(), particleConfiguration.getOptions(),
+				particleConfiguration.isForce());
+	}
+
+	private void playSound(SoundConfiguration soundConfiguration, Location at) {
+		at.getWorld().playSound(at, soundConfiguration.getSound(), soundConfiguration.getVolume().floatValue(),
+				soundConfiguration.getPitch().floatValue());
 	}
 }
