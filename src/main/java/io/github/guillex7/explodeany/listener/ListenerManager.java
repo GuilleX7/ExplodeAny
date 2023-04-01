@@ -14,7 +14,7 @@ public class ListenerManager {
 	private Map<String, LoadableListener> registeredListeners;
 
 	private ListenerManager() {
-		registeredListeners = new HashMap<String, LoadableListener>();
+		registeredListeners = new HashMap<>();
 	}
 
 	public static ListenerManager getInstance() {

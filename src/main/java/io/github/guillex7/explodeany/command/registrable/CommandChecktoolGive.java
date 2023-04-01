@@ -8,19 +8,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandChecktoolGive extends RegistrableCommand {
-	private CommandChecktoolGive() {
-		super();
-	}
-
-	public static CommandChecktoolGive empty() {
-		return new CommandChecktoolGive();
-	}
-
 	@Override
 	public String getName() {
 		return "give";
@@ -62,7 +55,7 @@ public class CommandChecktoolGive extends RegistrableCommand {
 			receiver = possibleReceiver;
 		}
 
-		receiver.getInventory().addItem(CommandChecktool.getChecktool());
+		receiver.getInventory().addItem(ChecktoolManager.getChecktool());
 		sender.sendMessage(MessageFormatter.sign(ConfigurationManager.getInstance()
 				.getLocale(ConfigurationLocale.CHECKTOOL_GIVEN).replaceAll("%NAME%", receiver.getName())));
 		return true;

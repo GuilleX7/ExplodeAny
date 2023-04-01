@@ -17,14 +17,6 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
 public final class VanillaExplosionListener implements LoadableListener {
-	private VanillaExplosionListener() {
-		super();
-	}
-
-	public static VanillaExplosionListener empty() {
-		return new VanillaExplosionListener();
-	}
-
 	@Override
 	public String getName() {
 		return "Vanilla explosions";
@@ -80,31 +72,31 @@ public final class VanillaExplosionListener implements LoadableListener {
 		int explosionRadius = 0;
 		float explosionPower = 0f;
 		switch (event.getEntityType()) {
-		case WITHER: // Wither spawn or destroy
-			explosionRadius = 7;
-			explosionPower = 7f;
-			break;
-		case ENDER_CRYSTAL: // End crystal
-			explosionRadius = 6;
-			explosionPower = 6f;
-			break;
-		case PRIMED_TNT:
-			explosionRadius = 4; // TNT
-			explosionPower = 4f;
-			break;
-		case CREEPER: // Creeper explosion
-			explosionRadius = (isCharged) ? 4 : 3;
-			explosionPower = (isCharged) ? 6f : 3f;
-			break;
-		case FIREBALL: // Large fireball (Ghast)
-		case DRAGON_FIREBALL: // Dragon fireball
-		case SMALL_FIREBALL: // Blaze fireball
-		case WITHER_SKULL: // Wither skull explosion
-			explosionRadius = 1;
-			explosionPower = 1f;
-			break;
-		default:
-			break; // Unsupported entity type
+			case WITHER: // Wither spawn or destroy
+				explosionRadius = 7;
+				explosionPower = 7f;
+				break;
+			case ENDER_CRYSTAL: // End crystal
+				explosionRadius = 6;
+				explosionPower = 6f;
+				break;
+			case PRIMED_TNT:
+				explosionRadius = 4; // TNT
+				explosionPower = 4f;
+				break;
+			case CREEPER: // Creeper explosion
+				explosionRadius = (isCharged) ? 4 : 3;
+				explosionPower = (isCharged) ? 6f : 3f;
+				break;
+			case FIREBALL: // Large fireball (Ghast)
+			case DRAGON_FIREBALL: // Dragon fireball
+			case SMALL_FIREBALL: // Blaze fireball
+			case WITHER_SKULL: // Wither skull explosion
+				explosionRadius = 1;
+				explosionPower = 1f;
+				break;
+			default:
+				break; // Unsupported entity type
 		}
 
 		if (explosionRadius <= 0) {

@@ -9,14 +9,6 @@ public final class VanillaEntityConfiguration extends LoadableSectionConfigurati
 			Arrays.asList("WITHER", "ENDER_CRYSTAL", "PRIMED_TNT", "CREEPER", "CHARGED_CREEPER", "FIREBALL",
 					"DRAGON_FIREBALL", "SMALL_FIREBALL", "WITHER_SKULL", "CHARGED_WITHER_SKULL"));
 
-	private VanillaEntityConfiguration() {
-		super();
-	};
-
-	public static VanillaEntityConfiguration empty() {
-		return new VanillaEntityConfiguration();
-	}
-
 	@Override
 	public String getSectionPath() {
 		return "VanillaEntity";
@@ -33,7 +25,7 @@ public final class VanillaEntityConfiguration extends LoadableSectionConfigurati
 	}
 
 	@Override
-	public boolean checkEntityTypeIsValid(String entity) {
+	public boolean isEntityTypeValid(String entity) {
 		return entity != null && validEntities.contains(entity);
 	}
 }

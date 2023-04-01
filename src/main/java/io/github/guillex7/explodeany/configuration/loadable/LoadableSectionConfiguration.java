@@ -27,14 +27,6 @@ public abstract class LoadableSectionConfiguration<T> {
 		entityConfigurations = new HashMap<T, EntityConfiguration>();
 	}
 
-	public abstract String getEntityName(T entity);
-
-	public abstract String getSectionPath();
-
-	public abstract T getEntityFromName(String name);
-
-	public abstract boolean checkEntityTypeIsValid(T entity);
-
 	public boolean shouldBeLoaded() {
 		return true;
 	}
@@ -97,7 +89,7 @@ public abstract class LoadableSectionConfiguration<T> {
 			boolean definitionHasPriority = true;
 
 			T entity = getEntityFromName(entityName);
-			if (checkEntityTypeIsValid(entity)) {
+			if (isEntityTypeValid(entity)) {
 				fetchedEntities.add(entity);
 			} else {
 				definitionHasPriority = false;
@@ -105,7 +97,7 @@ public abstract class LoadableSectionConfiguration<T> {
 				if (entityGroup != null) {
 					for (String entityNameInGroup : entityGroup) {
 						T entityInGroup = getEntityFromName(entityNameInGroup);
-						if (checkEntityTypeIsValid(entityInGroup)) {
+						if (isEntityTypeValid(entityInGroup)) {
 							fetchedEntities.add(entityInGroup);
 						}
 					}
@@ -161,7 +153,7 @@ public abstract class LoadableSectionConfiguration<T> {
 		return material;
 	}
 
-	private final boolean checkMaterialIsValid(Material material) {
+	private final boolean isMaterialValid(Material material) {
 		return material != null && !material.equals(Material.WATER) && !material.equals(Material.LAVA);
 	}
 
@@ -173,7 +165,7 @@ public abstract class LoadableSectionConfiguration<T> {
 			boolean definitionHasPriority = true;
 
 			Material material = getMaterialFromName(materialName);
-			if (checkMaterialIsValid(material)) {
+			if (isMaterialValid(material)) {
 				fetchedMaterials.add(getMaterialFromName(materialName));
 			} else {
 				definitionHasPriority = false;
@@ -181,7 +173,7 @@ public abstract class LoadableSectionConfiguration<T> {
 				if (materialGroup != null) {
 					for (String materialNameInGroup : materialGroup) {
 						Material materialInGroup = getMaterialFromName(materialNameInGroup);
-						if (checkMaterialIsValid(materialInGroup)) {
+						if (isMaterialValid(materialInGroup)) {
 							fetchedMaterials.add(materialInGroup);
 						}
 					}
@@ -213,4 +205,12 @@ public abstract class LoadableSectionConfiguration<T> {
 
 		return materialConfigurations;
 	}
+
+	public abstract String getEntityName(T entity);
+
+	public abstract String getSectionPath();
+
+	public abstract T getEntityFromName(String name);
+
+	public abstract boolean isEntityTypeValid(T entity);
 }

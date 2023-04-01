@@ -18,13 +18,13 @@ import io.github.guillex7.explodeany.listener.loadable.EntityListener;
 import io.github.guillex7.explodeany.listener.loadable.VanillaExplosionListener;
 
 public class ExplodeAny extends JavaPlugin {
-	private final String databaseFilename = "blockDatabase.json";
+	private final String DATABASE_FILENAME = "blockDatabase.json";
 
 	@Override
 	public void onEnable() {
 		super.onEnable();
 		getLogger().info(
-				String.format("%s v%s is LOADING now!", getDescription().getName(), getDescription().getVersion()));
+				String.format("%s v%s is loading now!", getDescription().getName(), getDescription().getVersion()));
 		loadConfiguration();
 		loadDatabase();
 		registerListeners();
@@ -35,7 +35,7 @@ public class ExplodeAny extends JavaPlugin {
 	public void onDisable() {
 		super.onDisable();
 		getLogger().info(
-				String.format("%s v%s is UNLOADING now!", getDescription().getName(), getDescription().getVersion()));
+				String.format("%s v%s is unloading now!", getDescription().getName(), getDescription().getVersion()));
 		unregisterListeners();
 		unloadDatabase();
 		unloadConfiguration();
@@ -44,8 +44,8 @@ public class ExplodeAny extends JavaPlugin {
 	public void loadConfiguration() {
 		ConfigurationManager configurationManager = ConfigurationManager.getInstance();
 		configurationManager.loadConfiguration();
-		configurationManager.registerEntityConfiguration(VanillaEntityConfiguration.empty());
-		configurationManager.registerEntityConfiguration(CannonProjectileConfiguration.empty());
+		configurationManager.registerEntityConfiguration(new VanillaEntityConfiguration());
+		configurationManager.registerEntityConfiguration(new CannonProjectileConfiguration());
 		configurationManager.loadAllEntityConfigurations();
 	}
 
@@ -60,16 +60,16 @@ public class ExplodeAny extends JavaPlugin {
 
 	public void registerListeners() {
 		ListenerManager listenerManager = ListenerManager.getInstance();
-		listenerManager.registerListener(VanillaExplosionListener.empty());
-		listenerManager.registerListener(CannonExplosionListener.empty());
-		listenerManager.registerListener(BlockListener.empty());
-		listenerManager.registerListener(EntityListener.empty());
+		listenerManager.registerListener(new VanillaExplosionListener());
+		listenerManager.registerListener(new CannonExplosionListener());
+		listenerManager.registerListener(new BlockListener());
+		listenerManager.registerListener(new EntityListener());
 		listenerManager.loadAllListeners();
 	}
 
 	public void registerCommands() {
 		CommandManager commandManager = CommandManager.getInstance();
-		commandManager.registerCommand(CommandEany.empty());
+		commandManager.registerCommand(new CommandEany());
 
 		for (RegistrableCommand command : commandManager.getRegisteredCommands().values()) {
 			getCommand(command.getName()).setExecutor(commandManager);
@@ -93,7 +93,7 @@ public class ExplodeAny extends JavaPlugin {
 	}
 
 	public String getDatabaseFilename() {
-		return databaseFilename;
+		return DATABASE_FILENAME;
 	}
 
 	public static ExplodeAny getInstance() {

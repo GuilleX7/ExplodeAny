@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
-import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.util.MathUtils;
 
 public class SoundConfiguration {
 	public static final String ROOT_PATH = "Sound";
@@ -36,8 +36,8 @@ public class SoundConfiguration {
 		}
 
 		return SoundConfiguration.of(sound,
-				ConfigurationManager.ensureMin(section.getDouble(VOLUME_PATH, defaults.getVolume()), 0.0d),
-				ConfigurationManager.ensureRange(section.getDouble(PITCH_PATH, defaults.getPitch()), 2.0d, 0.5d));
+				MathUtils.ensureMin(section.getDouble(VOLUME_PATH, defaults.getVolume()), 0.0d),
+				MathUtils.ensureRange(section.getDouble(PITCH_PATH, defaults.getPitch()), 2.0d, 0.5d));
 	}
 
 	private SoundConfiguration(Sound sound, Double volume, Double pitch) {

@@ -8,13 +8,13 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 public class BlockLocation {
-	private UUID worldUUID;
+	private UUID worldUuid;
 	private int x;
 	private int y;
 	private int z;
 
-	public static BlockLocation of(UUID worldUUID, int x, int y, int z) {
-		return new BlockLocation(worldUUID, x, y, z);
+	public static BlockLocation of(UUID worldUuid, int x, int y, int z) {
+		return new BlockLocation(worldUuid, x, y, z);
 	}
 
 	public static BlockLocation fromLocation(Location location) {
@@ -25,16 +25,16 @@ public class BlockLocation {
 		return of(block.getWorld().getUID(), block.getX(), block.getY(), block.getZ());
 	}
 
-	private BlockLocation(UUID worldUUID, int x, int y, int z) {
+	private BlockLocation(UUID worldUuid, int x, int y, int z) {
 		super();
-		this.worldUUID = worldUUID;
+		this.worldUuid = worldUuid;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
 	public World getWorld() {
-		return Bukkit.getServer().getWorld(worldUUID);
+		return Bukkit.getServer().getWorld(worldUuid);
 	}
 
 	public Location toLocation() {
@@ -53,12 +53,12 @@ public class BlockLocation {
 		return world.getBlockAt(x, y, z);
 	}
 
-	public UUID getWorldUUID() {
-		return worldUUID;
+	public UUID getWorldUuid() {
+		return worldUuid;
 	}
 
-	public void setWorldUUID(UUID worldUUID) {
-		this.worldUUID = worldUUID;
+	public void setWorldUuid(UUID worldUuid) {
+		this.worldUuid = worldUuid;
 	}
 
 	public int getX() {
@@ -89,7 +89,7 @@ public class BlockLocation {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((worldUUID == null) ? 0 : worldUUID.hashCode());
+		result = prime * result + ((worldUuid == null) ? 0 : worldUuid.hashCode());
 		result = prime * result + x;
 		result = prime * result + y;
 		result = prime * result + z;
@@ -105,10 +105,10 @@ public class BlockLocation {
 		if (getClass() != obj.getClass())
 			return false;
 		BlockLocation other = (BlockLocation) obj;
-		if (worldUUID == null) {
-			if (other.worldUUID != null)
+		if (worldUuid == null) {
+			if (other.worldUuid != null)
 				return false;
-		} else if (!worldUUID.equals(other.worldUUID))
+		} else if (!worldUuid.equals(other.worldUuid))
 			return false;
 		if (x != other.x)
 			return false;
@@ -121,6 +121,6 @@ public class BlockLocation {
 
 	@Override
 	public String toString() {
-		return "BlockLocation [worldUUID=" + worldUUID + ", x=" + x + ", y=" + y + ", z=" + z + "]";
+		return "BlockLocation [worldUuid=" + worldUuid + ", x=" + x + ", y=" + y + ", z=" + z + "]";
 	}
 }

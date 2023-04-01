@@ -10,7 +10,7 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.configuration.ConfigurationSection;
 
-import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.util.MathUtils;
 
 public class ParticleConfiguration {
 	private static final Set<Particle> particlesWithData = new HashSet<>(Arrays.asList(Particle.REDSTONE));
@@ -60,13 +60,13 @@ public class ParticleConfiguration {
 		if (particlesWithData.contains(particle)) {
 			options = new DustOptions(
 					Color.fromRGB(
-							ConfigurationManager.ensureRange(
+							MathUtils.ensureRange(
 									section.getInt(RED_PATH, defaults.getOptions().getColor().getRed()), 255, 0),
-							ConfigurationManager.ensureRange(
+							MathUtils.ensureRange(
 									section.getInt(GREEN_PATH, defaults.getOptions().getColor().getGreen()), 255, 0),
-							ConfigurationManager.ensureRange(
+							MathUtils.ensureRange(
 									section.getInt(BLUE_PATH, defaults.getOptions().getColor().getBlue()), 255, 0)),
-					(float) ConfigurationManager
+					(float) MathUtils
 							.ensureMin(section.getDouble(SIZE_PATH, defaults.getOptions().getSize()), 0));
 		} else {
 			options = null;
@@ -75,8 +75,8 @@ public class ParticleConfiguration {
 		return ParticleConfiguration.of(particle, section.getDouble(DELTA_X_PATH, defaults.getDeltaX()),
 				section.getDouble(DELTA_Y_PATH, defaults.getDeltaY()),
 				section.getDouble(DELTA_Z_PATH, defaults.getDeltaZ()),
-				ConfigurationManager.ensureMin(section.getInt(AMOUNT_PATH, defaults.getAmount()), 0),
-				ConfigurationManager.ensureMin(section.getDouble(SPEED_PATH, defaults.getSpeed()), 0),
+				MathUtils.ensureMin(section.getInt(AMOUNT_PATH, defaults.getAmount()), 0),
+				MathUtils.ensureMin(section.getDouble(SPEED_PATH, defaults.getSpeed()), 0),
 				section.getBoolean(FORCE_PATH, defaults.isForce()), options);
 	}
 

@@ -67,7 +67,14 @@ public class ExplosionManager {
 						continue;
 					}
 
-					damageBlock(materialConfiguration, block, sourceLocation, squaredExplosionRadius, squaredDistance);
+					final double effectiveSquaredExplosionRadius = squaredExplosionRadius
+							* materialConfiguration.getExplosionRadiusFactor();
+					if (squaredDistance > effectiveSquaredExplosionRadius) {
+						continue;
+					}
+
+					damageBlock(materialConfiguration, block, sourceLocation, effectiveSquaredExplosionRadius,
+							squaredDistance);
 				}
 			}
 		}
@@ -92,12 +99,7 @@ public class ExplosionManager {
 	}
 
 	public void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
-			Location sourceLocation, int squaredExplosionRadius, double squaredDistance) {
-		final double maximumSquaredDistance = squaredExplosionRadius * materialConfiguration.getExplosionRadiusFactor();
-		if (squaredDistance > maximumSquaredDistance) {
-			return;
-		}
-
+			Location sourceLocation, double squaredExplosionRadius, double squaredDistance) {
 		double effectiveDamage = materialConfiguration.getDamage();
 
 		// Underwater attenuation
@@ -111,10 +113,9 @@ public class ExplosionManager {
 		// 0 if dmax <= d
 		// c = distance attenuation factor
 		// d = distance from the center (always >= 1)
-		// dmax = maximum distance
-		// Use squared distance to avoid sqrt overhead
+		// dmax = explosion radius
 		effectiveDamage *= 1
-				- materialConfiguration.getDistanceAttenuationFactor() * (squaredDistance - 1) / maximumSquaredDistance;
+				- materialConfiguration.getDistanceAttenuationFactor() * (squaredDistance - 1) / squaredExplosionRadius;
 
 		BlockStatus affectedBlockStatus = BlockDatabase.getInstance().getBlockStatus(targetBlock);
 		affectedBlockStatus.damage(effectiveDamage);
@@ -139,36 +140,40 @@ public class ExplosionManager {
 		}
 	}
 
-	private boolean performUnderwaterDetection(EntityMaterialConfiguration materialConfiguration, Location source,
-			Location target) {
-		return materialConfiguration.isFancyUnderwaterDetection() ? isLiquidInTrajectory(source, target)
-				: source.getBlock().isLiquid();
+	private boolean performUnderwaterDetection(EntityMaterialConfiguration materialConfiguration,
+			Location sourceLocation,
+			Location targetLocation) {
+		return materialConfiguration.isFancyUnderwaterDetection() ? isLiquidInTrajectory(sourceLocation, targetLocation)
+				: sourceLocation.getBlock().isLiquid();
 	}
 
-	private boolean isLiquidInTrajectory(Location source, Location target) {
-		if (source.equals(target)) {
-			return source.getBlock().isLiquid();
+	private boolean isLiquidInTrajectory(Location sourceLocation, Location targetLocation) {
+		if (sourceLocation.equals(targetLocation)) {
+			return sourceLocation.getBlock().isLiquid();
 		}
 
-		BlockIterator it = new BlockIterator(source.getWorld(), source.toVector(),
-				target.toVector().subtract(source.toVector()), 0, (int) source.distance(target));
-		while (it.hasNext()) {
-			if (it.next().isLiquid()) {
+		BlockIterator iterator = new BlockIterator(sourceLocation.getWorld(), sourceLocation.toVector(),
+				targetLocation.toVector().subtract(sourceLocation.toVector()), 0,
+				(int) sourceLocation.distance(targetLocation));
+		while (iterator.hasNext()) {
+			if (iterator.next().isLiquid()) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private void spawnParticles(ParticleConfiguration particleConfiguration, Location at) {
-		at.getWorld().spawnParticle(particleConfiguration.getParticle(), at.getX(), at.getY(), at.getZ(),
+	private void spawnParticles(ParticleConfiguration particleConfiguration, Location location) {
+		location.getWorld().spawnParticle(particleConfiguration.getParticle(), location.getX(), location.getY(),
+				location.getZ(),
 				particleConfiguration.getAmount(), particleConfiguration.getDeltaX(), particleConfiguration.getDeltaY(),
 				particleConfiguration.getDeltaZ(), particleConfiguration.getSpeed(), particleConfiguration.getOptions(),
 				particleConfiguration.isForce());
 	}
 
-	private void playSound(SoundConfiguration soundConfiguration, Location at) {
-		at.getWorld().playSound(at, soundConfiguration.getSound(), soundConfiguration.getVolume().floatValue(),
+	private void playSound(SoundConfiguration soundConfiguration, Location location) {
+		location.getWorld().playSound(location, soundConfiguration.getSound(),
+				soundConfiguration.getVolume().floatValue(),
 				soundConfiguration.getPitch().floatValue());
 	}
 }

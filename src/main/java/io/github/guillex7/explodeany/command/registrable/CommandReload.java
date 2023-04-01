@@ -12,14 +12,6 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandReload extends RegistrableCommand {
-	private CommandReload() {
-		super();
-	}
-
-	public static CommandReload empty() {
-		return new CommandReload();
-	}
-
 	@Override
 	public String getName() {
 		return "reload";

@@ -3,6 +3,7 @@ package io.github.guillex7.explodeany.configuration.section;
 import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.util.MathUtils;
 
 public class EntityMaterialConfiguration {
 	private static final String DAMAGE_PATH = "Damage";
@@ -40,15 +41,15 @@ public class EntityMaterialConfiguration {
 				.getConfigurationSection(ParticleConfiguration.ROOT_PATH);
 
 		return EntityMaterialConfiguration.of(
-				ConfigurationManager.ensureMin(section.getDouble(DAMAGE_PATH, defaults.getDamage()), 0.0d),
-				ConfigurationManager.ensureRange(section.getDouble(DROP_CHANCE_PATH, defaults.getDropChance()), 100.0d,
+				MathUtils.ensureMin(section.getDouble(DAMAGE_PATH, defaults.getDamage()), 0.0d),
+				MathUtils.ensureRange(section.getDouble(DROP_CHANCE_PATH, defaults.getDropChance()), 100.0d,
 						0.0d) / 100.0,
-				ConfigurationManager.ensureRange(
+				MathUtils.ensureRange(
 						section.getDouble(DISTANCE_ATTENUATION_FACTOR_PATH, defaults.getDistanceAttenuationFactor()),
 						1.0d, 0.0d),
-				ConfigurationManager.ensureMin(
+				MathUtils.ensureMin(
 						section.getDouble(EXPLOSION_RADIUS_FACTOR_PATH, defaults.getExplosionRadiusFactor()), 0.0d),
-				ConfigurationManager.ensureMin(
+				MathUtils.ensureMin(
 						section.getDouble(UNDERWATER_DAMAGE_FACTOR_PATH, defaults.getUnderwaterDamageFactor()), 0.0d),
 				section.getBoolean(FANCY_UNDERWATER_DETECTION_PATH, defaults.isFancyUnderwaterDetection()),
 				(soundConfigurationSection != null)

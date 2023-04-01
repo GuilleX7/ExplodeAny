@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableSectionConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.util.MathUtils;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public final class ConfigurationManager {
@@ -44,30 +45,6 @@ public final class ConfigurationManager {
 		return ExplodeAny.getInstance();
 	}
 
-	public static double ensureRange(double value, double max, double min) {
-		return Math.min(Math.max(value, min), max);
-	}
-
-	public static double ensureMax(double value, double max) {
-		return Math.min(value, max);
-	}
-
-	public static double ensureMin(double value, double min) {
-		return Math.max(value, min);
-	}
-
-	public static int ensureRange(int value, int max, int min) {
-		return Math.min(Math.max(value, min), max);
-	}
-
-	public static int ensureMax(int value, int max) {
-		return Math.min(value, max);
-	}
-
-	public static int ensureMin(int value, int min) {
-		return Math.max(value, min);
-	}
-
 	public Map<String, LoadableSectionConfiguration<?>> getRegisteredEntityConfigurations() {
 		return registeredEntityConfigurations;
 	}
@@ -93,7 +70,7 @@ public final class ConfigurationManager {
 	}
 
 	public Double getBlockDurability() {
-		return ensureMin(getPlugin().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
+		return MathUtils.ensureMin(getPlugin().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
 	}
 
 	public Map<String, List<String>> getGroups() {

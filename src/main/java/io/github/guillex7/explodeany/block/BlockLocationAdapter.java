@@ -16,7 +16,7 @@ public class BlockLocationAdapter extends TypeAdapter<BlockLocation> {
 			return;
 		}
 
-		out.value(String.format("%s:%d:%d:%d", value.getWorldUUID().toString(), value.getX(), value.getY(),
+		out.value(String.format("%s:%d:%d:%d", value.getWorldUuid().toString(), value.getX(), value.getY(),
 				value.getZ()));
 	}
 

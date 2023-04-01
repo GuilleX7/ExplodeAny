@@ -7,19 +7,12 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandChecktoolToggle extends RegistrableCommand {
-	private CommandChecktoolToggle() {
-		super();
-	}
-
-	public static CommandChecktoolToggle empty() {
-		return new CommandChecktoolToggle();
-	}
-
 	@Override
 	public String getName() {
 		return "toggle";
@@ -40,12 +33,12 @@ public class CommandChecktoolToggle extends RegistrableCommand {
 
 		Player player = (Player) sender;
 
-		if (CommandChecktool.getPlayersUsingChecktool().contains(player)) {
-			CommandChecktool.getPlayersUsingChecktool().remove(player);
+		if (ChecktoolManager.getPlayersUsingChecktool().contains(player)) {
+			ChecktoolManager.getPlayersUsingChecktool().remove(player);
 			player.sendMessage(MessageFormatter
 					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.LEAVE_CHECKTOOL_MODE)));
 		} else {
-			CommandChecktool.getPlayersUsingChecktool().add(player);
+			ChecktoolManager.getPlayersUsingChecktool().add(player);
 			player.sendMessage(MessageFormatter
 					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ENTER_CHECKTOOL_MODE)));
 		}

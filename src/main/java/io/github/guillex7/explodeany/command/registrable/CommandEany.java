@@ -5,14 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CommandEany extends RegistrableCommand {
-	private CommandEany() {
-		super();
-	}
-
-	public static CommandEany empty() {
-		return new CommandEany();
-	}
-
 	@Override
 	public String getName() {
 		return "explodeany";
@@ -26,6 +18,6 @@ public class CommandEany extends RegistrableCommand {
 	@Override
 	public List<RegistrableCommand> getSubcommands() {
 		return new ArrayList<RegistrableCommand>(
-				Arrays.asList(CommandAbout.empty(), CommandChecktool.empty(), CommandReload.empty()));
+				Arrays.asList(new CommandAbout(), new CommandChecktool(), new CommandReload()));
 	}
 }

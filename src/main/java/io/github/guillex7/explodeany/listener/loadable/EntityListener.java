@@ -11,20 +11,12 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
-import io.github.guillex7.explodeany.command.registrable.CommandChecktool;
+import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
-public class EntityListener implements LoadableListener {
-	private EntityListener() {
-		super();
-	}
-
-	public static EntityListener empty() {
-		return new EntityListener();
-	}
-
+public final class EntityListener implements LoadableListener {
 	@Override
 	public String getName() {
 		return "Entity";
@@ -39,19 +31,19 @@ public class EntityListener implements LoadableListener {
 	public boolean isAdvisable() {
 		return false;
 	}
-	
+
 	private boolean isChecktoolSimilar(ItemStack item) {
-		if (item.getType().equals(Material.AIR) && CommandChecktool.getChecktool().getType().equals(Material.AIR)) {
+		if (item.getType().equals(Material.AIR) && ChecktoolManager.getChecktool().getType().equals(Material.AIR)) {
 			return true;
 		} else {
-			return item.isSimilar(CommandChecktool.getChecktool());
+			return item.isSimilar(ChecktoolManager.getChecktool());
 		}
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerInteractEvent(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getHand().equals(EquipmentSlot.HAND)
-				&& CommandChecktool.getPlayersUsingChecktool().contains(event.getPlayer())) {
+				&& ChecktoolManager.getPlayersUsingChecktool().contains(event.getPlayer())) {
 			ItemStack itemInHand = new ItemStack(event.getPlayer().getInventory().getItemInMainHand());
 			if (!isChecktoolSimilar(itemInHand)) {
 				return;
@@ -72,7 +64,7 @@ public class EntityListener implements LoadableListener {
 				formattedMessage = formattedMessage.replaceAll("%DURABILITY%",
 						String.format("%.02f", blockStatus.getDurability()));
 				formattedMessage = formattedMessage.replaceAll("%MAX_DURABILITY%",
-						String.format("%.02f", BlockStatus.getDefaultDurability()));
+						String.format("%.02f", BlockStatus.getDefaultBlockDurability()));
 				formattedMessage = formattedMessage.replaceAll("%B_X%",
 						String.format("%d", clickedBlock.getLocation().getBlockX()));
 				formattedMessage = formattedMessage.replaceAll("%B_Y%",

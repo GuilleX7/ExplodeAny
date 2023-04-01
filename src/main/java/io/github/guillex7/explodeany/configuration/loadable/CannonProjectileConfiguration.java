@@ -5,14 +5,6 @@ import org.bukkit.Bukkit;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 
 public final class CannonProjectileConfiguration extends LoadableSectionConfiguration<String> {
-	private CannonProjectileConfiguration() {
-		super();
-	}
-
-	public static CannonProjectileConfiguration empty() {
-		return new CannonProjectileConfiguration();
-	}
-
 	@Override
 	public boolean shouldBeLoaded() {
 		return Bukkit.getPluginManager().isPluginEnabled("Cannons");
@@ -34,7 +26,7 @@ public final class CannonProjectileConfiguration extends LoadableSectionConfigur
 	}
 
 	@Override
-	public boolean checkEntityTypeIsValid(String entity) {
+	public boolean isEntityTypeValid(String entity) {
 		return entity != null && ProjectileStorage.getProjectile(entity) != null;
 	}
 }

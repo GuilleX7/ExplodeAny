@@ -7,15 +7,7 @@ import org.bukkit.event.block.BlockExpEvent;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 
-public class BlockListener implements LoadableListener {
-	private BlockListener() {
-		super();
-	}
-
-	public static BlockListener empty() {
-		return new BlockListener();
-	}
-
+public final class BlockListener implements LoadableListener {
 	@Override
 	public String getName() {
 		return "Block";

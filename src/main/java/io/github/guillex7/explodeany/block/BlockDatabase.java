@@ -56,12 +56,12 @@ public class BlockDatabase {
 		return getBlockStatus(block, true);
 	}
 
-	public BlockStatus getBlockStatus(Block block, Boolean putIfAbsent) {
+	public BlockStatus getBlockStatus(Block block, Boolean persistIfAbsentOrIncongruent) {
 		BlockLocation blockLocation = BlockLocation.fromBlock(block);
 		BlockStatus blockStatus = getDatabase().get(blockLocation);
 		if (blockStatus == null || !blockStatus.isCongruentWith(block)) {
 			blockStatus = BlockStatus.defaultForBlock(block);
-			if (putIfAbsent) {
+			if (persistIfAbsentOrIncongruent) {
 				getDatabase().put(blockLocation, blockStatus);
 			}
 		}
@@ -133,14 +133,14 @@ public class BlockDatabase {
 		Iterator<Entry<BlockLocation, BlockStatus>> iterator = getDatabase().entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<BlockLocation, BlockStatus> entry = iterator.next();
-			if (sanitizeEntry(entry, ConfigurationManager.getInstance().doCheckBlockDatabaseAtStartup())) {
+			if (isEntryNotSane(entry, ConfigurationManager.getInstance().doCheckBlockDatabaseAtStartup())) {
 				iterator.remove();
 				continue;
 			}
 		}
 	}
 
-	private boolean sanitizeEntry(Entry<BlockLocation, BlockStatus> entry, boolean deep) {
+	private boolean isEntryNotSane(Entry<BlockLocation, BlockStatus> entry, boolean deep) {
 		BlockStatus blockStatus = entry.getValue();
 		if (blockStatus.shouldBreak()) {
 			return true;

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.util.MathUtils;
 
 public class BlockStatus {
 	private Material material;
@@ -14,10 +15,10 @@ public class BlockStatus {
 	}
 
 	public static BlockStatus defaultForBlock(Block block) {
-		return BlockStatus.of(block.getType(), getDefaultDurability());
+		return BlockStatus.of(block.getType(), getDefaultBlockDurability());
 	}
 
-	public static double getDefaultDurability() {
+	public static double getDefaultBlockDurability() {
 		return ConfigurationManager.getInstance().getBlockDurability();
 	}
 
@@ -37,16 +38,11 @@ public class BlockStatus {
 	}
 
 	public boolean shouldBreak() {
-		if (getDurability() <= 0.0) {
-			return true;
-		}
-		return false;
+		return getDurability() <= 0.0;
 	}
 
 	public void sanitize() {
-		if (getDurability() > getDefaultDurability()) {
-			setDurability(getDefaultDurability());
-		}
+		setDurability(MathUtils.ensureMax(getDurability(), BlockStatus.getDefaultBlockDurability()));
 	}
 
 	public Material getMaterial() {

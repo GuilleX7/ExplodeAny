@@ -17,14 +17,6 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
 public final class CannonExplosionListener implements LoadableListener {
-	private CannonExplosionListener() {
-		super();
-	}
-
-	public static CannonExplosionListener empty() {
-		return new CannonExplosionListener();
-	}
-
 	@Override
 	public String getName() {
 		return "Cannons explosions";
