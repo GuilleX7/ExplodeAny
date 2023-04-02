@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.util.MessageFormatter;
+import io.github.guillex7.explodeany.configuration.PermissionNode;
 
 public class CommandChecktoolToggle extends RegistrableCommand {
 	@Override
@@ -19,28 +19,26 @@ public class CommandChecktoolToggle extends RegistrableCommand {
 	}
 
 	@Override
-	public List<String> getRequiredPermissions() {
-		return new ArrayList<String>(Arrays.asList("explodeany.checktool.toggle"));
+	public List<PermissionNode> getRequiredPermissions() {
+		return new ArrayList<>(Arrays.asList(PermissionNode.CHECKTOOL_TOGGLE));
 	}
 
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(MessageFormatter
-					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ONLY_PLAYER_ALLOWED)));
+			sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ONLY_PLAYER_ALLOWED));
 			return true;
 		}
 
 		Player player = (Player) sender;
 
-		if (ChecktoolManager.getPlayersUsingChecktool().contains(player)) {
-			ChecktoolManager.getPlayersUsingChecktool().remove(player);
-			player.sendMessage(MessageFormatter
-					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.LEAVE_CHECKTOOL_MODE)));
+		ChecktoolManager checktoolManager = ChecktoolManager.getInstance();
+		if (checktoolManager.getPlayersUsingChecktool().contains(player)) {
+			checktoolManager.getPlayersUsingChecktool().remove(player);
+			player.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.LEAVE_CHECKTOOL_MODE));
 		} else {
-			ChecktoolManager.getPlayersUsingChecktool().add(player);
-			player.sendMessage(MessageFormatter
-					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ENTER_CHECKTOOL_MODE)));
+			checktoolManager.getPlayersUsingChecktool().add(player);
+			player.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ENTER_CHECKTOOL_MODE));
 		}
 		return true;
 	}

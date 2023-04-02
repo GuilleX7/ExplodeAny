@@ -16,6 +16,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.util.StringUtils;
 
 public class ChecktoolManager {
     private static final String CHECKTOOL_DUMP_FILENAME = "checktool.dump";
@@ -39,15 +40,15 @@ public class ChecktoolManager {
         return instance;
     }
 
-    private static ExplodeAny getPlugin() {
+    private ExplodeAny getPlugin() {
         return ExplodeAny.getInstance();
     }
 
-    public static Set<Player> getPlayersUsingChecktool() {
+    public Set<Player> getPlayersUsingChecktool() {
         return playersUsingChecktool;
     }
 
-    public static void loadChecktool() {
+    public void loadChecktool() {
         if (checktoolFile.exists() && checktoolFile.canRead()) {
             try {
                 InputStream is = new FileInputStream(checktoolFile);
@@ -55,14 +56,15 @@ public class ChecktoolManager {
                 checktool = (ItemStack) ois.readObject();
                 ois.close();
                 is.close();
-                getPlugin().getLogger().info("Checktool item loaded successfully");
+                getPlugin().getLogger().info(String.format("Checktool item loaded successfully (%s)",
+                        StringUtils.beautifyName(checktool.getType().toString())));
             } catch (Exception e) {
                 getPlugin().getLogger().warning("Couldn't load checktool item!");
             }
         }
     }
 
-    public static boolean persistChecktool() {
+    public boolean persistChecktool() {
         try {
             checktoolFile.createNewFile();
         } catch (IOException e) {
@@ -85,11 +87,11 @@ public class ChecktoolManager {
         return true;
     }
 
-    public static ItemStack getChecktool() {
+    public ItemStack getChecktool() {
         return checktool;
     }
 
-    public static boolean setChecktool(ItemStack item) {
+    public boolean setChecktool(ItemStack item) {
         checktool = item;
 
         if (persistChecktool()) {

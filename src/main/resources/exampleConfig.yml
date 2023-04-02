@@ -1,208 +1,243 @@
-# Hey! This file will regenerate every time you reload ExplodeAny, so don't be scared in case you remove it :)
-# It will help you understand how to configure the plugin. Happy configuration time!
+# Whether to use a database or not. While it's not necessary at all, a database will keep
+# track of every block's durability, so durability is not reset after a server restart.
+# Warning: the file that contains the database can become huge, so consider cleaning it up
+# (this is, removing it) after X server restarts (let's be serious, nobody's gonna care if
+# a block he/she damaged three days ago has now its durability fully restored).
+UseBlockDatabase: false
 
-UseBlockDatabase: false                             # Whether to use a database or not. While it's not necessary at all, a database will keep
-                                                    # track of every block's durability, so durability is not reset after a server restart.
-                                                    # Warning: the file that contains the database can become huge, so consider cleaning it up
-                                                    # (this is, removing it) after X server restarts (let's be serious, nobody's gonna care if
-                                                    # a block he/she damaged three days ago has now its durability fully restored).
+# (Note: not used at all if useBlockDatabase is disabled)
+# This will perform a database cleanup every time the plugin is reloaded.
+# This can help reducing the database size, but may also load the chunks where the blocks were
+# located.
+CheckBlockDatabaseAtStartup: false
 
-CheckBlockDatabaseAtStartup: false                  # (Note: not used at all if useBlockDatabase is disabled)
-                                                    # This will perform a database cleanup every time the plugin is reloaded.
-                                                    # This can help reducing the database size, but may also load the chunks where the blocks were
-                                                    # located.
-                                                 
-BlockDurability: 100.0                              # Maximum and initial durability of every block handled by ExplodeAny.
-                                                    # [Minimum] is 1.0.
-                                                    # [Default] is 100.0.
+# Maximum and initial durability of every block handled by ExplodeAny.
+# [Minimum] is 1.0.
+# [Default] is 100.0.           
+BlockDurability: 100.0
 
-Groups:                                             # Named groups of materials and/or entitys. You can create groups with a mix of materials
-                                                    # and entities. When you use the group in a certain section, the plugin will choose only
-                                                    # the values that make sense for that section. If no value in the group makes sense for the
-                                                    # section, then it will be considered an invalid group. You can use the name you like for the
-                                                    # groups, but if group's name coincides with a valid material or entity's name, then the valid
-                                                    # material or entity will be selected as the target, and not the group.
-                                                    
-                                                    # When a single entity/material appears more than once in the same section, the following rules
-                                                    # will be used to merge them, depending on the section:
-                                                    #
-                                                    # EXPLODING ENTITIES:
-                                                    # 1. If an entity appears in two or more groups, then the material configurations
-                                                    #    will try to merge without overwriting each other. If a material configuration
-                                                    #    for an entity appears in both groups, then the material configuration of the
-                                                    #    group that appears first in the configuration is applied.
-                                                    # 2. If an entity appears in two or more groups but also as an individual item,
-                                                    #    then rule 1 applies, and after that, the individual configuration will be merged,
-                                                    #    overwriting the previous rules if necessary (has greater priority than groups).
-                                                    #
-                                                    # MATERIAL CONFIGURATIONS:
-                                                    # 1. If a material configuration appears in two or more groups, then only the material
-                                                    #    configuration of the group that appears first in the configuration will be applied.
-                                                    # 2. If a material configuration appears in two or more groups but also as an individual
-                                                    #    item, then the individual configuration will be applied.
-    unbreakableBlocks:
-        - OBSIDIAN
-        - CRYING_OBSIDIAN
-        - BEDROCK
-    dangerousEntity:
-        - PRIMED_TNT
+# Metrics allow us to obtain information about the number of servers that use ExplodeAny,
+# as well as some of their characteristics, including operating system and Java Version, etc.
+# All this data is completely anonymous, and sending metrics does not affect performance. We
+# use bstats (https://bstats.org/) to gather all this data.
+EnableMetrics: true
 
+# Named groups of materials and/or entitys. You can create groups with a mix of materials
+# and entities. When you use the group in a certain section, the plugin will choose only
+# the values that make sense for that section. If no value in the group makes sense for the
+# section, then it will be considered an invalid group. You can use the name you like for the
+# groups, but if group's name coincides with a valid material or entity's name, then the valid
+# material or entity will be selected as the target, and not the group.
+#
+# When a single entity/material appears more than once in the same section, the following rules
+# will be used to merge them, depending on the section:
+#
+# EXPLODING ENTITIES:
+# 1. If an entity appears in two or more groups, then the material configurations
+#    will try to merge without overwriting each other. If a material configuration
+#    for an entity appears in both groups, then the material configuration of the
+#    group that appears first in the configuration is applied.
+# 2. If an entity appears in two or more groups but also as an individual item,
+#    then rule 1 applies, and after that, the individual configuration will be merged,
+#    overwriting the previous rules if necessary (has greater priority than groups).
+#
+# MATERIAL CONFIGURATIONS:
+# 1. If a material configuration appears in two or more groups, then only the material
+#    configuration of the group that appears first in the configuration will be applied.
+# 2. If a material configuration appears in two or more groups but also as an individual
+#    item, then the individual configuration will be applied.
+Groups:
+  unbreakableBlocks:
+  - OBSIDIAN
+  - CRYING_OBSIDIAN
+  - BEDROCK
+  dangerousEntity:
+  - PRIMED_TNT
+
+# This sections allows to customize the behaviour of Vanilla entities explosions
+# Allowed entity values are:
+# WITHER, ENDER_CRYSTAL, PRIMED_TNT, CREEPER, CHARGED_CREEPER,
+# FIREBALL, DRAGON_FIREBALL, SMALL_FIREBALL, WITHER_SKULL, CHARGED_WITHER_SKULL
 VanillaEntity:
-    dangerousEntity:                                # Vanilla entities that explode, allowed entities are:
-                                                    # WITHER, ENDER_CRYSTAL, PRIMED_TNT, CREEPER, CHARGED_CREEPER,
-                                                    # FIREBALL, DRAGON_FIREBALL, SMALL_FIREBALL, WITHER_SKULL, CHARGED_WITHER_SKULL
-                                                    # Groups can also be used here.
-                                                
-        Properties:                                 # This section allows to configure some properties of the exploding entity itself.
-                                                    # It is not mandatory.
-                                                    
-            ExplosionDamageBlocksUnderwater: false  # Overrides the explosion caused by this entity when it takes place under any liquid.
-                                                    # It will be replaced with a explosion that can damage blocks, even underwater.
-                                                    # This allows to break, for example, any block that would normally break in the
-                                                    # overworld. Blocks managed by ExplodeAny will keep their behaviour!
-                                                    # [Default] is false.
-                                                    
-            UnderwaterExplosionFactor: 0.5          # The explosion power of the overriding explosion will be the same as the original,
-                                                    # but you may want to change it as it takes place under a liquid.
-                                                    # Explosion power will be multiplied by this factor when UnderliquidExplosionFactor
-                                                    # is enabled and the explosion takes place underwater.
-                                                    # [Minimum] is 0.0, which means it will disabled
-                                                    # [Default] is 0.5, which reduces the explosion power to half its original value.
-                                                    # A value of 1.0 means that water doesn't affect explosion power
-                                                    # A value greater than 1.0 means underwater explosion power is magnified.
+  # Groups can also be used here (like this one).
+  dangerousEntity:
+    # This section allows to configure some properties of the exploding entity itself.
+    # It is not mandatory.
+    Properties:
+      # Overrides the explosion caused by this entity when it takes place under any liquid.
+      # It will be replaced with a explosion that can damage blocks, even underwater.
+      # This allows to break, for example, any block that would normally break in the
+      # overworld. Blocks managed by ExplodeAny will keep their behaviour!
+      # [Default] is false.
+      ExplosionDamageBlocksUnderwater: false
+      # The explosion power of the overriding explosion will be the same as the original,
+      # but you may want to change it as it takes place under a liquid.
+      # Explosion power will be multiplied by this factor when UnderliquidExplosionFactor
+      # is enabled and the explosion takes place underwater.
+      # [Minimum] is 0.0, which means it will disabled
+      # [Default] is 0.5, which reduces the explosion power to half its original value.
+      # A value of 1.0 means that water doesn't affect explosion power
+      # A value greater than 1.0 means underwater explosion power is magnified.
+      UnderwaterExplosionFactor: 0.5
+      # This section allows to specify the particles that will spawn when the entity explodes.
+      Particles:
+        # Name of the particles to be spawned. Valid values are listed in
+        # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+        Name: REDSTONE
+        # Size of the cube that will contain the particles
+        DeltaX: 2.0
+        DeltaY: 2.0
+        DeltaZ: 2.0
+        # Amount of particles to be spawned. Be careful, larger values could cause FPS drops.
+        Amount: 2000
+        # Speed of the particles to be spawned. Must be a positive value or zero.
+        Speed: 1.0
+        # Allows the particles to be seen up to 256 blocks away.
+        Force: true
+        # Color of the particles. Only applicable when particle's name is REDSTONE
+        Red: 255
+        Blue: 0
+        Green: 255
+        # Size of the particles. Must be a positive value. Only applicable when particle's name is REDSTONE
+        Size: 2.0
+      # This section allows to specify the sound to be played when the entity explodes.
+      Sound:
+        # Name of the sound to be played. Valid values are listed in
+        # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html            
+        Name: ENTITY_OCELOT_HURT
+        # Volume of the sound to be played. Must be a positive value. Values greater than
+        # 1.0 will not increase the loudness of the sound, but will allow the sound to be heared
+        # in a greater radius.
+        Volume: 1.0
+        # Pitch of the sound. Must be between 0.5 and 2.0, and allows to specify the speed
+        # the sound is played at.
+        Pitch: 1.0
+    # This section contains the materials that will be managed by the plugin.
+    # It is not mandatory: if this section doesn't exist, the plugin will understand that
+    # every section in the entity is a material. That can be used as a shortcut when
+    # you don't want to add entity properties, but only to list the affected materials.
+    # The damage to all those materials is "simulated" by the plugin and managed
+    # by these settings.
+    Materials:
+      # Valid values are all materials listed in
+      # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.
+      # WATER and LAVA are not allowed.
+      # Groups can also be used here.                     
+      unbreakableBlocks:
+        # Base damage used to compute the effective damage taken by a block.
+        # [Minimum] is 0.0, which means the block isn't affected by the explosion.
+        # [Default] is the same value as BlockDurability.
+        # Values greater than BlockDurability are allowed.
+        #
+        # NOTE: Effective damage is calculated according to the following formula:
+        # effectiveDamage = baseDamage * underwaterDamageFactor * (1 - distanceFactor * distanceAttenuationFactor)
+        # where distanceFactor = distance / (explosionRadius * explosionRadiusFactor)                
+        Damage: 50.0
+        # Indicates the chance of naturally breaking the block (and thus having drops).
+        # [Minimum] [default] is 0.0, which means blocks will never break naturally.
+        # [Maximum] is 100.0, which means blocks will always break naturally.
+        DropChance: 0.0
+        # Indicates how effective damage decreases with distance.
+        # [Minimum] [default] is 0.0, which means that all blocks in range will
+        # take the same amount of damage.
+        # [Maximum] is 1.0, which means that effective damage decreases linearly as
+        # distance increases.
+        DistanceAttenuationFactor: 0.0
+        # Multiplicative factor applied to the original explosion radius
+        # to compute the effective explosion radius.
+        # [Minimum] is 0.0, which means the effective radius equals to 0 (no damage).
+        # [Default] is 0.5, which means the effective radius is half the original explosion radius.
+        # [Maximum] is 1.0, which means the effective radius equals to the original explosion radius.
+        ExplosionRadiusFactor: 0.5
+        # Multiplicative factor applied when explosion takes place underwater.
+        # [Minimum] is 0.0, which means no damage will be taken underwater.
+        # [Default] is 0.5, which halves the damage taken in underwater explosions.
+        # A value of 1.0 means that water doesn't affect damage.
+        # A value greater than 1.0 means damage underwater is magnified.
+        UnderwaterDamageFactor: 0.5
+        # Specifies how to detect underwater explosions.
+        # False [default]: Explosions will be considered underwater if they were originated in a
+        # block of water, and therefore every block in range will be applied an underwater damage factor. (fast)
+        # True: For each block in range, look for water in the trajectory between its location and the explosion center.
+        # Therefore, each block will or will not be applied the underwater damage factor, depending on its position (very slow)
+        FancyUnderwaterDetection: false
+        # Note how Particles and Sound sections can also be placed here, in the material section.
+        Particles:
+          Name: WATER_SPLASH
+          DeltaX: 5.0
+          DeltaY: 5.0
+          DeltaZ: 5.0
+          Amount: 2000
+          Speed: 1.0
+          Force: true
+        Sound:
+          Name: BLOCK_SAND_BREAK
+          Volume: 1.0
+          Pitch: 1.0
+      # Not affected by the explosion of any "dangerousEntity"! Will never break...
+      DIRT:
+        Damage: 0.0
 
-            Particles:                              # This section allows to specify the particles that will spawn when the entity explodes.
-                Name: REDSTONE                      # Name of the particles to be spawned. Valid values are listed in
-                                                    # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
-                DeltaX: 2.0                         # Size of the cube that will contain the particles
-                DeltaY: 2.0
-                DeltaZ: 2.0
-                Amount: 2000                        # Amount of particles to be spawned. Be careful, larger values could cause FPS drops.
-                Speed: 1.0                          # Speed of the particles to be spawned. Must be a positive value or zero.
-                Force: true                         # Allows the particles to be seen up to 256 blocks away.
-                Red: 255                            # Color of the particles. Only applicable when particle's name is REDSTONE
-                Blue: 0
-                Green: 255
-                Size: 2.0                           # Size of the particles. Must be a positive value. Only applicable when particle's
-                                                    # name is REDSTONE
+# This section allows to customize the behaviour of Cannons explosions.
+# The support for Cannons will be enabled automatically when it is detected.
+CannonProjectile:
+  # Cannon projectile IDs
+  diamond:
+    Properties:
+      # Overriding the original projectile explosion also means that all side effects 
+      # managed by Cannons (like spawning fireworks, cluster bombs, etc.) will be disabled.
+      # This might change in future versions.
+      ExplosionDamageBlocksUnderliquid: true
+      UnderliquidExplosionFactor: 0.5
+    Materials:
+      # Contrary to what happens in the VanillaEntity section, it's not possible to override
+      # the behaviour of blocks that would break in regular conditions when a Cannon projectile
+      # explodes. That means that putting breakable materials here (like DIRT) won't have the desired
+      # effect.
+      OBSIDIAN:
+        Damage: 50.0
+        DropChance: 0.0
+        DistanceAttenuationFactor: 0.0
+        ExplosionRadiusFactor: 0.5
+        UnderwaterDamageFactor: 1.0
+        FancyUnderwaterDetection: false
 
-            Sound:                                  # This section allows to specify the sound to be played when the entity explodes.
-                Name: ENTITY_OCELOT_HURT            # Name of the sound to be played. Valid values are listed in
-                                                    # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
-                Volume: 1.0                         # Volume of the sound to be played. Must be a positive value. Values greater than
-                                                    # 1.0 will not increase the loudness of the sound, but will allow the sound to be heared
-                                                    # in a greater radius.
-                Pitch: 1.0                          # Pitch of the sound. Must be between 0.5 and 2.0, and allows to specify the speed
-                                                    # the sound is played at.
+# This section allows to customize the behaviour Magic entities explosions.
+# The support for Magic will be enabled automatically when it is detected.
+# This section behaves exactly as the VanillaEntity section, but will affect only
+# to entities spawned by Magic and not to vanilla entities. Allowed entity values are:
+# WITHER, ENDER_CRYSTAL, PRIMED_TNT, CREEPER, CHARGED_CREEPER,
+# FIREBALL, DRAGON_FIREBALL, SMALL_FIREBALL, WITHER_SKULL, CHARGED_WITHER_SKULL
+MagicEntity:
+  PRIMED_TNT:
+    unbreakableBlocks:
+      Damage: 25.0
 
-        Materials:                                  # This section contains the materials that will be managed by the plugin.
-                                                    # It is not mandatory: if this section doesn't exist, the plugin will understand that
-                                                    # every section in the entity is a material. That can be used as a shortcut when
-                                                    # you don't want to add entity properties, but only to list the affected materials.
-                                                    # The damage to all those materials is "simulated" by the plugin and managed
-                                                    # by these settings.
-                                                    
-            unbreakableBlocks:                      # Valid values are all materials listed in
-                                                    # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.
-                                                    # WATER and LAVA are not allowed.
-                                                    # Groups can also be used here.
-                                                    
-                Damage: 50.0                        # Base damage used to compute the effective damage taken by a block.
-                                                    # [Minimum] is 0.0, which means the block isn't affected by the explosion.
-                                                    # [Default] is the same value as BlockDurability.
-                                                    # Values greater than BlockDurability are allowed.
+# All colors and modifiers are available for locale messages.
+# For ChecktoolUse and ChecktoolNotHandled, you can use some variables:
+#   %MATERIAL% represents the clicked block's type,
+#   %B_X% the X coordinate of the targeted block
+#   %B_Y% the Y coordinate of the targeted block
+#   %B_Z% the Z coordinate of the targeted block
+# These are only available for ChecktoolUse message:
+#   %DURABILITY% the clicked block's durability and
+#   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability)
+# For ChecktoolGiven message:
+#   %NAME% the player's name
+Locale:
+  NotAllowed: You are not allowed to perform this action!
+  OnlyPlayerAllowed: Only players can perform this action!
+  PlayerDoesntExist: The player doesn't exist in the server!
+  PlayerIsOffline: The player must be online to perform that
+  EnterChecktoolMode: You can now right-click a block with the checktool to display
+    block durability
+  LeaveChecktoolMode: You can no longer check for a block durability
+  ChecktoolUse: 'Block health: %DURABILITY_PERCENTAGE%% (%PRETTY_MATERIAL%)'
+  ChecktoolSet: Checktool successfully set!
+  ChecktoolNotPersisted: Checktool item was set, but it couldn't be persisted
+  ChecktoolGiven: A checktool was given to player %NAME%
+  ChecktoolReset: Checktool successfully reset to bare hand
+  ChecktoolNotHandled: '%PRETTY_MATERIAL% is not handled by the current configuration'
+  Reloaded: Reloaded successfully!
 
-                                                    # NOTE: Effective damage is calculated according to the following formula:
-                                                    # effectiveDamage = baseDamage * underwaterDamageFactor * (1 - distanceFactor * distanceAttenuationFactor)
-                                                    # where distanceFactor = distance / (explosionRadius * explosionRadiusFactor)
-                                                    
-                DropChance: 0.0                     # Indicates the chance of naturally breaking the block (and thus having drops).
-                                                    # [Minimum] [default] is 0.0, which means blocks will never break naturally.
-                                                    # [Maximum] is 100.0, which means blocks will always break naturally.
-                                                    
-                DistanceAttenuationFactor: 0.0      # Indicates how effective damage decreases with distance.
-                                                    # [Minimum] [default] is 0.0, which means that all blocks in range will
-                                                    # take the same amount of damage.
-                                                    # [Maximum] is 1.0, which means that effective damage decreases linearly as
-                                                    # distance increases.
-                
-                ExplosionRadiusFactor: 0.5          # Multiplicative factor applied to the original explosion radius
-                                                    # to compute the effective explosion radius.
-                                                    # [Minimum] is 0.0, which means the effective radius equals to 0 (no damage).
-                                                    # [Default] is 0.5, which means the effective radius is half the original explosion radius.
-                                                    # [Maximum] is 1.0, which means the effective radius equals to the original explosion radius.
-                
-                UnderwaterDamageFactor: 0.5         # Multiplicative factor applied when explosion takes place underwater.
-                                                    # [Minimum] is 0.0, which means no damage will be taken underwater.
-                                                    # [Default] is 0.5, which halves the damage taken in underwater explosions.
-                                                    # A value of 1.0 means that water doesn't affect damage.
-                                                    # A value greater than 1.0 means damage underwater is magnified.
-                
-                FancyUnderwaterDetection: false     # Specifies how to detect underwater explosions.
-                                                    # False [default]: Explosions will be considered underwater if they were originated in a
-                                                    # block of water, and therefore every block in range will be applied an underwater damage factor. (fast)
-                                                    # True: For each block in range, look for water in the trajectory between its location and the explosion center.
-                                                    # Therefore, each block will or will not be applied the underwater damage factor, depending on its position (very slow)
-
-                Particles:                          # Note how Particles and Sound sections can also be placed here, in the material section.
-                    Name: WATER_SPLASH
-                    DeltaX: 5.0
-                    DeltaY: 5.0
-                    DeltaZ: 5.0
-                    Amount: 2000
-                    Speed: 1.0
-                    Force: true
-                Sound:
-                    Name: BLOCK_SAND_BREAK
-                    Volume: 1.0                         
-                    Pitch: 1.0                          
-
-            DIRT:
-                Damage: 0.0                         # Not affected by the explosion of any "dangerousEntity"! Will never break...
-            
-CannonProjectile:                                   # This section allows to customize the behaviour of Cannons explosions.
-                                                    # The support for Cannons will be enabled automatically when it is detected.
-                                                    
-    diamond:                                        # Cannon projectile IDs
-        Properties:
-            ExplosionDamageBlocksUnderliquid: true  # Overriding the original projectile explosion also means that all side effects 
-                                                    # managed by Cannons (like spawning fireworks, cluster bombs, etc.) will be disabled.
-                                                    # This might change in future versions.
-            UnderliquidExplosionFactor: 0.5
-        Materials:                                  # Contrary to what happens in the VanillaEntity section, it's not possible to override
-                                                    # the behaviour of blocks that would break in regular conditions when a Cannon projectile
-                                                    # explodes. That means that putting breakable materials here (like DIRT) won't have the desired
-                                                    # effect.
-            OBSIDIAN:
-                Damage: 50.0
-                DropChance: 0.0
-                DistanceAttenuationFactor: 0.0
-                ExplosionRadiusFactor: 0.5
-                UnderwaterDamageFactor: 1.0
-                FancyUnderwaterDetection: false
-            
-Locale:                                             # All colors and modifiers are available for locale messages.
-                                                    # For ChecktoolUse and ChecktoolNotHandled, you can use some variables:
-                                                    #   %MATERIAL% represents the clicked block's type,
-                                                    #   %B_X% the X coordinate of the targeted block
-                                                    #   %B_Y% the Y coordinate of the targeted block
-                                                    #   %B_Z% the Z coordinate of the targeted block
-                                                    # These are only available for ChecktoolUse message:
-                                                    #   %DURABILITY% the clicked block's durability and
-                                                    #   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability)
-                                                    # For ChecktoolGiven message:
-                                                    #   %NAME% the player's name
-                                                
-    NotAllowed: "You are not allowed to perform this action!"
-    OnlyPlayerAllowed: "Only players can perform this action!"
-    PlayerDoesntExist: "The player doesn't exist in the server!"
-    PlayerIsOffline: "The player must be online to perform that"
-    EnterChecktoolMode: "You can now right-click a block with the checktool to display block durability"
-    LeaveChecktoolMode: "You can no longer check for a block durability"
-    ChecktoolUse: "%B_X% / %B_Y% / %B_Z% // %MATERIAL% (%DURABILITY% / %MAX_DURABILITY%)"
-    ChecktoolSet: "Checktool successfully set!"
-    ChecktoolNotPersisted: "Checktool item was set, but it couldn't be persisted"
-    ChecktoolGiven: "A checktool was given to player %NAME%"
-    ChecktoolReset: "Checktool successfully reset to bare hand"
-    ChecktoolNotHandled: "%MATERIAL% is not handled by the current configuration"
-    Reloaded: "Reloaded successfully!"
+LocalePrefix: '[ExplodeAny] '

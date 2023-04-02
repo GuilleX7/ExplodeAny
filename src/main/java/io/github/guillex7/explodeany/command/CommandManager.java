@@ -13,6 +13,7 @@ import org.bukkit.command.TabExecutor;
 import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.configuration.PermissionNode;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandManager implements TabExecutor {
@@ -62,29 +63,28 @@ public class CommandManager implements TabExecutor {
 		}
 
 		boolean executable = true;
-		for (String permissionName : rootCommand.getRequiredPermissions()) {
-			if (!sender.hasPermission(permissionName)) {
+		for (PermissionNode permissionNode : rootCommand.getRequiredPermissions()) {
+			if (!sender.hasPermission(permissionNode.getKey())) {
 				executable = false;
 				break;
 			}
 		}
 
 		if (!executable) {
-			sender.sendMessage(MessageFormatter
-					.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED)));
+			sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED));
 			return true;
 		}
 
 		if (!rootCommand.execute(sender, Arrays.copyOfRange(args, i, args.length))) {
 			sender.sendMessage(MessageFormatter.colorize(
-					MessageFormatter.sign(String.format("Usage: /%s &7%s", breadcrumbs, rootCommand.getUsage()))));
+					String.format("Usage: /%s &7%s", breadcrumbs, rootCommand.getUsage())));
 		}
 		return true;
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		List<String> autocompletion = new ArrayList<String>();
+		List<String> autocompletion = new ArrayList<>();
 
 		RegistrableCommand rootCommand = getRegisteredCommands().get(command.getName());
 		if (rootCommand == null) {

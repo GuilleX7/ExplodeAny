@@ -1,6 +1,9 @@
 package io.github.guillex7.explodeany.util;
 
 public class MathUtils {
+    private MathUtils() {
+    }
+
     public static double ensureRange(double value, double max, double min) {
         return Math.min(Math.max(value, min), max);
     }

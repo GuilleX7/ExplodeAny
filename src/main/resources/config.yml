@@ -1,12 +1,15 @@
 UseBlockDatabase: false
 CheckBlockDatabaseAtStartup: false                                
 BlockDurability: 100.0
+EnableMetrics: true
 
 Groups: {}
 
 VanillaEntity: {}
             
 CannonProjectile: {}
+
+MagicEntity: {}
 
 Locale:                                 
     NotAllowed: "You are not allowed to perform this action!"
@@ -15,10 +18,12 @@ Locale:
     PlayerIsOffline: "The player must be online to perform that"
     EnterChecktoolMode: "You can now right-click a block with the checktool to display block durability"
     LeaveChecktoolMode: "You can no longer check for a block durability"
-    ChecktoolUse: "%B_X% / %B_Y% / %B_Z% -- %MATERIAL% (%DURABILITY% / %MAX_DURABILITY%)"
+    ChecktoolUse: "Block health: %DURABILITY_PERCENTAGE%% (%PRETTY_MATERIAL%)"
     ChecktoolSet: "Checktool successfully set!"
     ChecktoolNotPersisted: "Checktool item was set, but it couldn't be persisted"
     ChecktoolGiven: "A checktool was given to player %NAME%"
     ChecktoolReset: "Checktool successfully reset to bare hand"
-    ChecktoolNotHandled: "%MATERIAL% is not handled by the current configuration"
+    ChecktoolNotHandled: "%PRETTY_MATERIAL% is not handled by the current configuration"
     Reloaded: "Reloaded successfully!"
+
+LocalePrefix: "[ExplodeAny] "

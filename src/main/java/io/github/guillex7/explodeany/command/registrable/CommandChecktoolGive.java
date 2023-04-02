@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.util.MessageFormatter;
+import io.github.guillex7.explodeany.configuration.PermissionNode;
 
 public class CommandChecktoolGive extends RegistrableCommand {
 	@Override
@@ -20,8 +20,8 @@ public class CommandChecktoolGive extends RegistrableCommand {
 	}
 
 	@Override
-	public List<String> getRequiredPermissions() {
-		return new ArrayList<String>(Arrays.asList("explodeany.checktool.give"));
+	public List<PermissionNode> getRequiredPermissions() {
+		return new ArrayList<>(Arrays.asList(PermissionNode.CHECKTOOL_GIVE));
 	}
 
 	@Override
@@ -30,8 +30,8 @@ public class CommandChecktoolGive extends RegistrableCommand {
 
 		if (args.length == 0) {
 			if (!(sender instanceof Player)) {
-				sender.sendMessage(MessageFormatter
-						.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ONLY_PLAYER_ALLOWED)));
+				sender.sendMessage(
+						ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ONLY_PLAYER_ALLOWED));
 				return true;
 			}
 
@@ -41,23 +41,25 @@ public class CommandChecktoolGive extends RegistrableCommand {
 			Player possibleReceiver = Bukkit.getPlayer(receiverName);
 
 			if (possibleReceiver == null) {
-				sender.sendMessage(MessageFormatter
-						.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.PLAYER_DOESNT_EXIST)));
+				sender.sendMessage(
+						ConfigurationManager.getInstance().getLocale(ConfigurationLocale.PLAYER_DOESNT_EXIST));
 				return true;
 			}
 
 			if (!possibleReceiver.isOnline()) {
-				sender.sendMessage(MessageFormatter
-						.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.PLAYER_IS_OFFLINE)));
+				sender.sendMessage(
+						ConfigurationManager.getInstance().getLocale(ConfigurationLocale.PLAYER_IS_OFFLINE));
 				return true;
 			}
 
 			receiver = possibleReceiver;
 		}
 
-		receiver.getInventory().addItem(ChecktoolManager.getChecktool());
-		sender.sendMessage(MessageFormatter.sign(ConfigurationManager.getInstance()
-				.getLocale(ConfigurationLocale.CHECKTOOL_GIVEN).replaceAll("%NAME%", receiver.getName())));
+		receiver.getInventory().addItem(ChecktoolManager.getInstance().getChecktool());
+		sender.sendMessage(
+				ConfigurationManager.getInstance()
+						.getLocale(ConfigurationLocale.CHECKTOOL_GIVEN)
+						.replaceAll("%NAME%", receiver.getName()));
 		return true;
 	}
 }

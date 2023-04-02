@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 
+import io.github.guillex7.explodeany.configuration.PermissionNode;
+
 public abstract class RegistrableCommand {
 	private Map<String, RegistrableCommand> mappedSubcommands = null;
 
@@ -21,17 +23,17 @@ public abstract class RegistrableCommand {
 		return "";
 	}
 
-	public List<String> getRequiredPermissions() {
-		return new ArrayList<String>();
+	public List<PermissionNode> getRequiredPermissions() {
+		return new ArrayList<>();
 	}
 
 	public List<RegistrableCommand> getSubcommands() {
-		return new ArrayList<RegistrableCommand>();
+		return new ArrayList<>();
 	}
 
 	private final void mapSubcommands() {
 		if (mappedSubcommands == null) {
-			mappedSubcommands = new HashMap<String, RegistrableCommand>();
+			mappedSubcommands = new HashMap<>();
 		} else {
 			mappedSubcommands.clear();
 		}

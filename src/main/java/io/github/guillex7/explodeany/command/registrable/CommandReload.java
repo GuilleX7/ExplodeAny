@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.configuration.PermissionNode;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandReload extends RegistrableCommand {
@@ -18,16 +19,15 @@ public class CommandReload extends RegistrableCommand {
 	}
 
 	@Override
-	public List<String> getRequiredPermissions() {
-		return new ArrayList<String>(Arrays.asList("explodeany.reload"));
+	public List<PermissionNode> getRequiredPermissions() {
+		return new ArrayList<>(Arrays.asList(PermissionNode.RELOAD));
 	}
 
 	@Override
 	public boolean execute(CommandSender sender, String[] args) {
 		ExplodeAny.getInstance().onDisable();
 		ExplodeAny.getInstance().onEnable();
-		sender.sendMessage(
-				MessageFormatter.sign(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.RELOADED)));
+		sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.RELOADED));
 		return true;
 	}
 }

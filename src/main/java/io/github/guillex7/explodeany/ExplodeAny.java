@@ -2,6 +2,7 @@ package io.github.guillex7.explodeany;
 
 import java.io.File;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
@@ -10,25 +11,41 @@ import io.github.guillex7.explodeany.command.registrable.CommandEany;
 import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.CannonProjectileConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.MagicEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.VanillaEntityConfiguration;
 import io.github.guillex7.explodeany.listener.ListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.BlockListener;
-import io.github.guillex7.explodeany.listener.loadable.CannonExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.EntityListener;
-import io.github.guillex7.explodeany.listener.loadable.VanillaExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.CannonExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.MagicExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.VanillaExplosionListener;
 
 public class ExplodeAny extends JavaPlugin {
 	private final String DATABASE_FILENAME = "blockDatabase.json";
+	private final int METRICS_PLUGIN_ID = 18111;
+
+	private ConfigurationManager configurationManager;
+	private BlockDatabase blockDatabase;
+	private ListenerManager listenerManager;
+	private CommandManager commandManager;
+	private Metrics metrics;
 
 	@Override
 	public void onEnable() {
 		super.onEnable();
+
+		this.configurationManager = ConfigurationManager.getInstance();
+		this.blockDatabase = BlockDatabase.getInstance();
+		this.listenerManager = ListenerManager.getInstance();
+		this.commandManager = CommandManager.getInstance();
+
 		getLogger().info(
 				String.format("%s v%s is loading now!", getDescription().getName(), getDescription().getVersion()));
 		loadConfiguration();
 		loadDatabase();
 		registerListeners();
 		registerCommands();
+		peekMetrics();
 	}
 
 	@Override
@@ -39,61 +56,78 @@ public class ExplodeAny extends JavaPlugin {
 		unregisterListeners();
 		unloadDatabase();
 		unloadConfiguration();
+		shutdownMetrics();
 	}
 
 	public void loadConfiguration() {
-		ConfigurationManager configurationManager = ConfigurationManager.getInstance();
-		configurationManager.loadConfiguration();
-		configurationManager.registerEntityConfiguration(new VanillaEntityConfiguration());
-		configurationManager.registerEntityConfiguration(new CannonProjectileConfiguration());
-		configurationManager.loadAllEntityConfigurations();
+		this.configurationManager.loadConfiguration();
+		this.configurationManager.registerEntityConfiguration(new VanillaEntityConfiguration());
+		this.configurationManager.registerEntityConfiguration(new CannonProjectileConfiguration());
+		this.configurationManager.registerEntityConfiguration(new MagicEntityConfiguration());
+		this.configurationManager.loadAllEntityConfigurations();
 	}
 
 	public void loadDatabase() {
-		if (ConfigurationManager.getInstance().doUseBlockDatabase()) {
-			BlockDatabase blockDatabase = BlockDatabase.getInstance();
-			blockDatabase.loadFromFile(new File(getDataFolder(), getDatabaseFilename()));
-			blockDatabase.sanitize();
+		if (this.configurationManager.doUseBlockDatabase()) {
+			this.blockDatabase.loadFromFile(new File(getDataFolder(), getDatabaseFilename()));
+			this.blockDatabase.sanitize();
 			unloadDatabase();
 		}
 	}
 
 	public void registerListeners() {
-		ListenerManager listenerManager = ListenerManager.getInstance();
-		listenerManager.registerListener(new VanillaExplosionListener());
-		listenerManager.registerListener(new CannonExplosionListener());
-		listenerManager.registerListener(new BlockListener());
-		listenerManager.registerListener(new EntityListener());
-		listenerManager.loadAllListeners();
+		this.listenerManager.registerListener(new BlockListener());
+		this.listenerManager.registerListener(new EntityListener());
+		this.listenerManager.registerListener(new VanillaExplosionListener());
+		this.listenerManager.registerListener(new CannonExplosionListener());
+		this.listenerManager.registerListener(new MagicExplosionListener());
+		this.listenerManager.loadAllListeners();
 	}
 
 	public void registerCommands() {
-		CommandManager commandManager = CommandManager.getInstance();
-		commandManager.registerCommand(new CommandEany());
+		this.commandManager.registerCommand(new CommandEany());
 
-		for (RegistrableCommand command : commandManager.getRegisteredCommands().values()) {
-			getCommand(command.getName()).setExecutor(commandManager);
+		for (RegistrableCommand command : this.commandManager.getRegisteredCommands().values()) {
+			getCommand(command.getName()).setExecutor(this.commandManager);
+		}
+	}
+
+	public void peekMetrics() {
+		if (this.configurationManager.doEnableMetrics()) {
+			metrics = new Metrics(this, getMetricsPluginId());
+			getLogger().info("Metrics have been enabled");
 		}
 	}
 
 	public void unloadConfiguration() {
-		ConfigurationManager.getInstance().unloadAllEntityConfigurations();
+		this.configurationManager.unloadAllEntityConfigurations();
 	}
 
 	public void unloadDatabase() {
-		if (ConfigurationManager.getInstance().doUseBlockDatabase()) {
-			BlockDatabase.getInstance().saveToFile(new File(getDataFolder(), getDatabaseFilename()));
+		if (this.configurationManager.doUseBlockDatabase()) {
+			this.blockDatabase.saveToFile(new File(getDataFolder(), getDatabaseFilename()));
 		}
 	}
 
 	public void unregisterListeners() {
-		ListenerManager listenerManager = ListenerManager.getInstance();
-		listenerManager.unloadAllListeners();
-		listenerManager.unregisterAllListeners();
+		this.listenerManager.unloadAllListeners();
+		this.listenerManager.unregisterAllListeners();
+	}
+
+	public void shutdownMetrics() {
+		if (this.metrics != null) {
+			this.metrics.shutdown();
+		}
+
+		this.metrics = null;
 	}
 
 	public String getDatabaseFilename() {
 		return DATABASE_FILENAME;
+	}
+
+	public int getMetricsPluginId() {
+		return METRICS_PLUGIN_ID;
 	}
 
 	public static ExplodeAny getInstance() {

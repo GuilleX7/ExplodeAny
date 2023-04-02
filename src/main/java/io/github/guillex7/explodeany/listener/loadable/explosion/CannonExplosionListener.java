@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.listener.loadable;
+package io.github.guillex7.explodeany.listener.loadable.explosion;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -10,21 +10,17 @@ import org.bukkit.event.EventPriority;
 
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
+import at.pavlov.cannons.projectile.Projectile;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.LoadableSectionConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
-public final class CannonExplosionListener implements LoadableListener {
+public final class CannonExplosionListener extends BaseExplosionListener {
 	@Override
 	public String getName() {
 		return "Cannons explosions";
-	}
-
-	@Override
-	public boolean shouldBeLoaded() {
-		return ConfigurationManager.getInstance().getRegisteredEntityConfiguration("CannonProjectile").shouldBeLoaded();
 	}
 
 	@Override
@@ -34,24 +30,23 @@ public final class CannonExplosionListener implements LoadableListener {
 
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
 	public void onProjectileImpact(ProjectileImpactEvent event) {
-		if (event.getProjectile() == null) {
+		Projectile projectile = event.getProjectile();
+		if (projectile == null) {
 			return;
 		}
+
 		String projectileId = event.getProjectile().getProjectileId();
 
-		LoadableSectionConfiguration<?> cannonProjectileConfiguration = ConfigurationManager.getInstance()
-				.getRegisteredEntityConfiguration("CannonProjectile");
-
-		Map<Material, EntityMaterialConfiguration> materialConfigurations = cannonProjectileConfiguration
+		Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
 				.getEntityMaterialConfigurations().get(projectileId);
 		if (materialConfigurations == null) {
 			return;
 		}
 
-		EntityConfiguration entityConfiguration = cannonProjectileConfiguration.getEntityConfigurations()
+		EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
 				.get(projectileId);
 
-		float explosionPower = event.getProjectile().getExplosionPower();
+		float explosionPower = projectile.getExplosionPower();
 		if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
 				event.getImpactLocation(), (int) explosionPower, explosionPower)) {
 			event.setCancelled(true);
@@ -60,13 +55,14 @@ public final class CannonExplosionListener implements LoadableListener {
 
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
 	public void onProjectilePiercing(ProjectilePiercingEvent event) {
-		if (event.getProjectile() == null) {
+		Projectile projectile = event.getProjectile();
+		if (projectile == null) {
 			return;
 		}
 
-		Map<Material, EntityMaterialConfiguration> materialConfigurations = ConfigurationManager.getInstance()
-				.getRegisteredEntityConfiguration("CannonProjectile").getEntityMaterialConfigurations()
-				.get(event.getProjectile().getProjectileId());
+		Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+				.getEntityMaterialConfigurations()
+				.get(projectile.getProjectileId());
 		if (materialConfigurations == null) {
 			return;
 		}
@@ -82,7 +78,7 @@ public final class CannonExplosionListener implements LoadableListener {
 			}
 		}
 
-		// Remove all blocks after the first handled block
+		// Prevent all blocks behind the first handled block from being destroyed
 		while (iterator.hasNext()) {
 			iterator.next();
 			iterator.remove();
@@ -93,5 +89,10 @@ public final class CannonExplosionListener implements LoadableListener {
 	public void unload() {
 		ProjectileImpactEvent.getHandlerList().unregister(this);
 		ProjectilePiercingEvent.getHandlerList().unregister(this);
+	}
+
+	@Override
+	protected LoadableConfigurationSection<?> getConfiguration() {
+		return ConfigurationManager.getInstance().getRegisteredEntityConfiguration("CannonProjectile");
 	}
 }

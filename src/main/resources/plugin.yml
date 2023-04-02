@@ -1,10 +1,11 @@
 name: ExplodeAny
 main: io.github.guillex7.explodeany.ExplodeAny
 version: 1.4.0
+api-version: 1.13
 description: Allows to break any unbreakable block with explosions!
 author: GuilleX7
 website: https://github.com/GuilleX7/ExplodeAny
-softdepend: [Cannons]
+softdepend: [Cannons, Magic]
 commands:
     explodeany:
         description: "General command"

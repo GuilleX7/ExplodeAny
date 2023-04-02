@@ -44,14 +44,14 @@ public class ExplosionManager {
 	public boolean manageExplosion(Map<Material, EntityMaterialConfiguration> materialConfigurations,
 			EntityConfiguration entityConfiguration, Location sourceLocation, int explosionRadius,
 			float explosionPower) {
-		int cx = sourceLocation.getBlockX();
-		int cy = sourceLocation.getBlockY();
-		int cz = sourceLocation.getBlockZ();
-		Vector sourceVector = new Vector(cx, cy, cz);
-		int cxpr = cx + explosionRadius;
-		int cypr = cy + explosionRadius;
-		int czpr = cz + explosionRadius;
-		int squaredExplosionRadius = explosionRadius * explosionRadius;
+		final int cx = sourceLocation.getBlockX();
+		final int cy = sourceLocation.getBlockY();
+		final int cz = sourceLocation.getBlockZ();
+		final Vector sourceVector = new Vector(cx, cy, cz);
+		final int cxpr = cx + explosionRadius;
+		final int cypr = cy + explosionRadius;
+		final int czpr = cz + explosionRadius;
+		final int squaredExplosionRadius = explosionRadius * explosionRadius;
 
 		for (int x = cx - explosionRadius; x < cxpr; x++) {
 			for (int y = cy - explosionRadius; y < cypr; y++) {
@@ -67,7 +67,7 @@ public class ExplosionManager {
 						continue;
 					}
 
-					final double effectiveSquaredExplosionRadius = squaredExplosionRadius
+					double effectiveSquaredExplosionRadius = squaredExplosionRadius
 							* materialConfiguration.getExplosionRadiusFactor();
 					if (squaredDistance > effectiveSquaredExplosionRadius) {
 						continue;

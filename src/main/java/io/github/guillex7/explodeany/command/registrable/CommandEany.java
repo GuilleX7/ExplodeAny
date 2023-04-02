@@ -17,7 +17,7 @@ public class CommandEany extends RegistrableCommand {
 
 	@Override
 	public List<RegistrableCommand> getSubcommands() {
-		return new ArrayList<RegistrableCommand>(
+		return new ArrayList<>(
 				Arrays.asList(new CommandAbout(), new CommandChecktool(), new CommandReload()));
 	}
 }

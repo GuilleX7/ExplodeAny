@@ -14,21 +14,17 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 
-public abstract class LoadableSectionConfiguration<T> {
+public abstract class LoadableConfigurationSection<T> {
 	private static final String MATERIALS_SECTION = "Materials";
 	private static final String PROPERTIES_SECTION = "Properties";
 
 	private Map<T, Map<Material, EntityMaterialConfiguration>> entityMaterialConfigurations;
 	private Map<T, EntityConfiguration> entityConfigurations;
 
-	protected LoadableSectionConfiguration() {
+	protected LoadableConfigurationSection() {
 		super();
-		entityMaterialConfigurations = new HashMap<T, Map<Material, EntityMaterialConfiguration>>();
-		entityConfigurations = new HashMap<T, EntityConfiguration>();
-	}
-
-	public boolean shouldBeLoaded() {
-		return true;
+		entityMaterialConfigurations = new HashMap<>();
+		entityConfigurations = new HashMap<>();
 	}
 
 	private final ExplodeAny getPlugin() {
@@ -80,12 +76,17 @@ public abstract class LoadableSectionConfiguration<T> {
 	}
 
 	public final void fetchEntityMaterialConfigurations(FileConfiguration config) {
-		fetchEntities(config.getConfigurationSection(getSectionPath()));
+		ConfigurationSection configurationSection = config.getConfigurationSection(getSectionPath());
+		if (configurationSection == null) {
+			return;
+		}
+		
+		fetchEntities(configurationSection);
 	}
 
 	private final void fetchEntities(ConfigurationSection entitiesSection) {
 		for (String entityName : entitiesSection.getKeys(false)) {
-			List<T> fetchedEntities = new ArrayList<T>();
+			List<T> fetchedEntities = new ArrayList<>();
 			boolean definitionHasPriority = true;
 
 			T entity = getEntityFromName(entityName);
@@ -117,7 +118,7 @@ public abstract class LoadableSectionConfiguration<T> {
 				continue;
 			}
 
-			Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<Material, EntityMaterialConfiguration>();
+			Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
 			EntityConfiguration entityConfiguration = EntityConfiguration.byDefault();
 			ConfigurationSection materialsSection = entitySection.getConfigurationSection(MATERIALS_SECTION);
 			ConfigurationSection propertiesSection = entitySection.getConfigurationSection(PROPERTIES_SECTION);
@@ -137,7 +138,7 @@ public abstract class LoadableSectionConfiguration<T> {
 			for (T fetchedEntity : fetchedEntities) {
 				putAndMergeEntityConfigurations(fetchedEntity, entityConfiguration, definitionHasPriority);
 				putAndMergeEntityMaterialConfigurations(fetchedEntity,
-						new HashMap<Material, EntityMaterialConfiguration>(materialConfigurations),
+						new HashMap<>(materialConfigurations),
 						definitionHasPriority);
 			}
 		}
@@ -146,7 +147,7 @@ public abstract class LoadableSectionConfiguration<T> {
 	private final Material getMaterialFromName(String name) {
 		Material material;
 		try {
-			material = Material.valueOf(name);
+			material = Material.valueOf(name.toUpperCase());
 		} catch (Exception e) {
 			material = null;
 		}
@@ -158,10 +159,10 @@ public abstract class LoadableSectionConfiguration<T> {
 	}
 
 	private final Map<Material, EntityMaterialConfiguration> fetchMaterials(ConfigurationSection entitySection) {
-		Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<Material, EntityMaterialConfiguration>();
+		Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
 
 		for (String materialName : entitySection.getKeys(false)) {
-			List<Material> fetchedMaterials = new ArrayList<Material>();
+			List<Material> fetchedMaterials = new ArrayList<>();
 			boolean definitionHasPriority = true;
 
 			Material material = getMaterialFromName(materialName);
@@ -205,6 +206,8 @@ public abstract class LoadableSectionConfiguration<T> {
 
 		return materialConfigurations;
 	}
+
+	public abstract boolean shouldBeLoaded();
 
 	public abstract String getEntityName(T entity);
 
