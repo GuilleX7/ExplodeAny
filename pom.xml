@@ -1,14 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.guillex7</groupId>
-    <artifactId>ExplodeAny</artifactId>
+    <artifactId>explodeany-parent</artifactId>
     <version>1.4.0</version>
-    <name>ExplodeAny</name>
-    <description>Let's control explosions!</description>
+    <name>ExplodeAny parent project</name>
 
+    <packaging>pom</packaging>
 
     <developers>
         <developer>
@@ -20,7 +22,18 @@
         </developer>
     </developers>
 
+    <modules>
+        <module>explodeany</module>
+        <module>compatibility/compat-common</module>
+        <module>compatibility/compat-manager</module>
+        <module>compatibility/compat-v1_8</module>
+        <module>compatibility/compat-v1_9</module>
+        <module>compatibility/compat-v1_13</module>
+        <module>compatibility/compat-v1_14</module>
+    </modules>
+
     <properties>
+        <explodeany.version>1.4.0</explodeany.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,7 +49,6 @@
                 <maven.compiler.release>8</maven.compiler.release>
             </properties>
         </profile>
-
     </profiles>
 
     <build>
@@ -45,40 +57,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <relocations>
-                                <relocation>
-                                    <pattern>com.google.gson</pattern>
-                                    <shadedPattern>io.github.guillex7.explodeany.gson</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.bstats</pattern>
-                                    <shadedPattern>io.github.guillex7.explodeany.bstats</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/**</exclude>
-                                        <exclude>module-info.class</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
@@ -93,39 +71,4 @@
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.7</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Spigot API -->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.14-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- External plugin support  -->
-        <dependency>
-            <groupId>com.github.DerPavlov</groupId>
-            <artifactId>Cannons</artifactId>
-            <version>master-1437fe213f-1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.elmakers.mine.bukkit</groupId>
-            <artifactId>MagicAPI</artifactId>
-            <version>10.2</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 </project>

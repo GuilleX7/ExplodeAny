@@ -1,0 +1,13 @@
+package io.github.guillex7.explodeany.compat.v1_9.api;
+
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import io.github.guillex7.explodeany.compat.common.api.IPlayerInventoryUtils;
+
+public class CPlayerInventoryUtils implements IPlayerInventoryUtils {
+    @Override
+    public ItemStack getItemInMainHand(PlayerInventory inventory) {
+        return inventory.getItemInMainHand();
+    }
+}
