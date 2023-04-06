@@ -11,7 +11,7 @@ CannonProjectile: {}
 
 MagicEntity: {}
 
-Locale:                                 
+Locale:
     NotAllowed: "You are not allowed to perform this action!"
     OnlyPlayerAllowed: "Only players can perform this action!"
     PlayerDoesntExist: "The player doesn't exist in the server!"

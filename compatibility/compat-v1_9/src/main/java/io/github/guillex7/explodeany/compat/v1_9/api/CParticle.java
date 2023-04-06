@@ -69,9 +69,9 @@ public class CParticle implements IParticle {
     @Override
     public void spawn(World world, double x, double y, double z, int count, double offsetX, double offsetY,
             double offsetZ,
-            double extra, boolean force) {
+            double speed, boolean force) {
         if (this.particle != null) {
-            world.spawnParticle(this.particle, x, y, z, count, offsetX, offsetY, offsetZ, extra, this.extra);
+            world.spawnParticle(this.particle, x, y, z, count, offsetX, offsetY, offsetZ, speed, this.extra);
         }
     }
 }

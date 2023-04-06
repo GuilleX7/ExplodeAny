@@ -240,4 +240,4 @@ Locale:
   ChecktoolNotHandled: '%PRETTY_MATERIAL% is not handled by the current configuration'
   Reloaded: Reloaded successfully!
 
-LocalePrefix: '[ExplodeAny] '
+LocalePrefix: "[ExplodeAny] "

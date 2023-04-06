@@ -7,7 +7,7 @@ import io.github.guillex7.explodeany.compat.common.api.IParticleUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPersistentStorageUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPlayerInteractionEventUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPlayerInventoryUtils;
-import io.github.guillex7.explodeany.compat.v1_13.api.CParticleUtils;
+import io.github.guillex7.explodeany.compat.v1_14.api.CParticleUtils;
 import io.github.guillex7.explodeany.compat.v1_14.api.CPersistentStorageUtils;
 import io.github.guillex7.explodeany.compat.v1_9.api.CExplosionUtils;
 import io.github.guillex7.explodeany.compat.v1_9.api.CPlayerInteractionEventUtils;

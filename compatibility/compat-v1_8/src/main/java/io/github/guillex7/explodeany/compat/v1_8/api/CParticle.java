@@ -8,7 +8,7 @@ public class CParticle implements IParticle {
     @Override
     public void spawn(World world, double x, double y, double z, int count, double offsetX, double offsetY,
             double offsetZ,
-            double extra, boolean force) {
+            double speed, boolean force) {
         // Not supported
     }
 }
