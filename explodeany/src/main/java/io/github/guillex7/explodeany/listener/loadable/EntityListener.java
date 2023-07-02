@@ -1,6 +1,7 @@
 package io.github.guillex7.explodeany.listener.loadable;
 
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -21,12 +22,14 @@ public final class EntityListener implements LoadableListener {
     private ChecktoolManager checktoolManager;
     private ConfigurationManager configurationManager;
     private BlockDatabase blockDatabase;
+    private CompatibilityManager compatibilityManager;
 
     public EntityListener() {
         super();
         this.checktoolManager = ChecktoolManager.getInstance();
         this.configurationManager = ConfigurationManager.getInstance();
         this.blockDatabase = BlockDatabase.getInstance();
+        this.compatibilityManager = CompatibilityManager.getInstance();
     }
 
     @Override
@@ -46,20 +49,28 @@ public final class EntityListener implements LoadableListener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
-                && CompatibilityManager.getInstance().getApi().getPlayerInteractionEventUtils()
+                && this.compatibilityManager.getApi().getPlayerInteractionEventUtils()
                         .doesInteractionUseMainHand(event)
-                && this.checktoolManager.getPlayersUsingChecktool().contains(event.getPlayer())) {
-            ItemStack itemInHand = new ItemStack(CompatibilityManager.getInstance().getApi().getPlayerInventoryUtils()
-                    .getItemInMainHand(event.getPlayer().getInventory()));
+                && this.checktoolManager.getPlayersUsingChecktool().contains(player)) {
+            ItemStack itemInHand = new ItemStack(this.compatibilityManager.getApi().getPlayerInventoryUtils()
+                    .getItemInMainHand(player.getInventory()));
             ItemStack checktool = this.checktoolManager.getChecktool();
 
             if (!ItemStackUtils.areItemStacksSimilar(itemInHand, checktool)) {
                 return;
             }
 
-            if (!event.getPlayer().hasPermission(PermissionNode.CHECKTOOL_USE.getKey())) {
-                event.getPlayer().sendMessage(this.configurationManager.getLocale(ConfigurationLocale.NOT_ALLOWED));
+            if (!player.hasPermission(PermissionNode.CHECKTOOL_USE.getKey())) {
+                player.sendMessage(this.configurationManager.getLocale(ConfigurationLocale.NOT_ALLOWED));
+                return;
+            }
+
+            if (this.configurationManager.getDisabledWorlds().contains(player.getWorld().getName())) {
+                player.sendMessage(
+                        this.configurationManager.getLocale(ConfigurationLocale.DISABLED_IN_THIS_WORLD));
                 return;
             }
 
@@ -98,7 +109,7 @@ public final class EntityListener implements LoadableListener {
                     .replaceAll("%MATERIAL%", materialName)
                     .replaceAll("%PRETTY_MATERIAL%", prettyMaterialName);
 
-            event.getPlayer().sendMessage(formattedMessage);
+            player.sendMessage(formattedMessage);
         }
     }
 

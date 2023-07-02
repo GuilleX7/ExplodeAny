@@ -17,105 +17,105 @@ import io.github.guillex7.explodeany.configuration.PermissionNode;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandManager implements TabExecutor {
-	private static CommandManager instance;
+    private static CommandManager instance;
 
-	private Map<String, RegistrableCommand> registeredCommands;
+    private Map<String, RegistrableCommand> registeredCommands;
 
-	private CommandManager() {
-		registeredCommands = new HashMap<>();
-	}
+    private CommandManager() {
+        registeredCommands = new HashMap<>();
+    }
 
-	public static CommandManager getInstance() {
-		if (instance == null) {
-			instance = new CommandManager();
-		}
-		return instance;
-	}
+    public static CommandManager getInstance() {
+        if (instance == null) {
+            instance = new CommandManager();
+        }
+        return instance;
+    }
 
-	public Map<String, RegistrableCommand> getRegisteredCommands() {
-		return registeredCommands;
-	}
+    public Map<String, RegistrableCommand> getRegisteredCommands() {
+        return registeredCommands;
+    }
 
-	public void registerCommand(RegistrableCommand command) {
-		registeredCommands.put(command.getName(), command);
-	}
+    public void registerCommand(RegistrableCommand command) {
+        registeredCommands.put(command.getName(), command);
+    }
 
-	public void unregisterAllCommands() {
-		registeredCommands.clear();
-	}
+    public void unregisterAllCommands() {
+        registeredCommands.clear();
+    }
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		RegistrableCommand rootCommand = getRegisteredCommands().get(command.getName());
-		if (rootCommand == null) {
-			return true;
-		}
-		String breadcrumbs = rootCommand.getName();
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        RegistrableCommand rootCommand = getRegisteredCommands().get(command.getName());
+        if (rootCommand == null) {
+            return true;
+        }
+        String breadcrumbs = rootCommand.getName();
 
-		int i;
-		for (i = 0; i < args.length; i++) {
-			RegistrableCommand subcommand = rootCommand.getMappedSubcommands().get(args[i]);
-			if (subcommand == null) {
-				break;
-			}
-			rootCommand = subcommand;
-			breadcrumbs += " " + rootCommand.getName();
-		}
+        int i;
+        for (i = 0; i < args.length; i++) {
+            RegistrableCommand subcommand = rootCommand.getMappedSubcommands().get(args[i]);
+            if (subcommand == null) {
+                break;
+            }
+            rootCommand = subcommand;
+            breadcrumbs += " " + rootCommand.getName();
+        }
 
-		boolean executable = true;
-		for (PermissionNode permissionNode : rootCommand.getRequiredPermissions()) {
-			if (!sender.hasPermission(permissionNode.getKey())) {
-				executable = false;
-				break;
-			}
-		}
+        boolean executable = true;
+        for (PermissionNode permissionNode : rootCommand.getRequiredPermissions()) {
+            if (!sender.hasPermission(permissionNode.getKey())) {
+                executable = false;
+                break;
+            }
+        }
 
-		if (!executable) {
-			sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED));
-			return true;
-		}
+        if (!executable) {
+            sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED));
+            return true;
+        }
 
-		if (!rootCommand.execute(sender, Arrays.copyOfRange(args, i, args.length))) {
-			sender.sendMessage(MessageFormatter.colorize(
-					String.format("Usage: /%s &7%s", breadcrumbs, rootCommand.getUsage())));
-		}
-		return true;
-	}
+        if (!rootCommand.execute(sender, Arrays.copyOfRange(args, i, args.length))) {
+            sender.sendMessage(MessageFormatter.colorize(
+                    String.format("Usage: /%s &7%s", breadcrumbs, rootCommand.getUsage())));
+        }
+        return true;
+    }
 
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		List<String> autocompletion = new ArrayList<>();
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> autocompletion = new ArrayList<>();
 
-		RegistrableCommand rootCommand = getRegisteredCommands().get(command.getName());
-		if (rootCommand == null) {
-			return autocompletion;
-		}
+        RegistrableCommand rootCommand = getRegisteredCommands().get(command.getName());
+        if (rootCommand == null) {
+            return autocompletion;
+        }
 
-		int i;
-		for (i = 0; i < args.length; i++) {
-			RegistrableCommand subcommand = rootCommand.getMappedSubcommands().get(args[i]);
-			if (subcommand == null) {
-				break;
-			}
-			rootCommand = subcommand;
-		}
+        int i;
+        for (i = 0; i < args.length; i++) {
+            RegistrableCommand subcommand = rootCommand.getMappedSubcommands().get(args[i]);
+            if (subcommand == null) {
+                break;
+            }
+            rootCommand = subcommand;
+        }
 
-		if (args.length <= i) {
-			return autocompletion;
-		}
+        if (args.length <= i) {
+            return autocompletion;
+        }
 
-		if (args[i].length() > 0) {
-			for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
-				if (subcommand.getName().startsWith(args[i])) {
-					autocompletion.add(subcommand.getName());
-				}
-			}
-		} else {
-			for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
-				autocompletion.add(subcommand.getName());
-			}
-		}
+        if (args[i].length() > 0) {
+            for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
+                if (subcommand.getName().startsWith(args[i])) {
+                    autocompletion.add(subcommand.getName());
+                }
+            }
+        } else {
+            for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
+                autocompletion.add(subcommand.getName());
+            }
+        }
 
-		return autocompletion;
-	}
+        return autocompletion;
+    }
 }

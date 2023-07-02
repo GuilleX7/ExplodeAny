@@ -15,205 +15,205 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 
 public abstract class LoadableConfigurationSection<T> {
-	private static final String MATERIALS_SECTION = "Materials";
-	private static final String PROPERTIES_SECTION = "Properties";
+    private static final String MATERIALS_SECTION = "Materials";
+    private static final String PROPERTIES_SECTION = "Properties";
 
-	private Map<T, Map<Material, EntityMaterialConfiguration>> entityMaterialConfigurations;
-	private Map<T, EntityConfiguration> entityConfigurations;
+    private Map<T, Map<Material, EntityMaterialConfiguration>> entityMaterialConfigurations;
+    private Map<T, EntityConfiguration> entityConfigurations;
 
-	protected LoadableConfigurationSection() {
-		super();
-		entityMaterialConfigurations = new HashMap<>();
-		entityConfigurations = new HashMap<>();
-	}
+    protected LoadableConfigurationSection() {
+        super();
+        entityMaterialConfigurations = new HashMap<>();
+        entityConfigurations = new HashMap<>();
+    }
 
-	private final ExplodeAny getPlugin() {
-		return ExplodeAny.getInstance();
-	}
+    private final ExplodeAny getPlugin() {
+        return ExplodeAny.getInstance();
+    }
 
-	public final Map<T, Map<Material, EntityMaterialConfiguration>> getEntityMaterialConfigurations() {
-		return entityMaterialConfigurations;
-	}
+    public final Map<T, Map<Material, EntityMaterialConfiguration>> getEntityMaterialConfigurations() {
+        return entityMaterialConfigurations;
+    }
 
-	public final Map<T, EntityConfiguration> getEntityConfigurations() {
-		return entityConfigurations;
-	}
+    public final Map<T, EntityConfiguration> getEntityConfigurations() {
+        return entityConfigurations;
+    }
 
-	public final void putAndMergeEntityMaterialConfigurations(T entity,
-			Map<Material, EntityMaterialConfiguration> materialConfigurations, boolean definitionHasPriority) {
-		if (!entityMaterialConfigurations.containsKey(entity)) {
-			entityMaterialConfigurations.put(entity, materialConfigurations);
-		} else if (definitionHasPriority) {
-			entityMaterialConfigurations.get(entity).putAll(materialConfigurations);
-		} else {
-			for (Material material : materialConfigurations.keySet()) {
-				entityMaterialConfigurations.get(entity).putIfAbsent(material, materialConfigurations.get(material));
-			}
-		}
-	}
+    public final void putAndMergeEntityMaterialConfigurations(T entity,
+            Map<Material, EntityMaterialConfiguration> materialConfigurations, boolean definitionHasPriority) {
+        if (!entityMaterialConfigurations.containsKey(entity)) {
+            entityMaterialConfigurations.put(entity, materialConfigurations);
+        } else if (definitionHasPriority) {
+            entityMaterialConfigurations.get(entity).putAll(materialConfigurations);
+        } else {
+            for (Material material : materialConfigurations.keySet()) {
+                entityMaterialConfigurations.get(entity).putIfAbsent(material, materialConfigurations.get(material));
+            }
+        }
+    }
 
-	public final void putAndMergeEntityConfigurations(T entity, EntityConfiguration entityConfiguration,
-			boolean definitionHasPriority) {
-		if (definitionHasPriority) {
-			getEntityConfigurations().put(entity, entityConfiguration);
-		} else {
-			getEntityConfigurations().putIfAbsent(entity, entityConfiguration);
-		}
-	}
+    public final void putAndMergeEntityConfigurations(T entity, EntityConfiguration entityConfiguration,
+            boolean definitionHasPriority) {
+        if (definitionHasPriority) {
+            getEntityConfigurations().put(entity, entityConfiguration);
+        } else {
+            getEntityConfigurations().putIfAbsent(entity, entityConfiguration);
+        }
+    }
 
-	public final void putAndMergeMaterialConfigurations(
-			Map<Material, EntityMaterialConfiguration> materialConfigurations, Material material,
-			EntityMaterialConfiguration entityMaterialConfiguration, boolean definitionHasPriority) {
-		if (definitionHasPriority) {
-			materialConfigurations.put(material, entityMaterialConfiguration);
-		} else {
-			materialConfigurations.putIfAbsent(material, entityMaterialConfiguration);
-		}
-	}
+    public final void putAndMergeMaterialConfigurations(
+            Map<Material, EntityMaterialConfiguration> materialConfigurations, Material material,
+            EntityMaterialConfiguration entityMaterialConfiguration, boolean definitionHasPriority) {
+        if (definitionHasPriority) {
+            materialConfigurations.put(material, entityMaterialConfiguration);
+        } else {
+            materialConfigurations.putIfAbsent(material, entityMaterialConfiguration);
+        }
+    }
 
-	public final void clearEntityMaterialConfigurations() {
-		entityMaterialConfigurations.clear();
-	}
+    public final void clearEntityMaterialConfigurations() {
+        entityMaterialConfigurations.clear();
+    }
 
-	public final void fetchEntityMaterialConfigurations(FileConfiguration config) {
-		ConfigurationSection configurationSection = config.getConfigurationSection(getSectionPath());
-		if (configurationSection == null) {
-			return;
-		}
-		
-		fetchEntities(configurationSection);
-	}
+    public final void fetchEntityMaterialConfigurations(FileConfiguration config) {
+        ConfigurationSection configurationSection = config.getConfigurationSection(getSectionPath());
+        if (configurationSection == null) {
+            return;
+        }
 
-	private final void fetchEntities(ConfigurationSection entitiesSection) {
-		for (String entityName : entitiesSection.getKeys(false)) {
-			List<T> fetchedEntities = new ArrayList<>();
-			boolean definitionHasPriority = true;
+        fetchEntities(configurationSection);
+    }
 
-			T entity = getEntityFromName(entityName);
-			if (isEntityTypeValid(entity)) {
-				fetchedEntities.add(entity);
-			} else {
-				definitionHasPriority = false;
-				List<String> entityGroup = ConfigurationManager.getInstance().getGroups().get(entityName);
-				if (entityGroup != null) {
-					for (String entityNameInGroup : entityGroup) {
-						T entityInGroup = getEntityFromName(entityNameInGroup);
-						if (isEntityTypeValid(entityInGroup)) {
-							fetchedEntities.add(entityInGroup);
-						}
-					}
-				}
-			}
+    private final void fetchEntities(ConfigurationSection entitiesSection) {
+        for (String entityName : entitiesSection.getKeys(false)) {
+            List<T> fetchedEntities = new ArrayList<>();
+            boolean definitionHasPriority = true;
 
-			if (fetchedEntities.isEmpty()) {
-				getPlugin().getLogger().warning(String.format("%s is not a valid %s nor %s group and won't be loaded",
-						entityName, getSectionPath(), getSectionPath()));
-				continue;
-			}
+            T entity = getEntityFromName(entityName);
+            if (isEntityTypeValid(entity)) {
+                fetchedEntities.add(entity);
+            } else {
+                definitionHasPriority = false;
+                List<String> entityGroup = ConfigurationManager.getInstance().getGroups().get(entityName);
+                if (entityGroup != null) {
+                    for (String entityNameInGroup : entityGroup) {
+                        T entityInGroup = getEntityFromName(entityNameInGroup);
+                        if (isEntityTypeValid(entityInGroup)) {
+                            fetchedEntities.add(entityInGroup);
+                        }
+                    }
+                }
+            }
 
-			ConfigurationSection entitySection = entitiesSection.getConfigurationSection(entityName);
-			if (entitySection == null) {
-				getPlugin().getLogger().warning(
-						String.format("%s.%s section is invalid and won't be loaded", getSectionPath(), entityName));
-				continue;
-			}
+            if (fetchedEntities.isEmpty()) {
+                getPlugin().getLogger().warning(String.format("%s is not a valid %s nor %s group and won't be loaded",
+                        entityName, getSectionPath(), getSectionPath()));
+                continue;
+            }
 
-			Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
-			EntityConfiguration entityConfiguration = EntityConfiguration.byDefault();
-			ConfigurationSection materialsSection = entitySection.getConfigurationSection(MATERIALS_SECTION);
-			ConfigurationSection propertiesSection = entitySection.getConfigurationSection(PROPERTIES_SECTION);
-			boolean hasSections = false;
-			if (materialsSection != null) {
-				materialConfigurations = fetchMaterials(materialsSection);
-				hasSections = true;
-			}
-			if (propertiesSection != null) {
-				entityConfiguration = EntityConfiguration.fromConfigurationSection(propertiesSection);
-				hasSections = true;
-			}
-			if (!hasSections) {
-				materialConfigurations = fetchMaterials(entitySection);
-			}
+            ConfigurationSection entitySection = entitiesSection.getConfigurationSection(entityName);
+            if (entitySection == null) {
+                getPlugin().getLogger().warning(
+                        String.format("%s.%s section is invalid and won't be loaded", getSectionPath(), entityName));
+                continue;
+            }
 
-			for (T fetchedEntity : fetchedEntities) {
-				putAndMergeEntityConfigurations(fetchedEntity, entityConfiguration, definitionHasPriority);
-				putAndMergeEntityMaterialConfigurations(fetchedEntity,
-						new HashMap<>(materialConfigurations),
-						definitionHasPriority);
-			}
-		}
-	}
+            Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
+            EntityConfiguration entityConfiguration = EntityConfiguration.byDefault();
+            ConfigurationSection materialsSection = entitySection.getConfigurationSection(MATERIALS_SECTION);
+            ConfigurationSection propertiesSection = entitySection.getConfigurationSection(PROPERTIES_SECTION);
+            boolean hasSections = false;
+            if (materialsSection != null) {
+                materialConfigurations = fetchMaterials(materialsSection);
+                hasSections = true;
+            }
+            if (propertiesSection != null) {
+                entityConfiguration = EntityConfiguration.fromConfigurationSection(propertiesSection);
+                hasSections = true;
+            }
+            if (!hasSections) {
+                materialConfigurations = fetchMaterials(entitySection);
+            }
 
-	private final Material getMaterialFromName(String name) {
-		Material material;
-		try {
-			material = Material.valueOf(name.toUpperCase());
-		} catch (Exception e) {
-			material = null;
-		}
-		return material;
-	}
+            for (T fetchedEntity : fetchedEntities) {
+                putAndMergeEntityConfigurations(fetchedEntity, entityConfiguration, definitionHasPriority);
+                putAndMergeEntityMaterialConfigurations(fetchedEntity,
+                        new HashMap<>(materialConfigurations),
+                        definitionHasPriority);
+            }
+        }
+    }
 
-	private final boolean isMaterialValid(Material material) {
-		return material != null && !material.equals(Material.WATER) && !material.equals(Material.LAVA);
-	}
+    private final Material getMaterialFromName(String name) {
+        Material material;
+        try {
+            material = Material.valueOf(name.toUpperCase());
+        } catch (Exception e) {
+            material = null;
+        }
+        return material;
+    }
 
-	private final Map<Material, EntityMaterialConfiguration> fetchMaterials(ConfigurationSection entitySection) {
-		Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
+    private final boolean isMaterialValid(Material material) {
+        return material != null && !material.equals(Material.WATER) && !material.equals(Material.LAVA);
+    }
 
-		for (String materialName : entitySection.getKeys(false)) {
-			List<Material> fetchedMaterials = new ArrayList<>();
-			boolean definitionHasPriority = true;
+    private final Map<Material, EntityMaterialConfiguration> fetchMaterials(ConfigurationSection entitySection) {
+        Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
 
-			Material material = getMaterialFromName(materialName);
-			if (isMaterialValid(material)) {
-				fetchedMaterials.add(getMaterialFromName(materialName));
-			} else {
-				definitionHasPriority = false;
-				List<String> materialGroup = ConfigurationManager.getInstance().getGroups().get(materialName);
-				if (materialGroup != null) {
-					for (String materialNameInGroup : materialGroup) {
-						Material materialInGroup = getMaterialFromName(materialNameInGroup);
-						if (isMaterialValid(materialInGroup)) {
-							fetchedMaterials.add(materialInGroup);
-						}
-					}
-				}
-			}
+        for (String materialName : entitySection.getKeys(false)) {
+            List<Material> fetchedMaterials = new ArrayList<>();
+            boolean definitionHasPriority = true;
 
-			if (fetchedMaterials.isEmpty()) {
-				getPlugin().getLogger()
-						.warning(String.format("%s is an invalid material or material group for %s and won't be loaded",
-								materialName, entitySection.getName()));
-				continue;
-			}
+            Material material = getMaterialFromName(materialName);
+            if (isMaterialValid(material)) {
+                fetchedMaterials.add(getMaterialFromName(materialName));
+            } else {
+                definitionHasPriority = false;
+                List<String> materialGroup = ConfigurationManager.getInstance().getGroups().get(materialName);
+                if (materialGroup != null) {
+                    for (String materialNameInGroup : materialGroup) {
+                        Material materialInGroup = getMaterialFromName(materialNameInGroup);
+                        if (isMaterialValid(materialInGroup)) {
+                            fetchedMaterials.add(materialInGroup);
+                        }
+                    }
+                }
+            }
 
-			ConfigurationSection materialSection = entitySection.getConfigurationSection(materialName);
-			if (materialSection == null) {
-				getPlugin().getLogger().warning(String.format("%s.%s.%s is invalid and won't be loaded",
-						getSectionPath(), entitySection.getName(), materialName));
-				continue;
-			}
+            if (fetchedMaterials.isEmpty()) {
+                getPlugin().getLogger()
+                        .warning(String.format("%s is an invalid material or material group for %s and won't be loaded",
+                                materialName, entitySection.getName()));
+                continue;
+            }
 
-			EntityMaterialConfiguration entityMaterialConfiguration = EntityMaterialConfiguration
-					.fromConfigurationSection(materialSection);
+            ConfigurationSection materialSection = entitySection.getConfigurationSection(materialName);
+            if (materialSection == null) {
+                getPlugin().getLogger().warning(String.format("%s.%s.%s is invalid and won't be loaded",
+                        getSectionPath(), entitySection.getName(), materialName));
+                continue;
+            }
 
-			for (Material fetchedMaterial : fetchedMaterials) {
-				putAndMergeMaterialConfigurations(materialConfigurations, fetchedMaterial, entityMaterialConfiguration,
-						definitionHasPriority);
-			}
-		}
+            EntityMaterialConfiguration entityMaterialConfiguration = EntityMaterialConfiguration
+                    .fromConfigurationSection(materialSection);
 
-		return materialConfigurations;
-	}
+            for (Material fetchedMaterial : fetchedMaterials) {
+                putAndMergeMaterialConfigurations(materialConfigurations, fetchedMaterial, entityMaterialConfiguration,
+                        definitionHasPriority);
+            }
+        }
 
-	public abstract boolean shouldBeLoaded();
+        return materialConfigurations;
+    }
 
-	public abstract String getEntityName(T entity);
+    public abstract boolean shouldBeLoaded();
 
-	public abstract String getSectionPath();
+    public abstract String getEntityName(T entity);
 
-	public abstract T getEntityFromName(String name);
+    public abstract String getSectionPath();
 
-	public abstract boolean isEntityTypeValid(T entity);
+    public abstract T getEntityFromName(String name);
+
+    public abstract boolean isEntityTypeValid(T entity);
 }

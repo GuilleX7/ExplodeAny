@@ -24,8 +24,7 @@ public final class VanillaExplosionListener extends VanillaBaseExplosionListener
 
     @Override
     protected boolean isEventHandled(EntityExplodeEvent event) {
-        Entity entity = event.getEntity();
-        return entity == null || isEntityVanilla(entity);
+        return super.isEventHandled(event) && isEntityVanilla(event.getEntity());
     }
 
     @Override

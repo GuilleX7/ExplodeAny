@@ -18,81 +18,91 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
 public final class CannonExplosionListener extends BaseExplosionListener {
-	@Override
-	public String getName() {
-		return "Cannons explosions";
-	}
+    @Override
+    public String getName() {
+        return "Cannons explosions";
+    }
 
-	@Override
-	public boolean isAnnounceable() {
-		return true;
-	}
+    @Override
+    public boolean isAnnounceable() {
+        return true;
+    }
 
-	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
-	public void onProjectileImpact(ProjectileImpactEvent event) {
-		Projectile projectile = event.getProjectile();
-		if (projectile == null) {
-			return;
-		}
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
+    public void onProjectileImpact(ProjectileImpactEvent event) {
+        if (ConfigurationManager.getInstance().getDisabledWorlds()
+                .contains(event.getImpactLocation().getWorld().getName())) {
+            return;
+        }
 
-		String projectileId = event.getProjectile().getProjectileId();
+        Projectile projectile = event.getProjectile();
+        if (projectile == null) {
+            return;
+        }
 
-		Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-				.getEntityMaterialConfigurations().get(projectileId);
-		if (materialConfigurations == null) {
-			return;
-		}
+        String projectileId = event.getProjectile().getProjectileId();
 
-		EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
-				.get(projectileId);
+        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+                .getEntityMaterialConfigurations().get(projectileId);
+        if (materialConfigurations == null) {
+            return;
+        }
 
-		float explosionPower = projectile.getExplosionPower();
-		if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-				event.getImpactLocation(), (int) explosionPower, explosionPower)) {
-			event.setCancelled(true);
-		}
-	}
+        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
+                .get(projectileId);
 
-	@EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
-	public void onProjectilePiercing(ProjectilePiercingEvent event) {
-		Projectile projectile = event.getProjectile();
-		if (projectile == null) {
-			return;
-		}
+        float explosionPower = projectile.getExplosionPower();
+        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
+                event.getImpactLocation(), (int) explosionPower, explosionPower)) {
+            event.setCancelled(true);
+        }
+    }
 
-		Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-				.getEntityMaterialConfigurations()
-				.get(projectile.getProjectileId());
-		if (materialConfigurations == null) {
-			return;
-		}
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
+    public void onProjectilePiercing(ProjectilePiercingEvent event) {
+        if (ConfigurationManager.getInstance().getDisabledWorlds()
+                .contains(event.getImpactLocation().getWorld().getName())) {
+            return;
+        }
 
-		Iterator<Block> iterator = event.getBlockList().iterator();
-		while (iterator.hasNext()) {
-			Block block = iterator.next();
-			if (materialConfigurations.containsKey(block.getType())) {
-				// First handled block, stop here
-				event.setImpactLocation(block.getLocation());
-				iterator.remove();
-				break;
-			}
-		}
+        Projectile projectile = event.getProjectile();
+        if (projectile == null) {
+            return;
+        }
 
-		// Prevent all blocks behind the first handled block from being destroyed
-		while (iterator.hasNext()) {
-			iterator.next();
-			iterator.remove();
-		}
-	}
+        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+                .getEntityMaterialConfigurations()
+                .get(projectile.getProjectileId());
+        if (materialConfigurations == null) {
+            return;
+        }
 
-	@Override
-	public void unload() {
-		ProjectileImpactEvent.getHandlerList().unregister(this);
-		ProjectilePiercingEvent.getHandlerList().unregister(this);
-	}
+        Iterator<Block> iterator = event.getBlockList().iterator();
+        while (iterator.hasNext()) {
+            Block block = iterator.next();
+            if (materialConfigurations.containsKey(block.getType())) {
+                // First handled block, stop here
+                event.setImpactLocation(block.getLocation());
+                iterator.remove();
+                break;
+            }
+        }
 
-	@Override
-	protected LoadableConfigurationSection<?> getConfiguration() {
-		return ConfigurationManager.getInstance().getRegisteredEntityConfiguration("CannonProjectile");
-	}
+        // Prevent all blocks behind the first handled block from being destroyed
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+    }
+
+    @Override
+    public void unload() {
+        ProjectileImpactEvent.getHandlerList().unregister(this);
+        ProjectilePiercingEvent.getHandlerList().unregister(this);
+    }
+
+    @Override
+    protected LoadableConfigurationSection<?> getConfiguration() {
+        return ConfigurationManager.getInstance().getRegisteredEntityConfiguration("CannonProjectile");
+    }
 }

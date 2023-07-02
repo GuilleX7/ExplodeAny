@@ -42,7 +42,7 @@ public class CompatibilityManager {
         return this.registeredApis[this.registeredApis.length - 1];
     }
 
-    private Version getBukkitVersion() {
+    public Version getBukkitVersion() {
         return Version.fromString(Bukkit.getVersion());
     }
 

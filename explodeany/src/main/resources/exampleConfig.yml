@@ -238,6 +238,12 @@ Locale:
   ChecktoolGiven: A checktool was given to player %NAME%
   ChecktoolReset: Checktool successfully reset to bare hand
   ChecktoolNotHandled: '%PRETTY_MATERIAL% is not handled by the current configuration'
+  DisabledInThisWorld: "This functionality is disabled in this world"
   Reloaded: Reloaded successfully!
 
 LocalePrefix: "[ExplodeAny] "
+
+# Use this section to disable the plugin in certain worlds
+# Notice that world names are case sensitive
+DisabledWorlds:
+# - My_example_world_with_no_ExplodeAny

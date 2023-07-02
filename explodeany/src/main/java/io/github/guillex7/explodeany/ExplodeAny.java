@@ -69,8 +69,9 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void announceCompatibility() {
-        getLogger().info(String.format("Compatibility layer for Bukkit v%s+",
-                this.compatibilityManager.getApi().getMinimumSupportedBukkitVersion()));
+        getLogger().info(String.format("Compatibility layer for Bukkit v%s+ (detected Bukkit version: %s)",
+                this.compatibilityManager.getApi().getMinimumSupportedBukkitVersion(),
+                this.compatibilityManager.getBukkitVersion()));
     }
 
     public void loadConfiguration() {

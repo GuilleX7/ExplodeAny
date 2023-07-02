@@ -31,8 +31,7 @@ public class MagicExplosionListener extends VanillaBaseExplosionListener {
 
     @Override
     protected boolean isEventHandled(EntityExplodeEvent event) {
-        Entity entity = event.getEntity();
-        return entity != null && isEntitySpawnedByMagic(entity);
+        return super.isEventHandled(event) && isEntitySpawnedByMagic(event.getEntity());
     }
 
     @Override

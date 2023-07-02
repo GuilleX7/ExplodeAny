@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 import io.github.guillex7.explodeany.compat.common.api.IExplosionUtils.ExplosionParameters;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
+import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
@@ -70,5 +71,8 @@ public abstract class VanillaBaseExplosionListener extends BaseExplosionListener
         EntityExplodeEvent.getHandlerList().unregister(this);
     }
 
-    protected abstract boolean isEventHandled(EntityExplodeEvent event);
+    protected boolean isEventHandled(EntityExplodeEvent event) {
+        return event.getEntity() != null && !ConfigurationManager.getInstance().getDisabledWorlds()
+                .contains(event.getLocation().getWorld().getName());
+    }
 }

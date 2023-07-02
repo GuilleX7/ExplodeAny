@@ -1,5 +1,6 @@
 package io.github.guillex7.explodeany.compat.common;
 
+import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
 import io.github.guillex7.explodeany.compat.common.api.IExplosionUtils;
 import io.github.guillex7.explodeany.compat.common.api.IParticleUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPersistentStorageUtils;
@@ -11,13 +12,15 @@ public interface ICompatibilityApi {
 
     public void load();
 
-    public IParticleUtils getParticleUtils();
-
-    public IPlayerInventoryUtils getPlayerInventoryUtils();
-
-    public IPlayerInteractionEventUtils getPlayerInteractionEventUtils();
+    public IBlockDataUtils getBlockDataUtils();
 
     public IExplosionUtils getExplosionUtils();
 
+    public IParticleUtils getParticleUtils();
+
     public IPersistentStorageUtils getPersistentStorageUtils();
+
+    public IPlayerInteractionEventUtils getPlayerInteractionEventUtils();
+
+    public IPlayerInventoryUtils getPlayerInventoryUtils();
 }

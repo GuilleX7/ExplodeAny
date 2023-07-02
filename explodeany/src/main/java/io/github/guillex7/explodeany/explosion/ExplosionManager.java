@@ -1,23 +1,36 @@
 package io.github.guillex7.explodeany.explosion;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.util.BlockIterator;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
+import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
+import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
+import io.github.guillex7.explodeany.explosion.liquid.TrajectoryExplosionLiquidDetector;
 
 public class ExplosionManager {
     private static ExplosionManager instance;
 
+    private BlockLiquidDetector blockLiquidDetector;
+    private TrajectoryExplosionLiquidDetector trajectoryExplosionWaterDetector;
+    private IBlockDataUtils blockDataUtils;
+
     private ExplosionManager() {
+        this.blockLiquidDetector = new BlockLiquidDetector();
+        this.trajectoryExplosionWaterDetector = new TrajectoryExplosionLiquidDetector();
+        this.blockDataUtils = CompatibilityManager.getInstance().getApi().getBlockDataUtils();
     }
 
     public static ExplosionManager getInstance() {
@@ -48,6 +61,11 @@ public class ExplosionManager {
         final int cypr = cy + explosionRadius;
         final int czpr = cz + explosionRadius;
         final int squaredExplosionRadius = explosionRadius * explosionRadius;
+        final World sourceWorld = sourceLocation.getWorld();
+        final Block sourceBlock = sourceLocation.getBlock();
+
+        final List<Block> unhandledWaterloggedBlocks = new ArrayList<>(256);
+        final List<Block> liquidBlocks = new ArrayList<>(256);
 
         for (int x = cx - explosionRadius; x < cxpr; x++) {
             for (int y = cy - explosionRadius; y < cypr; y++) {
@@ -61,9 +79,18 @@ public class ExplosionManager {
                         continue;
                     }
 
-                    Block block = sourceLocation.getWorld().getBlockAt(x, y, z);
+                    Block block = sourceWorld.getBlockAt(x, y, z);
+                    if (block.isEmpty()) {
+                        continue;
+                    }
+
                     EntityMaterialConfiguration materialConfiguration = materialConfigurations.get(block.getType());
                     if (materialConfiguration == null) {
+                        if (blockDataUtils.isBlockWaterlogged(block)) {
+                            unhandledWaterloggedBlocks.add(block);
+                        } else if (block.isLiquid()) {
+                            liquidBlocks.add(block);
+                        }
                         continue;
                     }
 
@@ -82,10 +109,18 @@ public class ExplosionManager {
         entityConfiguration.getSoundConfiguration().playAt(sourceLocation);
         entityConfiguration.getParticleConfiguration().spawnAt(sourceLocation);
 
-        if (entityConfiguration.isExplosionDamageBlocksUnderwater() && sourceLocation.getBlock().isLiquid()) {
-            sourceLocation.getBlock().setType(Material.AIR);
-            return sourceLocation.getWorld().createExplosion(sourceLocation,
-                    explosionPower * entityConfiguration.getUnderwaterExplosionFactor().floatValue());
+        if (entityConfiguration.doesExplosionDamageBlocksUnderwater()) {
+            for (Block unhandledWaterloggedBlock : unhandledWaterloggedBlocks) {
+                blockDataUtils.setIsBlockWaterlogged(unhandledWaterloggedBlock, false);
+            }
+
+            for (Block liquidBlock : liquidBlocks) {
+                liquidBlock.setType(Material.AIR);
+            }
+
+            return sourceWorld.createExplosion(sourceLocation,
+                    explosionPower *
+                            entityConfiguration.getUnderwaterExplosionFactor().floatValue());
         }
 
         return false;
@@ -96,7 +131,7 @@ public class ExplosionManager {
         double effectiveDamage = materialConfiguration.getDamage();
 
         if (materialConfiguration.isUnderwaterAffected()
-                && performUnderwaterDetection(materialConfiguration, sourceLocation, targetBlock.getLocation())) {
+                && areUnderwaterRulesApplicable(materialConfiguration, sourceLocation, targetBlock.getLocation())) {
             effectiveDamage *= materialConfiguration.getUnderwaterDamageFactor();
         }
 
@@ -119,26 +154,11 @@ public class ExplosionManager {
         }
     }
 
-    private boolean performUnderwaterDetection(EntityMaterialConfiguration materialConfiguration,
+    private boolean areUnderwaterRulesApplicable(EntityMaterialConfiguration materialConfiguration,
             Location sourceLocation,
             Location targetLocation) {
-        return materialConfiguration.isFancyUnderwaterDetection() ? isLiquidInTrajectory(sourceLocation, targetLocation)
-                : sourceLocation.getBlock().isLiquid();
-    }
-
-    private boolean isLiquidInTrajectory(Location sourceLocation, Location targetLocation) {
-        if (sourceLocation.equals(targetLocation)) {
-            return sourceLocation.getBlock().isLiquid();
-        }
-
-        BlockIterator iterator = new BlockIterator(sourceLocation.getWorld(), sourceLocation.toVector(),
-                targetLocation.toVector().subtract(sourceLocation.toVector()), 0,
-                (int) sourceLocation.distance(targetLocation));
-        while (iterator.hasNext()) {
-            if (iterator.next().isLiquid()) {
-                return true;
-            }
-        }
-        return false;
+        return materialConfiguration.isFancyUnderwaterDetection()
+                ? trajectoryExplosionWaterDetector.isLiquidInTrajectory(sourceLocation, targetLocation)
+                : blockLiquidDetector.isBlockLiquidlike(sourceLocation);
     }
 }
