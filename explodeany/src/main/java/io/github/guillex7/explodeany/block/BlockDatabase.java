@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.block.exception.BlockDatabaseException;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 
 public class BlockDatabase {
@@ -30,7 +31,7 @@ public class BlockDatabase {
     }
 
     private BlockDatabase() {
-        database = new HashMap<BlockLocation, BlockStatus>();
+        database = new HashMap<>();
     }
 
     public static BlockDatabase getInstance() {
@@ -56,7 +57,7 @@ public class BlockDatabase {
         return getBlockStatus(block, true);
     }
 
-    public BlockStatus getBlockStatus(Block block, Boolean persistIfAbsentOrIncongruent) {
+    public BlockStatus getBlockStatus(Block block, boolean persistIfAbsentOrIncongruent) {
         BlockLocation blockLocation = BlockLocation.fromBlock(block);
         BlockStatus blockStatus = getDatabase().get(blockLocation);
         if (blockStatus == null || !blockStatus.isCongruentWith(block)) {
@@ -83,10 +84,7 @@ public class BlockDatabase {
 
     private Map<BlockLocation, BlockStatus> deserializeDatabaseFile(File databaseFile) {
         Map<BlockLocation, BlockStatus> loadedDatabase;
-        FileReader fileReader = null;
-        try {
-            fileReader = new FileReader(databaseFile);
-
+        try (FileReader fileReader = new FileReader(databaseFile)) {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(BlockLocation.class, new BlockLocationAdapter());
             gsonBuilder.registerTypeAdapter(BlockStatus.class, new BlockStatusAdapter());
@@ -96,21 +94,13 @@ public class BlockDatabase {
             loadedDatabase = gson.fromJson(fileReader, getDatabaseTypeToken().getType());
 
             if (loadedDatabase == null) {
-                throw new Exception();
+                throw new BlockDatabaseException();
             } else {
                 getPlugin().getLogger().info("Database loaded successfully");
             }
         } catch (Exception e) {
             loadedDatabase = new HashMap<>();
             getPlugin().getLogger().warning("Couldn't load database, creating an empty one");
-        } finally {
-            if (fileReader != null) {
-                try {
-                    fileReader.close();
-                } catch (Exception e) {
-                    // Pass
-                }
-            }
         }
 
         return loadedDatabase;
@@ -130,9 +120,7 @@ public class BlockDatabase {
     }
 
     private void serializeDatabaseFile(File databaseFile, Map<BlockLocation, BlockStatus> database) {
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(databaseFile);
+        try (FileWriter fileWriter = new FileWriter(databaseFile)) {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(BlockLocation.class, new BlockLocationAdapter());
             gsonBuilder.registerTypeAdapter(BlockStatus.class, new BlockStatusAdapter());
@@ -142,14 +130,6 @@ public class BlockDatabase {
             getPlugin().getLogger().info("Database saved successfully");
         } catch (Exception e) {
             getPlugin().getLogger().warning("Couldn't save database");
-        } finally {
-            if (fileWriter != null) {
-                try {
-                    fileWriter.close();
-                } catch (Exception e) {
-                    // Pass
-                }
-            }
         }
     }
 
@@ -159,7 +139,6 @@ public class BlockDatabase {
             Entry<BlockLocation, BlockStatus> entry = iterator.next();
             if (isEntryNotSane(entry, ConfigurationManager.getInstance().doCheckBlockDatabaseAtStartup())) {
                 iterator.remove();
-                continue;
             }
         }
     }

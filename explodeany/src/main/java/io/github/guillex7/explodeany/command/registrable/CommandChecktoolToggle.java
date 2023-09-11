@@ -1,8 +1,6 @@
 package io.github.guillex7.explodeany.command.registrable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,6 +9,7 @@ import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolMana
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.PermissionNode;
+import io.github.guillex7.explodeany.util.SetUtils;
 
 public class CommandChecktoolToggle extends RegistrableCommand {
     @Override
@@ -19,8 +18,13 @@ public class CommandChecktoolToggle extends RegistrableCommand {
     }
 
     @Override
-    public List<PermissionNode> getRequiredPermissions() {
-        return new ArrayList<>(Arrays.asList(PermissionNode.CHECKTOOL_TOGGLE));
+    public Set<String> getAliases() {
+        return SetUtils.createHashSetOf("t");
+    }
+
+    @Override
+    public Set<PermissionNode> getRequiredPermissions() {
+        return SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_TOGGLE);
     }
 
     @Override

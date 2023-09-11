@@ -1,6 +1,7 @@
 package io.github.guillex7.explodeany.explosion;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.block.BlockDatabase;
@@ -23,9 +28,12 @@ import io.github.guillex7.explodeany.explosion.liquid.TrajectoryExplosionLiquidD
 public class ExplosionManager {
     private static ExplosionManager instance;
 
-    private BlockLiquidDetector blockLiquidDetector;
-    private TrajectoryExplosionLiquidDetector trajectoryExplosionWaterDetector;
-    private IBlockDataUtils blockDataUtils;
+    public static final String EXPLOSION_MANAGER_SPAWNED_TAG = "eany-em-spawned";
+    public static final String EXPLOSION_MANAGER_MATERIAL_CONFIGURATIONS_TAG = "eany-em-material-configurations";
+
+    private final BlockLiquidDetector blockLiquidDetector;
+    private final TrajectoryExplosionLiquidDetector trajectoryExplosionWaterDetector;
+    private final IBlockDataUtils blockDataUtils;
 
     private ExplosionManager() {
         this.blockLiquidDetector = new BlockLiquidDetector();
@@ -51,6 +59,29 @@ public class ExplosionManager {
         }
     }
 
+    private void markEntityAsSpawnedByExplosionManager(Entity entity,
+            Map<Material, EntityMaterialConfiguration> materialConfigurations) {
+        entity.setMetadata(EXPLOSION_MANAGER_SPAWNED_TAG,
+                new FixedMetadataValue(ExplodeAny.getInstance(), true));
+        entity.setMetadata(EXPLOSION_MANAGER_MATERIAL_CONFIGURATIONS_TAG,
+                new FixedMetadataValue(ExplodeAny.getInstance(), materialConfigurations));
+    }
+
+    public boolean isEntitySpawnedByExplosionManager(Entity entity) {
+        return entity.hasMetadata(EXPLOSION_MANAGER_SPAWNED_TAG);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<Material, EntityMaterialConfiguration> getMaterialConfigurationsFromEntity(Entity entity) {
+        List<MetadataValue> metadataValueList = entity.getMetadata(EXPLOSION_MANAGER_MATERIAL_CONFIGURATIONS_TAG);
+        
+        if (!metadataValueList.isEmpty()) {
+            return (Map<Material, EntityMaterialConfiguration>) metadataValueList.get(0).value();
+        } else {
+            return new HashMap<>(0, 0);
+        }
+    }
+
     public boolean manageExplosion(Map<Material, EntityMaterialConfiguration> materialConfigurations,
             EntityConfiguration entityConfiguration, Location sourceLocation, int explosionRadius,
             float explosionPower) {
@@ -62,7 +93,6 @@ public class ExplosionManager {
         final int czpr = cz + explosionRadius;
         final int squaredExplosionRadius = explosionRadius * explosionRadius;
         final World sourceWorld = sourceLocation.getWorld();
-        final Block sourceBlock = sourceLocation.getBlock();
 
         final List<Block> unhandledWaterloggedBlocks = new ArrayList<>(256);
         final List<Block> liquidBlocks = new ArrayList<>(256);
@@ -109,24 +139,37 @@ public class ExplosionManager {
         entityConfiguration.getSoundConfiguration().playAt(sourceLocation);
         entityConfiguration.getParticleConfiguration().spawnAt(sourceLocation);
 
-        if (entityConfiguration.doesExplosionDamageBlocksUnderwater()) {
+        final boolean isSourceLocationUnderwater = sourceLocation.getBlock().isLiquid();
+
+        if (entityConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()) {
             for (Block unhandledWaterloggedBlock : unhandledWaterloggedBlocks) {
                 blockDataUtils.setIsBlockWaterlogged(unhandledWaterloggedBlock, false);
             }
+        }
 
+        if (entityConfiguration.doesExplosionRemoveNearbyLiquid()) {
             for (Block liquidBlock : liquidBlocks) {
                 liquidBlock.setType(Material.AIR);
             }
+        }
 
-            return sourceWorld.createExplosion(sourceLocation,
-                    explosionPower *
-                            entityConfiguration.getUnderwaterExplosionFactor().floatValue());
+        if (entityConfiguration.doesExplosionDamageBlocksUnderwater()
+                && isSourceLocationUnderwater) {
+            sourceLocation.getBlock().setType(Material.AIR);
+
+            TNTPrimed explosiveEntity = (TNTPrimed) sourceWorld.spawn(sourceLocation, TNTPrimed.class);
+            markEntityAsSpawnedByExplosionManager(explosiveEntity, materialConfigurations);
+            explosiveEntity.setFuseTicks(0);
+            explosiveEntity.setYield(explosionPower *
+                    entityConfiguration.getUnderwaterExplosionFactor().floatValue());
+
+            return entityConfiguration.doReplaceOriginalExplosionWhenUnderwater();
         }
 
         return false;
     }
 
-    public void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
+    private void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
             Location sourceLocation, double squaredExplosionRadius, double squaredDistance) {
         double effectiveDamage = materialConfiguration.getDamage();
 

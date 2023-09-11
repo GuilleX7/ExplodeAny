@@ -1,6 +1,5 @@
 package io.github.guillex7.explodeany.command.registrable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +16,6 @@ public class CommandEany extends RegistrableCommand {
 
     @Override
     public List<RegistrableCommand> getSubcommands() {
-        return new ArrayList<>(
-                Arrays.asList(new CommandAbout(), new CommandChecktool(), new CommandReload()));
+        return Arrays.asList(new CommandAbout(), new CommandChecktool(), new CommandReload());
     }
 }

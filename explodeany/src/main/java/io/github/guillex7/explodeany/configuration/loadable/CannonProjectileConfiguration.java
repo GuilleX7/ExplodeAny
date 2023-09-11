@@ -10,7 +10,7 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
     @Override
     public boolean shouldBeLoaded() {
         Plugin externalPlugin = Bukkit.getPluginManager().getPlugin("Cannons");
-        return externalPlugin != null && externalPlugin instanceof Cannons;
+        return externalPlugin instanceof Cannons;
     }
 
     @Override

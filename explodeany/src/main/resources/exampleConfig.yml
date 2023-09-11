@@ -64,12 +64,27 @@ VanillaEntity:
     # This section allows to configure some properties of the exploding entity itself.
     # It is not mandatory.
     Properties:
-      # Overrides the explosion caused by this entity when it takes place under any liquid.
-      # It will be replaced with a explosion that can damage blocks, even underwater.
+      # If the explosion takes place underwater (where vanilla explosions don't break blocks),
+      # set this true to create another explosion that can break blocks even underwater.
+      #
       # This allows to break, for example, any block that would normally break in the
       # overworld. Blocks managed by ExplodeAny will keep their behaviour!
       # [Default] is false.
       ExplosionDamageBlocksUnderwater: false
+      # If ExplosionDamageBlocksUnderwater is set true, then this property determines whether
+      # the original explosion is replaced with the one that ExplodeAny will spawn to break blocks
+      # underwater.
+      #
+      # If replaced, some properties of the original explosion might get lost. For example, if the
+      # original explosion was to set blocks on fire, the replacement will not keep this behaviour.
+      # Cannons projectiles will also lose their special properties, such as clustering, etc.
+      #
+      # Not replacing it means that the ExplodeAny explosion will spawn together with the original one,
+      # which is not bad at all but might be undesired for some people (double entity damage? laggier?).
+      # I suggest to play with this parameter and decide!
+      #
+      # [Default] is true.
+      ReplaceOriginalExplosionWhenUnderwater: true
       # The explosion power of the overriding explosion will be the same as the original,
       # but you may want to change it as it takes place under a liquid.
       # Explosion power will be multiplied by this factor when UnderliquidExplosionFactor
@@ -79,6 +94,14 @@ VanillaEntity:
       # A value of 1.0 means that water doesn't affect explosion power
       # A value greater than 1.0 means underwater explosion power is magnified.
       UnderwaterExplosionFactor: 0.5
+      # The explosion will remove the waterlogged state from nearby blocks before the explosion,
+      # thus causing damage to blocks that would normally not break, like waterlogged stairs, etc.
+      # [Default] is false.
+      ExplosionRemoveWaterloggedStateFromNearbyBlocks: false
+      # The explosion will remove nearby liquids before the explosion, thus allowing to break
+      # through liquids.
+      # [Default] is false.
+      ExplosionRemoveNearbyLiquids: false
       # This section allows to specify the particles that will spawn when the entity explodes.
       Particles:
         # Name of the particles to be spawned. Valid values are listed in

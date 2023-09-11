@@ -28,7 +28,7 @@ public final class CannonExplosionListener extends BaseExplosionListener {
         return true;
     }
 
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onProjectileImpact(ProjectileImpactEvent event) {
         if (ConfigurationManager.getInstance().getDisabledWorlds()
                 .contains(event.getImpactLocation().getWorld().getName())) {

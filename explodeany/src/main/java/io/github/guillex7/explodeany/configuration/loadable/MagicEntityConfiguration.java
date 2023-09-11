@@ -14,7 +14,7 @@ public class MagicEntityConfiguration extends BaseVanillaEntityConfiguration {
     @Override
     public boolean shouldBeLoaded() {
         Plugin externalPlugin = Bukkit.getPluginManager().getPlugin("Magic");
-        return externalPlugin != null && externalPlugin instanceof MagicAPI
+        return externalPlugin instanceof MagicAPI
                 && CompatibilityManager.getInstance().getApi().getMinimumSupportedBukkitVersion()
                         .isEqualOrAfter(MINIMUM_SUPPORTED_BUKKIT_VERSION);
     }

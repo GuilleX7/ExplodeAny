@@ -18,7 +18,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
 public abstract class VanillaBaseExplosionListener extends BaseExplosionListener {
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onEntityExplode(EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
@@ -59,10 +59,11 @@ public abstract class VanillaBaseExplosionListener extends BaseExplosionListener
             return;
         }
 
-        ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList());
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
                 event.getLocation(), explosionParameters.getRadius(), explosionParameters.getPower())) {
             event.setCancelled(true);
+        } else {
+            ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList());
         }
     }
 
@@ -72,7 +73,9 @@ public abstract class VanillaBaseExplosionListener extends BaseExplosionListener
     }
 
     protected boolean isEventHandled(EntityExplodeEvent event) {
-        return event.getEntity() != null && !ConfigurationManager.getInstance().getDisabledWorlds()
-                .contains(event.getLocation().getWorld().getName());
+        return event.getEntity() != null
+                && !ExplosionManager.getInstance().isEntitySpawnedByExplosionManager(event.getEntity())
+                && !ConfigurationManager.getInstance().getDisabledWorlds()
+                        .contains(event.getLocation().getWorld().getName());
     }
 }

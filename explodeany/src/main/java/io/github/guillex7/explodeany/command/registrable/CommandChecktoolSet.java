@@ -1,8 +1,6 @@
 package io.github.guillex7.explodeany.command.registrable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,16 +11,17 @@ import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.PermissionNode;
+import io.github.guillex7.explodeany.util.SetUtils;
 
 public class CommandChecktoolSet extends RegistrableCommand {
     @Override
     public String getName() {
         return "set";
     }
-
+    
     @Override
-    public List<PermissionNode> getRequiredPermissions() {
-        return new ArrayList<>(Arrays.asList(PermissionNode.CHECKTOOL_SET));
+    public Set<PermissionNode> getRequiredPermissions() {
+        return SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_SET);
     }
 
     @Override

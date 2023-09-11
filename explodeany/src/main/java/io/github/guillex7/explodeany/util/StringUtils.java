@@ -1,6 +1,9 @@
 package io.github.guillex7.explodeany.util;
 
 public class StringUtils {
+    private StringUtils() {
+    }
+
     public static String beautifyName(String name) {
         if (name.length() < 1) {
             return name;
@@ -9,6 +12,6 @@ public class StringUtils {
         return String.format("%s%s",
                 name.substring(0, 1).toUpperCase(),
                 name.substring(1).toLowerCase())
-                .replaceAll("_", " ");
+                .replace("_", " ");
     }
 }

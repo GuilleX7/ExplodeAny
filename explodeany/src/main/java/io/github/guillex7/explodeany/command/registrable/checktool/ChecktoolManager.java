@@ -58,14 +58,11 @@ public class ChecktoolManager {
 
     public void loadChecktool() {
         if (this.checktoolFile.exists() && this.checktoolFile.canRead()) {
-            InputStream inputStream = null;
-            BukkitObjectInputStream objectInputStream = null;
             Logger configurationSerializationLogger = Logger.getLogger(ConfigurationSerialization.class.getName());
             Level previousConfigurationSerializationLevel = configurationSerializationLogger.getLevel();
 
-            try {
-                inputStream = new FileInputStream(checktoolFile);
-                objectInputStream = new BukkitObjectInputStream(inputStream);
+            try (InputStream inputStream = new FileInputStream(checktoolFile);
+                    BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(inputStream)) {
 
                 configurationSerializationLogger.setLevel(Level.OFF);
                 checktool = (ItemStack) objectInputStream.readObject();
@@ -87,22 +84,6 @@ public class ChecktoolManager {
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);
                 checktool = getDefaultChecktool();
                 getPlugin().getLogger().warning("Couldn't load checktool item! Unknown issue");
-            } finally {
-                if (objectInputStream != null) {
-                    try {
-                        objectInputStream.close();
-                    } catch (Exception e) {
-                        // Pass
-                    }
-                }
-
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (Exception e) {
-                        // Pass
-                    }
-                }
             }
         }
     }
@@ -114,34 +95,16 @@ public class ChecktoolManager {
             return false;
         }
 
-        OutputStream outputStream = null;
-        BukkitObjectOutputStream objectOutputStream = null;
         boolean checktoolWasPersistedSuccessfully = false;
 
         if (checktoolFile.exists() && checktoolFile.canWrite()) {
-            try {
-                outputStream = new FileOutputStream(checktoolFile);
-                objectOutputStream = new BukkitObjectOutputStream(outputStream);
+            try (OutputStream outputStream = new FileOutputStream(checktoolFile);
+                    BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(outputStream)) {
+
                 objectOutputStream.writeObject(checktool);
                 checktoolWasPersistedSuccessfully = true;
             } catch (Exception e) {
                 checktoolWasPersistedSuccessfully = false;
-            } finally {
-                if (objectOutputStream != null) {
-                    try {
-                        objectOutputStream.close();
-                    } catch (Exception e) {
-                        // Pass
-                    }
-                }
-
-                if (outputStream != null) {
-                    try {
-                        outputStream.close();
-                    } catch (Exception e) {
-                        // Pass
-                    }
-                }
             }
         }
 

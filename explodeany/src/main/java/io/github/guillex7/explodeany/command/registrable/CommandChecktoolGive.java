@@ -1,8 +1,6 @@
 package io.github.guillex7.explodeany.command.registrable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,6 +10,7 @@ import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolMana
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.PermissionNode;
+import io.github.guillex7.explodeany.util.SetUtils;
 
 public class CommandChecktoolGive extends RegistrableCommand {
     @Override
@@ -20,8 +19,8 @@ public class CommandChecktoolGive extends RegistrableCommand {
     }
 
     @Override
-    public List<PermissionNode> getRequiredPermissions() {
-        return new ArrayList<>(Arrays.asList(PermissionNode.CHECKTOOL_GIVE));
+    public Set<PermissionNode> getRequiredPermissions() {
+        return SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_GIVE);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class CommandChecktoolGive extends RegistrableCommand {
         sender.sendMessage(
                 ConfigurationManager.getInstance()
                         .getLocale(ConfigurationLocale.CHECKTOOL_GIVEN)
-                        .replaceAll("%NAME%", receiver.getName()));
+                        .replace("%NAME%", receiver.getName()));
         return true;
     }
 }

@@ -1,8 +1,6 @@
 package io.github.guillex7.explodeany.command.registrable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 
@@ -10,6 +8,7 @@ import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.PermissionNode;
+import io.github.guillex7.explodeany.util.SetUtils;
 
 public class CommandReload extends RegistrableCommand {
     @Override
@@ -18,8 +17,8 @@ public class CommandReload extends RegistrableCommand {
     }
 
     @Override
-    public List<PermissionNode> getRequiredPermissions() {
-        return new ArrayList<>(Arrays.asList(PermissionNode.RELOAD));
+    public Set<PermissionNode> getRequiredPermissions() {
+        return SetUtils.createHashSetOf(PermissionNode.RELOAD);
     }
 
     @Override

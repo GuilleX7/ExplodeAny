@@ -18,6 +18,7 @@ import io.github.guillex7.explodeany.listener.ListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.BlockListener;
 import io.github.guillex7.explodeany.listener.loadable.EntityListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.CannonExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.EanyExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.MagicExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.VanillaExplosionListener;
 
@@ -69,7 +70,7 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void announceCompatibility() {
-        getLogger().info(String.format("Compatibility layer for Bukkit v%s+ (detected Bukkit version: %s)",
+        getLogger().info(String.format("Compatibility layer for Bukkit v%s+ (detected Bukkit version: v%s)",
                 this.compatibilityManager.getApi().getMinimumSupportedBukkitVersion(),
                 this.compatibilityManager.getBukkitVersion()));
     }
@@ -93,6 +94,7 @@ public class ExplodeAny extends JavaPlugin {
     public void registerListeners() {
         this.listenerManager.registerListener(new BlockListener());
         this.listenerManager.registerListener(new EntityListener());
+        this.listenerManager.registerListener(new EanyExplosionListener());
         this.listenerManager.registerListener(new VanillaExplosionListener());
         this.listenerManager.registerListener(new CannonExplosionListener());
         this.listenerManager.registerListener(new MagicExplosionListener());
@@ -110,7 +112,7 @@ public class ExplodeAny extends JavaPlugin {
     public void peekMetrics() {
         if (this.configurationManager.doEnableMetrics()) {
             metrics = new Metrics(this, getMetricsPluginId());
-            getLogger().info("Metrics have been enabled");
+            getLogger().info("Metrics have been enabled, thanks for your support!");
         }
     }
 

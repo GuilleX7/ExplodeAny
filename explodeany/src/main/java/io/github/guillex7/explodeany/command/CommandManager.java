@@ -50,7 +50,7 @@ public class CommandManager implements TabExecutor {
         if (rootCommand == null) {
             return true;
         }
-        String breadcrumbs = rootCommand.getName();
+        StringBuilder breadcrumbsBuilder = new StringBuilder(rootCommand.getName());
 
         int i;
         for (i = 0; i < args.length; i++) {
@@ -59,7 +59,8 @@ public class CommandManager implements TabExecutor {
                 break;
             }
             rootCommand = subcommand;
-            breadcrumbs += " " + rootCommand.getName();
+            breadcrumbsBuilder.append(" ");
+            breadcrumbsBuilder.append(rootCommand.getName());
         }
 
         boolean executable = true;
@@ -77,7 +78,7 @@ public class CommandManager implements TabExecutor {
 
         if (!rootCommand.execute(sender, Arrays.copyOfRange(args, i, args.length))) {
             sender.sendMessage(MessageFormatter.colorize(
-                    String.format("Usage: /%s &7%s", breadcrumbs, rootCommand.getUsage())));
+                    String.format("Usage: /%s &7%s", breadcrumbsBuilder.toString(), rootCommand.getUsage())));
         }
         return true;
     }
@@ -100,20 +101,15 @@ public class CommandManager implements TabExecutor {
             rootCommand = subcommand;
         }
 
-        if (args.length <= i) {
+        if (args.length - 1 != i) {
             return autocompletion;
         }
 
-        if (args[i].length() > 0) {
-            for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
-                if (subcommand.getName().startsWith(args[i])) {
-                    autocompletion.add(subcommand.getName());
-                }
-            }
-        } else {
-            for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
-                autocompletion.add(subcommand.getName());
-            }
+        final String lastWrittenSubcommand = args[i];
+
+        for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
+            subcommand.getAllNames().stream().filter(x -> x.startsWith(lastWrittenSubcommand))
+                    .forEach(autocompletion::add);
         }
 
         return autocompletion;

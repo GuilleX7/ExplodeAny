@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -46,8 +47,8 @@ public abstract class LoadableConfigurationSection<T> {
         } else if (definitionHasPriority) {
             entityMaterialConfigurations.get(entity).putAll(materialConfigurations);
         } else {
-            for (Material material : materialConfigurations.keySet()) {
-                entityMaterialConfigurations.get(entity).putIfAbsent(material, materialConfigurations.get(material));
+            for (Entry<Material, EntityMaterialConfiguration> entry : materialConfigurations.entrySet()) {
+                entityMaterialConfigurations.get(entity).putIfAbsent(entry.getKey(), entry.getValue());
             }
         }
     }
