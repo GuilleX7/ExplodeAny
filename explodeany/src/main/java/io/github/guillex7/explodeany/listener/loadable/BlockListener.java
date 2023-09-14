@@ -3,7 +3,6 @@ package io.github.guillex7.explodeany.listener.loadable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExpEvent;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 
@@ -37,6 +36,6 @@ public final class BlockListener implements LoadableListener {
 
     @Override
     public void unload() {
-        BlockExpEvent.getHandlerList().unregister(this);
+        BlockBreakEvent.getHandlerList().unregister(this);
     }
 }

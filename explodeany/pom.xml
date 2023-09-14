@@ -32,7 +32,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-
                             <relocations>
                                 <relocation>
                                     <pattern>com.google.gson</pattern>
