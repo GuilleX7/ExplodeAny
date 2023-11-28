@@ -23,7 +23,6 @@ public abstract class LoadableConfigurationSection<T> {
     private Map<T, EntityConfiguration> entityConfigurations;
 
     protected LoadableConfigurationSection() {
-        super();
         entityMaterialConfigurations = new HashMap<>();
         entityConfigurations = new HashMap<>();
     }
@@ -40,44 +39,12 @@ public abstract class LoadableConfigurationSection<T> {
         return entityConfigurations;
     }
 
-    public final void putAndMergeEntityMaterialConfigurations(T entity,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations, boolean definitionHasPriority) {
-        if (!entityMaterialConfigurations.containsKey(entity)) {
-            entityMaterialConfigurations.put(entity, materialConfigurations);
-        } else if (definitionHasPriority) {
-            entityMaterialConfigurations.get(entity).putAll(materialConfigurations);
-        } else {
-            for (Entry<Material, EntityMaterialConfiguration> entry : materialConfigurations.entrySet()) {
-                entityMaterialConfigurations.get(entity).putIfAbsent(entry.getKey(), entry.getValue());
-            }
-        }
-    }
-
-    public final void putAndMergeEntityConfigurations(T entity, EntityConfiguration entityConfiguration,
-            boolean definitionHasPriority) {
-        if (definitionHasPriority) {
-            getEntityConfigurations().put(entity, entityConfiguration);
-        } else {
-            getEntityConfigurations().putIfAbsent(entity, entityConfiguration);
-        }
-    }
-
-    public final void putAndMergeMaterialConfigurations(
-            Map<Material, EntityMaterialConfiguration> materialConfigurations, Material material,
-            EntityMaterialConfiguration entityMaterialConfiguration, boolean definitionHasPriority) {
-        if (definitionHasPriority) {
-            materialConfigurations.put(material, entityMaterialConfiguration);
-        } else {
-            materialConfigurations.putIfAbsent(material, entityMaterialConfiguration);
-        }
-    }
-
     public final void clearEntityMaterialConfigurations() {
         entityMaterialConfigurations.clear();
     }
 
-    public final void fetchEntityMaterialConfigurations(FileConfiguration config) {
-        ConfigurationSection configurationSection = config.getConfigurationSection(getSectionPath());
+    public final void fetchEntityMaterialConfigurations(FileConfiguration configuration) {
+        ConfigurationSection configurationSection = configuration.getConfigurationSection(getSectionPath());
         if (configurationSection == null) {
             return;
         }
@@ -124,14 +91,17 @@ public abstract class LoadableConfigurationSection<T> {
             ConfigurationSection materialsSection = entitySection.getConfigurationSection(MATERIALS_SECTION);
             ConfigurationSection propertiesSection = entitySection.getConfigurationSection(PROPERTIES_SECTION);
             boolean hasSections = false;
+
             if (materialsSection != null) {
                 materialConfigurations = fetchMaterials(materialsSection);
                 hasSections = true;
             }
+
             if (propertiesSection != null) {
                 entityConfiguration = EntityConfiguration.fromConfigurationSection(propertiesSection);
                 hasSections = true;
             }
+
             if (!hasSections) {
                 materialConfigurations = fetchMaterials(entitySection);
             }
@@ -143,20 +113,6 @@ public abstract class LoadableConfigurationSection<T> {
                         definitionHasPriority);
             }
         }
-    }
-
-    private final Material getMaterialFromName(String name) {
-        Material material;
-        try {
-            material = Material.valueOf(name.toUpperCase());
-        } catch (Exception e) {
-            material = null;
-        }
-        return material;
-    }
-
-    private final boolean isMaterialValid(Material material) {
-        return material != null && !material.equals(Material.WATER) && !material.equals(Material.LAVA);
     }
 
     private final Map<Material, EntityMaterialConfiguration> fetchMaterials(ConfigurationSection entitySection) {
@@ -206,6 +162,52 @@ public abstract class LoadableConfigurationSection<T> {
         }
 
         return materialConfigurations;
+    }
+
+    private final void putAndMergeEntityMaterialConfigurations(T entity,
+            Map<Material, EntityMaterialConfiguration> materialConfigurations, boolean definitionHasPriority) {
+        if (!entityMaterialConfigurations.containsKey(entity)) {
+            entityMaterialConfigurations.put(entity, materialConfigurations);
+        } else if (definitionHasPriority) {
+            entityMaterialConfigurations.get(entity).putAll(materialConfigurations);
+        } else {
+            for (Entry<Material, EntityMaterialConfiguration> entry : materialConfigurations.entrySet()) {
+                entityMaterialConfigurations.get(entity).putIfAbsent(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
+    private final void putAndMergeEntityConfigurations(T entity, EntityConfiguration entityConfiguration,
+            boolean definitionHasPriority) {
+        if (definitionHasPriority) {
+            getEntityConfigurations().put(entity, entityConfiguration);
+        } else {
+            getEntityConfigurations().putIfAbsent(entity, entityConfiguration);
+        }
+    }
+
+    private final void putAndMergeMaterialConfigurations(
+            Map<Material, EntityMaterialConfiguration> materialConfigurations, Material material,
+            EntityMaterialConfiguration entityMaterialConfiguration, boolean definitionHasPriority) {
+        if (definitionHasPriority) {
+            materialConfigurations.put(material, entityMaterialConfiguration);
+        } else {
+            materialConfigurations.putIfAbsent(material, entityMaterialConfiguration);
+        }
+    }
+
+    private final Material getMaterialFromName(String name) {
+        Material material;
+        try {
+            material = Material.valueOf(name.toUpperCase());
+        } catch (Exception e) {
+            material = null;
+        }
+        return material;
+    }
+
+    private final boolean isMaterialValid(Material material) {
+        return material != null && !material.equals(Material.WATER) && !material.equals(Material.LAVA);
     }
 
     public abstract boolean shouldBeLoaded();

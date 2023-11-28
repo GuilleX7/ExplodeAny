@@ -59,7 +59,6 @@ public class EntityMaterialConfiguration {
     private EntityMaterialConfiguration(double damage, double dropChance, double distanceAttenuationFactor,
             double underwaterDamageFactor, boolean fancyUnderwaterDetection,
             SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
-        super();
         this.damage = damage;
         this.dropChance = dropChance;
         this.distanceAttenuationFactor = distanceAttenuationFactor;

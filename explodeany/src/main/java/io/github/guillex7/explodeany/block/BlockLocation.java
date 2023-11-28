@@ -26,7 +26,6 @@ public class BlockLocation {
     }
 
     private BlockLocation(UUID worldUuid, int x, int y, int z) {
-        super();
         this.worldUuid = worldUuid;
         this.x = x;
         this.y = y;

@@ -77,7 +77,6 @@ public class EntityConfiguration {
             boolean replaceOriginalExplosionWhenUnderwater, boolean explosionRemoveWaterloggedStateFromNearbyBlocks,
             boolean explosionRemoveNearbyLiquid, SoundConfiguration soundConfiguration,
             ParticleConfiguration particleConfiguration) {
-        super();
         this.explosionRadius = explosionRadius;
         this.explosionFactor = explosionFactor;
         this.replaceOriginalExplosion = replaceOriginalExplosion;

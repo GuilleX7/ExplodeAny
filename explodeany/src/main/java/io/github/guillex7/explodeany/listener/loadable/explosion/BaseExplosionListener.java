@@ -7,7 +7,6 @@ public abstract class BaseExplosionListener implements LoadableListener {
     protected LoadableConfigurationSection<?> configuration;
 
     public BaseExplosionListener() {
-        super();
         this.configuration = this.getConfiguration();
     }
 

@@ -16,7 +16,6 @@ public abstract class RegistrableCommand {
     private Set<String> allNames = null;
 
     protected RegistrableCommand() {
-        super();
         mapSubcommands();
         mapAllNames();
     }

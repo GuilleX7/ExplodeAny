@@ -23,7 +23,6 @@ public class BlockStatus {
     }
 
     private BlockStatus(Material material, double durability) {
-        super();
         this.material = material;
         this.durability = durability;
     }

@@ -25,7 +25,6 @@ public final class EntityListener implements LoadableListener {
     private CompatibilityManager compatibilityManager;
 
     public EntityListener() {
-        super();
         this.checktoolManager = ChecktoolManager.getInstance();
         this.configurationManager = ConfigurationManager.getInstance();
         this.blockDatabase = BlockDatabase.getInstance();

@@ -17,7 +17,6 @@ public class SoundConfiguration {
     private Double pitch;
 
     private SoundConfiguration(Sound sound, Double volume, Double pitch) {
-        super();
         this.sound = sound;
         this.volume = volume;
         this.pitch = pitch;

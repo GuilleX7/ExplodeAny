@@ -10,7 +10,6 @@ public final class BlockListener implements LoadableListener {
     private BlockDatabase blockDatabase;
 
     public BlockListener() {
-        super();
         this.blockDatabase = BlockDatabase.getInstance();
     }
 

@@ -34,7 +34,6 @@ public class ParticleConfiguration {
 
     public ParticleConfiguration(IParticle particle, Double deltaX, Double deltaY, Double deltaZ, Integer amount,
             Double speed, Boolean force) {
-        super();
         this.particle = particle;
         this.deltaX = deltaX;
         this.deltaY = deltaY;
