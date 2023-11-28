@@ -6,6 +6,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
+import io.github.guillex7.explodeany.configuration.loadable.VanillaEntityConfiguration;
 
 public final class VanillaExplosionListener extends VanillaBaseExplosionListener {
     public static boolean isEntityVanilla(Entity entity) {
@@ -30,6 +31,6 @@ public final class VanillaExplosionListener extends VanillaBaseExplosionListener
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredEntityConfiguration("VanillaEntity");
+                .getRegisteredEntityConfiguration(VanillaEntityConfiguration.getConfigurationId());
     }
 }

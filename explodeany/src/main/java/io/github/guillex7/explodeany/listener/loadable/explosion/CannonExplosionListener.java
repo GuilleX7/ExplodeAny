@@ -103,6 +103,7 @@ public final class CannonExplosionListener extends BaseExplosionListener {
 
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
-        return ConfigurationManager.getInstance().getRegisteredEntityConfiguration("CannonProjectile");
+        return ConfigurationManager.getInstance()
+                .getRegisteredEntityConfiguration(CannonProjectileConfiguration.getConfigurationId());
     }
 }

@@ -11,6 +11,10 @@ import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 public class MagicEntityConfiguration extends BaseVanillaEntityConfiguration {
     private static final Version MINIMUM_SUPPORTED_BUKKIT_VERSION = new Version(1, 16);
 
+    public static String getConfigurationId() {
+        return "MagicEntity";
+    }
+
     @Override
     public boolean shouldBeLoaded() {
         Plugin externalPlugin = Bukkit.getPluginManager().getPlugin("Magic");
@@ -21,6 +25,6 @@ public class MagicEntityConfiguration extends BaseVanillaEntityConfiguration {
 
     @Override
     public String getSectionPath() {
-        return "MagicEntity";
+        return MagicEntityConfiguration.getConfigurationId();
     }
 }

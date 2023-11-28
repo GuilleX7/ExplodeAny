@@ -7,6 +7,10 @@ import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.projectile.ProjectileStorage;
 
 public final class CannonProjectileConfiguration extends LoadableConfigurationSection<String> {
+    public static String getConfigurationId() {
+        return "CannonProjectile";
+    }
+
     @Override
     public boolean shouldBeLoaded() {
         Plugin externalPlugin = Bukkit.getPluginManager().getPlugin("Cannons");
@@ -20,7 +24,7 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
 
     @Override
     public String getSectionPath() {
-        return "CannonProjectile";
+        return CannonProjectileConfiguration.getConfigurationId();
     }
 
     @Override

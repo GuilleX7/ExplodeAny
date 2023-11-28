@@ -9,6 +9,7 @@ import io.github.guillex7.explodeany.compat.common.api.IPersistentStorage.MetaPe
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
+import io.github.guillex7.explodeany.configuration.loadable.MagicEntityConfiguration;
 
 public class MagicExplosionListener extends VanillaBaseExplosionListener {
     private static final Plugin MAGIC_SPAWNED_NAMESPACE = Bukkit.getPluginManager().getPlugin("Magic");
@@ -36,6 +37,7 @@ public class MagicExplosionListener extends VanillaBaseExplosionListener {
 
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
-        return ConfigurationManager.getInstance().getRegisteredEntityConfiguration("MagicEntity");
+        return ConfigurationManager.getInstance()
+                .getRegisteredEntityConfiguration(MagicEntityConfiguration.getConfigurationId());
     }
 }
