@@ -9,28 +9,26 @@ public class EntityMaterialConfiguration {
     private static final String DAMAGE_PATH = "Damage";
     private static final String DROP_CHANCE_PATH = "DropChance";
     private static final String DISTANCE_ATTENUATION_FACTOR_PATH = "DistanceAttenuationFactor";
-    private static final String EXPLOSION_RADIUS_FACTOR_PATH = "ExplosionRadiusFactor";
     private static final String UNDERWATER_DAMAGE_FACTOR_PATH = "UnderwaterDamageFactor";
     private static final String FANCY_UNDERWATER_DETECTION_PATH = "FancyUnderwaterDetection";
 
     private double damage;
     private double dropChance;
     private double distanceAttenuationFactor;
-    private double explosionRadiusFactor;
     private double underwaterDamageFactor;
     private boolean fancyUnderwaterDetection;
     private SoundConfiguration soundConfiguration;
     private ParticleConfiguration particleConfiguration;
 
     public static EntityMaterialConfiguration of(double damage, double dropChance, double distanceAttenuationFactor,
-            double explosionRadiusFactor, double underwaterDamageFactor, boolean fancyUnderwaterDetection,
+            double underwaterDamageFactor, boolean fancyUnderwaterDetection,
             SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
-        return new EntityMaterialConfiguration(damage, dropChance, distanceAttenuationFactor, explosionRadiusFactor,
+        return new EntityMaterialConfiguration(damage, dropChance, distanceAttenuationFactor,
                 underwaterDamageFactor, fancyUnderwaterDetection, soundConfiguration, particleConfiguration);
     }
 
     public static EntityMaterialConfiguration byDefault() {
-        return EntityMaterialConfiguration.of(ConfigurationManager.getInstance().getBlockDurability(), 0.0d, 0.0d, 0.5d,
+        return EntityMaterialConfiguration.of(ConfigurationManager.getInstance().getBlockDurability(), 0.0d, 0.0d,
                 0.5d, false, SoundConfiguration.byDefault(), ParticleConfiguration.byDefault());
     }
 
@@ -48,8 +46,6 @@ public class EntityMaterialConfiguration {
                         section.getDouble(DISTANCE_ATTENUATION_FACTOR_PATH, defaults.getDistanceAttenuationFactor()),
                         1.0d, 0.0d),
                 MathUtils.ensureMin(
-                        section.getDouble(EXPLOSION_RADIUS_FACTOR_PATH, defaults.getExplosionRadiusFactor()), 0.0d),
-                MathUtils.ensureMin(
                         section.getDouble(UNDERWATER_DAMAGE_FACTOR_PATH, defaults.getUnderwaterDamageFactor()), 0.0d),
                 section.getBoolean(FANCY_UNDERWATER_DETECTION_PATH, defaults.isFancyUnderwaterDetection()),
                 (soundConfigurationSection != null)
@@ -61,13 +57,12 @@ public class EntityMaterialConfiguration {
     }
 
     private EntityMaterialConfiguration(double damage, double dropChance, double distanceAttenuationFactor,
-            double explosionRadiusFactor, double underwaterDamageFactor, boolean fancyUnderwaterDetection,
+            double underwaterDamageFactor, boolean fancyUnderwaterDetection,
             SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
         super();
         this.damage = damage;
         this.dropChance = dropChance;
         this.distanceAttenuationFactor = distanceAttenuationFactor;
-        this.explosionRadiusFactor = explosionRadiusFactor;
         this.underwaterDamageFactor = underwaterDamageFactor;
         this.fancyUnderwaterDetection = fancyUnderwaterDetection;
         this.soundConfiguration = soundConfiguration;
@@ -100,14 +95,6 @@ public class EntityMaterialConfiguration {
 
     public void setDistanceAttenuationFactor(double distanceAttenuationFactor) {
         this.distanceAttenuationFactor = distanceAttenuationFactor;
-    }
-
-    public double getExplosionRadiusFactor() {
-        return explosionRadiusFactor;
-    }
-
-    public void setExplosionRadiusFactor(double explosionRadiusFactor) {
-        this.explosionRadiusFactor = explosionRadiusFactor;
     }
 
     public double getUnderwaterDamageFactor() {
@@ -153,17 +140,15 @@ public class EntityMaterialConfiguration {
         long temp;
         temp = Double.doubleToLongBits(damage);
         result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(distanceAttenuationFactor);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(dropChance);
         result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(explosionRadiusFactor);
+        temp = Double.doubleToLongBits(distanceAttenuationFactor);
         result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + (fancyUnderwaterDetection ? 1231 : 1237);
-        result = prime * result + ((particleConfiguration == null) ? 0 : particleConfiguration.hashCode());
-        result = prime * result + ((soundConfiguration == null) ? 0 : soundConfiguration.hashCode());
         temp = Double.doubleToLongBits(underwaterDamageFactor);
         result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + (fancyUnderwaterDetection ? 1231 : 1237);
+        result = prime * result + ((soundConfiguration == null) ? 0 : soundConfiguration.hashCode());
+        result = prime * result + ((particleConfiguration == null) ? 0 : particleConfiguration.hashCode());
         return result;
     }
 
@@ -178,36 +163,25 @@ public class EntityMaterialConfiguration {
         EntityMaterialConfiguration other = (EntityMaterialConfiguration) obj;
         if (Double.doubleToLongBits(damage) != Double.doubleToLongBits(other.damage))
             return false;
+        if (Double.doubleToLongBits(dropChance) != Double.doubleToLongBits(other.dropChance))
+            return false;
         if (Double.doubleToLongBits(distanceAttenuationFactor) != Double
                 .doubleToLongBits(other.distanceAttenuationFactor))
             return false;
-        if (Double.doubleToLongBits(dropChance) != Double.doubleToLongBits(other.dropChance))
-            return false;
-        if (Double.doubleToLongBits(explosionRadiusFactor) != Double.doubleToLongBits(other.explosionRadiusFactor))
+        if (Double.doubleToLongBits(underwaterDamageFactor) != Double.doubleToLongBits(other.underwaterDamageFactor))
             return false;
         if (fancyUnderwaterDetection != other.fancyUnderwaterDetection)
-            return false;
-        if (particleConfiguration == null) {
-            if (other.particleConfiguration != null)
-                return false;
-        } else if (!particleConfiguration.equals(other.particleConfiguration))
             return false;
         if (soundConfiguration == null) {
             if (other.soundConfiguration != null)
                 return false;
         } else if (!soundConfiguration.equals(other.soundConfiguration))
             return false;
-        if (Double.doubleToLongBits(underwaterDamageFactor) != Double.doubleToLongBits(other.underwaterDamageFactor))
+        if (particleConfiguration == null) {
+            if (other.particleConfiguration != null)
+                return false;
+        } else if (!particleConfiguration.equals(other.particleConfiguration))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "EntityMaterialConfiguration [damage=" + damage + ", dropChance=" + dropChance
-                + ", distanceAttenuationFactor=" + distanceAttenuationFactor + ", explosionRadiusFactor="
-                + explosionRadiusFactor + ", underwaterDamageFactor=" + underwaterDamageFactor
-                + ", fancyUnderwaterDetection=" + fancyUnderwaterDetection + ", soundConfiguration="
-                + soundConfiguration + ", particleConfiguration=" + particleConfiguration + "]";
     }
 }

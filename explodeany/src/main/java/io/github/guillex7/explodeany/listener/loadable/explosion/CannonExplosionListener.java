@@ -12,6 +12,7 @@ import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.projectile.Projectile;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.configuration.loadable.CannonProjectileConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
@@ -53,7 +54,7 @@ public final class CannonExplosionListener extends BaseExplosionListener {
 
         float explosionPower = projectile.getExplosionPower();
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getImpactLocation(), (int) explosionPower, explosionPower)) {
+                event.getImpactLocation(), explosionPower)) {
             event.setCancelled(true);
         }
     }

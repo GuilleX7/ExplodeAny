@@ -5,33 +5,41 @@ import org.bukkit.configuration.ConfigurationSection;
 import io.github.guillex7.explodeany.util.MathUtils;
 
 public class EntityConfiguration {
+    private static final String EXPLOSION_RADIUS_PATH = "ExplosionRadius";
+    private static final String EXPLOSION_FACTOR_PATH = "ExplosionFactor";
+    private static final String REPLACE_ORIGINAL_EXPLOSION_PATH = "ReplaceOriginalExplosion";
+    private static final String UNDERWATER_EXPLOSION_FACTOR_PATH = "UnderwaterExplosionFactor";
     private static final String EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH = "ExplosionDamageBlocksUnderwater";
     private static final String REPLACE_ORIGINAL_EXPLOSION_WHEN_UNDERWATER = "ReplaceOriginalExplosionWhenUnderwater";
-    private static final String UNDERWATER_EXPLOSION_FACTOR_PATH = "UnderwaterExplosionFactor";
     private static final String EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS = "ExplosionRemoveWaterloggedStateFromNearbyBlocks";
     private static final String EXPLOSION_REMOVE_NEARBY_LIQUIDS = "ExplosionRemoveNearbyLiquids";
 
+    private Double explosionRadius;
+    private Double explosionFactor;
+    private boolean replaceOriginalExplosion;
+    private Double underwaterExplosionFactor;
     private boolean explosionDamageBlocksUnderwater;
     private boolean replaceOriginalExplosionWhenUnderwater;
-
-    private Double underwaterExplosionFactor;
     private boolean explosionRemoveWaterloggedStateFromNearbyBlocks;
     private boolean explosionRemoveNearbyLiquid;
     private SoundConfiguration soundConfiguration;
     private ParticleConfiguration particleConfiguration;
 
-    public static EntityConfiguration of(boolean explosionDamageBlocksUnderwater,
-            boolean replaceOriginalExplosionWhenUnderwater, Double underwaterExplosionFactor,
-            boolean explosionRemoveWaterloggedStateFromNearbyBlocks, boolean explosionRemoveNearbyLiquid,
-            SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
-        return new EntityConfiguration(explosionDamageBlocksUnderwater, replaceOriginalExplosionWhenUnderwater,
-                underwaterExplosionFactor, explosionRemoveWaterloggedStateFromNearbyBlocks, explosionRemoveNearbyLiquid,
-                soundConfiguration,
+    public static EntityConfiguration of(Double explosionRadius, Double explosionFactor,
+            boolean replaceOriginalExplosion,
+            Double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
+            boolean replaceOriginalExplosionWhenUnderwater, boolean explosionRemoveWaterloggedStateFromNearbyBlocks,
+            boolean explosionRemoveNearbyLiquid, SoundConfiguration soundConfiguration,
+            ParticleConfiguration particleConfiguration) {
+        return new EntityConfiguration(explosionRadius, explosionFactor, replaceOriginalExplosion,
+                underwaterExplosionFactor, explosionDamageBlocksUnderwater, replaceOriginalExplosionWhenUnderwater,
+                explosionRemoveWaterloggedStateFromNearbyBlocks, explosionRemoveNearbyLiquid, soundConfiguration,
                 particleConfiguration);
     }
 
     public static EntityConfiguration byDefault() {
-        return EntityConfiguration.of(false, true, 0.5d, false, false, SoundConfiguration.byDefault(),
+        return EntityConfiguration.of(0.0d, 1.0d, false, 0.5d, false, false, false, false,
+                SoundConfiguration.byDefault(),
                 ParticleConfiguration.byDefault());
     }
 
@@ -42,13 +50,16 @@ public class EntityConfiguration {
                 .getConfigurationSection(ParticleConfiguration.ROOT_PATH);
 
         return EntityConfiguration.of(
+                MathUtils.ensureMin(section.getDouble(EXPLOSION_RADIUS_PATH, defaults.getExplosionRadius()), 0.0d),
+                MathUtils.ensureMin(section.getDouble(EXPLOSION_FACTOR_PATH, defaults.getExplosionFactor()), 0.0d),
+                section.getBoolean(REPLACE_ORIGINAL_EXPLOSION_PATH, defaults.doReplaceOriginalExplosion()),
+                MathUtils.ensureMin(
+                        section.getDouble(UNDERWATER_EXPLOSION_FACTOR_PATH, defaults.getUnderwaterExplosionFactor()),
+                        0.0d),
                 section.getBoolean(EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH,
                         defaults.doesExplosionDamageBlocksUnderwater()),
                 section.getBoolean(REPLACE_ORIGINAL_EXPLOSION_WHEN_UNDERWATER,
                         defaults.doReplaceOriginalExplosionWhenUnderwater()),
-                MathUtils.ensureMin(
-                        section.getDouble(UNDERWATER_EXPLOSION_FACTOR_PATH, defaults.getUnderwaterExplosionFactor()),
-                        0.0d),
                 section.getBoolean(EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS,
                         defaults.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()),
                 section.getBoolean(EXPLOSION_REMOVE_NEARBY_LIQUIDS,
@@ -61,18 +72,54 @@ public class EntityConfiguration {
                         : ParticleConfiguration.byDefault());
     }
 
-    private EntityConfiguration(boolean explosionDamageBlocksUnderwater,
-            boolean replaceOriginalExplosionWhenUnderwater, Double underwaterExplosionFactor,
-            boolean explosionRemoveWaterloggedStateFromNearbyBlocks, boolean explosionRemoveNearbyLiquid,
-            SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
+    public EntityConfiguration(Double explosionRadius, Double explosionFactor, boolean replaceOriginalExplosion,
+            Double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
+            boolean replaceOriginalExplosionWhenUnderwater, boolean explosionRemoveWaterloggedStateFromNearbyBlocks,
+            boolean explosionRemoveNearbyLiquid, SoundConfiguration soundConfiguration,
+            ParticleConfiguration particleConfiguration) {
         super();
+        this.explosionRadius = explosionRadius;
+        this.explosionFactor = explosionFactor;
+        this.replaceOriginalExplosion = replaceOriginalExplosion;
+        this.underwaterExplosionFactor = underwaterExplosionFactor;
         this.explosionDamageBlocksUnderwater = explosionDamageBlocksUnderwater;
         this.replaceOriginalExplosionWhenUnderwater = replaceOriginalExplosionWhenUnderwater;
-        this.underwaterExplosionFactor = underwaterExplosionFactor;
         this.explosionRemoveWaterloggedStateFromNearbyBlocks = explosionRemoveWaterloggedStateFromNearbyBlocks;
         this.explosionRemoveNearbyLiquid = explosionRemoveNearbyLiquid;
         this.soundConfiguration = soundConfiguration;
         this.particleConfiguration = particleConfiguration;
+    }
+
+    public Double getExplosionRadius() {
+        return explosionRadius;
+    }
+
+    public void setExplosionRadius(Double explosionRadius) {
+        this.explosionRadius = explosionRadius;
+    }
+
+    public Double getExplosionFactor() {
+        return explosionFactor;
+    }
+
+    public boolean doReplaceOriginalExplosion() {
+        return replaceOriginalExplosion;
+    }
+
+    public void setReplaceOriginalExplosion(boolean replaceOriginalExplosion) {
+        this.replaceOriginalExplosion = replaceOriginalExplosion;
+    }
+
+    public void setExplosionFactor(Double explosionFactor) {
+        this.explosionFactor = explosionFactor;
+    }
+
+    public Double getUnderwaterExplosionFactor() {
+        return underwaterExplosionFactor;
+    }
+
+    public void setUnderwaterExplosionFactor(Double underwaterExplosionFactor) {
+        this.underwaterExplosionFactor = underwaterExplosionFactor;
     }
 
     public boolean doesExplosionDamageBlocksUnderwater() {
@@ -89,14 +136,6 @@ public class EntityConfiguration {
 
     public void setReplaceOriginalExplosionWhenUnderwater(boolean replaceOriginalExplosionWhenUnderwater) {
         this.replaceOriginalExplosionWhenUnderwater = replaceOriginalExplosionWhenUnderwater;
-    }
-
-    public Double getUnderwaterExplosionFactor() {
-        return underwaterExplosionFactor;
-    }
-
-    public void setUnderwaterExplosionFactor(Double underwaterExplosionFactor) {
-        this.underwaterExplosionFactor = underwaterExplosionFactor;
     }
 
     public boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocks() {
@@ -136,9 +175,12 @@ public class EntityConfiguration {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((explosionRadius == null) ? 0 : explosionRadius.hashCode());
+        result = prime * result + ((explosionFactor == null) ? 0 : explosionFactor.hashCode());
+        result = prime * result + (replaceOriginalExplosion ? 1231 : 1237);
+        result = prime * result + ((underwaterExplosionFactor == null) ? 0 : underwaterExplosionFactor.hashCode());
         result = prime * result + (explosionDamageBlocksUnderwater ? 1231 : 1237);
         result = prime * result + (replaceOriginalExplosionWhenUnderwater ? 1231 : 1237);
-        result = prime * result + ((underwaterExplosionFactor == null) ? 0 : underwaterExplosionFactor.hashCode());
         result = prime * result + (explosionRemoveWaterloggedStateFromNearbyBlocks ? 1231 : 1237);
         result = prime * result + (explosionRemoveNearbyLiquid ? 1231 : 1237);
         result = prime * result + ((soundConfiguration == null) ? 0 : soundConfiguration.hashCode());
@@ -155,14 +197,26 @@ public class EntityConfiguration {
         if (getClass() != obj.getClass())
             return false;
         EntityConfiguration other = (EntityConfiguration) obj;
-        if (explosionDamageBlocksUnderwater != other.explosionDamageBlocksUnderwater)
+        if (explosionRadius == null) {
+            if (other.explosionRadius != null)
+                return false;
+        } else if (!explosionRadius.equals(other.explosionRadius))
             return false;
-        if (replaceOriginalExplosionWhenUnderwater != other.replaceOriginalExplosionWhenUnderwater)
+        if (explosionFactor == null) {
+            if (other.explosionFactor != null)
+                return false;
+        } else if (!explosionFactor.equals(other.explosionFactor))
+            return false;
+        if (replaceOriginalExplosion != other.replaceOriginalExplosion)
             return false;
         if (underwaterExplosionFactor == null) {
             if (other.underwaterExplosionFactor != null)
                 return false;
         } else if (!underwaterExplosionFactor.equals(other.underwaterExplosionFactor))
+            return false;
+        if (explosionDamageBlocksUnderwater != other.explosionDamageBlocksUnderwater)
+            return false;
+        if (replaceOriginalExplosionWhenUnderwater != other.replaceOriginalExplosionWhenUnderwater)
             return false;
         if (explosionRemoveWaterloggedStateFromNearbyBlocks != other.explosionRemoveWaterloggedStateFromNearbyBlocks)
             return false;
@@ -179,15 +233,5 @@ public class EntityConfiguration {
         } else if (!particleConfiguration.equals(other.particleConfiguration))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "EntityConfiguration [explosionDamageBlocksUnderwater=" + explosionDamageBlocksUnderwater
-                + ", replaceOriginalExplosionWhenUnderwater=" + replaceOriginalExplosionWhenUnderwater
-                + ", underwaterExplosionFactor=" + underwaterExplosionFactor
-                + ", explosionRemoveWaterloggedStateFromNearbyBlocks=" + explosionRemoveWaterloggedStateFromNearbyBlocks
-                + ", explosionRemoveNearbyLiquid=" + explosionRemoveNearbyLiquid + ", soundConfiguration="
-                + soundConfiguration + ", particleConfiguration=" + particleConfiguration + "]";
     }
 }

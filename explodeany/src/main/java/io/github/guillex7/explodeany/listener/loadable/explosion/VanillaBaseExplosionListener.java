@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import io.github.guillex7.explodeany.compat.common.api.IExplosionUtils.ExplosionParameters;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
@@ -52,15 +51,15 @@ public abstract class VanillaBaseExplosionListener extends BaseExplosionListener
         EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(entityTypeName);
 
-        ExplosionParameters explosionParameters = CompatibilityManager.getInstance().getApi().getExplosionUtils()
+        double explosionRadius = CompatibilityManager.getInstance().getApi().getExplosionUtils()
                 .getExplosionRadiusAndPower(entityType, isCharged);
 
-        if (!explosionParameters.areValid()) {
+        if (explosionRadius == 0d) {
             return;
         }
 
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getLocation(), explosionParameters.getRadius(), explosionParameters.getPower())) {
+                event.getLocation(), explosionRadius)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList());
