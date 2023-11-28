@@ -16,7 +16,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
-public abstract class VanillaBaseExplosionListener extends BaseExplosionListener {
+public abstract class BaseVanillaExplosionListener extends BaseExplosionListener {
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onEntityExplode(EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {

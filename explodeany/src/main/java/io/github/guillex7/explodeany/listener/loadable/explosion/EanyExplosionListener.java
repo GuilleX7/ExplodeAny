@@ -27,7 +27,7 @@ public class EanyExplosionListener implements LoadableListener {
         return false;
     }
 
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onEntityExplode(EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;

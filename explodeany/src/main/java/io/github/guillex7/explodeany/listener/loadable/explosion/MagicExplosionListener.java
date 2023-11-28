@@ -11,7 +11,7 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.MagicEntityConfiguration;
 
-public class MagicExplosionListener extends VanillaBaseExplosionListener {
+public class MagicExplosionListener extends BaseVanillaExplosionListener {
     private static final Plugin MAGIC_SPAWNED_NAMESPACE = Bukkit.getPluginManager().getPlugin("Magic");
     private static final String MAGIC_SPAWNED_KEY = "magicspawned";
 

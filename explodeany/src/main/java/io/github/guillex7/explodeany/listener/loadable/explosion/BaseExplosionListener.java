@@ -6,7 +6,7 @@ import io.github.guillex7.explodeany.listener.loadable.LoadableListener;
 public abstract class BaseExplosionListener implements LoadableListener {
     protected LoadableConfigurationSection<?> configuration;
 
-    public BaseExplosionListener() {
+    protected BaseExplosionListener() {
         this.configuration = this.getConfiguration();
     }
 

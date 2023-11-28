@@ -8,7 +8,7 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.VanillaEntityConfiguration;
 
-public final class VanillaExplosionListener extends VanillaBaseExplosionListener {
+public final class VanillaExplosionListener extends BaseVanillaExplosionListener {
     public static boolean isEntityVanilla(Entity entity) {
         return CompatibilityManager.getInstance().getApi().getPersistentStorageUtils().getForEntity(entity).isEmpty();
     }
