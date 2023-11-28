@@ -112,35 +112,39 @@ public class ExplosionManager {
         final List<Block> unhandledWaterloggedBlocks = new ArrayList<>(squaredExplosionRadius);
         final List<Block> liquidBlocks = new ArrayList<>(squaredExplosionRadius);
 
-        for (int x = cx - explosionRadius; x < cxpr; x++) {
-            for (int y = cy - explosionRadius; y < cypr; y++) {
-                for (int z = cz - explosionRadius; z < czpr; z++) {
-                    final int dx = x - cx;
-                    final int dy = y - cy;
-                    final int dz = z - cz;
-                    final int squaredDistance = dx * dx + dy * dy + dz * dz;
+        // Hint: This is a very expensive operation, so we only do it if we have to.
+        if (!materialConfigurations.isEmpty() || entityConfiguration.doesExplosionRemoveNearbyLiquid()
+                || entityConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()) {
+            for (int x = cx - explosionRadius; x < cxpr; x++) {
+                for (int y = cy - explosionRadius; y < cypr; y++) {
+                    for (int z = cz - explosionRadius; z < czpr; z++) {
+                        final int dx = x - cx;
+                        final int dy = y - cy;
+                        final int dz = z - cz;
+                        final int squaredDistance = dx * dx + dy * dy + dz * dz;
 
-                    if (squaredExplosionRadius < squaredDistance) {
-                        continue;
-                    }
-
-                    Block block = sourceWorld.getBlockAt(x, y, z);
-                    if (block.isEmpty()) {
-                        continue;
-                    }
-
-                    EntityMaterialConfiguration materialConfiguration = materialConfigurations.get(block.getType());
-                    if (materialConfiguration == null) {
-                        if (blockDataUtils.isBlockWaterlogged(block)) {
-                            unhandledWaterloggedBlocks.add(block);
-                        } else if (block.isLiquid()) {
-                            liquidBlocks.add(block);
+                        if (squaredExplosionRadius < squaredDistance) {
+                            continue;
                         }
-                        continue;
-                    }
 
-                    damageBlock(materialConfiguration, block, sourceLocation, squaredExplosionRadius,
-                            squaredDistance, isSourceLocationLiquidlike);
+                        Block block = sourceWorld.getBlockAt(x, y, z);
+                        if (block.isEmpty()) {
+                            continue;
+                        }
+
+                        EntityMaterialConfiguration materialConfiguration = materialConfigurations.get(block.getType());
+                        if (materialConfiguration == null) {
+                            if (blockDataUtils.isBlockWaterlogged(block)) {
+                                unhandledWaterloggedBlocks.add(block);
+                            } else if (block.isLiquid()) {
+                                liquidBlocks.add(block);
+                            }
+                            continue;
+                        }
+
+                        damageBlock(materialConfiguration, block, sourceLocation, squaredExplosionRadius,
+                                squaredDistance, isSourceLocationLiquidlike);
+                    }
                 }
             }
         }
