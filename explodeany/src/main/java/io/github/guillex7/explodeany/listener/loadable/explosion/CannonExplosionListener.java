@@ -52,7 +52,7 @@ public final class CannonExplosionListener extends BaseExplosionListener {
         EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(projectileId);
 
-        float explosionPower = projectile.getExplosionPower();
+        double explosionPower = projectile.getExplosionPower();
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
                 event.getImpactLocation(), explosionPower)) {
             event.setCancelled(true);

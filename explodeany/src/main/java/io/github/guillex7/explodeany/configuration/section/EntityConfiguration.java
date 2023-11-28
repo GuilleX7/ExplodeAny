@@ -14,10 +14,10 @@ public class EntityConfiguration {
     private static final String EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS = "ExplosionRemoveWaterloggedStateFromNearbyBlocks";
     private static final String EXPLOSION_REMOVE_NEARBY_LIQUIDS = "ExplosionRemoveNearbyLiquids";
 
-    private Double explosionRadius;
-    private Double explosionFactor;
+    private double explosionRadius;
+    private double explosionFactor;
     private boolean replaceOriginalExplosion;
-    private Double underwaterExplosionFactor;
+    private double underwaterExplosionFactor;
     private boolean explosionDamageBlocksUnderwater;
     private boolean replaceOriginalExplosionWhenUnderwater;
     private boolean explosionRemoveWaterloggedStateFromNearbyBlocks;
@@ -25,9 +25,9 @@ public class EntityConfiguration {
     private SoundConfiguration soundConfiguration;
     private ParticleConfiguration particleConfiguration;
 
-    public static EntityConfiguration of(Double explosionRadius, Double explosionFactor,
+    public static EntityConfiguration of(double explosionRadius, double explosionFactor,
             boolean replaceOriginalExplosion,
-            Double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
+            double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
             boolean replaceOriginalExplosionWhenUnderwater, boolean explosionRemoveWaterloggedStateFromNearbyBlocks,
             boolean explosionRemoveNearbyLiquid, SoundConfiguration soundConfiguration,
             ParticleConfiguration particleConfiguration) {
@@ -72,8 +72,8 @@ public class EntityConfiguration {
                         : ParticleConfiguration.byDefault());
     }
 
-    public EntityConfiguration(Double explosionRadius, Double explosionFactor, boolean replaceOriginalExplosion,
-            Double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
+    public EntityConfiguration(double explosionRadius, double explosionFactor, boolean replaceOriginalExplosion,
+            double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
             boolean replaceOriginalExplosionWhenUnderwater, boolean explosionRemoveWaterloggedStateFromNearbyBlocks,
             boolean explosionRemoveNearbyLiquid, SoundConfiguration soundConfiguration,
             ParticleConfiguration particleConfiguration) {
@@ -89,15 +89,15 @@ public class EntityConfiguration {
         this.particleConfiguration = particleConfiguration;
     }
 
-    public Double getExplosionRadius() {
+    public double getExplosionRadius() {
         return explosionRadius;
     }
 
-    public void setExplosionRadius(Double explosionRadius) {
+    public void setExplosionRadius(double explosionRadius) {
         this.explosionRadius = explosionRadius;
     }
 
-    public Double getExplosionFactor() {
+    public double getExplosionFactor() {
         return explosionFactor;
     }
 
@@ -109,15 +109,15 @@ public class EntityConfiguration {
         this.replaceOriginalExplosion = replaceOriginalExplosion;
     }
 
-    public void setExplosionFactor(Double explosionFactor) {
+    public void setExplosionFactor(double explosionFactor) {
         this.explosionFactor = explosionFactor;
     }
 
-    public Double getUnderwaterExplosionFactor() {
+    public double getUnderwaterExplosionFactor() {
         return underwaterExplosionFactor;
     }
 
-    public void setUnderwaterExplosionFactor(Double underwaterExplosionFactor) {
+    public void setUnderwaterExplosionFactor(double underwaterExplosionFactor) {
         this.underwaterExplosionFactor = underwaterExplosionFactor;
     }
 
@@ -174,10 +174,14 @@ public class EntityConfiguration {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((explosionRadius == null) ? 0 : explosionRadius.hashCode());
-        result = prime * result + ((explosionFactor == null) ? 0 : explosionFactor.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(explosionRadius);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(explosionFactor);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + (replaceOriginalExplosion ? 1231 : 1237);
-        result = prime * result + ((underwaterExplosionFactor == null) ? 0 : underwaterExplosionFactor.hashCode());
+        temp = Double.doubleToLongBits(underwaterExplosionFactor);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + (explosionDamageBlocksUnderwater ? 1231 : 1237);
         result = prime * result + (replaceOriginalExplosionWhenUnderwater ? 1231 : 1237);
         result = prime * result + (explosionRemoveWaterloggedStateFromNearbyBlocks ? 1231 : 1237);
@@ -196,22 +200,14 @@ public class EntityConfiguration {
         if (getClass() != obj.getClass())
             return false;
         EntityConfiguration other = (EntityConfiguration) obj;
-        if (explosionRadius == null) {
-            if (other.explosionRadius != null)
-                return false;
-        } else if (!explosionRadius.equals(other.explosionRadius))
+        if (Double.doubleToLongBits(explosionRadius) != Double.doubleToLongBits(other.explosionRadius))
             return false;
-        if (explosionFactor == null) {
-            if (other.explosionFactor != null)
-                return false;
-        } else if (!explosionFactor.equals(other.explosionFactor))
+        if (Double.doubleToLongBits(explosionFactor) != Double.doubleToLongBits(other.explosionFactor))
             return false;
         if (replaceOriginalExplosion != other.replaceOriginalExplosion)
             return false;
-        if (underwaterExplosionFactor == null) {
-            if (other.underwaterExplosionFactor != null)
-                return false;
-        } else if (!underwaterExplosionFactor.equals(other.underwaterExplosionFactor))
+        if (Double.doubleToLongBits(underwaterExplosionFactor) != Double
+                .doubleToLongBits(other.underwaterExplosionFactor))
             return false;
         if (explosionDamageBlocksUnderwater != other.explosionDamageBlocksUnderwater)
             return false;

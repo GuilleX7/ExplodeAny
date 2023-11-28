@@ -25,7 +25,7 @@ public class CParticle extends io.github.guillex7.explodeany.compat.v1_9.api.CPa
 
     DustOptions getDustOptionsFromParticleData(ParticleData particleData) {
         return new DustOptions(Color.fromRGB(particleData.getRed(), particleData.getGreen(), particleData.getBlue()),
-                particleData.getSize());
+                (float) particleData.getSize());
     }
 
     BlockData getBlockDataFromParticleData(ParticleData particleData) {

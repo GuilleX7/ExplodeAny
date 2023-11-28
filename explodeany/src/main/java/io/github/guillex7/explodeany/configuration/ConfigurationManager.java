@@ -72,7 +72,7 @@ public final class ConfigurationManager {
         return getPlugin().getConfig().getBoolean(CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
     }
 
-    public Double getBlockDurability() {
+    public double getBlockDurability() {
         return MathUtils.ensureMin(getPlugin().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
     }
 

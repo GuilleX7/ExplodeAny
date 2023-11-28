@@ -25,15 +25,15 @@ public class ParticleConfiguration {
     private static final String MATERIAL_PATH = "Material";
 
     private IParticle particle;
-    private Double deltaX;
-    private Double deltaY;
-    private Double deltaZ;
-    private Integer amount;
-    private Double speed;
-    private Boolean force;
+    private double deltaX;
+    private double deltaY;
+    private double deltaZ;
+    private int amount;
+    private double speed;
+    private boolean force;
 
-    public ParticleConfiguration(IParticle particle, Double deltaX, Double deltaY, Double deltaZ, Integer amount,
-            Double speed, Boolean force) {
+    public ParticleConfiguration(IParticle particle, double deltaX, double deltaY, double deltaZ, int amount,
+            double speed, boolean force) {
         this.particle = particle;
         this.deltaX = deltaX;
         this.deltaY = deltaY;
@@ -43,8 +43,8 @@ public class ParticleConfiguration {
         this.force = force;
     }
 
-    public static ParticleConfiguration of(IParticle particle, Double deltaX, Double deltaY, Double deltaZ,
-            Integer amount, Double speed, Boolean force) {
+    public static ParticleConfiguration of(IParticle particle, double deltaX, double deltaY, double deltaZ,
+            int amount, double speed, boolean force) {
         return new ParticleConfiguration(particle, deltaX, deltaY, deltaZ, amount, speed, force);
     }
 
@@ -56,10 +56,10 @@ public class ParticleConfiguration {
         ParticleConfiguration defaults = ParticleConfiguration.byDefault();
 
         String name = section.getString(NAME_PATH).toUpperCase();
-        Integer red = MathUtils.ensureRange(section.getInt(RED_PATH, 0), 255, 0);
-        Integer green = MathUtils.ensureRange(section.getInt(GREEN_PATH, 0), 255, 0);
-        Integer blue = MathUtils.ensureRange(section.getInt(BLUE_PATH, 0), 255, 0);
-        float size = (float) MathUtils.ensureMin(section.getDouble(SIZE_PATH, 1), 0);
+        int red = MathUtils.ensureRange(section.getInt(RED_PATH, 0), 255, 0);
+        int green = MathUtils.ensureRange(section.getInt(GREEN_PATH, 0), 255, 0);
+        int blue = MathUtils.ensureRange(section.getInt(BLUE_PATH, 0), 255, 0);
+        double size = MathUtils.ensureMin(section.getDouble(SIZE_PATH, 1), 0);
         Material material;
 
         try {
@@ -94,51 +94,51 @@ public class ParticleConfiguration {
         this.particle = particle;
     }
 
-    public Double getDeltaX() {
+    public double getDeltaX() {
         return deltaX;
     }
 
-    public void setDeltaX(Double deltaX) {
+    public void setDeltaX(double deltaX) {
         this.deltaX = deltaX;
     }
 
-    public Double getDeltaY() {
+    public double getDeltaY() {
         return deltaY;
     }
 
-    public void setDeltaY(Double deltaY) {
+    public void setDeltaY(double deltaY) {
         this.deltaY = deltaY;
     }
 
-    public Double getDeltaZ() {
+    public double getDeltaZ() {
         return deltaZ;
     }
 
-    public void setDeltaZ(Double deltaZ) {
+    public void setDeltaZ(double deltaZ) {
         this.deltaZ = deltaZ;
     }
 
-    public Integer getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
-    public Double getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(Double speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 
-    public Boolean isForce() {
+    public boolean isForce() {
         return force;
     }
 
-    public void setIsForce(Boolean force) {
+    public void setIsForce(boolean force) {
         this.force = force;
     }
 
@@ -147,12 +147,17 @@ public class ParticleConfiguration {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((particle == null) ? 0 : particle.hashCode());
-        result = prime * result + ((deltaX == null) ? 0 : deltaX.hashCode());
-        result = prime * result + ((deltaY == null) ? 0 : deltaY.hashCode());
-        result = prime * result + ((deltaZ == null) ? 0 : deltaZ.hashCode());
-        result = prime * result + ((amount == null) ? 0 : amount.hashCode());
-        result = prime * result + ((speed == null) ? 0 : speed.hashCode());
-        result = prime * result + ((force == null) ? 0 : force.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(deltaX);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(deltaY);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(deltaZ);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + amount;
+        temp = Double.doubleToLongBits(speed);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + (force ? 1231 : 1237);
         return result;
     }
 
@@ -170,42 +175,18 @@ public class ParticleConfiguration {
                 return false;
         } else if (!particle.equals(other.particle))
             return false;
-        if (deltaX == null) {
-            if (other.deltaX != null)
-                return false;
-        } else if (!deltaX.equals(other.deltaX))
+        if (Double.doubleToLongBits(deltaX) != Double.doubleToLongBits(other.deltaX))
             return false;
-        if (deltaY == null) {
-            if (other.deltaY != null)
-                return false;
-        } else if (!deltaY.equals(other.deltaY))
+        if (Double.doubleToLongBits(deltaY) != Double.doubleToLongBits(other.deltaY))
             return false;
-        if (deltaZ == null) {
-            if (other.deltaZ != null)
-                return false;
-        } else if (!deltaZ.equals(other.deltaZ))
+        if (Double.doubleToLongBits(deltaZ) != Double.doubleToLongBits(other.deltaZ))
             return false;
-        if (amount == null) {
-            if (other.amount != null)
-                return false;
-        } else if (!amount.equals(other.amount))
+        if (amount != other.amount)
             return false;
-        if (speed == null) {
-            if (other.speed != null)
-                return false;
-        } else if (!speed.equals(other.speed))
+        if (Double.doubleToLongBits(speed) != Double.doubleToLongBits(other.speed))
             return false;
-        if (force == null) {
-            if (other.force != null)
-                return false;
-        } else if (!force.equals(other.force))
+        if (force != other.force)
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ParticleConfiguration [particle=" + particle + ", deltaX=" + deltaX + ", deltaY=" + deltaY + ", deltaZ="
-                + deltaZ + ", amount=" + amount + ", speed=" + speed + ", force=" + force + "]";
     }
 }

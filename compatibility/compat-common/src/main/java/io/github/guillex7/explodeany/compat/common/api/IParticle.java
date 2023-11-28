@@ -13,10 +13,10 @@ public interface IParticle {
         private int red;
         private int green;
         private int blue;
-        private float size;
+        private double size;
         private Material material;
 
-        public ParticleData(String name, int red, int green, int blue, float size, Material material) {
+        public ParticleData(String name, int red, int green, int blue, double size, Material material) {
             this.name = name;
             this.red = red;
             this.green = green;
@@ -57,11 +57,11 @@ public interface IParticle {
             this.blue = blue;
         }
 
-        public float getSize() {
+        public double getSize() {
             return size;
         }
 
-        public void setSize(float size) {
+        public void setSize(double size) {
             this.size = size;
         }
 

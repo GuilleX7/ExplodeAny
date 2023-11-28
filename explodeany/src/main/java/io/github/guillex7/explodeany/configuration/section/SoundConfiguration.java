@@ -13,16 +13,16 @@ public class SoundConfiguration {
     private static final String PITCH_PATH = "Pitch";
 
     private Sound sound;
-    private Double volume;
-    private Double pitch;
+    private double volume;
+    private double pitch;
 
-    private SoundConfiguration(Sound sound, Double volume, Double pitch) {
+    private SoundConfiguration(Sound sound, double volume, double pitch) {
         this.sound = sound;
         this.volume = volume;
         this.pitch = pitch;
     }
 
-    public static SoundConfiguration of(Sound sound, Double volume, Double pitch) {
+    public static SoundConfiguration of(Sound sound, double volume, double pitch) {
         return new SoundConfiguration(sound, volume, pitch);
     }
 
@@ -47,8 +47,8 @@ public class SoundConfiguration {
 
     public void playAt(Location location) {
         location.getWorld().playSound(location, this.sound,
-                this.volume.floatValue(),
-                this.pitch.floatValue());
+                (float) this.volume,
+                (float) this.pitch);
     }
 
     public Sound getSound() {
@@ -59,19 +59,19 @@ public class SoundConfiguration {
         this.sound = sound;
     }
 
-    public Double getVolume() {
+    public double getVolume() {
         return volume;
     }
 
-    public void setVolume(Double volume) {
+    public void setVolume(double volume) {
         this.volume = volume;
     }
 
-    public Double getPitch() {
+    public double getPitch() {
         return pitch;
     }
 
-    public void setPitch(Double pitch) {
+    public void setPitch(double pitch) {
         this.pitch = pitch;
     }
 
@@ -79,9 +79,12 @@ public class SoundConfiguration {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((pitch == null) ? 0 : pitch.hashCode());
         result = prime * result + ((sound == null) ? 0 : sound.hashCode());
-        result = prime * result + ((volume == null) ? 0 : volume.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(volume);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(pitch);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
@@ -94,23 +97,12 @@ public class SoundConfiguration {
         if (getClass() != obj.getClass())
             return false;
         SoundConfiguration other = (SoundConfiguration) obj;
-        if (pitch == null) {
-            if (other.pitch != null)
-                return false;
-        } else if (!pitch.equals(other.pitch))
-            return false;
         if (sound != other.sound)
             return false;
-        if (volume == null) {
-            if (other.volume != null)
-                return false;
-        } else if (!volume.equals(other.volume))
+        if (Double.doubleToLongBits(volume) != Double.doubleToLongBits(other.volume))
+            return false;
+        if (Double.doubleToLongBits(pitch) != Double.doubleToLongBits(other.pitch))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "SoundConfiguration [sound=" + sound + ", volume=" + volume + ", pitch=" + pitch + "]";
     }
 }
