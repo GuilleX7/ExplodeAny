@@ -20,8 +20,6 @@ public abstract class RegistrableCommand {
         mapAllNames();
     }
 
-    public abstract String getName();
-
     public Set<String> getAliases() {
         return new HashSet<>();
     }
@@ -75,4 +73,6 @@ public abstract class RegistrableCommand {
     public boolean execute(CommandSender sender, String[] args) {
         return false;
     }
+
+    public abstract String getName();
 }

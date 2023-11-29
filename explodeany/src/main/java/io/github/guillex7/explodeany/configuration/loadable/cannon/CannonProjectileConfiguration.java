@@ -1,10 +1,11 @@
-package io.github.guillex7.explodeany.configuration.loadable;
+package io.github.guillex7.explodeany.configuration.loadable.cannon;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.projectile.ProjectileStorage;
+import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 
 public final class CannonProjectileConfiguration extends LoadableConfigurationSection<String> {
     public static String getConfigurationId() {
@@ -13,8 +14,8 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
 
     @Override
     public boolean shouldBeLoaded() {
-        Plugin externalPlugin = Bukkit.getPluginManager().getPlugin("Cannons");
-        return externalPlugin instanceof Cannons;
+        Plugin cannonsPlugin = Bukkit.getPluginManager().getPlugin("Cannons");
+        return cannonsPlugin instanceof Cannons;
     }
 
     @Override
@@ -33,7 +34,7 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
     }
 
     @Override
-    public boolean isEntityTypeValid(String entity) {
+    public boolean isEntityValid(String entity) {
         return entity != null && ProjectileStorage.getProjectile(entity) != null;
     }
 }

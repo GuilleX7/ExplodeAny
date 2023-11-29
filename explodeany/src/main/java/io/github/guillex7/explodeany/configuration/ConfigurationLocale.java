@@ -10,7 +10,7 @@ public enum ConfigurationLocale {
 
     private final String path;
 
-    ConfigurationLocale(String path) {
+    private ConfigurationLocale(String path) {
         this.path = path;
     }
 

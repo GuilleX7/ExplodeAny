@@ -210,11 +210,11 @@ public class ExplosionManager {
 
             if (materialConfiguration.shouldBeDropped()) {
                 targetBlock.breakNaturally();
+                // Hint: BlockListener will handle the block status removal.
             } else {
                 targetBlock.setType(Material.AIR);
+                blockDatabase.removeBlockStatus(targetBlock);
             }
-
-            blockDatabase.removeBlockStatus(targetBlock);
         }
     }
 

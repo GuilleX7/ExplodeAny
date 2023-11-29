@@ -58,6 +58,8 @@ Groups:
 # Allowed entity values are:
 # WITHER, ENDER_CRYSTAL, PRIMED_TNT, CREEPER, CHARGED_CREEPER,
 # FIREBALL, DRAGON_FIREBALL, SMALL_FIREBALL, WITHER_SKULL, CHARGED_WITHER_SKULL
+# Note that every property that appears here can be used in any other entity section, like
+# CannonProjectile, MagicEntity or CustomEntity.
 VanillaEntity:
     # Groups can also be used here (like this one).
     dangerousEntity:
@@ -243,6 +245,21 @@ MagicEntity:
         unbreakableBlocks:
             Damage: 25.0
 
+# This section allows to customize the behaviour of custom Vanilla entities explosions, which
+# are entities introduced by mods in Forge servers.
+# Any entity name can be used here, since there's no way to check if the entity exists.
+CustomEntity:
+  # From https://www.curseforge.com/minecraft/mc-mods/mrcrayfishs-gun-mod, for example.
+  CGM_MISSILE:
+    Properties:
+      # We need to specify the ExplosionRadius manually, otherwise a warning will be thrown and
+      # the entity won't be taken into account, since there's no way for ExplodeAny to know it.
+      ExplosionRadius: 4.0
+    Materials:
+      Obsidian:
+        Damage: 50.0
+
+
 # All colors and modifiers are available for locale messages.
 # For ChecktoolUse and ChecktoolNotHandled, you can use some variables:
 #   %MATERIAL% represents the clicked block's type,
@@ -274,6 +291,7 @@ Locale:
     DisabledInThisWorld: "This functionality is disabled in this world"
     Reloaded: Reloaded successfully!
 
+# Prefix for all locale messages
 LocalePrefix: "[ExplodeAny] "
 
 # Use this section to disable the plugin in certain worlds

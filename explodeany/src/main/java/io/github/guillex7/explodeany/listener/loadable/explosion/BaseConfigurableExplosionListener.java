@@ -3,10 +3,10 @@ package io.github.guillex7.explodeany.listener.loadable.explosion;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.listener.loadable.LoadableListener;
 
-public abstract class BaseExplosionListener implements LoadableListener {
+public abstract class BaseConfigurableExplosionListener implements LoadableListener {
     protected LoadableConfigurationSection<?> configuration;
 
-    protected BaseExplosionListener() {
+    protected BaseConfigurableExplosionListener() {
         this.configuration = this.getConfiguration();
     }
 

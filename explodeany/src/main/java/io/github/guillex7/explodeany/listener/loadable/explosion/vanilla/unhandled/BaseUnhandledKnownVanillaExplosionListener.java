@@ -1,9 +1,10 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion;
+package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled;
 
 import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
@@ -11,50 +12,40 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
-import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
+import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.BaseUnhandledVanillaExplosionListener;
 
-public abstract class BaseVanillaExplosionListener extends BaseExplosionListener {
+public abstract class BaseUnhandledKnownVanillaExplosionListener extends BaseUnhandledVanillaExplosionListener {
+    // TODO: this logic should be extracted to BaseUnhandledVanillaExplosionListener
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onEntityExplode(EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
 
+        Entity entity = event.getEntity();
         EntityType entityType = event.getEntityType();
         String entityTypeName = entityType.toString();
-        boolean isCharged = false;
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = null;
-
+        
         // Special cases
-        if (event.getEntityType().equals(EntityType.CREEPER)) {
-            Creeper creeper = (Creeper) event.getEntity();
-            if (creeper.isPowered()) {
-                entityTypeName = "CHARGED_".concat(entityTypeName);
-                isCharged = true;
-            }
-        } else if (event.getEntityType().equals(EntityType.WITHER_SKULL)) {
-            WitherSkull witherSkull = (WitherSkull) event.getEntity();
-            if (witherSkull.isCharged()) {
-                entityTypeName = "CHARGED_".concat(entityTypeName);
-                isCharged = true;
-            }
+        boolean isCharged = false;
+        if ((entityType.equals(EntityType.CREEPER) && ((Creeper) entity).isPowered()) ||
+                (entityType.equals(EntityType.WITHER_SKULL) && ((WitherSkull) entity).isCharged())) {
+            entityTypeName = "CHARGED_".concat(entityTypeName);
+            isCharged = true;
         }
 
-        materialConfigurations = this.configuration.getEntityMaterialConfigurations().get(entityTypeName);
-        if (materialConfigurations == null) {
-            return;
-        }
-
+        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+                .getEntityMaterialConfigurations().get(entityTypeName);
         EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(entityTypeName);
-
         double explosionRadius = CompatibilityManager.getInstance().getApi().getExplosionUtils()
                 .getExplosionRadiusAndPower(entityType, isCharged);
 
-        if (explosionRadius == 0d) {
+        if (materialConfigurations == null || entityConfiguration == null || explosionRadius == 0d) {
             return;
         }
 
@@ -71,10 +62,9 @@ public abstract class BaseVanillaExplosionListener extends BaseExplosionListener
         EntityExplodeEvent.getHandlerList().unregister(this);
     }
 
+    @Override
     protected boolean isEventHandled(EntityExplodeEvent event) {
-        return event.getEntity() != null
-                && !ExplosionManager.getInstance().isEntitySpawnedByExplosionManager(event.getEntity())
-                && !ConfigurationManager.getInstance().getDisabledWorlds()
-                        .contains(event.getLocation().getWorld().getName());
+        return super.isEventHandled(event)
+                && ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().toString());
     }
 }

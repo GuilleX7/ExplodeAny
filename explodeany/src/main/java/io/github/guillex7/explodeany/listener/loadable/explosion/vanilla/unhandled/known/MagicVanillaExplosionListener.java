@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion;
+package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.known;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -9,9 +9,10 @@ import io.github.guillex7.explodeany.compat.common.api.IPersistentStorage.MetaPe
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
-import io.github.guillex7.explodeany.configuration.loadable.MagicEntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.MagicVanillaEntityConfiguration;
+import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.BaseUnhandledKnownVanillaExplosionListener;
 
-public class MagicExplosionListener extends BaseVanillaExplosionListener {
+public class MagicVanillaExplosionListener extends BaseUnhandledKnownVanillaExplosionListener {
     private static final Plugin MAGIC_SPAWNED_NAMESPACE = Bukkit.getPluginManager().getPlugin("Magic");
     private static final String MAGIC_SPAWNED_KEY = "magicspawned";
 
@@ -38,6 +39,6 @@ public class MagicExplosionListener extends BaseVanillaExplosionListener {
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredEntityConfiguration(MagicEntityConfiguration.getConfigurationId());
+                .getRegisteredEntityConfiguration(MagicVanillaEntityConfiguration.getConfigurationId());
     }
 }

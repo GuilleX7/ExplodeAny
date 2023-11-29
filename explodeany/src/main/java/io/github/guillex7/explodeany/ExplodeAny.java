@@ -11,16 +11,18 @@ import io.github.guillex7.explodeany.command.registrable.CommandEany;
 import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.CannonProjectileConfiguration;
-import io.github.guillex7.explodeany.configuration.loadable.MagicEntityConfiguration;
-import io.github.guillex7.explodeany.configuration.loadable.VanillaEntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.cannon.CannonProjectileConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.MagicVanillaEntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.CustomVanillaEntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.ExplodingVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.listener.ListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.BlockListener;
 import io.github.guillex7.explodeany.listener.loadable.EntityListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.CannonExplosionListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.EanyExplosionListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.MagicExplosionListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.VanillaExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.cannon.CannonExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.HandledVanillaExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.UnhandledUnknownVanillaExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.known.ExplodingVanillaExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.known.MagicVanillaExplosionListener;
 
 public class ExplodeAny extends JavaPlugin {
     private static final String DATABASE_FILENAME = "blockDatabase.json";
@@ -77,9 +79,10 @@ public class ExplodeAny extends JavaPlugin {
 
     public void loadConfiguration() {
         this.configurationManager.loadConfiguration();
-        this.configurationManager.registerEntityConfiguration(new VanillaEntityConfiguration());
+        this.configurationManager.registerEntityConfiguration(new ExplodingVanillaEntityConfiguration());
         this.configurationManager.registerEntityConfiguration(new CannonProjectileConfiguration());
-        this.configurationManager.registerEntityConfiguration(new MagicEntityConfiguration());
+        this.configurationManager.registerEntityConfiguration(new MagicVanillaEntityConfiguration());
+        this.configurationManager.registerEntityConfiguration(new CustomVanillaEntityConfiguration());
         this.configurationManager.loadAllEntityConfigurations();
     }
 
@@ -94,10 +97,11 @@ public class ExplodeAny extends JavaPlugin {
     public void registerListeners() {
         this.listenerManager.registerListener(new BlockListener());
         this.listenerManager.registerListener(new EntityListener());
-        this.listenerManager.registerListener(new EanyExplosionListener());
-        this.listenerManager.registerListener(new VanillaExplosionListener());
+        this.listenerManager.registerListener(new HandledVanillaExplosionListener());
+        this.listenerManager.registerListener(new ExplodingVanillaExplosionListener());
         this.listenerManager.registerListener(new CannonExplosionListener());
-        this.listenerManager.registerListener(new MagicExplosionListener());
+        this.listenerManager.registerListener(new MagicVanillaExplosionListener());
+        this.listenerManager.registerListener(new UnhandledUnknownVanillaExplosionListener());
         this.listenerManager.loadAllListeners();
     }
 

@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion;
+package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla;
 
 import java.util.Map;
 
@@ -11,10 +11,10 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.listener.loadable.LoadableListener;
 
-public class EanyExplosionListener implements LoadableListener {
+public class HandledVanillaExplosionListener implements LoadableListener {
     @Override
     public String getName() {
-        return "ExplodeAny explosion manager";
+        return "Overridden explosions manager";
     }
 
     @Override

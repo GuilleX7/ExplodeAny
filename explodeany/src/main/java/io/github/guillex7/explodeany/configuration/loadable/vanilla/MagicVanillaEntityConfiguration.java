@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.configuration.loadable;
+package io.github.guillex7.explodeany.configuration.loadable.vanilla;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -7,8 +7,9 @@ import com.elmakers.mine.bukkit.api.magic.MagicAPI;
 
 import io.github.guillex7.explodeany.compat.common.Version;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
+import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
-public class MagicEntityConfiguration extends BaseVanillaEntityConfiguration {
+public class MagicVanillaEntityConfiguration extends BaseVanillaEntityConfiguration {
     private static final Version MINIMUM_SUPPORTED_BUKKIT_VERSION = new Version(1, 16);
 
     public static String getConfigurationId() {
@@ -17,14 +18,19 @@ public class MagicEntityConfiguration extends BaseVanillaEntityConfiguration {
 
     @Override
     public boolean shouldBeLoaded() {
-        Plugin externalPlugin = Bukkit.getPluginManager().getPlugin("Magic");
-        return externalPlugin instanceof MagicAPI
+        Plugin magicPlugin = Bukkit.getPluginManager().getPlugin("Magic");
+        return magicPlugin instanceof MagicAPI
                 && CompatibilityManager.getInstance().getApi().getMinimumSupportedBukkitVersion()
                         .isEqualOrAfter(MINIMUM_SUPPORTED_BUKKIT_VERSION);
     }
 
     @Override
     public String getSectionPath() {
-        return MagicEntityConfiguration.getConfigurationId();
+        return MagicVanillaEntityConfiguration.getConfigurationId();
+    }
+
+    @Override
+    public boolean isEntityValid(String entity) {
+        return super.isEntityValid(entity) && ExplodingVanillaEntity.isEntityNameValid(entity);
     }
 }

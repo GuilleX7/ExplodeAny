@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion;
+package io.github.guillex7.explodeany.listener.loadable.explosion.cannon;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -12,13 +12,14 @@ import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.projectile.Projectile;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.CannonProjectileConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
+import io.github.guillex7.explodeany.configuration.loadable.cannon.CannonProjectileConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
+import io.github.guillex7.explodeany.listener.loadable.explosion.BaseConfigurableExplosionListener;
 
-public final class CannonExplosionListener extends BaseExplosionListener {
+public final class CannonExplosionListener extends BaseConfigurableExplosionListener {
     @Override
     public String getName() {
         return "Cannons explosions";

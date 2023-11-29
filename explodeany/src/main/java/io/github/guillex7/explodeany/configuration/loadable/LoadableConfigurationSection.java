@@ -58,7 +58,7 @@ public abstract class LoadableConfigurationSection<T> {
             boolean definitionHasPriority = true;
 
             T entity = getEntityFromName(entityName);
-            if (isEntityTypeValid(entity)) {
+            if (isEntityValid(entity)) {
                 fetchedEntities.add(entity);
             } else {
                 definitionHasPriority = false;
@@ -66,7 +66,7 @@ public abstract class LoadableConfigurationSection<T> {
                 if (entityGroup != null) {
                     for (String entityNameInGroup : entityGroup) {
                         T entityInGroup = getEntityFromName(entityNameInGroup);
-                        if (isEntityTypeValid(entityInGroup)) {
+                        if (isEntityValid(entityInGroup)) {
                             fetchedEntities.add(entityInGroup);
                         }
                     }
@@ -103,14 +103,18 @@ public abstract class LoadableConfigurationSection<T> {
             }
 
             if (!hasSections) {
+                // Hint: if there are no sections, then assume the whole section is the
+                // materials section
                 materialConfigurations = fetchMaterials(entitySection);
             }
 
             for (T fetchedEntity : fetchedEntities) {
-                putAndMergeEntityConfigurations(fetchedEntity, entityConfiguration, definitionHasPriority);
-                putAndMergeEntityMaterialConfigurations(fetchedEntity,
-                        new HashMap<>(materialConfigurations),
-                        definitionHasPriority);
+                if (areEntityAndMaterialConfigurationsValid(fetchedEntity, entityConfiguration,
+                        materialConfigurations)) {
+                    putAndMergeEntityConfigurations(fetchedEntity, entityConfiguration, definitionHasPriority);
+                    putAndMergeEntityMaterialConfigurations(fetchedEntity, materialConfigurations,
+                            definitionHasPriority);
+                }
             }
         }
     }
@@ -166,13 +170,13 @@ public abstract class LoadableConfigurationSection<T> {
 
     private final void putAndMergeEntityMaterialConfigurations(T entity,
             Map<Material, EntityMaterialConfiguration> materialConfigurations, boolean definitionHasPriority) {
-        if (!entityMaterialConfigurations.containsKey(entity)) {
-            entityMaterialConfigurations.put(entity, materialConfigurations);
+        if (!getEntityMaterialConfigurations().containsKey(entity)) {
+            getEntityMaterialConfigurations().put(entity, materialConfigurations);
         } else if (definitionHasPriority) {
-            entityMaterialConfigurations.get(entity).putAll(materialConfigurations);
+            getEntityMaterialConfigurations().get(entity).putAll(materialConfigurations);
         } else {
             for (Entry<Material, EntityMaterialConfiguration> entry : materialConfigurations.entrySet()) {
-                entityMaterialConfigurations.get(entity).putIfAbsent(entry.getKey(), entry.getValue());
+                getEntityMaterialConfigurations().get(entity).putIfAbsent(entry.getKey(), entry.getValue());
             }
         }
     }
@@ -196,7 +200,7 @@ public abstract class LoadableConfigurationSection<T> {
         }
     }
 
-    private final Material getMaterialFromName(String name) {
+    protected Material getMaterialFromName(String name) {
         Material material;
         try {
             material = Material.valueOf(name.toUpperCase());
@@ -206,8 +210,13 @@ public abstract class LoadableConfigurationSection<T> {
         return material;
     }
 
-    private final boolean isMaterialValid(Material material) {
+    protected boolean isMaterialValid(Material material) {
         return material != null && !material.equals(Material.WATER) && !material.equals(Material.LAVA);
+    }
+
+    protected boolean areEntityAndMaterialConfigurationsValid(T entity, EntityConfiguration entityConfiguration,
+            Map<Material, EntityMaterialConfiguration> materialConfigurations) {
+        return true;
     }
 
     public abstract boolean shouldBeLoaded();
@@ -218,5 +227,6 @@ public abstract class LoadableConfigurationSection<T> {
 
     public abstract T getEntityFromName(String name);
 
-    public abstract boolean isEntityTypeValid(T entity);
+    public abstract boolean isEntityValid(T entity);
+
 }

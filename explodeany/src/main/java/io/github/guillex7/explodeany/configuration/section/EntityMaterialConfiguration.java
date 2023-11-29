@@ -41,7 +41,7 @@ public class EntityMaterialConfiguration {
         return EntityMaterialConfiguration.of(
                 MathUtils.ensureMin(section.getDouble(DAMAGE_PATH, defaults.getDamage()), 0.0d),
                 MathUtils.ensureRange(section.getDouble(DROP_CHANCE_PATH, defaults.getDropChance()), 100.0d,
-                        0.0d) / 100.0,
+                        0.0d) / 100.0d,
                 MathUtils.ensureRange(
                         section.getDouble(DISTANCE_ATTENUATION_FACTOR_PATH, defaults.getDistanceAttenuationFactor()),
                         1.0d, 0.0d),
@@ -81,7 +81,7 @@ public class EntityMaterialConfiguration {
     }
 
     public boolean shouldBeDropped() {
-        return Math.random() <= getDropChance();
+        return Math.random() < getDropChance();
     }
 
     public void setDropChance(double dropChance) {
