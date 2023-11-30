@@ -11,10 +11,10 @@ import io.github.guillex7.explodeany.listener.loadable.LoadableListener;
 public class ListenerManager {
     private static ListenerManager instance;
 
-    private Map<String, LoadableListener> registeredListeners;
+    private final Map<String, LoadableListener> registeredListeners;
 
     private ListenerManager() {
-        registeredListeners = new HashMap<>();
+        this.registeredListeners = new HashMap<>();
     }
 
     public static ListenerManager getInstance() {
@@ -29,23 +29,23 @@ public class ListenerManager {
     }
 
     public void registerListener(LoadableListener explosionListener) {
-        getRegisteredListeners().put(explosionListener.getName(), explosionListener);
+        this.getRegisteredListeners().put(explosionListener.getName(), explosionListener);
     }
 
     public void loadAllListeners() {
-        for (LoadableListener listener : getRegisteredListeners().values()) {
+        for (LoadableListener listener : this.getRegisteredListeners().values()) {
             if (!listener.shouldBeLoaded()) {
                 continue;
             }
             Bukkit.getServer().getPluginManager().registerEvents(listener, ExplodeAny.getInstance());
             if (listener.isAnnounceable()) {
-                getPlugin().getLogger().info(String.format("Enabled support for %s", listener.getName()));
+                this.getPlugin().getLogger().info(String.format("Enabled support for %s", listener.getName()));
             }
         }
     }
 
     public void unloadAllListeners() {
-        for (LoadableListener explosionListener : getRegisteredListeners().values()) {
+        for (LoadableListener explosionListener : this.getRegisteredListeners().values()) {
             if (explosionListener.shouldBeLoaded()) {
                 explosionListener.unload();
             }
@@ -53,7 +53,7 @@ public class ListenerManager {
     }
 
     public void unregisterAllListeners() {
-        getRegisteredListeners().clear();
+        this.getRegisteredListeners().clear();
     }
 
     private ExplodeAny getPlugin() {

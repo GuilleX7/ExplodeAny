@@ -29,12 +29,12 @@ public final class ConfigurationManager {
 
     private static ConfigurationManager instance;
 
-    private Map<String, LoadableConfigurationSection<?>> registeredEntityConfigurations;
-    private Set<Material> handledMaterials;
+    private final Map<String, LoadableConfigurationSection<?>> registeredEntityConfigurations;
+    private final Set<Material> handledMaterials;
 
     private ConfigurationManager() {
-        registeredEntityConfigurations = new HashMap<>();
-        handledMaterials = new HashSet<>();
+        this.registeredEntityConfigurations = new HashMap<>();
+        this.handledMaterials = new HashSet<>();
     }
 
     public static ConfigurationManager getInstance() {
@@ -53,7 +53,7 @@ public final class ConfigurationManager {
     }
 
     public LoadableConfigurationSection<?> getRegisteredEntityConfiguration(String sectionPath) {
-        return getRegisteredEntityConfigurations().get(sectionPath);
+        return this.getRegisteredEntityConfigurations().get(sectionPath);
     }
 
     public Set<Material> getHandledMaterials() {
@@ -61,35 +61,35 @@ public final class ConfigurationManager {
     }
 
     public boolean handlesBlock(Block block) {
-        return getHandledMaterials().contains(block.getType());
+        return this.getHandledMaterials().contains(block.getType());
     }
 
     public boolean doUseBlockDatabase() {
-        return getPlugin().getConfig().getBoolean(USE_BLOCK_DATABASE_ITEM);
+        return this.getPlugin().getConfig().getBoolean(USE_BLOCK_DATABASE_ITEM);
     }
 
     public boolean doCheckBlockDatabaseAtStartup() {
-        return getPlugin().getConfig().getBoolean(CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
+        return this.getPlugin().getConfig().getBoolean(CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
     }
 
     public double getBlockDurability() {
-        return MathUtils.ensureMin(getPlugin().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
+        return MathUtils.ensureMin(this.getPlugin().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
     }
 
     public boolean doEnableMetrics() {
-        return getPlugin().getConfig().getBoolean(ENABLE_METRICS);
+        return this.getPlugin().getConfig().getBoolean(ENABLE_METRICS);
     }
 
     public String getLocalePrefix() {
-        return getPlugin().getConfig().getString(LOCALE_PREFIX_ITEM);
+        return this.getPlugin().getConfig().getString(LOCALE_PREFIX_ITEM);
     }
 
     public Set<String> getDisabledWorlds() {
-        return new HashSet<>(getPlugin().getConfig().getStringList(DISABLED_WORLDS_ITEM));
+        return new HashSet<>(this.getPlugin().getConfig().getStringList(DISABLED_WORLDS_ITEM));
     }
 
     public Map<String, List<String>> getGroups() {
-        ConfigurationSection groupsSection = getPlugin().getConfig().getConfigurationSection(GROUPS_SECTION);
+        ConfigurationSection groupsSection = this.getPlugin().getConfig().getConfigurationSection(GROUPS_SECTION);
         Map<String, List<String>> groups = new HashMap<>();
         for (String groupName : groupsSection.getKeys(false)) {
             groups.put(groupName, groupsSection.getStringList(groupName));
@@ -98,17 +98,17 @@ public final class ConfigurationManager {
     }
 
     public void loadConfiguration() {
-        getPlugin().saveDefaultConfig();
-        getPlugin().reloadConfig();
-        getPlugin().getConfig().options().copyDefaults(true);
-        getPlugin().saveConfig();
-        getPlugin().saveResource("exampleConfig.yml", true);
-        parseLocale();
+        this.getPlugin().saveDefaultConfig();
+        this.getPlugin().reloadConfig();
+        this.getPlugin().getConfig().options().copyDefaults(true);
+        this.getPlugin().saveConfig();
+        this.getPlugin().saveResource("exampleConfig.yml", true);
+        this.parseLocale();
     }
 
     private void parseLocale() {
-        String localePrefix = getLocalePrefix();
-        ConfigurationSection localeSection = getPlugin().getConfig().getConfigurationSection(LOCALE_SECTION);
+        String localePrefix = this.getLocalePrefix();
+        ConfigurationSection localeSection = this.getPlugin().getConfig().getConfigurationSection(LOCALE_SECTION);
         if (localeSection != null) {
             for (String path : localeSection.getValues(false).keySet()) {
                 localeSection.set(path,
@@ -118,30 +118,30 @@ public final class ConfigurationManager {
     }
 
     public String getLocale(ConfigurationLocale locale) {
-        return getPlugin().getConfig().getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
+        return this.getPlugin().getConfig().getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
     }
 
     public void registerEntityConfiguration(LoadableConfigurationSection<?> entityConfiguration) {
-        getRegisteredEntityConfigurations().put(entityConfiguration.getSectionPath(), entityConfiguration);
+        this.getRegisteredEntityConfigurations().put(entityConfiguration.getSectionPath(), entityConfiguration);
     }
 
     public void loadAllEntityConfigurations() {
-        FileConfiguration config = getPlugin().getConfig();
+        FileConfiguration config = this.getPlugin().getConfig();
 
-        for (LoadableConfigurationSection<?> entityConfiguration : getRegisteredEntityConfigurations().values()) {
+        for (LoadableConfigurationSection<?> entityConfiguration : this.getRegisteredEntityConfigurations().values()) {
             if (entityConfiguration.shouldBeLoaded()) {
                 entityConfiguration.clearEntityMaterialConfigurations();
                 entityConfiguration.fetchEntityMaterialConfigurations(config);
                 for (Map<Material, EntityMaterialConfiguration> map : entityConfiguration
                         .getEntityMaterialConfigurations().values()) {
-                    getHandledMaterials().addAll(map.keySet());
+                    this.getHandledMaterials().addAll(map.keySet());
                 }
             }
         }
     }
 
     public void unloadAllEntityConfigurations() {
-        getRegisteredEntityConfigurations().clear();
-        getHandledMaterials().clear();
+        this.getRegisteredEntityConfigurations().clear();
+        this.getHandledMaterials().clear();
     }
 }

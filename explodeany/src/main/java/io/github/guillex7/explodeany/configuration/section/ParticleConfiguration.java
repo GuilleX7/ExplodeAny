@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.guillex7.explodeany.compat.common.api.IParticle;
-import io.github.guillex7.explodeany.compat.common.api.IParticle.ParticleData;
+import io.github.guillex7.explodeany.compat.common.data.ParticleData;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.util.MathUtils;
 

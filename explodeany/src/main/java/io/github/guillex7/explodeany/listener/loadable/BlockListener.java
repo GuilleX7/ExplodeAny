@@ -7,7 +7,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import io.github.guillex7.explodeany.block.BlockDatabase;
 
 public final class BlockListener implements LoadableListener {
-    private BlockDatabase blockDatabase;
+    private final BlockDatabase blockDatabase;
 
     public BlockListener() {
         this.blockDatabase = BlockDatabase.getInstance();

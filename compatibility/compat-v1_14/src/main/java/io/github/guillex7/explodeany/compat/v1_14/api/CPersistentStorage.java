@@ -6,6 +6,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import io.github.guillex7.explodeany.compat.common.api.IPersistentStorage;
+import io.github.guillex7.explodeany.compat.common.data.MetaPersistentDataType;
 
 public class CPersistentStorage implements IPersistentStorage {
     protected PersistentDataContainer persistentDataContainer;
@@ -22,7 +23,7 @@ public class CPersistentStorage implements IPersistentStorage {
     @Override
     public boolean has(Plugin namespace, String key, MetaPersistentDataType metaDataType) {
         return this.persistentDataContainer.has(new NamespacedKey(namespace, key),
-                getPersistentDataTypeFromMeta(metaDataType));
+                this.getPersistentDataTypeFromMeta(metaDataType));
     }
 
     public PersistentDataType<?, ?> getPersistentDataTypeFromMeta(MetaPersistentDataType meta) {

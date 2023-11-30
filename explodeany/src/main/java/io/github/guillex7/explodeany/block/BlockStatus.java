@@ -28,20 +28,20 @@ public class BlockStatus {
     }
 
     public boolean isCongruentWith(Block block) {
-        return block.getType().equals(getMaterial());
+        return block.getType().equals(this.getMaterial());
     }
 
     public boolean damage(double damage) {
-        setDurability(getDurability() - damage);
-        return shouldBreak();
+        this.setDurability(this.getDurability() - damage);
+        return this.shouldBreak();
     }
 
     public boolean shouldBreak() {
-        return getDurability() <= 0.0;
+        return this.getDurability() <= 0.0;
     }
 
     public void sanitize() {
-        setDurability(MathUtils.ensureMax(getDurability(), BlockStatus.getDefaultBlockDurability()));
+        this.setDurability(MathUtils.ensureMax(this.getDurability(), BlockStatus.getDefaultBlockDurability()));
     }
 
     public Material getMaterial() {
@@ -85,10 +85,5 @@ public class BlockStatus {
         if (material != other.material)
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BlockStatus [material=" + material + ", durability=" + durability + "]";
     }
 }

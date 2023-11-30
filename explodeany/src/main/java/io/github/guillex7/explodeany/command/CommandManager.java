@@ -19,10 +19,10 @@ import io.github.guillex7.explodeany.util.MessageFormatter;
 public class CommandManager implements TabExecutor {
     private static CommandManager instance;
 
-    private Map<String, RegistrableCommand> registeredCommands;
+    private final Map<String, RegistrableCommand> registeredCommands;
 
     private CommandManager() {
-        registeredCommands = new HashMap<>();
+        this.registeredCommands = new HashMap<>();
     }
 
     public static CommandManager getInstance() {
@@ -37,16 +37,16 @@ public class CommandManager implements TabExecutor {
     }
 
     public void registerCommand(RegistrableCommand command) {
-        registeredCommands.put(command.getName(), command);
+        this.registeredCommands.put(command.getName(), command);
     }
 
     public void unregisterAllCommands() {
-        registeredCommands.clear();
+        this.registeredCommands.clear();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        RegistrableCommand rootCommand = getRegisteredCommands().get(command.getName());
+        RegistrableCommand rootCommand = this.getRegisteredCommands().get(command.getName());
         if (rootCommand == null) {
             return true;
         }
@@ -87,7 +87,7 @@ public class CommandManager implements TabExecutor {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> autocompletion = new ArrayList<>();
 
-        RegistrableCommand rootCommand = getRegisteredCommands().get(command.getName());
+        RegistrableCommand rootCommand = this.getRegisteredCommands().get(command.getName());
         if (rootCommand == null) {
             return autocompletion;
         }

@@ -19,10 +19,10 @@ import io.github.guillex7.explodeany.util.ItemStackUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public final class EntityListener implements LoadableListener {
-    private ChecktoolManager checktoolManager;
-    private ConfigurationManager configurationManager;
-    private BlockDatabase blockDatabase;
-    private CompatibilityManager compatibilityManager;
+    private final ChecktoolManager checktoolManager;
+    private final ConfigurationManager configurationManager;
+    private final BlockDatabase blockDatabase;
+    private final CompatibilityManager compatibilityManager;
 
     public EntityListener() {
         this.checktoolManager = ChecktoolManager.getInstance();

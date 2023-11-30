@@ -1,6 +1,6 @@
 package io.github.guillex7.explodeany.compat.v1_9.api;
 
-import io.github.guillex7.explodeany.compat.common.api.IParticle.ParticleData;
+import io.github.guillex7.explodeany.compat.common.data.ParticleData;
 import io.github.guillex7.explodeany.compat.common.api.IParticleUtils;
 
 public class CParticleUtils implements IParticleUtils {

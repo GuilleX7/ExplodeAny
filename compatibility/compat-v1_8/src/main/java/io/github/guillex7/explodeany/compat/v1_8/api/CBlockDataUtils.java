@@ -7,6 +7,7 @@ import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
 public class CBlockDataUtils implements IBlockDataUtils {
     @Override
     public boolean isBlockWaterlogged(Block block) {
+        // Not supported
         return false;
     }
 

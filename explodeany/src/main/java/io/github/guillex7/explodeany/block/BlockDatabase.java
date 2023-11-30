@@ -31,7 +31,7 @@ public class BlockDatabase {
     }
 
     private BlockDatabase() {
-        database = new HashMap<>();
+        this.database = new HashMap<>();
     }
 
     public static BlockDatabase getInstance() {
@@ -54,32 +54,32 @@ public class BlockDatabase {
     }
 
     public BlockStatus getBlockStatus(Block block) {
-        return getBlockStatus(block, true);
+        return this.getBlockStatus(block, true);
     }
 
     public BlockStatus getBlockStatus(Block block, boolean persistIfAbsentOrIncongruent) {
         BlockLocation blockLocation = BlockLocation.fromBlock(block);
-        BlockStatus blockStatus = getDatabase().get(blockLocation);
+        BlockStatus blockStatus = this.getDatabase().get(blockLocation);
         if (blockStatus == null || !blockStatus.isCongruentWith(block)) {
             blockStatus = BlockStatus.defaultForBlock(block);
             if (persistIfAbsentOrIncongruent) {
-                getDatabase().put(blockLocation, blockStatus);
+                this.getDatabase().put(blockLocation, blockStatus);
             }
         }
         return blockStatus;
     }
 
     public void removeBlockStatus(Block block) {
-        getDatabase().remove(BlockLocation.fromBlock(block));
+        this.getDatabase().remove(BlockLocation.fromBlock(block));
     }
 
     public void loadFromFile(File databaseFile) {
         if (!databaseFile.exists() || !databaseFile.canRead()) {
-            getPlugin().getLogger().info("Database doesn't exist yet, will create a new database");
+            this.getPlugin().getLogger().info("Database doesn't exist yet, will create a new database");
             return;
         }
 
-        setDatabase(deserializeDatabaseFile(databaseFile));
+        this.setDatabase(this.deserializeDatabaseFile(databaseFile));
     }
 
     private Map<BlockLocation, BlockStatus> deserializeDatabaseFile(File databaseFile) {
@@ -96,11 +96,11 @@ public class BlockDatabase {
             if (loadedDatabase == null) {
                 throw new BlockDatabaseException();
             } else {
-                getPlugin().getLogger().info("Database loaded successfully");
+                this.getPlugin().getLogger().info("Database loaded successfully");
             }
         } catch (Exception e) {
             loadedDatabase = new HashMap<>();
-            getPlugin().getLogger().warning("Couldn't load database, creating an empty one");
+            this.getPlugin().getLogger().warning("Couldn't load database, creating an empty one");
         }
 
         return loadedDatabase;
@@ -111,12 +111,12 @@ public class BlockDatabase {
             try {
                 databaseFile.createNewFile();
             } catch (IOException e) {
-                getPlugin().getLogger().warning("Couldn't create a new database file! Database won't be saved");
+                this.getPlugin().getLogger().warning("Couldn't create a new database file! Database won't be saved");
                 return;
             }
         }
 
-        serializeDatabaseFile(databaseFile, getDatabase());
+        this.serializeDatabaseFile(databaseFile, this.getDatabase());
     }
 
     private void serializeDatabaseFile(File databaseFile, Map<BlockLocation, BlockStatus> database) {
@@ -127,17 +127,17 @@ public class BlockDatabase {
             gsonBuilder.enableComplexMapKeySerialization();
             Gson gson = gsonBuilder.create();
             fileWriter.write(gson.toJson(database, getDatabaseTypeToken().getType()));
-            getPlugin().getLogger().info("Database saved successfully");
+            this.getPlugin().getLogger().info("Database saved successfully");
         } catch (Exception e) {
-            getPlugin().getLogger().warning("Couldn't save database");
+            this.getPlugin().getLogger().warning("Couldn't save database");
         }
     }
 
     public void sanitize() {
-        Iterator<Entry<BlockLocation, BlockStatus>> iterator = getDatabase().entrySet().iterator();
+        Iterator<Entry<BlockLocation, BlockStatus>> iterator = this.getDatabase().entrySet().iterator();
         while (iterator.hasNext()) {
             Entry<BlockLocation, BlockStatus> entry = iterator.next();
-            if (isEntryNotSane(entry, ConfigurationManager.getInstance().doCheckBlockDatabaseAtStartup())) {
+            if (this.isEntryNotSane(entry, ConfigurationManager.getInstance().doCheckBlockDatabaseAtStartup())) {
                 iterator.remove();
             }
         }

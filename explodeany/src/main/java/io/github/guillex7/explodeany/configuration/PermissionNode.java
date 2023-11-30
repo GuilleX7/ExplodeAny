@@ -5,7 +5,7 @@ public enum PermissionNode {
     CHECKTOOL_GIVE("explodeany.checktool.give"), CHECKTOOL_SET("explodeany.checktool.set"),
     CHECKTOOL_RESET("explodeany.checktool.reset"), RELOAD("explodeany.reload");
 
-    private String key;
+    private final String key;
 
     private PermissionNode(String key) {
         this.key = key;

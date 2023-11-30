@@ -7,28 +7,29 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import io.github.guillex7.explodeany.compat.common.api.IParticle;
+import io.github.guillex7.explodeany.compat.common.data.ParticleData;
 
 public class CParticle implements IParticle {
     protected Particle particle;
     protected Object extra;
 
     public CParticle(ParticleData particleData) {
-        this.particle = getParticleFromParticleData(particleData);
+        this.particle = this.getParticleFromParticleData(particleData);
         if (this.particle != null) {
-            this.extra = getExtraFromParticleData(this.particle, particleData);
-            if (isExtraRequiredForParticle(this.particle) && this.extra == null) {
+            this.extra = this.getExtraFromParticleData(this.particle, particleData);
+            if (this.isExtraRequiredForParticle(this.particle) && this.extra == null) {
                 this.particle = null;
             }
         }
     }
 
     protected Object getExtraFromParticleData(Particle particle, ParticleData particleData) {
-        Class<?> dataTypeClazz = getExtraTypeDataForParticle(particle);
+        Class<?> dataTypeClazz = this.getExtraTypeDataForParticle(particle);
 
         if (ItemStack.class.equals(dataTypeClazz)) {
-            return getItemStackFromMaterial(particleData.getMaterial());
+            return this.getItemStackFromMaterial(particleData.getMaterial());
         } else if (MaterialData.class.equals(dataTypeClazz)) {
-            return getMaterialDataFromMaterial(particleData.getMaterial());
+            return this.getMaterialDataFromMaterial(particleData.getMaterial());
         } else {
             return null;
         }
@@ -39,7 +40,7 @@ public class CParticle implements IParticle {
     }
 
     protected boolean isExtraRequiredForParticle(Particle particle) {
-        return !Void.class.equals(getExtraTypeDataForParticle(particle));
+        return !Void.class.equals(this.getExtraTypeDataForParticle(particle));
     }
 
     protected Particle getParticleFromParticleData(ParticleData particleData) {

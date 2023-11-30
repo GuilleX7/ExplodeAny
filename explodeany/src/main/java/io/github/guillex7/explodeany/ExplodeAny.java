@@ -45,26 +45,26 @@ public class ExplodeAny extends JavaPlugin {
         this.listenerManager = ListenerManager.getInstance();
         this.commandManager = CommandManager.getInstance();
 
-        getLogger().info(
-                String.format("%s v%s is loading now!", getDescription().getName(), getDescription().getVersion()));
-        loadCompatibilityLayer();
-        announceCompatibility();
-        loadConfiguration();
-        loadDatabase();
-        registerListeners();
-        registerCommands();
-        peekMetrics();
+        this.getLogger().info(
+                String.format("%s v%s is loading now!", this.getDescription().getName(), this.getDescription().getVersion()));
+        this.loadCompatibilityLayer();
+        this.announceCompatibility();
+        this.loadConfiguration();
+        this.loadDatabase();
+        this.registerListeners();
+        this.registerCommands();
+        this.peekMetrics();
     }
 
     @Override
     public void onDisable() {
         super.onDisable();
-        getLogger().info(
-                String.format("%s v%s is unloading now!", getDescription().getName(), getDescription().getVersion()));
-        unregisterListeners();
-        unloadDatabase();
-        unloadConfiguration();
-        shutdownMetrics();
+        this.getLogger().info(
+                String.format("%s v%s is unloading now!", this.getDescription().getName(), this.getDescription().getVersion()));
+        this.unregisterListeners();
+        this.unloadDatabase();
+        this.unloadConfiguration();
+        this.shutdownMetrics();
     }
 
     public void loadCompatibilityLayer() {
@@ -72,7 +72,7 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void announceCompatibility() {
-        getLogger().info(String.format("Compatibility layer for Bukkit v%s+ (detected Bukkit version: v%s)",
+        this.getLogger().info(String.format("Compatibility layer for Bukkit v%s+ (detected Bukkit version: v%s)",
                 this.compatibilityManager.getApi().getMinimumSupportedBukkitVersion(),
                 this.compatibilityManager.getBukkitVersion()));
     }
@@ -88,9 +88,9 @@ public class ExplodeAny extends JavaPlugin {
 
     public void loadDatabase() {
         if (this.configurationManager.doUseBlockDatabase()) {
-            this.blockDatabase.loadFromFile(new File(getDataFolder(), getDatabaseFilename()));
+            this.blockDatabase.loadFromFile(new File(this.getDataFolder(), this.getDatabaseFilename()));
             this.blockDatabase.sanitize();
-            unloadDatabase();
+            this.unloadDatabase();
         }
     }
 
@@ -109,14 +109,14 @@ public class ExplodeAny extends JavaPlugin {
         this.commandManager.registerCommand(new CommandEany());
 
         for (RegistrableCommand command : this.commandManager.getRegisteredCommands().values()) {
-            getCommand(command.getName()).setExecutor(this.commandManager);
+            this.getCommand(command.getName()).setExecutor(this.commandManager);
         }
     }
 
     public void peekMetrics() {
         if (this.configurationManager.doEnableMetrics()) {
-            metrics = new Metrics(this, getMetricsPluginId());
-            getLogger().info("Metrics have been enabled, thanks for your support!");
+            this.metrics = new Metrics(this, this.getMetricsPluginId());
+            this.getLogger().info("Metrics have been enabled, thanks for your support!");
         }
     }
 
@@ -126,7 +126,7 @@ public class ExplodeAny extends JavaPlugin {
 
     public void unloadDatabase() {
         if (this.configurationManager.doUseBlockDatabase()) {
-            this.blockDatabase.saveToFile(new File(getDataFolder(), getDatabaseFilename()));
+            this.blockDatabase.saveToFile(new File(this.getDataFolder(), this.getDatabaseFilename()));
         }
     }
 

@@ -5,7 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.plugin.Plugin;
 
-import io.github.guillex7.explodeany.compat.common.api.IPersistentStorage.MetaPersistentDataType;
+import io.github.guillex7.explodeany.compat.common.data.MetaPersistentDataType;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;

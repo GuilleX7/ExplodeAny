@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.util.BlockIterator;
 
 public class TrajectoryExplosionLiquidDetector {
-    BlockLiquidDetector blockLiquidDetector;
+    final BlockLiquidDetector blockLiquidDetector;
 
     public TrajectoryExplosionLiquidDetector() {
         this.blockLiquidDetector = new BlockLiquidDetector();
@@ -12,7 +12,7 @@ public class TrajectoryExplosionLiquidDetector {
 
     public boolean isLiquidInTrajectory(Location sourceLocation, Location targetLocation) {
         if (sourceLocation.equals(targetLocation)) {
-            return blockLiquidDetector.isBlockLiquidlike(sourceLocation);
+            return this.blockLiquidDetector.isBlockLiquidlike(sourceLocation);
         }
 
         BlockIterator iterator = new BlockIterator(sourceLocation.getWorld(), sourceLocation.toVector(),
@@ -20,7 +20,7 @@ public class TrajectoryExplosionLiquidDetector {
                 (int) sourceLocation.distance(targetLocation));
 
         while (iterator.hasNext()) {
-            if (blockLiquidDetector.isBlockLiquidlike(iterator.next())) {
+            if (this.blockLiquidDetector.isBlockLiquidlike(iterator.next())) {
                 return true;
             }
         }

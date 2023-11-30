@@ -12,12 +12,12 @@ import org.bukkit.command.CommandSender;
 import io.github.guillex7.explodeany.configuration.PermissionNode;
 
 public abstract class RegistrableCommand {
-    private Map<String, RegistrableCommand> mappedSubcommands = null;
-    private Set<String> allNames = null;
+    private Map<String, RegistrableCommand> mappedSubcommands;
+    private Set<String> allNames;
 
     protected RegistrableCommand() {
-        mapSubcommands();
-        mapAllNames();
+        this.mapSubcommands();
+        this.mapAllNames();
     }
 
     public Set<String> getAliases() {
@@ -37,29 +37,29 @@ public abstract class RegistrableCommand {
     }
 
     private final void mapSubcommands() {
-        if (mappedSubcommands == null) {
-            mappedSubcommands = new HashMap<>();
+        if (this.mappedSubcommands == null) {
+            this.mappedSubcommands = new HashMap<>();
         } else {
-            mappedSubcommands.clear();
+            this.mappedSubcommands.clear();
         }
 
-        for (RegistrableCommand subcommand : getSubcommands()) {
-            mappedSubcommands.put(subcommand.getName(), subcommand);
+        for (RegistrableCommand subcommand : this.getSubcommands()) {
+            this.mappedSubcommands.put(subcommand.getName(), subcommand);
             for (String subcommandAlias : subcommand.getAliases()) {
-                mappedSubcommands.put(subcommandAlias, subcommand);
+                this.mappedSubcommands.put(subcommandAlias, subcommand);
             }
         }
     }
 
     private final void mapAllNames() {
-        if (allNames == null) {
-            allNames = new HashSet<>();
+        if (this.allNames == null) {
+            this.allNames = new HashSet<>();
         } else {
-            allNames.clear();
+            this.allNames.clear();
         }
 
-        allNames.add(getName());
-        allNames.addAll(getAliases());
+        this.allNames.add(this.getName());
+        this.allNames.addAll(this.getAliases());
     }
 
     public final Map<String, RegistrableCommand> getMappedSubcommands() {

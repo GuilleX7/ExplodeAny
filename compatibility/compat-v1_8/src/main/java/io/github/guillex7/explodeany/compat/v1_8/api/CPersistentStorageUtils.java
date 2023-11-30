@@ -10,6 +10,6 @@ public class CPersistentStorageUtils implements IPersistentStorageUtils {
 
     @Override
     public IPersistentStorage getForEntity(Entity entity) {
-        return fakePersistentStorage;
+        return this.fakePersistentStorage;
     }
 }

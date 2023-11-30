@@ -87,7 +87,7 @@ public class ExplosionManager {
     public boolean manageExplosion(Map<Material, EntityMaterialConfiguration> materialConfigurations,
             EntityConfiguration entityConfiguration, Location sourceLocation, double originalRawExplosionRadius) {
         final boolean isSourceLocationLiquid = sourceLocation.getBlock().isLiquid();
-        final boolean isSourceLocationLiquidlike = blockLiquidDetector.isBlockLiquidlike(sourceLocation);
+        final boolean isSourceLocationLiquidlike = this.blockLiquidDetector.isBlockLiquidlike(sourceLocation);
 
         double rawExplosionRadius = entityConfiguration.getExplosionRadius() != 0d
                 ? entityConfiguration.getExplosionRadius()
@@ -134,7 +134,7 @@ public class ExplosionManager {
 
                         EntityMaterialConfiguration materialConfiguration = materialConfigurations.get(block.getType());
                         if (materialConfiguration == null) {
-                            if (blockDataUtils.isBlockWaterlogged(block)) {
+                            if (this.blockDataUtils.isBlockWaterlogged(block)) {
                                 unhandledWaterloggedBlocks.add(block);
                             } else if (block.isLiquid()) {
                                 liquidBlocks.add(block);
@@ -142,7 +142,7 @@ public class ExplosionManager {
                             continue;
                         }
 
-                        damageBlock(materialConfiguration, block, sourceLocation, squaredExplosionRadius,
+                        this.damageBlock(materialConfiguration, block, sourceLocation, squaredExplosionRadius,
                                 squaredDistance, isSourceLocationLiquidlike);
                     }
                 }
@@ -154,7 +154,7 @@ public class ExplosionManager {
 
         if (entityConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()) {
             for (Block unhandledWaterloggedBlock : unhandledWaterloggedBlocks) {
-                blockDataUtils.setIsBlockWaterlogged(unhandledWaterloggedBlock, false);
+                this.blockDataUtils.setIsBlockWaterlogged(unhandledWaterloggedBlock, false);
             }
         }
 
@@ -167,12 +167,12 @@ public class ExplosionManager {
         if (entityConfiguration.doesExplosionDamageBlocksUnderwater()
                 && isSourceLocationLiquid) {
             sourceLocation.getBlock().setType(Material.AIR);
-            spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
+            this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
             return entityConfiguration.doReplaceOriginalExplosionWhenUnderwater();
         }
 
         if (entityConfiguration.doReplaceOriginalExplosion()) {
-            spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
+            this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
             return true;
         }
 
@@ -182,7 +182,7 @@ public class ExplosionManager {
     private void spawnManagedExplosion(Location location,
             Map<Material, EntityMaterialConfiguration> materialConfigurations, double explosionRadius) {
         TNTPrimed explosiveEntity = (TNTPrimed) location.getWorld().spawn(location, TNTPrimed.class);
-        markEntityAsSpawnedByExplosionManager(explosiveEntity, materialConfigurations);
+        this.markEntityAsSpawnedByExplosionManager(explosiveEntity, materialConfigurations);
         explosiveEntity.setFuseTicks(0);
         explosiveEntity.setYield((float) explosionRadius);
     }
@@ -193,7 +193,7 @@ public class ExplosionManager {
         double effectiveDamage = materialConfiguration.getDamage();
 
         if (materialConfiguration.isUnderwaterAffected()
-                && areUnderwaterRulesApplicable(materialConfiguration, sourceLocation, targetBlock.getLocation(),
+                && this.areUnderwaterRulesApplicable(materialConfiguration, sourceLocation, targetBlock.getLocation(),
                         isSourceLocationLiquidlike)) {
             effectiveDamage *= materialConfiguration.getUnderwaterDamageFactor();
         }
@@ -201,7 +201,7 @@ public class ExplosionManager {
         effectiveDamage *= 1
                 - materialConfiguration.getDistanceAttenuationFactor() * (squaredDistance - 1) / squaredExplosionRadius;
 
-        final BlockStatus affectedBlockStatus = blockDatabase.getBlockStatus(targetBlock);
+        final BlockStatus affectedBlockStatus = this.blockDatabase.getBlockStatus(targetBlock);
         affectedBlockStatus.damage(effectiveDamage);
 
         if (affectedBlockStatus.shouldBreak()) {
@@ -213,7 +213,7 @@ public class ExplosionManager {
                 // Hint: BlockListener will handle the block status removal.
             } else {
                 targetBlock.setType(Material.AIR);
-                blockDatabase.removeBlockStatus(targetBlock);
+                this.blockDatabase.removeBlockStatus(targetBlock);
             }
         }
     }
@@ -223,7 +223,7 @@ public class ExplosionManager {
             Location targetLocation,
             boolean isSourceLocationLiquidlike) {
         return materialConfiguration.isFancyUnderwaterDetection()
-                ? trajectoryExplosionWaterDetector.isLiquidInTrajectory(sourceLocation, targetLocation)
+                ? this.trajectoryExplosionWaterDetector.isLiquidInTrajectory(sourceLocation, targetLocation)
                 : isSourceLocationLiquidlike;
     }
 }

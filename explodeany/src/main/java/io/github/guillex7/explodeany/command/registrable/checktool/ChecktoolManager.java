@@ -27,14 +27,14 @@ public class ChecktoolManager {
     private static ChecktoolManager instance;
 
     private ItemStack checktool;
-    private File checktoolFile;
-    private Set<Player> playersUsingChecktool;
+    private final File checktoolFile;
+    private final Set<Player> playersUsingChecktool;
 
     private ChecktoolManager() {
-        this.checktool = getDefaultChecktool();
-        this.checktoolFile = new File(getPlugin().getDataFolder(), CHECKTOOL_DUMP_FILENAME);
+        this.checktool = this.getDefaultChecktool();
+        this.checktoolFile = new File(this.getPlugin().getDataFolder(), CHECKTOOL_DUMP_FILENAME);
         this.playersUsingChecktool = new HashSet<>();
-        loadChecktool();
+        this.loadChecktool();
     }
 
     public static ChecktoolManager getInstance() {
@@ -61,47 +61,47 @@ public class ChecktoolManager {
             Logger configurationSerializationLogger = Logger.getLogger(ConfigurationSerialization.class.getName());
             Level previousConfigurationSerializationLevel = configurationSerializationLogger.getLevel();
 
-            try (InputStream inputStream = new FileInputStream(checktoolFile);
+            try (InputStream inputStream = new FileInputStream(this.checktoolFile);
                     BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(inputStream)) {
 
                 configurationSerializationLogger.setLevel(Level.OFF);
-                checktool = (ItemStack) objectInputStream.readObject();
+                this.checktool = (ItemStack) objectInputStream.readObject();
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);
 
-                if (checktool != null && checktool.getType() != null) {
-                    getPlugin().getLogger().info(String.format("Checktool item loaded successfully (%s)",
-                            StringUtils.beautifyName(checktool.getType().toString())));
+                if (this.checktool != null && this.checktool.getType() != null) {
+                    this.getPlugin().getLogger().info(String.format("Checktool item loaded successfully (%s)",
+                            StringUtils.beautifyName(this.checktool.getType().toString())));
                 } else {
                     throw new ClassNotFoundException();
                 }
             } catch (ClassNotFoundException | IOException e) {
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);
-                checktool = getDefaultChecktool();
-                getPlugin().getLogger()
+                this.checktool = this.getDefaultChecktool();
+                this.getPlugin().getLogger()
                         .warning(
                                 "Couldn't load checktool item! The item might belong to a higher Minecraft version or might be corrupted");
             } catch (Exception e) {
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);
-                checktool = getDefaultChecktool();
-                getPlugin().getLogger().warning("Couldn't load checktool item! Unknown issue");
+                this.checktool = this.getDefaultChecktool();
+                this.getPlugin().getLogger().warning("Couldn't load checktool item! Unknown issue");
             }
         }
     }
 
     public boolean persistChecktool() {
         try {
-            checktoolFile.createNewFile();
+            this.checktoolFile.createNewFile();
         } catch (IOException e) {
             return false;
         }
 
         boolean checktoolWasPersistedSuccessfully = false;
 
-        if (checktoolFile.exists() && checktoolFile.canWrite()) {
-            try (OutputStream outputStream = new FileOutputStream(checktoolFile);
+        if (this.checktoolFile.exists() && this.checktoolFile.canWrite()) {
+            try (OutputStream outputStream = new FileOutputStream(this.checktoolFile);
                     BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(outputStream)) {
 
-                objectOutputStream.writeObject(checktool);
+                objectOutputStream.writeObject(this.checktool);
                 checktoolWasPersistedSuccessfully = true;
             } catch (Exception e) {
                 checktoolWasPersistedSuccessfully = false;
@@ -116,13 +116,13 @@ public class ChecktoolManager {
     }
 
     public boolean setChecktool(ItemStack item) {
-        checktool = item;
+        this.checktool = item;
 
-        if (persistChecktool()) {
-            getPlugin().getLogger().info("Checktool item persisted successfully!");
+        if (this.persistChecktool()) {
+            this.getPlugin().getLogger().info("Checktool item persisted successfully!");
             return true;
         } else {
-            getPlugin().getLogger().info("Checktool item was set, but it couldn't be persisted");
+            this.getPlugin().getLogger().info("Checktool item was set, but it couldn't be persisted");
             return false;
         }
     }

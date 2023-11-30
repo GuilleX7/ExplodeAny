@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.data;
+package io.github.guillex7.explodeany.compat.common.data;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +15,7 @@ public enum ExplodingVanillaEntity {
     WITHER_SKULL("WITHER_SKULL"),
     CHARGED_WITHER_SKULL("CHARGED_WITHER_SKULL");
 
-    private String entityName;
+    private final String entityName;
 
     private static final Set<String> ENTITY_NAMES;
 

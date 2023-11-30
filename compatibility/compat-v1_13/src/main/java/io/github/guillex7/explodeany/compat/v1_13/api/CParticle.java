@@ -5,6 +5,8 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.block.data.BlockData;
 
+import io.github.guillex7.explodeany.compat.common.data.ParticleData;
+
 public class CParticle extends io.github.guillex7.explodeany.compat.v1_9.api.CParticle {
     public CParticle(ParticleData particleData) {
         super(particleData);
@@ -12,12 +14,12 @@ public class CParticle extends io.github.guillex7.explodeany.compat.v1_9.api.CPa
 
     @Override
     protected Object getExtraFromParticleData(Particle particle, ParticleData particleData) {
-        Class<?> dataTypeClazz = getExtraTypeDataForParticle(particle);
+        Class<?> dataTypeClazz = this.getExtraTypeDataForParticle(particle);
 
         if (DustOptions.class.equals(dataTypeClazz)) {
-            return getDustOptionsFromParticleData(particleData);
+            return this.getDustOptionsFromParticleData(particleData);
         } else if (BlockData.class.equals(dataTypeClazz)) {
-            return getBlockDataFromParticleData(particleData);
+            return this.getBlockDataFromParticleData(particleData);
         } else {
             return super.getExtraFromParticleData(particle, particleData);
         }

@@ -6,7 +6,7 @@ import io.github.guillex7.explodeany.compat.common.ICompatibilityApi;
 import io.github.guillex7.explodeany.compat.common.Version;
 
 public class CompatibilityManager {
-    static CompatibilityManager instance;
+    private static CompatibilityManager instance;
 
     private final ICompatibilityApi[] registeredApis;
     private ICompatibilityApi api;
@@ -28,7 +28,7 @@ public class CompatibilityManager {
     }
 
     public void loadMaximumApiForEnvironment() {
-        this.api = getMaximumApiForEnvironment(getBukkitVersion());
+        this.api = this.getMaximumApiForEnvironment(this.getBukkitVersion());
         this.api.load();
     }
 

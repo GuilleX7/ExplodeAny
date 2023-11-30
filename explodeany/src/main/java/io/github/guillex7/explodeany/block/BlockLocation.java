@@ -33,11 +33,11 @@ public class BlockLocation {
     }
 
     public World getWorld() {
-        return Bukkit.getServer().getWorld(worldUuid);
+        return Bukkit.getServer().getWorld(this.worldUuid);
     }
 
     public Location toLocation() {
-        World world = getWorld();
+        World world = this.getWorld();
         if (world == null) {
             return null;
         }
@@ -45,11 +45,11 @@ public class BlockLocation {
     }
 
     public Block toBlock() {
-        World world = getWorld();
+        World world = this.getWorld();
         if (world == null) {
             return null;
         }
-        return world.getBlockAt(x, y, z);
+        return world.getBlockAt(this.x, this.y, this.z);
     }
 
     public UUID getWorldUuid() {
@@ -116,10 +116,5 @@ public class BlockLocation {
         if (z != other.z)
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BlockLocation [worldUuid=" + worldUuid + ", x=" + x + ", y=" + y + ", z=" + z + "]";
     }
 }

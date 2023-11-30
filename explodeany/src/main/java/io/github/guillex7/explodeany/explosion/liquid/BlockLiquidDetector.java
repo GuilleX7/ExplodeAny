@@ -7,7 +7,7 @@ import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 
 public class BlockLiquidDetector {
     public boolean isBlockLiquidlike(Location blockLocation) {
-        return isBlockLiquidlike(blockLocation.getBlock());
+        return this.isBlockLiquidlike(blockLocation.getBlock());
     }
 
     public boolean isBlockLiquidlike(Block block) {

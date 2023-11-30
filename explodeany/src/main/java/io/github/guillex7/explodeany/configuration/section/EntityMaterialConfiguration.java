@@ -81,7 +81,7 @@ public class EntityMaterialConfiguration {
     }
 
     public boolean shouldBeDropped() {
-        return Math.random() < getDropChance();
+        return Math.random() < this.getDropChance();
     }
 
     public void setDropChance(double dropChance) {
@@ -101,7 +101,7 @@ public class EntityMaterialConfiguration {
     }
 
     public boolean isUnderwaterAffected() {
-        return getUnderwaterDamageFactor() != 1.0;
+        return this.getUnderwaterDamageFactor() != 1.0;
     }
 
     public void setUnderwaterDamageFactor(double underwaterDamageFactor) {
