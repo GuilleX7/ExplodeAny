@@ -55,7 +55,7 @@ public class ParticleConfiguration {
     public static ParticleConfiguration fromConfigurationSection(ConfigurationSection section) {
         ParticleConfiguration defaults = ParticleConfiguration.byDefault();
 
-        String name = section.getString(NAME_PATH).toUpperCase();
+        String name = section.getString(NAME_PATH, "").toUpperCase();
         int red = MathUtils.ensureRange(section.getInt(RED_PATH, 0), 255, 0);
         int green = MathUtils.ensureRange(section.getInt(GREEN_PATH, 0), 255, 0);
         int blue = MathUtils.ensureRange(section.getInt(BLUE_PATH, 0), 255, 0);
@@ -63,7 +63,7 @@ public class ParticleConfiguration {
         Material material;
 
         try {
-            material = Material.valueOf(section.getString(MATERIAL_PATH).toUpperCase());
+            material = Material.valueOf(section.getString(MATERIAL_PATH, "").toUpperCase());
         } catch (Exception e) {
             material = null;
         }
@@ -80,10 +80,14 @@ public class ParticleConfiguration {
     }
 
     public void spawnAt(Location location) {
-        if (this.particle != null) {
+        if (this.isValid()) {
             this.particle.spawn(location.getWorld(), location.getX(), location.getY(), location.getZ(), this.amount,
                     this.deltaX, this.deltaY, this.deltaZ, this.speed, this.force);
         }
+    }
+
+    public boolean isValid() {
+        return this.particle != null && this.particle.isValid();
     }
 
     public IParticle getParticle() {
@@ -188,5 +192,18 @@ public class ParticleConfiguration {
         if (force != other.force)
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.isValid() ? String.format(
+                "%s\n"
+                        + "dX: %.2f dY: %.2f dZ: %.2f\n"
+                        + "Amount: %d\n"
+                        + "Speed: %.2f\n"
+                        + "Force: %b",
+                this.getParticle().toString(), this.getDeltaX(), this.getDeltaY(), this.getDeltaZ(), this.getAmount(),
+                this.getSpeed(), this.isForce())
+                : "(None)";
     }
 }

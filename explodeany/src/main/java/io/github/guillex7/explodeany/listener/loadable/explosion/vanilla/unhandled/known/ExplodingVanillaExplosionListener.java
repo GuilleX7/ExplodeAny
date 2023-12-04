@@ -32,6 +32,6 @@ public final class ExplodingVanillaExplosionListener extends BaseUnhandledKnownV
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredEntityConfiguration(ExplodingVanillaEntityConfiguration.getConfigurationId());
+                .getRegisteredLoadableConfigurationSection(ExplodingVanillaEntityConfiguration.getConfigurationId());
     }
 }

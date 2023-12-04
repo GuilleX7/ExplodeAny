@@ -29,11 +29,11 @@ public final class ConfigurationManager {
 
     private static ConfigurationManager instance;
 
-    private final Map<String, LoadableConfigurationSection<?>> registeredEntityConfigurations;
+    private final Map<String, LoadableConfigurationSection<?>> registeredLoadableConfigurationSections;
     private final Set<Material> handledMaterials;
 
     private ConfigurationManager() {
-        this.registeredEntityConfigurations = new HashMap<>();
+        this.registeredLoadableConfigurationSections = new HashMap<>();
         this.handledMaterials = new HashSet<>();
     }
 
@@ -48,12 +48,12 @@ public final class ConfigurationManager {
         return ExplodeAny.getInstance();
     }
 
-    public Map<String, LoadableConfigurationSection<?>> getRegisteredEntityConfigurations() {
-        return registeredEntityConfigurations;
+    public Map<String, LoadableConfigurationSection<?>> getRegisteredLoadableConfigurationSections() {
+        return registeredLoadableConfigurationSections;
     }
 
-    public LoadableConfigurationSection<?> getRegisteredEntityConfiguration(String sectionPath) {
-        return this.getRegisteredEntityConfigurations().get(sectionPath);
+    public LoadableConfigurationSection<?> getRegisteredLoadableConfigurationSection(String sectionPath) {
+        return this.getRegisteredLoadableConfigurationSections().get(sectionPath);
     }
 
     public Set<Material> getHandledMaterials() {
@@ -121,18 +121,21 @@ public final class ConfigurationManager {
         return this.getPlugin().getConfig().getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
     }
 
-    public void registerEntityConfiguration(LoadableConfigurationSection<?> entityConfiguration) {
-        this.getRegisteredEntityConfigurations().put(entityConfiguration.getSectionPath(), entityConfiguration);
+    public void registerLoadableConfigurationSection(LoadableConfigurationSection<?> loadableConfigurationSection) {
+        this.getRegisteredLoadableConfigurationSections().put(loadableConfigurationSection.getSectionPath(),
+                loadableConfigurationSection);
     }
 
-    public void loadAllEntityConfigurations() {
+    public void loadAllRegisteredLoadableConfigurationSections() {
         FileConfiguration config = this.getPlugin().getConfig();
 
-        for (LoadableConfigurationSection<?> entityConfiguration : this.getRegisteredEntityConfigurations().values()) {
-            if (entityConfiguration.shouldBeLoaded()) {
-                entityConfiguration.clearEntityMaterialConfigurations();
-                entityConfiguration.fetchEntityMaterialConfigurations(config);
-                for (Map<Material, EntityMaterialConfiguration> map : entityConfiguration
+        for (LoadableConfigurationSection<?> loadableConfigurationSection : this
+                .getRegisteredLoadableConfigurationSections()
+                .values()) {
+            if (loadableConfigurationSection.shouldBeLoaded()) {
+                loadableConfigurationSection.clearEntityMaterialConfigurations();
+                loadableConfigurationSection.fetchEntityMaterialConfigurations(config);
+                for (Map<Material, EntityMaterialConfiguration> map : loadableConfigurationSection
                         .getEntityMaterialConfigurations().values()) {
                     this.getHandledMaterials().addAll(map.keySet());
                 }
@@ -140,8 +143,8 @@ public final class ConfigurationManager {
         }
     }
 
-    public void unloadAllEntityConfigurations() {
-        this.getRegisteredEntityConfigurations().clear();
+    public void unloadAllRegisteredLoadableConfigurationSections() {
+        this.getRegisteredLoadableConfigurationSections().clear();
         this.getHandledMaterials().clear();
     }
 }

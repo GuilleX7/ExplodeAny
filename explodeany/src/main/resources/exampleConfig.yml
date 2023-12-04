@@ -194,13 +194,15 @@ VanillaEntity:
                 FancyUnderwaterDetection: false
                 # Note how Particles and Sound sections can also be placed here, in the material section.
                 Particles:
-                    Name: WATER_SPLASH
+                    Name: BLOCK_CRACK
                     DeltaX: 5.0
                     DeltaY: 5.0
                     DeltaZ: 5.0
                     Amount: 2000
                     Speed: 1.0
                     Force: true
+                    # Some particles require a Material to be specified.
+                    Material: OBSIDIAN
                 Sound:
                     Name: BLOCK_SAND_BREAK
                     Volume: 1.0
@@ -249,47 +251,90 @@ MagicEntity:
 # are entities introduced by mods in Forge servers.
 # Any entity name can be used here, since there's no way to check if the entity exists.
 CustomEntity:
-  # From https://www.curseforge.com/minecraft/mc-mods/mrcrayfishs-gun-mod, for example.
-  CGM_MISSILE:
-    Properties:
-      # We need to specify the ExplosionRadius manually, otherwise a warning will be thrown and
-      # the entity won't be taken into account, since there's no way for ExplodeAny to know it.
-      ExplosionRadius: 4.0
-    Materials:
-      Obsidian:
-        Damage: 50.0
-
+    # From https://www.curseforge.com/minecraft/mc-mods/mrcrayfishs-gun-mod, for example.
+    CGM_MISSILE:
+        Properties:
+            # We need to specify the ExplosionRadius manually, otherwise a warning will be thrown and
+            # the entity won't be taken into account, since there's no way for ExplodeAny to know it.
+            ExplosionRadius: 4.0
+        Materials:
+            Obsidian:
+                Damage: 50.0
 
 # All colors and modifiers are available for locale messages.
-# For ChecktoolUse and ChecktoolNotHandled, you can use some variables:
-#   %MATERIAL% represents the clicked block's type,
-#   %PRETTY_MATERIAL% represents the clicked block's type in a more readable way,
-#   %B_X% the X coordinate of the targeted block
-#   %B_Y% the Y coordinate of the targeted block
-#   %B_Z% the Z coordinate of the targeted block
-# These are only available for ChecktoolUse message:
-#   %DURABILITY% the clicked block's durability and
-#   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability),
-#   %DURABILITY_PERCENTAGE% the clicked block's durability as a percentage (excluding the % symbol)
-# For ChecktoolGiven message:
-#   %NAME% the player's name
+# Some messages allow to use placeholders, which are replaced by the plugin with the corresponding
+# value. Placeholders are represented by %PLACEHOLDER_NAME%.
+# The following placeholders are available:
 Locale:
-    NotAllowed: You are not allowed to perform this action!
-    OnlyPlayerAllowed: Only players can perform this action!
-    PlayerDoesntExist: The player doesn't exist in the server!
-    PlayerIsOffline: The player must be online to perform that
-    EnterChecktoolMode:
-        You can now right-click a block with the checktool to display
-        block durability
-    LeaveChecktoolMode: You can no longer check for a block durability
+    # - NotAllowed:
+    #   (None)
+    NotAllowed: "You are not allowed to perform this action!"
+    # - Usage:
+    #   %DESCRIPTION% represents the command's description
+    Usage: "Usage: %DESCRIPTION%"
+    # - OnlyPlayerAllowed:
+    #   (None)
+    OnlyPlayerAllowed: "Only players can perform this action!"
+    # - PlayerDoesntExist:
+    #   %NAME% represents the player's name
+    PlayerDoesntExist: "Player %NAME% doesn't exist in the server!"
+    # - PlayerIsOffline:
+    #   %NAME% represents the player's name
+    PlayerIsOffline: "Player %NAME% must be online to perform that"
+    # - EnterChecktoolMode:
+    #   %ITEM% represents the checktool item's name
+    #   %PRETTY_ITEM% represents the checktool item's name in a more readable way
+    EnterChecktoolMode: "You can now right-click a block with %PRETTY_ITEM% to display block durability"
+    # - LeaveChecktoolMode:
+    #   %ITEM% represents the checktool item's name
+    #   %PRETTY_ITEM% represents the checktool item's name in a more readable way
+    LeaveChecktoolMode: "You can no longer check for a block durability"
+    # - ChecktoolToggledOn:
+    #   %NAME% represents the player's name
+    ChecktoolToggledOn: Checktool mode toggled on for player %NAME%
+    # - ChecktoolToggledOff:
+    #   %NAME% represents the player's name
+    ChecktoolToggledOff: Checktool mode toggled off for player %NAME%
+    # - ChecktoolUse:
+    #   %MATERIAL% represents the clicked block's type,
+    #   %PRETTY_MATERIAL% represents the clicked block's type in a more readable way,
+    #   %B_X% the X coordinate of the targeted block
+    #   %B_Y% the Y coordinate of the targeted block
+    #   %B_Z% the Z coordinate of the targeted block
+    #   %DURABILITY% the clicked block's durability and
+    #   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability),
+    #   %DURABILITY_PERCENTAGE% the clicked block's durability as a percentage (excluding the % symbol)
     ChecktoolUse: "Block health: %DURABILITY_PERCENTAGE%% (%PRETTY_MATERIAL%)"
-    ChecktoolSet: Checktool successfully set!
-    ChecktoolNotPersisted: Checktool item was set, but it couldn't be persisted
-    ChecktoolGiven: A checktool was given to player %NAME%
-    ChecktoolReset: Checktool successfully reset to bare hand
+    # - ChecktoolSet:
+    #   %ITEM% represents the checktool item's name
+    #   %PRETTY_ITEM% represents the checktool item's name in a more readable way
+    ChecktoolSet: "Checktool successfully set to %PRETTY_ITEM%!"
+    # - ChecktoolNotPersisted:
+    #   %ITEM% represents the checktool item's name
+    #   %PRETTY_ITEM% represents the checktool item's name in a more readable way
+    ChecktoolNotPersisted: "Checktool item was set to %PRETTY_ITEM%, but it couldn't be persisted"
+    # - ChecktoolGiven:
+    #   %NAME% represents the player's name
+    #   %ITEM% represents the checktool item's name
+    #   %PRETTY_ITEM% represents the checktool item's name in a more readable way
+    ChecktoolGiven: "A checktool (%PRETTY_ITEM%) was given to player %NAME%"
+    # - ChecktoolReset:
+    #   (None)
+    ChecktoolReset: "Checktool successfully reset to bare hand (Air)"
+    # - ChecktoolNotHandled:
+    #   %MATERIAL% represents the clicked block's type,
+    #   %PRETTY_MATERIAL% represents the clicked block's type in a more readable way
     ChecktoolNotHandled: "%PRETTY_MATERIAL% is not handled by the current configuration"
+    # - ChecktoolInfo:
+    #   %ITEM% represents the checktool item's name
+    #   %PRETTY_ITEM% represents the checktool item's name in a more readable way
+    ChecktoolInfo: "Current checktool item: %PRETTY_ITEM%"
+    # - DisabledInThisWorld:
+    #   (None)
     DisabledInThisWorld: "This functionality is disabled in this world"
-    Reloaded: Reloaded successfully!
+    # - Reloaded:
+    #   (None)
+    Reloaded: "Reloaded successfully!"
 
 # Prefix for all locale messages
 LocalePrefix: "[ExplodeAny] "

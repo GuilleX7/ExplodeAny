@@ -10,10 +10,12 @@ import io.github.guillex7.explodeany.compat.common.api.IParticle;
 import io.github.guillex7.explodeany.compat.common.data.ParticleData;
 
 public class CParticle implements IParticle {
+    protected ParticleData particleData;
     protected Particle particle;
     protected Object extra;
 
     public CParticle(ParticleData particleData) {
+        this.particleData = particleData;
         this.particle = this.getParticleFromParticleData(particleData);
         if (this.particle != null) {
             this.extra = this.getExtraFromParticleData(this.particle, particleData);
@@ -36,7 +38,7 @@ public class CParticle implements IParticle {
     }
 
     protected Class<?> getExtraTypeDataForParticle(Particle particle) {
-        return this.particle.getDataType();
+        return particle.getDataType();
     }
 
     protected boolean isExtraRequiredForParticle(Particle particle) {
@@ -71,8 +73,18 @@ public class CParticle implements IParticle {
     public void spawn(World world, double x, double y, double z, int count, double offsetX, double offsetY,
             double offsetZ,
             double speed, boolean force) {
-        if (this.particle != null) {
+        if (this.isValid()) {
             world.spawnParticle(this.particle, x, y, z, count, offsetX, offsetY, offsetZ, speed, this.extra);
         }
+    }
+
+    @Override
+    public boolean isValid() {
+        return this.particle != null;
+    }
+    
+    @Override
+    public String toString() {
+        return this.isValid() ? this.particleData.toString() : "(None)";
     }
 }

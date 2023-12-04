@@ -16,6 +16,7 @@ permissions:
         default: op
         children:
             explodeany.checktool.*: true
+            explodeany.configuration.*: true
             explodeany.reload: true
             explodeany.about: true
     explodeany.checktool.*:
@@ -24,14 +25,19 @@ permissions:
         children:
             explodeany.checktool.use: true
             explodeany.checktool.toggle: true
+            explodeany.checktool.toggle.others: true
             explodeany.checktool.give: true
             explodeany.checktool.set: true
+            explodeany.checktool.info: true
             explodeany.checktool.reset: true
     explodeany.checktool.use:
         description: "Gives permission to use checktool"
         default: op
     explodeany.checktool.toggle:
-        description: "Gives permission to toggle checktool use"
+        description: "Gives permission to toggle checktool use for yourself"
+        default: op
+    explodeany.checktool.toggle.others:
+        description: "Gives permission to toggle checktool use for others"
         default: op
     explodeany.checktool.give:
         description: "Gives permission to give checktool items"
@@ -39,8 +45,19 @@ permissions:
     explodeany.checktool.set:
         description: "Gives permission to set checktool item"
         default: op
+    explodeany.checktool.info:
+        description: "Gives permission to show checktool item info"
+        default: op
     explodeany.checktool.reset:
         description: "Gives permission to reset checktool item"
+        default: op
+    explodeany.configuration.*:
+        description: "Gives all permissions about configuration"
+        default: op
+        children:
+            explodeany.configuration.show: true
+    explodeany.configuration.show:
+        description: "Gives permission to show configuration"
         default: op
     explodeany.reload:
         description: "Gives permission to use reload command"

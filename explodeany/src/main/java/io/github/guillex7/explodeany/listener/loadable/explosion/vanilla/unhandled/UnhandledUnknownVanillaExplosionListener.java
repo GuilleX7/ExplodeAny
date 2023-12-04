@@ -68,7 +68,7 @@ public class UnhandledUnknownVanillaExplosionListener extends BaseUnhandledVanil
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredEntityConfiguration(CustomVanillaEntityConfiguration.getConfigurationId());
+                .getRegisteredLoadableConfigurationSection(CustomVanillaEntityConfiguration.getConfigurationId());
     }
 
     @Override

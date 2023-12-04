@@ -46,7 +46,8 @@ public class ExplodeAny extends JavaPlugin {
         this.commandManager = CommandManager.getInstance();
 
         this.getLogger().info(
-                String.format("%s v%s is loading now!", this.getDescription().getName(), this.getDescription().getVersion()));
+                String.format("%s v%s is loading now!", this.getDescription().getName(),
+                        this.getDescription().getVersion()));
         this.loadCompatibilityLayer();
         this.announceCompatibility();
         this.loadConfiguration();
@@ -60,11 +61,13 @@ public class ExplodeAny extends JavaPlugin {
     public void onDisable() {
         super.onDisable();
         this.getLogger().info(
-                String.format("%s v%s is unloading now!", this.getDescription().getName(), this.getDescription().getVersion()));
+                String.format("%s v%s is unloading now!", this.getDescription().getName(),
+                        this.getDescription().getVersion()));
+        this.shutdownMetrics();
+        this.unregisterCommands();
         this.unregisterListeners();
         this.unloadDatabase();
         this.unloadConfiguration();
-        this.shutdownMetrics();
     }
 
     public void loadCompatibilityLayer() {
@@ -79,11 +82,11 @@ public class ExplodeAny extends JavaPlugin {
 
     public void loadConfiguration() {
         this.configurationManager.loadConfiguration();
-        this.configurationManager.registerEntityConfiguration(new ExplodingVanillaEntityConfiguration());
-        this.configurationManager.registerEntityConfiguration(new CannonProjectileConfiguration());
-        this.configurationManager.registerEntityConfiguration(new MagicVanillaEntityConfiguration());
-        this.configurationManager.registerEntityConfiguration(new CustomVanillaEntityConfiguration());
-        this.configurationManager.loadAllEntityConfigurations();
+        this.configurationManager.registerLoadableConfigurationSection(new ExplodingVanillaEntityConfiguration());
+        this.configurationManager.registerLoadableConfigurationSection(new CannonProjectileConfiguration());
+        this.configurationManager.registerLoadableConfigurationSection(new MagicVanillaEntityConfiguration());
+        this.configurationManager.registerLoadableConfigurationSection(new CustomVanillaEntityConfiguration());
+        this.configurationManager.loadAllRegisteredLoadableConfigurationSections();
     }
 
     public void loadDatabase() {
@@ -121,13 +124,17 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void unloadConfiguration() {
-        this.configurationManager.unloadAllEntityConfigurations();
+        this.configurationManager.unloadAllRegisteredLoadableConfigurationSections();
     }
 
     public void unloadDatabase() {
         if (this.configurationManager.doUseBlockDatabase()) {
             this.blockDatabase.saveToFile(new File(this.getDataFolder(), this.getDatabaseFilename()));
         }
+    }
+
+    public void unregisterCommands() {
+        this.commandManager.unregisterAllCommands();
     }
 
     public void unregisterListeners() {

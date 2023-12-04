@@ -9,7 +9,7 @@ public class SetUtils {
     }
 
     @SafeVarargs
-    public static final <T> Set<T> createHashSetOf(T... items) {
+    public static <T> Set<T> createHashSetOf(T... items) {
         Set<T> set = new HashSet<>();
         Collections.addAll(set, items);
         return set;

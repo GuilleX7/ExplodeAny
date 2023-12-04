@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.command.registrable;
+package io.github.guillex7.explodeany.command.registrable.checktool;
 
 import java.util.Set;
 
@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolManager;
+import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.PermissionNode;

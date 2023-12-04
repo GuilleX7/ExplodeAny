@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.command.registrable;
+package io.github.guillex7.explodeany.command.registrable.checktool;
 
 import java.util.Set;
 
@@ -6,19 +6,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolManager;
+import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.PermissionNode;
 import io.github.guillex7.explodeany.util.SetUtils;
+import io.github.guillex7.explodeany.util.StringUtils;
 
 public class CommandChecktoolSet extends RegistrableCommand {
     @Override
     public String getName() {
         return "set";
     }
-    
+
     @Override
     public Set<PermissionNode> getRequiredPermissions() {
         return SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_SET);
@@ -35,12 +36,15 @@ public class CommandChecktoolSet extends RegistrableCommand {
         ItemStack newTool = new ItemStack(CompatibilityManager.getInstance().getApi().getPlayerInventoryUtils()
                 .getItemInMainHand(player.getInventory()));
         newTool.setAmount(1);
-        if (ChecktoolManager.getInstance().setChecktool(newTool)) {
-            sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.CHECKTOOL_SET));
-        } else {
-            sender.sendMessage(
-                    ConfigurationManager.getInstance().getLocale(ConfigurationLocale.CHECKTOOL_NOT_PERSISTED));
-        }
+
+        final ConfigurationLocale senderLocaleMessage = ChecktoolManager.getInstance().setChecktool(newTool)
+                ? ConfigurationLocale.CHECKTOOL_SET
+                : ConfigurationLocale.CHECKTOOL_NOT_PERSISTED;
+
+        sender.sendMessage(ConfigurationManager.getInstance().getLocale(senderLocaleMessage)
+                .replace("%ITEM%", newTool.getType().name())
+                .replace("%PRETTY_ITEM%", StringUtils.beautifyName(newTool.getType().name())));
+
         return true;
     }
 }

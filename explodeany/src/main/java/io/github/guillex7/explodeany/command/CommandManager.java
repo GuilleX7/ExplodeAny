@@ -13,7 +13,6 @@ import org.bukkit.command.TabExecutor;
 import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.PermissionNode;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandManager implements TabExecutor {
@@ -63,22 +62,25 @@ public class CommandManager implements TabExecutor {
             breadcrumbsBuilder.append(rootCommand.getName());
         }
 
-        boolean executable = true;
-        for (PermissionNode permissionNode : rootCommand.getRequiredPermissions()) {
-            if (!sender.hasPermission(permissionNode.getKey())) {
-                executable = false;
-                break;
-            }
-        }
-
-        if (!executable) {
+        if (!this.isSenderAllowedToUseCommand(sender, rootCommand)) {
             sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED));
             return true;
         }
 
         if (!rootCommand.execute(sender, Arrays.copyOfRange(args, i, args.length))) {
-            sender.sendMessage(MessageFormatter.colorize(
-                    String.format("Usage: /%s &7%s", breadcrumbsBuilder.toString(), rootCommand.getUsage())));
+            String usageDescription = "";
+            if (!rootCommand.isTerminal()) {
+                final String possibleSubcommands = rootCommand.getSubcommands()
+                        .stream().filter(x -> this.isSenderAllowedToUseCommand(sender, x))
+                        .map(RegistrableCommand::getName).reduce((x, y) -> x + "/" + y).orElse("no subcommand available");
+                usageDescription = String.format("/%s &7<%s>", breadcrumbsBuilder.toString(), possibleSubcommands);
+
+            } else {
+                usageDescription = String.format("/%s &7%s", breadcrumbsBuilder.toString(), rootCommand.getUsage());
+            }
+            sender.sendMessage(
+                    ConfigurationManager.getInstance().getLocale(ConfigurationLocale.USAGE)
+                            .replace("%DESCRIPTION%", MessageFormatter.colorize(usageDescription)));
         }
         return true;
     }
@@ -94,24 +96,37 @@ public class CommandManager implements TabExecutor {
 
         int i;
         for (i = 0; i < args.length; i++) {
-            RegistrableCommand subcommand = rootCommand.getMappedSubcommands().get(args[i]);
+            final RegistrableCommand subcommand = rootCommand.getMappedSubcommands().get(args[i]);
             if (subcommand == null) {
                 break;
             }
             rootCommand = subcommand;
         }
 
-        if (args.length - 1 != i) {
+        // Hint: i == args.length (>= for safety) if a subcommand was fully written
+        // already and no space was written after it, i.e. waiting for next space
+        if (i >= args.length) {
             return autocompletion;
         }
 
-        final String lastWrittenSubcommand = args[i];
+        if (!rootCommand.isTerminal()) {
+            final String lastWrittenSubcommand = args[i];
 
-        for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
-            subcommand.getAllNames().stream().filter(x -> x.startsWith(lastWrittenSubcommand))
-                    .forEach(autocompletion::add);
+            for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
+                if (this.isSenderAllowedToUseCommand(sender, subcommand)) {
+                    subcommand.getAllNames().stream().filter(x -> x.startsWith(lastWrittenSubcommand))
+                            .forEach(autocompletion::add);
+                }
+            }
+        } else if (this.isSenderAllowedToUseCommand(sender, rootCommand)) {
+            rootCommand.onTabComplete(sender, Arrays.copyOfRange(args, i, args.length), autocompletion);
         }
 
         return autocompletion;
+    }
+
+    private boolean isSenderAllowedToUseCommand(CommandSender sender, RegistrableCommand command) {
+        return command.getRequiredPermissions().stream()
+                .allMatch(requiredPermission -> sender.hasPermission(requiredPermission.getKey()));
     }
 }

@@ -35,7 +35,7 @@ public class SoundConfiguration {
 
         Sound sound;
         try {
-            sound = Sound.valueOf(section.getString(NAME_PATH).toUpperCase());
+            sound = Sound.valueOf(section.getString(NAME_PATH, "").toUpperCase());
         } catch (Exception e) {
             sound = null;
         }
@@ -49,6 +49,10 @@ public class SoundConfiguration {
         location.getWorld().playSound(location, this.sound,
                 (float) this.volume,
                 (float) this.pitch);
+    }
+
+    public boolean isValid() {
+        return this.sound != null;
     }
 
     public Sound getSound() {
@@ -104,5 +108,15 @@ public class SoundConfiguration {
         if (Double.doubleToLongBits(pitch) != Double.doubleToLongBits(other.pitch))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.isValid() ? String.format(
+                "Sound name: %s\n" +
+                        "Volume: %.2f\n" +
+                        "Pitch: %.2f",
+                this.getSound().name(), this.getVolume(), this.getPitch())
+                : "(None)";
     }
 }

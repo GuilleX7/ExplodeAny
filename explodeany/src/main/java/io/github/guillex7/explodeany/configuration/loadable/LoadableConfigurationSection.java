@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,7 +17,7 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 
-public abstract class LoadableConfigurationSection<T> {
+public abstract class LoadableConfigurationSection<T extends Object> {
     private static final String MATERIALS_SECTION = "Materials";
     private static final String PROPERTIES_SECTION = "Properties";
 
@@ -162,7 +164,8 @@ public abstract class LoadableConfigurationSection<T> {
                     .fromConfigurationSection(materialSection);
 
             for (Material fetchedMaterial : fetchedMaterials) {
-                this.putAndMergeMaterialConfigurations(materialConfigurations, fetchedMaterial, entityMaterialConfiguration,
+                this.putAndMergeMaterialConfigurations(materialConfigurations, fetchedMaterial,
+                        entityMaterialConfiguration,
                         definitionHasPriority);
             }
         }
@@ -202,7 +205,7 @@ public abstract class LoadableConfigurationSection<T> {
         }
     }
 
-    protected Material getMaterialFromName(String name) {
+    public final Material getMaterialFromName(String name) {
         Material material;
         try {
             material = Material.valueOf(name.toUpperCase());
@@ -219,6 +222,14 @@ public abstract class LoadableConfigurationSection<T> {
     protected boolean areEntityAndMaterialConfigurationsValid(T entity, EntityConfiguration entityConfiguration,
             Map<Material, EntityMaterialConfiguration> materialConfigurations) {
         return true;
+    }
+
+    public String reifyEntityName(String entityName) {
+        return this.getEntityName(this.getEntityFromName(entityName));
+    }
+
+    public final Set<String> getEntitiesNames() {
+        return this.getEntityConfigurations().keySet().stream().map(this::getEntityName).collect(Collectors.toSet());
     }
 
     public abstract boolean shouldBeLoaded();

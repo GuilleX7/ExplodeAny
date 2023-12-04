@@ -1,5 +1,6 @@
 package io.github.guillex7.explodeany.compat.common;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,16 +87,7 @@ public class Version implements Comparable<Version> {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        boolean firstNumberAppeared = false;
-        for (int number : this.numbers) {
-            if (firstNumberAppeared) {
-                builder.append('.');
-            } else {
-                firstNumberAppeared = true;
-            }
-            builder.append(number);
-        }
-        return builder.toString();
+        return Arrays.stream(this.numbers).mapToObj(String::valueOf)
+                .reduce((a, b) -> a + "." + b).orElse("(invalid version)");
     }
 }

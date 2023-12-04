@@ -11,4 +11,14 @@ public class CParticle implements IParticle {
             double speed, boolean force) {
         // Not supported
     }
+
+    @Override
+    public boolean isValid() {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "(Not supported)";
+    }
 }

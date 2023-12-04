@@ -1,16 +1,19 @@
-package io.github.guillex7.explodeany.command.registrable;
+package io.github.guillex7.explodeany.command.registrable.checktool;
 
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-import io.github.guillex7.explodeany.command.registrable.checktool.ChecktoolManager;
+import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.PermissionNode;
 import io.github.guillex7.explodeany.util.SetUtils;
+import io.github.guillex7.explodeany.util.StringUtils;
 
 public class CommandChecktoolGive extends RegistrableCommand {
     @Override
@@ -41,24 +44,38 @@ public class CommandChecktoolGive extends RegistrableCommand {
 
             if (possibleReceiver == null) {
                 sender.sendMessage(
-                        ConfigurationManager.getInstance().getLocale(ConfigurationLocale.PLAYER_DOESNT_EXIST));
+                        ConfigurationManager.getInstance().getLocale(ConfigurationLocale.PLAYER_DOESNT_EXIST)
+                                .replace("%NAME%", receiverName));
                 return true;
             }
 
             if (!possibleReceiver.isOnline()) {
                 sender.sendMessage(
-                        ConfigurationManager.getInstance().getLocale(ConfigurationLocale.PLAYER_IS_OFFLINE));
+                        ConfigurationManager.getInstance().getLocale(ConfigurationLocale.PLAYER_IS_OFFLINE).replace(
+                                "%NAME%", receiverName));
                 return true;
             }
 
             receiver = possibleReceiver;
         }
 
-        receiver.getInventory().addItem(ChecktoolManager.getInstance().getChecktool());
+        final ItemStack checktool = ChecktoolManager.getInstance().getChecktool();
+        receiver.getInventory().addItem(checktool);
+
         sender.sendMessage(
                 ConfigurationManager.getInstance()
                         .getLocale(ConfigurationLocale.CHECKTOOL_GIVEN)
-                        .replace("%NAME%", receiver.getName()));
+                        .replace("%NAME%", receiver.getName())
+                        .replace("%ITEM%", checktool.getType().name())
+                        .replace("%PRETTY_ITEM%", StringUtils.beautifyName(checktool.getType().name())));
         return true;
+    }
+
+    @Override
+    public void onTabComplete(CommandSender sender, String[] args, List<String> autocompletion) {
+        if (args.length == 1) {
+            Bukkit.getOnlinePlayers().stream().filter(x -> x.getName().startsWith(args[0]))
+                    .forEach(x -> autocompletion.add(x.getName()));
+        }
     }
 }

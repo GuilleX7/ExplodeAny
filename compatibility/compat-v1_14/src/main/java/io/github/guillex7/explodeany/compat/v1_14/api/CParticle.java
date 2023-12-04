@@ -4,7 +4,7 @@ import org.bukkit.World;
 
 import io.github.guillex7.explodeany.compat.common.data.ParticleData;
 
-public class CParticle extends io.github.guillex7.explodeany.compat.v1_9.api.CParticle {
+public class CParticle extends io.github.guillex7.explodeany.compat.v1_13.api.CParticle {
     public CParticle(ParticleData particleData) {
         super(particleData);
     }

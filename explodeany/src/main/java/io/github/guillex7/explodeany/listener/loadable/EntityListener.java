@@ -46,7 +46,7 @@ public final class EntityListener implements LoadableListener {
         return false;
     }
 
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
@@ -84,17 +84,17 @@ public final class EntityListener implements LoadableListener {
                         * 100;
 
                 formattedMessage = formattedMessage
-                        .replaceAll("%DURABILITY_PERCENTAGE%",
+                        .replace("%DURABILITY_PERCENTAGE%",
                                 String.format("%.02f", durabilityPercentage))
-                        .replaceAll("%DURABILITY%",
+                        .replace("%DURABILITY%",
                                 String.format("%.02f", blockStatus.getDurability()))
-                        .replaceAll("%MAX_DURABILITY%",
+                        .replace("%MAX_DURABILITY%",
                                 String.format("%.02f", BlockStatus.getDefaultBlockDurability()))
-                        .replaceAll("%B_X%",
+                        .replace("%B_X%",
                                 String.format("%d", clickedBlock.getLocation().getBlockX()))
-                        .replaceAll("%B_Y%",
+                        .replace("%B_Y%",
                                 String.format("%d", clickedBlock.getLocation().getBlockY()))
-                        .replaceAll("%B_Z%",
+                        .replace("%B_Z%",
                                 String.format("%d", clickedBlock.getLocation().getBlockZ()));
             } else {
                 formattedMessage = this.configurationManager
@@ -105,8 +105,8 @@ public final class EntityListener implements LoadableListener {
             String prettyMaterialName = StringUtils.beautifyName(materialName);
 
             formattedMessage = formattedMessage
-                    .replaceAll("%MATERIAL%", materialName)
-                    .replaceAll("%PRETTY_MATERIAL%", prettyMaterialName);
+                    .replace("%MATERIAL%", materialName)
+                    .replace("%PRETTY_MATERIAL%", prettyMaterialName);
 
             player.sendMessage(formattedMessage);
         }

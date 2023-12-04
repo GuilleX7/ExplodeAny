@@ -3,6 +3,9 @@ package io.github.guillex7.explodeany.command.registrable;
 import java.util.Arrays;
 import java.util.List;
 
+import io.github.guillex7.explodeany.command.registrable.checktool.CommandChecktool;
+import io.github.guillex7.explodeany.command.registrable.configuration.CommandConfiguration;
+
 public class CommandEany extends RegistrableCommand {
     @Override
     public String getName() {
@@ -10,12 +13,8 @@ public class CommandEany extends RegistrableCommand {
     }
 
     @Override
-    public String getUsage() {
-        return "[reload|about|checktool]";
-    }
-
-    @Override
     public List<RegistrableCommand> getSubcommands() {
-        return Arrays.asList(new CommandAbout(), new CommandChecktool(), new CommandReload());
+        return Arrays.asList(new CommandAbout(), new CommandChecktool(), new CommandConfiguration(),
+                new CommandReload());
     }
 }

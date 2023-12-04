@@ -36,6 +36,28 @@ public abstract class RegistrableCommand {
         return new ArrayList<>();
     }
 
+    public boolean execute(CommandSender sender, String[] args) {
+        return false;
+    }
+
+    public void onTabComplete(CommandSender sender, String[] args, List<String> autocompletion) {
+        return;
+    }
+
+    public abstract String getName();
+
+    public final boolean isTerminal() {
+        return this.getSubcommands().isEmpty();
+    }
+
+    public final Map<String, RegistrableCommand> getMappedSubcommands() {
+        return mappedSubcommands;
+    }
+
+    public final Set<String> getAllNames() {
+        return allNames;
+    }
+
     private final void mapSubcommands() {
         if (this.mappedSubcommands == null) {
             this.mappedSubcommands = new HashMap<>();
@@ -61,18 +83,4 @@ public abstract class RegistrableCommand {
         this.allNames.add(this.getName());
         this.allNames.addAll(this.getAliases());
     }
-
-    public final Map<String, RegistrableCommand> getMappedSubcommands() {
-        return mappedSubcommands;
-    }
-
-    public final Set<String> getAllNames() {
-        return allNames;
-    }
-
-    public boolean execute(CommandSender sender, String[] args) {
-        return false;
-    }
-
-    public abstract String getName();
 }

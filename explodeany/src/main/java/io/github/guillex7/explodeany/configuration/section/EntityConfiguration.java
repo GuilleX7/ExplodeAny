@@ -38,7 +38,7 @@ public class EntityConfiguration {
     }
 
     public static EntityConfiguration byDefault() {
-        return EntityConfiguration.of(0.0d, 1.0d, false, 0.5d, false, false, false, false,
+        return EntityConfiguration.of(0.0d, 1.0d, false, 0.5d, false, true, false, false,
                 SoundConfiguration.byDefault(),
                 ParticleConfiguration.byDefault());
     }
@@ -228,5 +228,29 @@ public class EntityConfiguration {
         } else if (!particleConfiguration.equals(other.particleConfiguration))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "&7<General>\n"
+                        + "&fExplosion radius: %.2f\n"
+                        + "&fExplosion factor: %.2f\n"
+                        + "&fReplace original explosion: %b\n"
+                        + "&fUnderwater explosion factor: %.2f\n"
+                        + "&fDamage blocks underwater: %b\n"
+                        + "&fReplace underwater original explosion: %b\n"
+                        + "&fRemove nearby waterlogged: %b\n"
+                        + "&fRemove nearby liquids: %b\n"
+                        + "\n&7<Sound>\n"
+                        + "&f%s\n"
+                        + "\n&7<Particle>\n"
+                        + "&f%s",
+                this.getExplosionRadius(), this.getExplosionFactor(), this.doReplaceOriginalExplosion(),
+                this.getUnderwaterExplosionFactor(), this.doesExplosionDamageBlocksUnderwater(),
+                this.doReplaceOriginalExplosionWhenUnderwater(),
+                this.doesExplosionRemoveWaterloggedStateFromNearbyBlocks(),
+                this.doesExplosionRemoveNearbyLiquid(), this.getSoundConfiguration().toString(),
+                this.getParticleConfiguration().toString());
     }
 }

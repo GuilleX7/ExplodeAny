@@ -66,4 +66,12 @@ public class ParticleData {
     public void setMaterial(Material material) {
         this.material = material;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Name: %s\n"
+                + "R: %d G: %d B: %d\n"
+                + "Size: %.2f\n"
+                + "Material: %s", name, red, green, blue, size, material != null ? material.toString() : "(None)");
+    }
 }

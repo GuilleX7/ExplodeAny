@@ -21,13 +21,13 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 
 public class BlockDatabase {
     private static BlockDatabase instance;
-    private static final TypeToken<Map<BlockLocation, BlockStatus>> databaseTypeToken = new TypeToken<Map<BlockLocation, BlockStatus>>() {
+    private static final TypeToken<Map<BlockLocation, BlockStatus>> DATABASE_TYPE_TOKEN = new TypeToken<Map<BlockLocation, BlockStatus>>() {
     };
 
     private Map<BlockLocation, BlockStatus> database;
 
     private static TypeToken<Map<BlockLocation, BlockStatus>> getDatabaseTypeToken() {
-        return databaseTypeToken;
+        return DATABASE_TYPE_TOKEN;
     }
 
     private BlockDatabase() {
