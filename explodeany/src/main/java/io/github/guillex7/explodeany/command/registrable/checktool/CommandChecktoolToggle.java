@@ -15,6 +15,8 @@ import io.github.guillex7.explodeany.util.SetUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public class CommandChecktoolToggle extends RegistrableCommand {
+    private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_TOGGLE);
+
     @Override
     public String getName() {
         return "toggle";
@@ -26,8 +28,8 @@ public class CommandChecktoolToggle extends RegistrableCommand {
     }
 
     @Override
-    public Set<PermissionNode> getRequiredPermissions() {
-        return SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_TOGGLE);
+    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
+        return REQUIRED_PERMISSIONS.stream().allMatch(permission -> sender.hasPermission(permission.getKey()));
     }
 
     @Override

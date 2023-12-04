@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-
-import io.github.guillex7.explodeany.configuration.PermissionNode;
 
 public abstract class RegistrableCommand {
     private Map<String, RegistrableCommand> mappedSubcommands;
@@ -28,8 +27,8 @@ public abstract class RegistrableCommand {
         return "";
     }
 
-    public Set<PermissionNode> getRequiredPermissions() {
-        return new HashSet<>();
+    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
+        return this.getSubcommands().stream().anyMatch(subcommand -> subcommand.isCommandSenderAllowedToUse(sender));
     }
 
     public List<RegistrableCommand> getSubcommands() {

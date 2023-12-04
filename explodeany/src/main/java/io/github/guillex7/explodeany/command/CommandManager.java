@@ -62,7 +62,7 @@ public class CommandManager implements TabExecutor {
             breadcrumbsBuilder.append(rootCommand.getName());
         }
 
-        if (!this.isSenderAllowedToUseCommand(sender, rootCommand)) {
+        if (!rootCommand.isCommandSenderAllowedToUse(sender)) {
             sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.NOT_ALLOWED));
             return true;
         }
@@ -71,8 +71,10 @@ public class CommandManager implements TabExecutor {
             String usageDescription = "";
             if (!rootCommand.isTerminal()) {
                 final String possibleSubcommands = rootCommand.getSubcommands()
-                        .stream().filter(x -> this.isSenderAllowedToUseCommand(sender, x))
-                        .map(RegistrableCommand::getName).reduce((x, y) -> x + "/" + y).orElse("no subcommand available");
+                        .stream().filter(subcommand -> subcommand.isCommandSenderAllowedToUse(sender))
+                        .map(RegistrableCommand::getName)
+                        .reduce((subcommandAName, subcommandBName) -> subcommandAName + "/" + subcommandBName)
+                        .orElse("no subcommand available");
                 usageDescription = String.format("/%s &7<%s>", breadcrumbsBuilder.toString(), possibleSubcommands);
 
             } else {
@@ -113,20 +115,15 @@ public class CommandManager implements TabExecutor {
             final String lastWrittenSubcommand = args[i];
 
             for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
-                if (this.isSenderAllowedToUseCommand(sender, subcommand)) {
+                if (subcommand.isCommandSenderAllowedToUse(sender)) {
                     subcommand.getAllNames().stream().filter(x -> x.startsWith(lastWrittenSubcommand))
                             .forEach(autocompletion::add);
                 }
             }
-        } else if (this.isSenderAllowedToUseCommand(sender, rootCommand)) {
+        } else if (rootCommand.isCommandSenderAllowedToUse(sender)) {
             rootCommand.onTabComplete(sender, Arrays.copyOfRange(args, i, args.length), autocompletion);
         }
 
         return autocompletion;
-    }
-
-    private boolean isSenderAllowedToUseCommand(CommandSender sender, RegistrableCommand command) {
-        return command.getRequiredPermissions().stream()
-                .allMatch(requiredPermission -> sender.hasPermission(requiredPermission.getKey()));
     }
 }

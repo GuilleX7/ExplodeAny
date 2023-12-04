@@ -15,14 +15,16 @@ import io.github.guillex7.explodeany.util.SetUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public class CommandChecktoolSet extends RegistrableCommand {
+    private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_SET);
+
     @Override
     public String getName() {
         return "set";
     }
 
     @Override
-    public Set<PermissionNode> getRequiredPermissions() {
-        return SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_SET);
+    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
+        return REQUIRED_PERMISSIONS.stream().allMatch(permission -> sender.hasPermission(permission.getKey()));
     }
 
     @Override

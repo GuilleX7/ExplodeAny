@@ -15,14 +15,17 @@ import io.github.guillex7.explodeany.util.MessageFormatter;
 import io.github.guillex7.explodeany.util.SetUtils;
 
 public class CommandConfigurationShow extends RegistrableCommand {
+    private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils
+            .createHashSetOf(PermissionNode.CONFIGURATION_SHOW);
+
     @Override
     public String getName() {
         return "show";
     }
 
     @Override
-    public Set<PermissionNode> getRequiredPermissions() {
-        return SetUtils.createHashSetOf(PermissionNode.CONFIGURATION_SHOW);
+    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
+        return this.REQUIRED_PERMISSIONS.stream().allMatch(permission -> sender.hasPermission(permission.getKey()));
     }
 
     @Override

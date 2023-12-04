@@ -18,7 +18,6 @@ permissions:
             explodeany.checktool.*: true
             explodeany.configuration.*: true
             explodeany.reload: true
-            explodeany.about: true
     explodeany.checktool.*:
         description: "Gives all permissions about checktool"
         default: op
@@ -62,6 +61,3 @@ permissions:
     explodeany.reload:
         description: "Gives permission to use reload command"
         default: op
-    explodeany.about:
-        description: "Gives permission to use about command"
-        default: true
