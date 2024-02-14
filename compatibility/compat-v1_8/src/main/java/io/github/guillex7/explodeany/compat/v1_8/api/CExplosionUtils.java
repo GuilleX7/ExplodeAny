@@ -14,6 +14,7 @@ public class CExplosionUtils implements IExplosionUtils {
             case ENDER_CRYSTAL: // End crystal
                 return 6d;
             case PRIMED_TNT: // TNT
+            case MINECART_TNT: // TNT minecart
                 return 4d;
             case CREEPER: // Creeper explosion
                 return isCharged ? 5d : 3d;
