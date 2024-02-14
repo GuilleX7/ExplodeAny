@@ -31,10 +31,12 @@ public final class ConfigurationManager {
 
     private final Map<String, LoadableConfigurationSection<?>> registeredLoadableConfigurationSections;
     private final Set<Material> handledMaterials;
+    private final ConfigurationFile configurationFile;
 
     private ConfigurationManager() {
         this.registeredLoadableConfigurationSections = new HashMap<>();
         this.handledMaterials = new HashSet<>();
+        this.configurationFile = new ConfigurationFile(ExplodeAny.getInstance(), "config.yml");
     }
 
     public static ConfigurationManager getInstance() {
@@ -46,6 +48,10 @@ public final class ConfigurationManager {
 
     public ExplodeAny getPlugin() {
         return ExplodeAny.getInstance();
+    }
+
+    public ConfigurationFile getConfigurationFile() {
+        return this.configurationFile;
     }
 
     public Map<String, LoadableConfigurationSection<?>> getRegisteredLoadableConfigurationSections() {
@@ -65,31 +71,32 @@ public final class ConfigurationManager {
     }
 
     public boolean doUseBlockDatabase() {
-        return this.getPlugin().getConfig().getBoolean(USE_BLOCK_DATABASE_ITEM);
+        return this.getConfigurationFile().getConfig().getBoolean(USE_BLOCK_DATABASE_ITEM);
     }
 
     public boolean doCheckBlockDatabaseAtStartup() {
-        return this.getPlugin().getConfig().getBoolean(CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
+        return this.getConfigurationFile().getConfig().getBoolean(CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
     }
 
     public double getBlockDurability() {
-        return MathUtils.ensureMin(this.getPlugin().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
+        return MathUtils.ensureMin(this.getConfigurationFile().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
     }
 
     public boolean doEnableMetrics() {
-        return this.getPlugin().getConfig().getBoolean(ENABLE_METRICS);
+        return this.getConfigurationFile().getConfig().getBoolean(ENABLE_METRICS);
     }
 
     public String getLocalePrefix() {
-        return this.getPlugin().getConfig().getString(LOCALE_PREFIX_ITEM);
+        return this.getConfigurationFile().getConfig().getString(LOCALE_PREFIX_ITEM);
     }
 
     public Set<String> getDisabledWorlds() {
-        return new HashSet<>(this.getPlugin().getConfig().getStringList(DISABLED_WORLDS_ITEM));
+        return new HashSet<>(this.getConfigurationFile().getConfig().getStringList(DISABLED_WORLDS_ITEM));
     }
 
     public Map<String, List<String>> getGroups() {
-        ConfigurationSection groupsSection = this.getPlugin().getConfig().getConfigurationSection(GROUPS_SECTION);
+        ConfigurationSection groupsSection = this.getConfigurationFile().getConfig()
+                .getConfigurationSection(GROUPS_SECTION);
         Map<String, List<String>> groups = new HashMap<>();
         for (String groupName : groupsSection.getKeys(false)) {
             groups.put(groupName, groupsSection.getStringList(groupName));
@@ -98,17 +105,16 @@ public final class ConfigurationManager {
     }
 
     public void loadConfiguration() {
-        this.getPlugin().saveDefaultConfig();
-        this.getPlugin().reloadConfig();
-        this.getPlugin().getConfig().options().copyDefaults(true);
-        this.getPlugin().saveConfig();
+        this.getConfigurationFile().saveDefault();
+        this.getConfigurationFile().reload();
         this.getPlugin().saveResource("exampleConfig.yml", true);
         this.parseLocale();
     }
 
     private void parseLocale() {
         String localePrefix = this.getLocalePrefix();
-        ConfigurationSection localeSection = this.getPlugin().getConfig().getConfigurationSection(LOCALE_SECTION);
+        ConfigurationSection localeSection = this.getConfigurationFile().getConfig()
+                .getConfigurationSection(LOCALE_SECTION);
         if (localeSection != null) {
             for (String path : localeSection.getValues(false).keySet()) {
                 localeSection.set(path,
@@ -118,7 +124,8 @@ public final class ConfigurationManager {
     }
 
     public String getLocale(ConfigurationLocale locale) {
-        return this.getPlugin().getConfig().getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
+        return this.getConfigurationFile().getConfig()
+                .getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
     }
 
     public void registerLoadableConfigurationSection(LoadableConfigurationSection<?> loadableConfigurationSection) {
@@ -127,7 +134,7 @@ public final class ConfigurationManager {
     }
 
     public void loadAllRegisteredLoadableConfigurationSections() {
-        FileConfiguration config = this.getPlugin().getConfig();
+        FileConfiguration config = this.getConfigurationFile().getConfig();
 
         for (LoadableConfigurationSection<?> loadableConfigurationSection : this
                 .getRegisteredLoadableConfigurationSections()
