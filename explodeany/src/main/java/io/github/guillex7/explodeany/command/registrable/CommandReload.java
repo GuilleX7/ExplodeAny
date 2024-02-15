@@ -2,7 +2,6 @@ package io.github.guillex7.explodeany.command.registrable;
 
 import java.util.Set;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import io.github.guillex7.explodeany.ExplodeAny;
