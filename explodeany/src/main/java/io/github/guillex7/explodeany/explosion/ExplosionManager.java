@@ -20,6 +20,7 @@ import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
 import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
+import io.github.guillex7.explodeany.configuration.section.EntityBehavioralConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
@@ -109,12 +110,15 @@ public class ExplosionManager {
         final int squaredExplosionRadius = explosionRadius * explosionRadius;
         final World sourceWorld = sourceLocation.getWorld();
 
+        final EntityBehavioralConfiguration entityBehavioralConfiguration = entityConfiguration
+                .getEntityBehavioralConfiguration();
         final List<Block> unhandledWaterloggedBlocks = new ArrayList<>(squaredExplosionRadius);
         final List<Block> liquidBlocks = new ArrayList<>(squaredExplosionRadius);
 
         // Hint: This is a very expensive operation, so we only do it if we have to.
-        if (!materialConfigurations.isEmpty() || entityConfiguration.doesExplosionRemoveNearbyLiquid()
-                || entityConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()) {
+        if (!materialConfigurations.isEmpty() || entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquids()
+                || entityBehavioralConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()
+                || entityBehavioralConfiguration.doesExplosionRemoveNearbyWaterloggedBlocks()) {
             for (int x = cx - explosionRadius; x < cxpr; x++) {
                 for (int y = cy - explosionRadius; y < cypr; y++) {
                     for (int z = cz - explosionRadius; z < czpr; z++) {
@@ -152,23 +156,45 @@ public class ExplosionManager {
         entityConfiguration.getSoundConfiguration().playAt(sourceLocation);
         entityConfiguration.getParticleConfiguration().spawnAt(sourceLocation);
 
-        if (entityConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()) {
+        if (entityBehavioralConfiguration.doesExplosionRemoveNearbyWaterloggedBlocks()
+                && ((entityBehavioralConfiguration.doesExplosionRemoveNearbyWaterloggedBlocksSurface()
+                        && !isSourceLocationLiquidlike)
+                        || (entityBehavioralConfiguration.doesExplosionRemoveNearbyWaterloggedBlocksUnderwater()
+                                && isSourceLocationLiquidlike))) {
+            for (Block unhandledWaterloggedBlock : unhandledWaterloggedBlocks) {
+                unhandledWaterloggedBlock.setType(Material.AIR);
+            }
+        } else if (entityBehavioralConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks() &&
+                ((entityBehavioralConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface()
+                        && !isSourceLocationLiquidlike)
+                        || (entityBehavioralConfiguration
+                                .doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater()
+                                && isSourceLocationLiquidlike))) {
             for (Block unhandledWaterloggedBlock : unhandledWaterloggedBlocks) {
                 this.blockDataUtils.setIsBlockWaterlogged(unhandledWaterloggedBlock, false);
             }
         }
 
-        if (entityConfiguration.doesExplosionRemoveNearbyLiquid()) {
+        if (entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquids()
+                && ((entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquidsSurface()
+                        && !isSourceLocationLiquidlike)
+                        || (entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquidsUnderwater()
+                                && isSourceLocationLiquidlike))) {
             for (Block liquidBlock : liquidBlocks) {
                 liquidBlock.setType(Material.AIR);
             }
         }
 
-        if (entityConfiguration.doesExplosionDamageBlocksUnderwater()
-                && isSourceLocationLiquid) {
-            sourceLocation.getBlock().setType(Material.AIR);
-            this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
-            return entityConfiguration.doReplaceOriginalExplosionWhenUnderwater();
+        if (entityConfiguration.doesExplosionDamageBlocksUnderwater()) {
+            if (isSourceLocationLiquid) {
+                sourceLocation.getBlock().setType(Material.AIR);
+                this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
+                return entityConfiguration.doReplaceOriginalExplosionWhenUnderwater();
+            } else if (isSourceLocationLiquidlike) {
+                this.blockDataUtils.setIsBlockWaterlogged(sourceLocation.getBlock(), false);
+                this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
+                return entityConfiguration.doReplaceOriginalExplosionWhenUnderwater();
+            }
         }
 
         if (entityConfiguration.doReplaceOriginalExplosion()) {

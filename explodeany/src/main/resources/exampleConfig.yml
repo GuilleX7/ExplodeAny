@@ -114,10 +114,26 @@ VanillaEntity:
             # thus causing damage to blocks that would normally not break, like waterlogged stairs, etc.
             # [Default] is false.
             ExplosionRemoveWaterloggedStateFromNearbyBlocks: false
+            # Specifies when ExplosionRemoveWaterloggedStateFromNearbyBlocks is applied. Surface and
+            # underwater refer to the explosion's location.
+            ExplosionRemoveWaterloggedStateFromNearbyBlocksOnSurface: true
+            ExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater: true
+            # The explosion will remove nearby waterlogged blocks before the explosion. If this and
+            # ExplosionRemoveWaterloggedStateFromNearbyBlocks are both set to true, then this takes
+            # precedence.
+            ExplosionRemoveNearbyWaterloggedBlocks: false
+            # Specifies when ExplosionRemoveNearbyWaterloggedBlocks is applied. Surface and underwater
+            # refer to the explosion's location.
+            ExplosionRemoveNearbyWaterloggedBlocksOnSurface: true
+            ExplosionRemoveNearbyWaterloggedBlocksUnderwater: true
             # The explosion will remove nearby liquids before the explosion, thus allowing to break
             # through liquids.
             # [Default] is false.
             ExplosionRemoveNearbyLiquids: false
+            # Specifies when ExplosionRemoveNearbyLiquids is applied. Surface and underwater refer to
+            # the explosion's location.
+            ExplosionRemoveNearbyLiquidsOnSurface: true
+            ExplosionRemoveNearbyLiquidsUnderwater: true
             # This section allows to specify the particles that will spawn when the entity explodes.
             Particles:
                 # Name of the particles to be spawned. Valid values are listed in
