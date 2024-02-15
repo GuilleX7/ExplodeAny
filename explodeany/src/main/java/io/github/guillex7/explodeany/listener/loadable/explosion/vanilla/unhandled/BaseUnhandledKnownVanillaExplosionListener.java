@@ -28,7 +28,7 @@ public abstract class BaseUnhandledKnownVanillaExplosionListener extends BaseUnh
         Entity entity = event.getEntity();
         EntityType entityType = event.getEntityType();
         String entityTypeName = entityType.toString();
-        
+
         // Special cases
         boolean isCharged = false;
         if ((entityType.equals(EntityType.CREEPER) && ((Creeper) entity).isPowered()) ||

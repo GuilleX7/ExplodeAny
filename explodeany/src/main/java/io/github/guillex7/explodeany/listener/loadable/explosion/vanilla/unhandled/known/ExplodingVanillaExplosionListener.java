@@ -3,7 +3,6 @@ package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhand
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.ExplodingVanillaEntityConfiguration;
@@ -11,7 +10,7 @@ import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandl
 
 public final class ExplodingVanillaExplosionListener extends BaseUnhandledKnownVanillaExplosionListener {
     public static boolean isEntityVanilla(Entity entity) {
-        return CompatibilityManager.getInstance().getApi().getPersistentStorageUtils().getForEntity(entity).isEmpty();
+        return !MagicVanillaExplosionListener.isEntitySpawnedByMagic(entity);
     }
 
     @Override

@@ -13,12 +13,13 @@ import io.github.guillex7.explodeany.configuration.loadable.vanilla.MagicVanilla
 import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.BaseUnhandledKnownVanillaExplosionListener;
 
 public class MagicVanillaExplosionListener extends BaseUnhandledKnownVanillaExplosionListener {
-    private static final Plugin MAGIC_SPAWNED_NAMESPACE = Bukkit.getPluginManager().getPlugin("Magic");
+    private static final Plugin MAGIC_PLUGIN = Bukkit.getPluginManager().getPlugin("Magic");
     private static final String MAGIC_SPAWNED_KEY = "magicspawned";
 
     public static boolean isEntitySpawnedByMagic(Entity entity) {
-        return CompatibilityManager.getInstance().getApi().getPersistentStorageUtils().getForEntity(entity)
-                .has(MAGIC_SPAWNED_NAMESPACE, MAGIC_SPAWNED_KEY, MetaPersistentDataType.BYTE);
+        return MAGIC_PLUGIN != null
+                && CompatibilityManager.getInstance().getApi().getPersistentStorageUtils().getForEntity(entity)
+                        .has(MAGIC_PLUGIN, MAGIC_SPAWNED_KEY, MetaPersistentDataType.BYTE);
     }
 
     @Override
