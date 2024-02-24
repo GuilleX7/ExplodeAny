@@ -16,7 +16,7 @@ public class ConfigurationFile {
     private File file;
     private FileConfiguration fileConfiguration;
 
-    ConfigurationFile(JavaPlugin plugin, String fileName) {
+    public ConfigurationFile(JavaPlugin plugin, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
         this.file = new File(plugin.getDataFolder(), fileName);

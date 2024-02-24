@@ -24,6 +24,6 @@ public class BlockStatusAdapter extends TypeAdapter<BlockStatus> {
         String materialName = in.nextString();
         in.endArray();
 
-        return BlockStatus.of(Material.valueOf(materialName), durability);
+        return new BlockStatus(Material.valueOf(materialName), durability);
     }
 }

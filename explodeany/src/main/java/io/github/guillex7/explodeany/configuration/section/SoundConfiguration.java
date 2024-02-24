@@ -16,18 +16,8 @@ public class SoundConfiguration {
     private double volume;
     private double pitch;
 
-    private SoundConfiguration(Sound sound, double volume, double pitch) {
-        this.sound = sound;
-        this.volume = volume;
-        this.pitch = pitch;
-    }
-
-    public static SoundConfiguration of(Sound sound, double volume, double pitch) {
-        return new SoundConfiguration(sound, volume, pitch);
-    }
-
     public static SoundConfiguration byDefault() {
-        return SoundConfiguration.of(null, 1.0d, 1.0d);
+        return new SoundConfiguration(null, 1.0d, 1.0d);
     }
 
     public static SoundConfiguration fromConfigurationSection(ConfigurationSection section) {
@@ -40,9 +30,15 @@ public class SoundConfiguration {
             sound = null;
         }
 
-        return SoundConfiguration.of(sound,
+        return new SoundConfiguration(sound,
                 MathUtils.ensureMin(section.getDouble(VOLUME_PATH, defaults.getVolume()), 0.0d),
                 MathUtils.ensureRange(section.getDouble(PITCH_PATH, defaults.getPitch()), 2.0d, 0.5d));
+    }
+
+    public SoundConfiguration(Sound sound, double volume, double pitch) {
+        this.sound = sound;
+        this.volume = volume;
+        this.pitch = pitch;
     }
 
     public void playAt(Location location) {
@@ -59,55 +55,12 @@ public class SoundConfiguration {
         return sound;
     }
 
-    public void setSound(Sound sound) {
-        this.sound = sound;
-    }
-
     public double getVolume() {
         return volume;
     }
 
-    public void setVolume(double volume) {
-        this.volume = volume;
-    }
-
     public double getPitch() {
         return pitch;
-    }
-
-    public void setPitch(double pitch) {
-        this.pitch = pitch;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((sound == null) ? 0 : sound.hashCode());
-        long temp;
-        temp = Double.doubleToLongBits(volume);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(pitch);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        SoundConfiguration other = (SoundConfiguration) obj;
-        if (sound != other.sound)
-            return false;
-        if (Double.doubleToLongBits(volume) != Double.doubleToLongBits(other.volume))
-            return false;
-        if (Double.doubleToLongBits(pitch) != Double.doubleToLongBits(other.pitch))
-            return false;
-        return true;
     }
 
     @Override

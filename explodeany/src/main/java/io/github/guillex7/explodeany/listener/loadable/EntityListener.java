@@ -53,7 +53,7 @@ public final class EntityListener implements LoadableListener {
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
                 && this.compatibilityManager.getApi().getPlayerInteractionEventUtils()
                         .doesInteractionUseMainHand(event)
-                && this.checktoolManager.getPlayersUsingChecktool().contains(player)) {
+                && this.checktoolManager.isPlayerUsingChecktool(player)) {
             ItemStack itemInHand = new ItemStack(this.compatibilityManager.getApi().getPlayerInventoryUtils()
                     .getItemInMainHand(player.getInventory()));
             ItemStack checktool = this.checktoolManager.getChecktool();

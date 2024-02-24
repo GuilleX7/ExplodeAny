@@ -77,12 +77,12 @@ public class CommandChecktoolToggle extends RegistrableCommand {
         ConfigurationLocale receiverLocaleMessage;
         ConfigurationLocale senderLocaleMessage;
 
-        if (checktoolManager.getPlayersUsingChecktool().contains(receiver)) {
-            checktoolManager.getPlayersUsingChecktool().remove(receiver);
+        if (checktoolManager.isPlayerUsingChecktool(receiver)) {
+            checktoolManager.removePlayerUsingChecktool(receiver);
             receiverLocaleMessage = ConfigurationLocale.LEAVE_CHECKTOOL_MODE;
             senderLocaleMessage = ConfigurationLocale.CHECKTOOL_TOGGLED_OFF;
         } else {
-            checktoolManager.getPlayersUsingChecktool().add(receiver);
+            checktoolManager.addPlayerUsingChecktool(receiver);
             receiverLocaleMessage = ConfigurationLocale.ENTER_CHECKTOOL_MODE;
             senderLocaleMessage = ConfigurationLocale.CHECKTOOL_TOGGLED_ON;
         }

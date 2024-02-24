@@ -17,7 +17,7 @@ public class BlockLocationAdapter extends TypeAdapter<BlockLocation> {
     @Override
     public BlockLocation read(JsonReader in) throws IOException {
         String parts[] = in.nextString().split(":");
-        return BlockLocation.of(UUID.fromString(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
+        return new BlockLocation(UUID.fromString(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
                 Integer.parseInt(parts[3]));
     }
 }

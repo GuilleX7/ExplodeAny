@@ -48,8 +48,16 @@ public class ChecktoolManager {
         return ExplodeAny.getInstance();
     }
 
-    public Set<Player> getPlayersUsingChecktool() {
-        return playersUsingChecktool;
+    public boolean isPlayerUsingChecktool(Player player) {
+        return this.playersUsingChecktool.contains(player);
+    }
+
+    public void addPlayerUsingChecktool(Player player) {
+        this.playersUsingChecktool.add(player);
+    }
+
+    public void removePlayerUsingChecktool(Player player) {
+        this.playersUsingChecktool.remove(player);
     }
 
     private ItemStack getDefaultChecktool() {
@@ -89,13 +97,13 @@ public class ChecktoolManager {
     }
 
     public boolean persistChecktool() {
+        boolean checktoolWasPersistedSuccessfully = false;
+
         try {
             this.checktoolFile.createNewFile();
-        } catch (IOException e) {
-            return false;
+        } catch (Exception e) {
+            checktoolWasPersistedSuccessfully = false;
         }
-
-        boolean checktoolWasPersistedSuccessfully = false;
 
         if (this.checktoolFile.exists() && this.checktoolFile.canWrite()) {
             try (OutputStream outputStream = new FileOutputStream(this.checktoolFile);

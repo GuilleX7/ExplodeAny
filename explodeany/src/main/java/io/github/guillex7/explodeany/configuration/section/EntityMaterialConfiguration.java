@@ -20,15 +20,8 @@ public class EntityMaterialConfiguration {
     private SoundConfiguration soundConfiguration;
     private ParticleConfiguration particleConfiguration;
 
-    public static EntityMaterialConfiguration of(double damage, double dropChance, double distanceAttenuationFactor,
-            double underwaterDamageFactor, boolean fancyUnderwaterDetection,
-            SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
-        return new EntityMaterialConfiguration(damage, dropChance, distanceAttenuationFactor,
-                underwaterDamageFactor, fancyUnderwaterDetection, soundConfiguration, particleConfiguration);
-    }
-
     public static EntityMaterialConfiguration byDefault() {
-        return EntityMaterialConfiguration.of(ConfigurationManager.getInstance().getBlockDurability(), 0.0d, 0.0d,
+        return new EntityMaterialConfiguration(ConfigurationManager.getInstance().getBlockDurability(), 0.0d, 0.0d,
                 0.5d, false, SoundConfiguration.byDefault(), ParticleConfiguration.byDefault());
     }
 
@@ -38,7 +31,7 @@ public class EntityMaterialConfiguration {
         ConfigurationSection particleConfigurationSection = section
                 .getConfigurationSection(ParticleConfiguration.ROOT_PATH);
 
-        return EntityMaterialConfiguration.of(
+        return new EntityMaterialConfiguration(
                 MathUtils.ensureMin(section.getDouble(DAMAGE_PATH, defaults.getDamage()), 0.0d),
                 MathUtils.ensureRange(section.getDouble(DROP_CHANCE_PATH, defaults.getDropChance()), 100.0d,
                         0.0d) / 100.0d,
@@ -56,7 +49,7 @@ public class EntityMaterialConfiguration {
                         : ParticleConfiguration.byDefault());
     }
 
-    private EntityMaterialConfiguration(double damage, double dropChance, double distanceAttenuationFactor,
+    public EntityMaterialConfiguration(double damage, double dropChance, double distanceAttenuationFactor,
             double underwaterDamageFactor, boolean fancyUnderwaterDetection,
             SoundConfiguration soundConfiguration, ParticleConfiguration particleConfiguration) {
         this.damage = damage;
@@ -72,10 +65,6 @@ public class EntityMaterialConfiguration {
         return damage;
     }
 
-    public void setDamage(double damage) {
-        this.damage = damage;
-    }
-
     public double getDropChance() {
         return dropChance;
     }
@@ -84,16 +73,8 @@ public class EntityMaterialConfiguration {
         return Math.random() < this.getDropChance();
     }
 
-    public void setDropChance(double dropChance) {
-        this.dropChance = dropChance;
-    }
-
     public double getDistanceAttenuationFactor() {
         return distanceAttenuationFactor;
-    }
-
-    public void setDistanceAttenuationFactor(double distanceAttenuationFactor) {
-        this.distanceAttenuationFactor = distanceAttenuationFactor;
     }
 
     public double getUnderwaterDamageFactor() {
@@ -104,84 +85,16 @@ public class EntityMaterialConfiguration {
         return this.getUnderwaterDamageFactor() != 1.0;
     }
 
-    public void setUnderwaterDamageFactor(double underwaterDamageFactor) {
-        this.underwaterDamageFactor = underwaterDamageFactor;
-    }
-
     public boolean isFancyUnderwaterDetection() {
         return fancyUnderwaterDetection;
-    }
-
-    public void setFancyUnderwaterDetection(boolean fancyUnderwaterDetection) {
-        this.fancyUnderwaterDetection = fancyUnderwaterDetection;
     }
 
     public SoundConfiguration getSoundConfiguration() {
         return soundConfiguration;
     }
 
-    public void setSoundConfiguration(SoundConfiguration soundConfiguration) {
-        this.soundConfiguration = soundConfiguration;
-    }
-
     public ParticleConfiguration getParticleConfiguration() {
         return particleConfiguration;
-    }
-
-    public void setParticleConfiguration(ParticleConfiguration particleConfiguration) {
-        this.particleConfiguration = particleConfiguration;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        long temp;
-        temp = Double.doubleToLongBits(damage);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(dropChance);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(distanceAttenuationFactor);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(underwaterDamageFactor);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + (fancyUnderwaterDetection ? 1231 : 1237);
-        result = prime * result + ((soundConfiguration == null) ? 0 : soundConfiguration.hashCode());
-        result = prime * result + ((particleConfiguration == null) ? 0 : particleConfiguration.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        EntityMaterialConfiguration other = (EntityMaterialConfiguration) obj;
-        if (Double.doubleToLongBits(damage) != Double.doubleToLongBits(other.damage))
-            return false;
-        if (Double.doubleToLongBits(dropChance) != Double.doubleToLongBits(other.dropChance))
-            return false;
-        if (Double.doubleToLongBits(distanceAttenuationFactor) != Double
-                .doubleToLongBits(other.distanceAttenuationFactor))
-            return false;
-        if (Double.doubleToLongBits(underwaterDamageFactor) != Double.doubleToLongBits(other.underwaterDamageFactor))
-            return false;
-        if (fancyUnderwaterDetection != other.fancyUnderwaterDetection)
-            return false;
-        if (soundConfiguration == null) {
-            if (other.soundConfiguration != null)
-                return false;
-        } else if (!soundConfiguration.equals(other.soundConfiguration))
-            return false;
-        if (particleConfiguration == null) {
-            if (other.particleConfiguration != null)
-                return false;
-        } else if (!particleConfiguration.equals(other.particleConfiguration))
-            return false;
-        return true;
     }
 
     @Override

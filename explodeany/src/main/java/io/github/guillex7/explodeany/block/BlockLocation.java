@@ -3,7 +3,6 @@ package io.github.guillex7.explodeany.block;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
@@ -13,19 +12,11 @@ public class BlockLocation {
     private int y;
     private int z;
 
-    public static BlockLocation of(UUID worldUuid, int x, int y, int z) {
-        return new BlockLocation(worldUuid, x, y, z);
-    }
-
-    public static BlockLocation fromLocation(Location location) {
-        return of(location.getWorld().getUID(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
-    }
-
     public static BlockLocation fromBlock(Block block) {
-        return of(block.getWorld().getUID(), block.getX(), block.getY(), block.getZ());
+        return new BlockLocation(block.getWorld().getUID(), block.getX(), block.getY(), block.getZ());
     }
 
-    private BlockLocation(UUID worldUuid, int x, int y, int z) {
+    public BlockLocation(UUID worldUuid, int x, int y, int z) {
         this.worldUuid = worldUuid;
         this.x = x;
         this.y = y;
@@ -34,14 +25,6 @@ public class BlockLocation {
 
     public World getWorld() {
         return Bukkit.getServer().getWorld(this.worldUuid);
-    }
-
-    public Location toLocation() {
-        World world = this.getWorld();
-        if (world == null) {
-            return null;
-        }
-        return new Location(world, x, y, z);
     }
 
     public Block toBlock() {
@@ -56,32 +39,16 @@ public class BlockLocation {
         return worldUuid;
     }
 
-    public void setWorldUuid(UUID worldUuid) {
-        this.worldUuid = worldUuid;
-    }
-
     public int getX() {
         return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
     }
 
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public int getZ() {
         return z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
     }
 
     @Override

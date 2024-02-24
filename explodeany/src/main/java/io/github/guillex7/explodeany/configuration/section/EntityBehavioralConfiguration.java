@@ -23,20 +23,6 @@ public class EntityBehavioralConfiguration {
     private boolean explosionRemoveNearbyWaterloggedBlocksSurface;
     private boolean explosionRemoveNearbyWaterloggedBlocksUnderwater;
 
-    public static EntityBehavioralConfiguration of(boolean explosionRemoveWaterloggedStateFromNearbyBlocks,
-            boolean explosionRemoveWaterloggedStateFromNearbyBlocksSurface,
-            boolean explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater, boolean explosionRemoveNearbyLiquids,
-            boolean explosionRemoveNearbyLiquidsSurface, boolean explosionRemoveNearbyLiquidsUnderwater,
-            boolean explosionRemoveNearbyWaterloggedBlocks, boolean explosionRemoveNearbyWaterloggedBlocksSurface,
-            boolean explosionRemoveNearbyWaterloggedBlocksUnderwater) {
-        return new EntityBehavioralConfiguration(explosionRemoveWaterloggedStateFromNearbyBlocks,
-                explosionRemoveWaterloggedStateFromNearbyBlocksSurface,
-                explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater, explosionRemoveNearbyLiquids,
-                explosionRemoveNearbyLiquidsSurface, explosionRemoveNearbyLiquidsUnderwater,
-                explosionRemoveNearbyWaterloggedBlocks, explosionRemoveNearbyWaterloggedBlocksSurface,
-                explosionRemoveNearbyWaterloggedBlocksUnderwater);
-    }
-
     public static EntityBehavioralConfiguration byDefault() {
         return new EntityBehavioralConfiguration(
                 false,

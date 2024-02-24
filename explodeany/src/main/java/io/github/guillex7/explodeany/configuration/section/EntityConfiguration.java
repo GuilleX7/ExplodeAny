@@ -13,33 +13,19 @@ public class EntityConfiguration {
     private static final String REPLACE_ORIGINAL_EXPLOSION_WHEN_UNDERWATER_PATH = "ReplaceOriginalExplosionWhenUnderwater";
     private static final String PACK_DROPPED_ITEMS_PATH = "PackDroppedItems";
 
-    private double explosionRadius;
-    private double explosionFactor;
-    private boolean replaceOriginalExplosion;
-    private double underwaterExplosionFactor;
-    private boolean explosionDamageBlocksUnderwater;
-    private boolean replaceOriginalExplosionWhenUnderwater;
-    private boolean packDroppedItems;
-    private EntityBehavioralConfiguration entityBehavioralConfiguration;
-    private SoundConfiguration soundConfiguration;
-    private ParticleConfiguration particleConfiguration;
-
-    public static EntityConfiguration of(double explosionRadius, double explosionFactor,
-            boolean replaceOriginalExplosion,
-            double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
-            boolean replaceOriginalExplosionWhenUnderwater, boolean packDroppedItems,
-            EntityBehavioralConfiguration entityBehavioralConfiguration,
-            SoundConfiguration soundConfiguration,
-            ParticleConfiguration particleConfiguration) {
-        return new EntityConfiguration(explosionRadius, explosionFactor, replaceOriginalExplosion,
-                underwaterExplosionFactor, explosionDamageBlocksUnderwater, replaceOriginalExplosionWhenUnderwater,
-                packDroppedItems,
-                entityBehavioralConfiguration, soundConfiguration,
-                particleConfiguration);
-    }
+    private final double explosionRadius;
+    private final double explosionFactor;
+    private final boolean replaceOriginalExplosion;
+    private final double underwaterExplosionFactor;
+    private final boolean explosionDamageBlocksUnderwater;
+    private final boolean replaceOriginalExplosionWhenUnderwater;
+    private final boolean packDroppedItems;
+    private final EntityBehavioralConfiguration entityBehavioralConfiguration;
+    private final SoundConfiguration soundConfiguration;
+    private final ParticleConfiguration particleConfiguration;
 
     public static EntityConfiguration byDefault() {
-        return EntityConfiguration.of(0.0d,
+        return new EntityConfiguration(0.0d,
                 1.0d,
                 false,
                 0.5d,
@@ -57,7 +43,7 @@ public class EntityConfiguration {
         ConfigurationSection particleConfigurationSection = section
                 .getConfigurationSection(ParticleConfiguration.ROOT_PATH);
 
-        return EntityConfiguration.of(
+        return new EntityConfiguration(
                 MathUtils.ensureMin(section.getDouble(EXPLOSION_RADIUS_PATH, defaults.getExplosionRadius()), 0.0d),
                 MathUtils.ensureMin(section.getDouble(EXPLOSION_FACTOR_PATH, defaults.getExplosionFactor()), 0.0d),
                 section.getBoolean(REPLACE_ORIGINAL_EXPLOSION_PATH, defaults.doReplaceOriginalExplosion()),
@@ -100,10 +86,6 @@ public class EntityConfiguration {
         return explosionRadius;
     }
 
-    public void setExplosionRadius(double explosionRadius) {
-        this.explosionRadius = explosionRadius;
-    }
-
     public double getExplosionFactor() {
         return explosionFactor;
     }
@@ -112,44 +94,20 @@ public class EntityConfiguration {
         return replaceOriginalExplosion;
     }
 
-    public void setReplaceOriginalExplosion(boolean replaceOriginalExplosion) {
-        this.replaceOriginalExplosion = replaceOriginalExplosion;
-    }
-
-    public void setExplosionFactor(double explosionFactor) {
-        this.explosionFactor = explosionFactor;
-    }
-
     public double getUnderwaterExplosionFactor() {
         return underwaterExplosionFactor;
-    }
-
-    public void setUnderwaterExplosionFactor(double underwaterExplosionFactor) {
-        this.underwaterExplosionFactor = underwaterExplosionFactor;
     }
 
     public boolean doesExplosionDamageBlocksUnderwater() {
         return explosionDamageBlocksUnderwater;
     }
 
-    public void setExplosionDamageBlocksUnderwater(boolean explosionDamageBlocksUnderwater) {
-        this.explosionDamageBlocksUnderwater = explosionDamageBlocksUnderwater;
-    }
-
     public boolean doReplaceOriginalExplosionWhenUnderwater() {
         return replaceOriginalExplosionWhenUnderwater;
     }
 
-    public void setReplaceOriginalExplosionWhenUnderwater(boolean replaceOriginalExplosionWhenUnderwater) {
-        this.replaceOriginalExplosionWhenUnderwater = replaceOriginalExplosionWhenUnderwater;
-    }
-
     public boolean doPackDroppedItems() {
         return packDroppedItems;
-    }
-
-    public void setPackDroppedItems(boolean packDroppedItems) {
-        this.packDroppedItems = packDroppedItems;
     }
 
     public EntityBehavioralConfiguration getEntityBehavioralConfiguration() {
@@ -160,77 +118,8 @@ public class EntityConfiguration {
         return soundConfiguration;
     }
 
-    public void setSoundConfiguration(SoundConfiguration soundConfiguration) {
-        this.soundConfiguration = soundConfiguration;
-    }
-
     public ParticleConfiguration getParticleConfiguration() {
         return particleConfiguration;
-    }
-
-    public void setParticleConfiguration(ParticleConfiguration particleConfiguration) {
-        this.particleConfiguration = particleConfiguration;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        long temp;
-        temp = Double.doubleToLongBits(explosionRadius);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(explosionFactor);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + (replaceOriginalExplosion ? 1231 : 1237);
-        temp = Double.doubleToLongBits(underwaterExplosionFactor);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + (explosionDamageBlocksUnderwater ? 1231 : 1237);
-        result = prime * result + (replaceOriginalExplosionWhenUnderwater ? 1231 : 1237);
-        result = prime * result
-                + ((entityBehavioralConfiguration == null) ? 0 : entityBehavioralConfiguration.hashCode());
-        result = prime * result + ((soundConfiguration == null) ? 0 : soundConfiguration.hashCode());
-        result = prime * result + ((particleConfiguration == null) ? 0 : particleConfiguration.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        EntityConfiguration other = (EntityConfiguration) obj;
-        if (Double.doubleToLongBits(explosionRadius) != Double.doubleToLongBits(other.explosionRadius))
-            return false;
-        if (Double.doubleToLongBits(explosionFactor) != Double.doubleToLongBits(other.explosionFactor))
-            return false;
-        if (replaceOriginalExplosion != other.replaceOriginalExplosion)
-            return false;
-        if (Double.doubleToLongBits(underwaterExplosionFactor) != Double
-                .doubleToLongBits(other.underwaterExplosionFactor))
-            return false;
-        if (explosionDamageBlocksUnderwater != other.explosionDamageBlocksUnderwater)
-            return false;
-        if (replaceOriginalExplosionWhenUnderwater != other.replaceOriginalExplosionWhenUnderwater)
-            return false;
-        if (entityBehavioralConfiguration == null) {
-            if (other.entityBehavioralConfiguration != null)
-                return false;
-        } else if (!entityBehavioralConfiguration.equals(other.entityBehavioralConfiguration))
-            return false;
-        if (soundConfiguration == null) {
-            if (other.soundConfiguration != null)
-                return false;
-        } else if (!soundConfiguration.equals(other.soundConfiguration))
-            return false;
-        if (particleConfiguration == null) {
-            if (other.particleConfiguration != null)
-                return false;
-        } else if (!particleConfiguration.equals(other.particleConfiguration))
-            return false;
-        return true;
     }
 
     @Override
