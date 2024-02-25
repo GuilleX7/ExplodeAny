@@ -211,8 +211,8 @@ VanillaEntity:
                 # A value greater than 1.0 means damage underwater is magnified.
                 UnderwaterDamageFactor: 0.5
                 # Specifies when UnderwaterDamageFactor is applied.
-                # False [default]: Look for water in the explosion center. (fast)
-                # True: Trace a ray from the explosion center to each block and look for water. (slow)
+                # False [default]: Look for water in the explosion center. (faster)
+                # True: Trace a ray from the explosion center to each block and look for water. (fast)
                 FancyUnderwaterDetection: false
                 # Note how Particles and Sound sections can also be placed here, in the material section.
                 Particles:
@@ -254,7 +254,6 @@ CannonProjectile:
                 Damage: 50.0
                 DropChance: 0.0
                 DistanceAttenuationFactor: 0.0
-                ExplosionRadiusFactor: 0.5
                 UnderwaterDamageFactor: 1.0
                 FancyUnderwaterDetection: false
 
