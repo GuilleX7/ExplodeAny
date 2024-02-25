@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
@@ -23,6 +24,7 @@ import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.section.EntityBehavioralConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.explosion.drop.DropCollector;
 import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
 import io.github.guillex7.explodeany.explosion.liquid.TrajectoryExplosionLiquidDetector;
 
@@ -114,6 +116,15 @@ public class ExplosionManager {
                 .getEntityBehavioralConfiguration();
         final List<Block> unhandledWaterloggedBlocks = new ArrayList<>(squaredExplosionRadius);
         final List<Block> liquidBlocks = new ArrayList<>(squaredExplosionRadius);
+        final Map<Material, Integer> packedDropCounter = new HashMap<>(materialConfigurations.size(), 1);
+
+        final DropCollector dropCollector = entityConfiguration.doPackDroppedItems()
+                ? (material, location) -> {
+                    packedDropCounter.put(material, packedDropCounter.getOrDefault(material, 0) + 1);
+                }
+                : (material, location) -> {
+                    sourceWorld.dropItemNaturally(location, new ItemStack(material, 1));
+                };
 
         // Hint: This is a very expensive operation, so we only do it if we have to.
         if (!materialConfigurations.isEmpty() || entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquids()
@@ -146,10 +157,17 @@ public class ExplosionManager {
                             continue;
                         }
 
-                        this.damageBlock(materialConfiguration, block, sourceLocation, squaredExplosionRadius,
-                                squaredDistance, isSourceLocationLiquidlike);
+                        this.damageBlock(materialConfiguration, block, sourceLocation,
+                                squaredExplosionRadius,
+                                squaredDistance, isSourceLocationLiquidlike, dropCollector);
                     }
                 }
+            }
+        }
+
+        if (entityConfiguration.doPackDroppedItems()) {
+            for (Map.Entry<Material, Integer> entry : packedDropCounter.entrySet()) {
+                sourceWorld.dropItemNaturally(sourceLocation, new ItemStack(entry.getKey(), entry.getValue()));
             }
         }
 
@@ -214,12 +232,15 @@ public class ExplosionManager {
     }
 
     private void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
-            Location sourceLocation, double squaredExplosionRadius, double squaredDistance,
-            boolean isSourceLocationLiquidlike) {
+            Location sourceLocation, double squaredExplosionRadius,
+            double squaredDistance,
+            boolean isSourceLocationLiquidlike, DropCollector dropCollector) {
+        final Location targetLocation = targetBlock.getLocation();
         double effectiveDamage = materialConfiguration.getDamage();
 
         if (materialConfiguration.isUnderwaterAffected()
-                && this.areUnderwaterRulesApplicable(materialConfiguration, sourceLocation, targetBlock.getLocation(),
+                && this.areUnderwaterRulesApplicable(materialConfiguration, sourceLocation,
+                        targetLocation,
                         isSourceLocationLiquidlike)) {
             effectiveDamage *= materialConfiguration.getUnderwaterDamageFactor();
         }
@@ -231,15 +252,14 @@ public class ExplosionManager {
         affectedBlockStatus.damage(effectiveDamage);
 
         if (affectedBlockStatus.shouldBreak()) {
-            materialConfiguration.getSoundConfiguration().playAt(targetBlock.getLocation());
-            materialConfiguration.getParticleConfiguration().spawnAt(targetBlock.getLocation());
+            materialConfiguration.getSoundConfiguration().playAt(targetLocation);
+            materialConfiguration.getParticleConfiguration().spawnAt(targetLocation);
 
+            final Material targetBlockMaterial = targetBlock.getType();
+            targetBlock.setType(Material.AIR);
+            this.blockDatabase.removeBlockStatus(targetBlock);
             if (materialConfiguration.shouldBeDropped()) {
-                targetBlock.breakNaturally();
-                // Hint: BlockListener will handle the block status removal.
-            } else {
-                targetBlock.setType(Material.AIR);
-                this.blockDatabase.removeBlockStatus(targetBlock);
+                dropCollector.collect(targetBlockMaterial, targetLocation);
             }
         }
     }

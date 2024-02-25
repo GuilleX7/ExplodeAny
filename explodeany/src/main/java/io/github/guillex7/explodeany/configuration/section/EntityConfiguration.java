@@ -11,6 +11,7 @@ public class EntityConfiguration {
     private static final String UNDERWATER_EXPLOSION_FACTOR_PATH = "UnderwaterExplosionFactor";
     private static final String EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH = "ExplosionDamageBlocksUnderwater";
     private static final String REPLACE_ORIGINAL_EXPLOSION_WHEN_UNDERWATER_PATH = "ReplaceOriginalExplosionWhenUnderwater";
+    private static final String PACK_DROPPED_ITEMS_PATH = "PackDroppedItems";
 
     private double explosionRadius;
     private double explosionFactor;
@@ -18,6 +19,7 @@ public class EntityConfiguration {
     private double underwaterExplosionFactor;
     private boolean explosionDamageBlocksUnderwater;
     private boolean replaceOriginalExplosionWhenUnderwater;
+    private boolean packDroppedItems;
     private EntityBehavioralConfiguration entityBehavioralConfiguration;
     private SoundConfiguration soundConfiguration;
     private ParticleConfiguration particleConfiguration;
@@ -25,11 +27,13 @@ public class EntityConfiguration {
     public static EntityConfiguration of(double explosionRadius, double explosionFactor,
             boolean replaceOriginalExplosion,
             double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
-            boolean replaceOriginalExplosionWhenUnderwater, EntityBehavioralConfiguration entityBehavioralConfiguration,
+            boolean replaceOriginalExplosionWhenUnderwater, boolean packDroppedItems,
+            EntityBehavioralConfiguration entityBehavioralConfiguration,
             SoundConfiguration soundConfiguration,
             ParticleConfiguration particleConfiguration) {
         return new EntityConfiguration(explosionRadius, explosionFactor, replaceOriginalExplosion,
                 underwaterExplosionFactor, explosionDamageBlocksUnderwater, replaceOriginalExplosionWhenUnderwater,
+                packDroppedItems,
                 entityBehavioralConfiguration, soundConfiguration,
                 particleConfiguration);
     }
@@ -41,6 +45,7 @@ public class EntityConfiguration {
                 0.5d,
                 false,
                 true,
+                false,
                 EntityBehavioralConfiguration.byDefault(),
                 SoundConfiguration.byDefault(),
                 ParticleConfiguration.byDefault());
@@ -63,6 +68,7 @@ public class EntityConfiguration {
                         defaults.doesExplosionDamageBlocksUnderwater()),
                 section.getBoolean(REPLACE_ORIGINAL_EXPLOSION_WHEN_UNDERWATER_PATH,
                         defaults.doReplaceOriginalExplosionWhenUnderwater()),
+                section.getBoolean(PACK_DROPPED_ITEMS_PATH, defaults.doPackDroppedItems()),
                 EntityBehavioralConfiguration.fromConfigurationSection(section),
                 (soundConfigurationSection != null)
                         ? SoundConfiguration.fromConfigurationSection(soundConfigurationSection)
@@ -74,7 +80,8 @@ public class EntityConfiguration {
 
     public EntityConfiguration(double explosionRadius, double explosionFactor, boolean replaceOriginalExplosion,
             double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
-            boolean replaceOriginalExplosionWhenUnderwater, EntityBehavioralConfiguration entityBehavioralConfiguration,
+            boolean replaceOriginalExplosionWhenUnderwater, boolean packDroppedItems,
+            EntityBehavioralConfiguration entityBehavioralConfiguration,
             SoundConfiguration soundConfiguration,
             ParticleConfiguration particleConfiguration) {
         this.explosionRadius = explosionRadius;
@@ -83,6 +90,7 @@ public class EntityConfiguration {
         this.underwaterExplosionFactor = underwaterExplosionFactor;
         this.explosionDamageBlocksUnderwater = explosionDamageBlocksUnderwater;
         this.replaceOriginalExplosionWhenUnderwater = replaceOriginalExplosionWhenUnderwater;
+        this.packDroppedItems = packDroppedItems;
         this.entityBehavioralConfiguration = entityBehavioralConfiguration;
         this.soundConfiguration = soundConfiguration;
         this.particleConfiguration = particleConfiguration;
@@ -134,6 +142,14 @@ public class EntityConfiguration {
 
     public void setReplaceOriginalExplosionWhenUnderwater(boolean replaceOriginalExplosionWhenUnderwater) {
         this.replaceOriginalExplosionWhenUnderwater = replaceOriginalExplosionWhenUnderwater;
+    }
+
+    public boolean doPackDroppedItems() {
+        return packDroppedItems;
+    }
+
+    public void setPackDroppedItems(boolean packDroppedItems) {
+        this.packDroppedItems = packDroppedItems;
     }
 
     public EntityBehavioralConfiguration getEntityBehavioralConfiguration() {
@@ -227,6 +243,7 @@ public class EntityConfiguration {
                         + "&fUnderwater explosion factor: %.2f\n"
                         + "&fDamage blocks underwater: %b\n"
                         + "&fReplace underwater original explosion: %b\n"
+                        + "&fPack dropped items: %b\n"
                         + "\n&7<Behavior>\n"
                         + "&f%s\n"
                         + "\n&7<Sound>\n"
@@ -235,7 +252,7 @@ public class EntityConfiguration {
                         + "&f%s",
                 this.getExplosionRadius(), this.getExplosionFactor(), this.doReplaceOriginalExplosion(),
                 this.getUnderwaterExplosionFactor(), this.doesExplosionDamageBlocksUnderwater(),
-                this.doReplaceOriginalExplosionWhenUnderwater(),
+                this.doReplaceOriginalExplosionWhenUnderwater(), this.doPackDroppedItems(),
                 this.getEntityBehavioralConfiguration().toString(), this.getSoundConfiguration().toString(),
                 this.getParticleConfiguration().toString());
     }

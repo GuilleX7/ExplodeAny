@@ -134,6 +134,12 @@ VanillaEntity:
             # the explosion's location.
             ExplosionRemoveNearbyLiquidsOnSurface: true
             ExplosionRemoveNearbyLiquidsUnderwater: true
+            # The explosion will pack the dropped items into a single entity, which will be spawned
+            # at the explosion's location. This can help reducing lag on client side when the explosion
+            # causes a lot of items to be spawned (in general, when explosion radius > 10 and many items
+            # are dropped). If set to false, then items will drop naturally (like in Vanilla).
+            # [Default] is false.
+            PackDroppedItems: false
             # This section allows to specify the particles that will spawn when the entity explodes.
             Particles:
                 # Name of the particles to be spawned. Valid values are listed in
