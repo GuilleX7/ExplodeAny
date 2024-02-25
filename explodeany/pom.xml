@@ -32,6 +32,13 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>io.github.guillex7.explodeany</include>
+                                    <include>com.google.code.gson</include>
+                                    <include>org.bstats</include>
+                                </includes>
+                            </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>com.google.gson</pattern>
@@ -60,6 +67,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
             <artifactId>compat-manager</artifactId>
             <version>${explodeany.version}</version>
@@ -76,12 +89,6 @@
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.2</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
         <!-- External plugin support  -->
         <dependency>
