@@ -3,6 +3,7 @@ package io.github.guillex7.explodeany;
 import java.io.File;
 
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
@@ -39,6 +40,12 @@ public class ExplodeAny extends JavaPlugin {
     public void onEnable() {
         super.onEnable();
 
+        if (!this.isFoliaServer()) {
+            this.getLogger().severe(
+                    "It seems like you are not running this plugin on a Folia server. Please download the regular version of this plugin, since this version is only compatible with Folia servers.");
+            return;
+        }
+
         this.compatibilityManager = CompatibilityManager.getInstance();
         this.configurationManager = ConfigurationManager.getInstance();
         this.blockDatabase = BlockDatabase.getInstance();
@@ -46,8 +53,8 @@ public class ExplodeAny extends JavaPlugin {
         this.commandManager = CommandManager.getInstance();
 
         this.getLogger().info(
-                String.format("%s v%s is loading now!", this.getDescription().getName(),
-                        this.getDescription().getVersion()));
+                String.format("%s v%s is loading now!", this.getPluginMeta().getName(),
+                        this.getPluginMeta().getVersion()));
         this.loadCompatibilityLayer();
         this.announceCompatibility();
         this.loadConfiguration();
@@ -60,14 +67,28 @@ public class ExplodeAny extends JavaPlugin {
     @Override
     public void onDisable() {
         super.onDisable();
+
+        if (!this.isFoliaServer()) {
+            return;
+        }
+
         this.getLogger().info(
-                String.format("%s v%s is unloading now!", this.getDescription().getName(),
-                        this.getDescription().getVersion()));
+                String.format("%s v%s is unloading now!", this.getPluginMeta().getName(),
+                        this.getPluginMeta().getVersion()));
         this.shutdownMetrics();
         this.unregisterCommands();
         this.unregisterListeners();
         this.unloadDatabase();
         this.unloadConfiguration();
+    }
+
+    public boolean isFoliaServer() {
+        try {
+            Bukkit.class.getMethod("getGlobalRegionScheduler");
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
     }
 
     public void loadCompatibilityLayer() {
