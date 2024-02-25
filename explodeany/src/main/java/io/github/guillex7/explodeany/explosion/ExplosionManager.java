@@ -1,6 +1,5 @@
 package io.github.guillex7.explodeany.explosion;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TNTPrimed;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
@@ -26,14 +24,17 @@ import io.github.guillex7.explodeany.configuration.section.EntityBehavioralConfi
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.drop.DropCollector;
+import io.github.guillex7.explodeany.explosion.drop.UnpackedDropCollector;
+import io.github.guillex7.explodeany.explosion.drop.PackedDropCollector;
 import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
 import io.github.guillex7.explodeany.explosion.liquid.TrajectoryExplosionLiquidDetector;
+import io.github.guillex7.explodeany.explosion.metadata.ExplosionMetadata;
 
 public class ExplosionManager {
     private static ExplosionManager instance;
 
     public static final String EXPLOSION_MANAGER_SPAWNED_TAG = "eany-em-spawned";
-    public static final String EXPLOSION_MANAGER_MATERIAL_CONFIGURATIONS_TAG = "eany-em-material-configurations";
+    public static final String EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG = "eany-em-explosion-metadata";
 
     private final BlockLiquidDetector blockLiquidDetector;
     private final TrajectoryExplosionLiquidDetector trajectoryExplosionWaterDetector;
@@ -65,26 +66,27 @@ public class ExplosionManager {
         }
     }
 
-    private void markEntityAsSpawnedByExplosionManager(Entity entity,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations) {
+    private void attachExplosionManagerMetadataToEntity(Entity entity,
+            Map<Material, EntityMaterialConfiguration> materialConfigurations, DropCollector dropCollector) {
         entity.setMetadata(EXPLOSION_MANAGER_SPAWNED_TAG,
                 new FixedMetadataValue(ExplodeAny.getInstance(), true));
-        entity.setMetadata(EXPLOSION_MANAGER_MATERIAL_CONFIGURATIONS_TAG,
-                new FixedMetadataValue(ExplodeAny.getInstance(), materialConfigurations));
+        entity.setMetadata(EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG,
+                new FixedMetadataValue(ExplodeAny.getInstance(),
+                        new ExplosionMetadata(materialConfigurations, dropCollector)));
     }
 
     public boolean isEntitySpawnedByExplosionManager(Entity entity) {
         return entity.hasMetadata(EXPLOSION_MANAGER_SPAWNED_TAG);
     }
 
-    @SuppressWarnings("unchecked")
-    public Map<Material, EntityMaterialConfiguration> getMaterialConfigurationsFromEntity(Entity entity) {
-        List<MetadataValue> metadataValueList = entity.getMetadata(EXPLOSION_MANAGER_MATERIAL_CONFIGURATIONS_TAG);
+    public ExplosionMetadata getExplosionManagerMetadataFromEntity(Entity entity) {
+        List<MetadataValue> metadataValueList = entity.getMetadata(EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG);
 
         if (!metadataValueList.isEmpty()) {
-            return (Map<Material, EntityMaterialConfiguration>) metadataValueList.get(0).value();
+            return (ExplosionMetadata) metadataValueList.get(0).value();
         } else {
-            return new HashMap<>(0, 0);
+            // This should never happen, but just in case.
+            return new ExplosionMetadata(new HashMap<>(), new UnpackedDropCollector());
         }
     }
 
@@ -117,20 +119,12 @@ public class ExplosionManager {
         final EntityBehavioralConfiguration entityBehavioralConfiguration = entityConfiguration
                 .getEntityBehavioralConfiguration();
 
-        final Consumer<Block> waterloggedBlockConsumer = this.getWaterloggedBlockConsumer(entityBehavioralConfiguration,
+        final Consumer<Block> waterloggedBlockConsumer = this.getWaterloggedBlockConsumer(
+                entityBehavioralConfiguration,
                 isSourceLocationLiquidlike);
         final Consumer<Block> liquidBlockConsumer = this.getLiquidBlockConsumer(entityBehavioralConfiguration,
                 isSourceLocationLiquidlike);
-
-        final Map<Material, Integer> packedDropCounter = new HashMap<>(materialConfigurations.size(), 1);
-
-        final DropCollector dropCollector = entityConfiguration.doPackDroppedItems()
-                ? (material, location) -> {
-                    packedDropCounter.put(material, packedDropCounter.getOrDefault(material, 0) + 1);
-                }
-                : (material, location) -> {
-                    sourceWorld.dropItemNaturally(location, new ItemStack(material, 1));
-                };
+        final DropCollector dropCollector = this.getDropCollector(entityConfiguration, materialConfigurations);
 
         // Hint: This is a very expensive operation, so we only do it if we have to.
         if (!materialConfigurations.isEmpty() || entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquids()
@@ -153,7 +147,8 @@ public class ExplosionManager {
                             continue;
                         }
 
-                        EntityMaterialConfiguration materialConfiguration = materialConfigurations.get(block.getType());
+                        EntityMaterialConfiguration materialConfiguration = materialConfigurations
+                                .get(block.getType());
                         if (materialConfiguration == null) {
                             if (this.blockDataUtils.isBlockWaterlogged(block)) {
                                 waterloggedBlockConsumer.accept(block);
@@ -171,39 +166,36 @@ public class ExplosionManager {
             }
         }
 
-        if (entityConfiguration.doPackDroppedItems()) {
-            for (Map.Entry<Material, Integer> entry : packedDropCounter.entrySet()) {
-                sourceWorld.dropItemNaturally(sourceLocation, new ItemStack(entry.getKey(), entry.getValue()));
-            }
-        }
-
         entityConfiguration.getSoundConfiguration().playAt(sourceLocation);
         entityConfiguration.getParticleConfiguration().spawnAt(sourceLocation);
 
-        if (entityConfiguration.doesExplosionDamageBlocksUnderwater()) {
+        if (entityConfiguration.doesExplosionDamageBlocksUnderwater() && isSourceLocationLiquidlike) {
             if (isSourceLocationLiquid) {
                 sourceLocation.getBlock().setType(Material.AIR);
-                this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
-                return entityConfiguration.doReplaceOriginalExplosionWhenUnderwater();
-            } else if (isSourceLocationLiquidlike) {
+            } else {
                 this.blockDataUtils.setIsBlockWaterlogged(sourceLocation.getBlock(), false);
-                this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
-                return entityConfiguration.doReplaceOriginalExplosionWhenUnderwater();
             }
+
+            this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius,
+                    dropCollector);
+            return entityConfiguration.doReplaceOriginalExplosionWhenUnderwater();
         }
 
         if (entityConfiguration.doReplaceOriginalExplosion()) {
-            this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius);
+            this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius, dropCollector);
             return true;
         }
+
+        dropCollector.dropCollectedItems(sourceBlockLocation);
 
         return false;
     }
 
     private void spawnManagedExplosion(Location location,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations, double explosionRadius) {
+            Map<Material, EntityMaterialConfiguration> materialConfigurations, double explosionRadius,
+            DropCollector dropCollector) {
         TNTPrimed explosiveEntity = (TNTPrimed) location.getWorld().spawn(location, TNTPrimed.class);
-        this.markEntityAsSpawnedByExplosionManager(explosiveEntity, materialConfigurations);
+        this.attachExplosionManagerMetadataToEntity(explosiveEntity, materialConfigurations, dropCollector);
         explosiveEntity.setFuseTicks(0);
         explosiveEntity.setYield((float) explosionRadius);
     }
@@ -312,5 +304,12 @@ public class ExplosionManager {
         }
 
         return liquidBlockConsumer;
+    }
+
+    private DropCollector getDropCollector(EntityConfiguration entityConfiguration,
+            Map<Material, EntityMaterialConfiguration> materialConfigurations) {
+        return entityConfiguration.doPackDroppedItems()
+                ? new PackedDropCollector(materialConfigurations)
+                : new UnpackedDropCollector();
     }
 }

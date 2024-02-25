@@ -1,14 +1,11 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla;
 
-import java.util.Map;
-
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
+import io.github.guillex7.explodeany.explosion.metadata.ExplosionMetadata;
 import io.github.guillex7.explodeany.listener.loadable.LoadableListener;
 
 public class HandledVanillaExplosionListener implements LoadableListener {
@@ -33,9 +30,11 @@ public class HandledVanillaExplosionListener implements LoadableListener {
             return;
         }
 
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = ExplosionManager.getInstance()
-                .getMaterialConfigurationsFromEntity(event.getEntity());
-        ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList());
+        ExplosionMetadata explosionMetadata = ExplosionManager.getInstance()
+                .getExplosionManagerMetadataFromEntity(event.getEntity());
+        ExplosionManager.getInstance().removeHandledBlocksFromList(explosionMetadata.materialConfigurations,
+                event.blockList());
+        explosionMetadata.dropCollector.dropCollectedItems(event.getLocation());
     }
 
     private boolean isEventHandled(EntityExplodeEvent event) {
