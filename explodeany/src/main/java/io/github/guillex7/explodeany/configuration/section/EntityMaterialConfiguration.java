@@ -69,6 +69,10 @@ public class EntityMaterialConfiguration {
         return dropChance;
     }
 
+    public int getDropChancePercentage() {
+        return (int) (this.getDropChance() * 100);
+    }
+
     public boolean shouldBeDropped() {
         return Math.random() < this.getDropChance();
     }
@@ -102,15 +106,15 @@ public class EntityMaterialConfiguration {
         return String.format(
                 "&7<General>\n"
                         + "&fDamage: %.2f\n"
-                        + "&fDrop chance: %.2f\n"
-                        + "&fDistance attenuation factor: %.2f\n"
-                        + "&fUnderwater damage factor: %.2f\n"
+                        + "&fDrop chance: %d%%\n"
+                        + "&fDistance attenuation factor: x%.2f\n"
+                        + "&fUnderwater damage factor: x%.2f\n"
                         + "&fFancy underwater detection: %b\n"
                         + "\n&7<Sound>\n"
                         + "&f%s\n"
                         + "\n&7<Particle>\n"
                         + "&f%s",
-                this.getDamage(), this.getDropChance(), this.getDistanceAttenuationFactor(),
+                this.getDamage(), this.getDropChancePercentage(), this.getDistanceAttenuationFactor(),
                 this.getUnderwaterDamageFactor(), this.isFancyUnderwaterDetection(),
                 this.getSoundConfiguration().toString(), this.getParticleConfiguration().toString());
     }

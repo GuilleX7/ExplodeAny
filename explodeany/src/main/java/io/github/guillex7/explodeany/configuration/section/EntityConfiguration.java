@@ -86,6 +86,10 @@ public class EntityConfiguration {
         return explosionRadius;
     }
 
+    public boolean isExplosionRadiusOverridden() {
+        return this.getExplosionRadius() > 0.0d;
+    }
+
     public double getExplosionFactor() {
         return explosionFactor;
     }
@@ -124,12 +128,16 @@ public class EntityConfiguration {
 
     @Override
     public String toString() {
+        final String explosionRadiusString = (this.isExplosionRadiusOverridden())
+                ? String.format("%.2f blocks", this.getExplosionRadius())
+                : "default";
+
         return String.format(
                 "&7<General>\n"
-                        + "&fExplosion radius: %.2f\n"
-                        + "&fExplosion factor: %.2f\n"
+                        + "&fExplosion radius: %s\n"
+                        + "&fExplosion factor: x%.2f\n"
                         + "&fReplace original explosion: %b\n"
-                        + "&fUnderwater explosion factor: %.2f\n"
+                        + "&fUnderwater explosion factor: x%.2f\n"
                         + "&fDamage blocks underwater: %b\n"
                         + "&fReplace underwater original explosion: %b\n"
                         + "&fPack dropped items: %b\n"
@@ -139,7 +147,7 @@ public class EntityConfiguration {
                         + "&f%s\n"
                         + "\n&7<Particle>\n"
                         + "&f%s",
-                this.getExplosionRadius(), this.getExplosionFactor(), this.doReplaceOriginalExplosion(),
+                explosionRadiusString, this.getExplosionFactor(), this.doReplaceOriginalExplosion(),
                 this.getUnderwaterExplosionFactor(), this.doesExplosionDamageBlocksUnderwater(),
                 this.doReplaceOriginalExplosionWhenUnderwater(), this.doPackDroppedItems(),
                 this.getEntityBehavioralConfiguration().toString(), this.getSoundConfiguration().toString(),
