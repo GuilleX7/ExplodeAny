@@ -49,6 +49,13 @@
                                     <shadedPattern>io.github.guillex7.explodeany.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
+                            <artifactSet>
+                                <includes>
+                                    <include>io.github.guillex7.explodeany</include>
+                                    <include>com.google.code.gson</include>
+                                    <include>org.bstats</include>
+                                </includes>
+                            </artifactSet>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
@@ -67,9 +74,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
