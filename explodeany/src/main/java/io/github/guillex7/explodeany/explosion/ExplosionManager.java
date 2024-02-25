@@ -111,6 +111,7 @@ public class ExplosionManager {
         final int czpr = cz + explosionRadius;
         final int squaredExplosionRadius = explosionRadius * explosionRadius;
         final World sourceWorld = sourceLocation.getWorld();
+        final Location sourceBlockLocation = new Location(sourceWorld, cx, cy, cz);
 
         final EntityBehavioralConfiguration entityBehavioralConfiguration = entityConfiguration
                 .getEntityBehavioralConfiguration();
@@ -157,8 +158,8 @@ public class ExplosionManager {
                             continue;
                         }
 
-                        this.damageBlock(materialConfiguration, block, sourceLocation,
-                                squaredExplosionRadius,
+                        this.damageBlock(materialConfiguration, block, sourceBlockLocation,
+                                explosionRadius, squaredExplosionRadius,
                                 squaredDistance, isSourceLocationLiquidlike, dropCollector);
                     }
                 }
@@ -232,16 +233,17 @@ public class ExplosionManager {
     }
 
     private void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
-            Location sourceLocation, double squaredExplosionRadius,
+            Location sourceBlockLocation, int explosionRadius, double squaredExplosionRadius,
             double squaredDistance,
             boolean isSourceLocationLiquidlike, DropCollector dropCollector) {
-        final Location targetLocation = targetBlock.getLocation();
+        final Location targetBlockLocation = targetBlock.getLocation();
+
         double effectiveDamage = materialConfiguration.getDamage();
 
         if (materialConfiguration.isUnderwaterAffected()
-                && this.areUnderwaterRulesApplicable(materialConfiguration, sourceLocation,
-                        targetLocation,
-                        isSourceLocationLiquidlike)) {
+                && this.areUnderwaterRulesApplicable(materialConfiguration, sourceBlockLocation,
+                        targetBlockLocation,
+                        isSourceLocationLiquidlike, explosionRadius)) {
             effectiveDamage *= materialConfiguration.getUnderwaterDamageFactor();
         }
 
@@ -252,24 +254,25 @@ public class ExplosionManager {
         affectedBlockStatus.damage(effectiveDamage);
 
         if (affectedBlockStatus.shouldBreak()) {
-            materialConfiguration.getSoundConfiguration().playAt(targetLocation);
-            materialConfiguration.getParticleConfiguration().spawnAt(targetLocation);
+            materialConfiguration.getSoundConfiguration().playAt(targetBlockLocation);
+            materialConfiguration.getParticleConfiguration().spawnAt(targetBlockLocation);
 
             final Material targetBlockMaterial = targetBlock.getType();
             targetBlock.setType(Material.AIR);
             this.blockDatabase.removeBlockStatus(targetBlock);
             if (materialConfiguration.shouldBeDropped()) {
-                dropCollector.collect(targetBlockMaterial, targetLocation);
+                dropCollector.collect(targetBlockMaterial, targetBlockLocation);
             }
         }
     }
 
     private boolean areUnderwaterRulesApplicable(EntityMaterialConfiguration materialConfiguration,
-            Location sourceLocation,
-            Location targetLocation,
-            boolean isSourceLocationLiquidlike) {
+            Location sourceBlockLocation,
+            Location targetBlockLocation,
+            boolean isSourceLocationLiquidlike, int explosionRadius) {
         return materialConfiguration.isFancyUnderwaterDetection()
-                ? this.trajectoryExplosionWaterDetector.isLiquidInTrajectory(sourceLocation, targetLocation)
+                ? this.trajectoryExplosionWaterDetector.isLiquidInTrajectory(sourceBlockLocation, targetBlockLocation,
+                        explosionRadius)
                 : isSourceLocationLiquidlike;
     }
 }
