@@ -4,8 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 public class UnpackedDropItem {
-    Material material;
-    Location location;
+    public Material material;
+    public Location location;
 
     public UnpackedDropItem(Material material, Location location) {
         this.material = material;

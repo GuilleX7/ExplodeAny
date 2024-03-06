@@ -5,5 +5,6 @@ import org.bukkit.Material;
 
 public interface DropCollector {
     void collect(Material material, Location location);
+
     void dropCollectedItems(Location location);
 }
