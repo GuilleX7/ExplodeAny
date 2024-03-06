@@ -19,7 +19,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.listener.loadable.explosion.BaseConfigurableExplosionListener;
 
-public final class CannonExplosionListener extends BaseConfigurableExplosionListener {
+public final class CannonProjectileExplosionListener extends BaseConfigurableExplosionListener {
     @Override
     public String getName() {
         return "Cannons explosions";

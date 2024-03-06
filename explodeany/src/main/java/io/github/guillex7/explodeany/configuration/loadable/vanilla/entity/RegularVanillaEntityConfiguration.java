@@ -1,8 +1,8 @@
-package io.github.guillex7.explodeany.configuration.loadable.vanilla;
+package io.github.guillex7.explodeany.configuration.loadable.vanilla.entity;
 
-import io.github.guillex7.explodeany.compat.common.data.ExplodingVanillaEntity;
+import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
-public class ExplodingVanillaEntityConfiguration extends BaseVanillaEntityConfiguration {
+public class RegularVanillaEntityConfiguration extends BaseVanillaEntityConfiguration {
     public static String getConfigurationId() {
         return "VanillaEntity";
     }
@@ -14,7 +14,7 @@ public class ExplodingVanillaEntityConfiguration extends BaseVanillaEntityConfig
 
     @Override
     public String getSectionPath() {
-        return ExplodingVanillaEntityConfiguration.getConfigurationId();
+        return RegularVanillaEntityConfiguration.getConfigurationId();
     }
 
     @Override

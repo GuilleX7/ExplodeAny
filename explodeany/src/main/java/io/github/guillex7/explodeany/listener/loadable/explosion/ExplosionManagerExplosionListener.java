@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla;
+package io.github.guillex7.explodeany.listener.loadable.explosion;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -8,10 +8,10 @@ import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.explosion.metadata.ExplosionMetadata;
 import io.github.guillex7.explodeany.listener.loadable.LoadableListener;
 
-public class HandledVanillaExplosionListener implements LoadableListener {
+public class ExplosionManagerExplosionListener extends LoadableListener {
     @Override
     public String getName() {
-        return "Overridden explosions manager";
+        return "ExplosionManager explosions";
     }
 
     @Override

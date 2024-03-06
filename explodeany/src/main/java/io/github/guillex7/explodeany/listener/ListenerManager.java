@@ -37,7 +37,7 @@ public class ListenerManager {
             if (!listener.shouldBeLoaded()) {
                 continue;
             }
-            Bukkit.getServer().getPluginManager().registerEvents(listener, ExplodeAny.getInstance());
+            Bukkit.getServer().getPluginManager().registerEvents(listener.getEventListener(), ExplodeAny.getInstance());
             if (listener.isAnnounceable()) {
                 this.getPlugin().getLogger().info(String.format("Enabled support for %s", listener.getName()));
             }

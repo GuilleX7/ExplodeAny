@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.configuration.loadable.vanilla;
+package io.github.guillex7.explodeany.configuration.loadable.vanilla.entity;
 
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 

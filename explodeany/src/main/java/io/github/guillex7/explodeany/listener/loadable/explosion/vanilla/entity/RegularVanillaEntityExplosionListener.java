@@ -1,16 +1,15 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.known;
+package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
-import io.github.guillex7.explodeany.configuration.loadable.vanilla.ExplodingVanillaEntityConfiguration;
-import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.BaseUnhandledKnownVanillaExplosionListener;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 
-public final class ExplodingVanillaExplosionListener extends BaseUnhandledKnownVanillaExplosionListener {
+public final class RegularVanillaEntityExplosionListener extends KnownVanillaEntityExplosionListener {
     public static boolean isEntityVanilla(Entity entity) {
-        return !MagicVanillaExplosionListener.isEntitySpawnedByMagic(entity);
+        return !MagicVanillaEntityExplosionListener.isEntitySpawnedByMagic(entity);
     }
 
     @Override
@@ -31,6 +30,6 @@ public final class ExplodingVanillaExplosionListener extends BaseUnhandledKnownV
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredLoadableConfigurationSection(ExplodingVanillaEntityConfiguration.getConfigurationId());
+                .getRegisteredLoadableConfigurationSection(RegularVanillaEntityConfiguration.getConfigurationId());
     }
 }
