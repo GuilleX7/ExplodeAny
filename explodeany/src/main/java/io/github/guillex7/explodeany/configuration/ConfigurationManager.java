@@ -108,6 +108,7 @@ public final class ConfigurationManager {
         this.getConfigurationFile().saveDefault();
         this.getConfigurationFile().reload();
         this.getPlugin().saveResource("exampleConfig.yml", true);
+        this.getPlugin().saveResource("TUTORIAL.md", true);
         this.parseLocale();
     }
 
