@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.configuration.loadable.vanilla;
+package io.github.guillex7.explodeany.configuration.loadable.vanilla.entity;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -6,8 +6,8 @@ import org.bukkit.plugin.Plugin;
 import com.elmakers.mine.bukkit.api.magic.MagicAPI;
 
 import io.github.guillex7.explodeany.compat.common.Version;
-import io.github.guillex7.explodeany.compat.common.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
+import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
 public class MagicVanillaEntityConfiguration extends BaseVanillaEntityConfiguration {
     private static final Version MINIMUM_SUPPORTED_BUKKIT_VERSION = new Version(1, 16);

@@ -37,6 +37,17 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_8_3</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
             <artifactId>compat-v1_9</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
@@ -60,6 +71,17 @@
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
             <artifactId>compat-v1_14</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_16_1</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>

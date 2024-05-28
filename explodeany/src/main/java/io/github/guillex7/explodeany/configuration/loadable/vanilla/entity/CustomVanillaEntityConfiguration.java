@@ -1,13 +1,13 @@
-package io.github.guillex7.explodeany.configuration.loadable.vanilla;
+package io.github.guillex7.explodeany.configuration.loadable.vanilla.entity;
 
 import java.util.Map;
 
 import org.bukkit.Material;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
 public class CustomVanillaEntityConfiguration extends BaseVanillaEntityConfiguration {
     public static String getConfigurationId() {

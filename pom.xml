@@ -27,9 +27,11 @@
         <module>compatibility/compat-common</module>
         <module>compatibility/compat-manager</module>
         <module>compatibility/compat-v1_8</module>
+        <module>compatibility/compat-v1_8_3</module>
         <module>compatibility/compat-v1_9</module>
         <module>compatibility/compat-v1_13</module>
         <module>compatibility/compat-v1_14</module>
+        <module>compatibility/compat-v1_16_1</module>
     </modules>
 
     <properties>

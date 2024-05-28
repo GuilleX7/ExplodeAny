@@ -18,7 +18,7 @@ import io.github.guillex7.explodeany.configuration.PermissionNode;
 import io.github.guillex7.explodeany.util.ItemStackUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
-public final class EntityListener implements LoadableListener {
+public final class EntityListener extends LoadableListener {
     private final ChecktoolManager checktoolManager;
     private final ConfigurationManager configurationManager;
     private final BlockDatabase blockDatabase;

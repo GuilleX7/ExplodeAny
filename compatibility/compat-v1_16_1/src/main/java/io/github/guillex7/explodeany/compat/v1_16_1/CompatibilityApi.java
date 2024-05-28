@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.compat.v1_9;
+package io.github.guillex7.explodeany.compat.v1_16_1;
 
 import io.github.guillex7.explodeany.compat.common.ICompatibilityApi;
 import io.github.guillex7.explodeany.compat.common.Version;
@@ -8,15 +8,15 @@ import io.github.guillex7.explodeany.compat.common.api.IParticleUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPersistentStorageUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPlayerInteractionEventUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPlayerInventoryUtils;
-import io.github.guillex7.explodeany.compat.v1_8.api.CPersistentStorageUtils;
-import io.github.guillex7.explodeany.compat.v1_9.api.CParticleUtils;
+import io.github.guillex7.explodeany.compat.v1_14.api.CParticleUtils;
+import io.github.guillex7.explodeany.compat.v1_14.api.CPersistentStorageUtils;
+import io.github.guillex7.explodeany.compat.v1_16_1.api.CBukkitListenerUtils;
+import io.github.guillex7.explodeany.compat.v1_13.api.CBlockDataUtils;
 import io.github.guillex7.explodeany.compat.v1_9.api.CPlayerInteractionEventUtils;
 import io.github.guillex7.explodeany.compat.v1_9.api.CPlayerInventoryUtils;
-import io.github.guillex7.explodeany.compat.v1_8.api.CBlockDataUtils;
-import io.github.guillex7.explodeany.compat.v1_8_3.api.CBukkitListenerUtils;
 
 public class CompatibilityApi implements ICompatibilityApi {
-    private final Version minimumSupportedBukkitVersion = new Version(1, 9);
+    private final Version minimumSupportedBukkitVersion = new Version(1, 16, 1);
 
     private IBlockDataUtils blockDataUtils;
     private IParticleUtils particleUtils;

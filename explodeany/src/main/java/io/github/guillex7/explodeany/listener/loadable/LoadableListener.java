@@ -2,12 +2,16 @@ package io.github.guillex7.explodeany.listener.loadable;
 
 import org.bukkit.event.Listener;
 
-public interface LoadableListener extends Listener {
-    public void unload();
+public abstract class LoadableListener implements Listener {
+    public abstract void unload();
 
-    public String getName();
+    public abstract String getName();
 
-    public boolean shouldBeLoaded();
+    public abstract boolean shouldBeLoaded();
 
-    public boolean isAnnounceable();
+    public abstract boolean isAnnounceable();
+
+    public Listener getEventListener() {
+        return this;
+    }
 }

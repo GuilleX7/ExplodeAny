@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.known;
+package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -9,10 +9,9 @@ import io.github.guillex7.explodeany.compat.common.data.MetaPersistentDataType;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
-import io.github.guillex7.explodeany.configuration.loadable.vanilla.MagicVanillaEntityConfiguration;
-import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.unhandled.BaseUnhandledKnownVanillaExplosionListener;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.MagicVanillaEntityConfiguration;
 
-public class MagicVanillaExplosionListener extends BaseUnhandledKnownVanillaExplosionListener {
+public class MagicVanillaEntityExplosionListener extends KnownVanillaEntityExplosionListener {
     private static final Plugin MAGIC_PLUGIN = Bukkit.getPluginManager().getPlugin("Magic");
     private static final String MAGIC_SPAWNED_KEY = "magicspawned";
 

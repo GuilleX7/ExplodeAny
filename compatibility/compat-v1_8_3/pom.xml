@@ -13,8 +13,8 @@
     </parent>
 
     <groupId>io.github.guillex7.explodeany</groupId>
-    <artifactId>compat-v1_9</artifactId>
-    <name>Compatibility for Bukkit v1.9+</name>
+    <artifactId>compat-v1_8_3</artifactId>
+    <name>Compatibility for Bukkit v1.8.3+</name>
 
     <packaging>jar</packaging>
 
@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_8_3</artifactId>
+            <artifactId>compat-v1_8</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.9-R0.1-SNAPSHOT</version>
+            <version>1.8.3-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
