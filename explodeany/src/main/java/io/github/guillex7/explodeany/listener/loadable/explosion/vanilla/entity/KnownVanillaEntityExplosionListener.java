@@ -12,6 +12,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
+import io.github.guillex7.explodeany.services.DebugManager;
 
 public abstract class KnownVanillaEntityExplosionListener extends BaseVanillaEntityExplosionListener {
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
@@ -25,6 +26,10 @@ public abstract class KnownVanillaEntityExplosionListener extends BaseVanillaEnt
         ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
         String entityTypeName = explodingEntity.getName();
         double explosionRadius = explodingEntity.getExplosionRadius();
+
+        if (DebugManager.getInstance().isDebugEnabled()) {
+            this.logDebugMessage(entityTypeName);
+        }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(entityTypeName);
@@ -48,4 +53,6 @@ public abstract class KnownVanillaEntityExplosionListener extends BaseVanillaEnt
         return super.isEventHandled(event)
                 && ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().toString());
     }
+
+    protected abstract void logDebugMessage(String entityTypeName);
 }

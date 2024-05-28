@@ -2,6 +2,7 @@ package io.github.guillex7.explodeany.listener.loadable.explosion.cannon;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.projectile.Projectile;
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.cannon.CannonProjectileConfiguration;
@@ -18,6 +20,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.listener.loadable.explosion.BaseConfigurableExplosionListener;
+import io.github.guillex7.explodeany.services.DebugManager;
 
 public final class CannonProjectileExplosionListener extends BaseConfigurableExplosionListener {
     @Override
@@ -43,6 +46,11 @@ public final class CannonProjectileExplosionListener extends BaseConfigurableExp
         }
 
         String projectileId = event.getProjectile().getProjectileId();
+
+        if (DebugManager.getInstance().isDebugEnabled()) {
+            ExplodeAny.getInstance().getLogger().log(Level.INFO,
+                    "Detected Cannons projectile explosion. Projectile ID: {0}", projectileId);
+        }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(projectileId);

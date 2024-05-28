@@ -1,10 +1,13 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity;
 
+import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.plugin.Plugin;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.data.MetaPersistentDataType;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
@@ -34,6 +37,12 @@ public class MagicVanillaEntityExplosionListener extends KnownVanillaEntityExplo
     @Override
     protected boolean isEventHandled(EntityExplodeEvent event) {
         return super.isEventHandled(event) && isEntitySpawnedByMagic(event.getEntity());
+    }
+
+    @Override
+    protected void logDebugMessage(String entityTypeName) {
+        ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected Magic entity explosion. Entity type: {0}",
+                entityTypeName);
     }
 
     @Override

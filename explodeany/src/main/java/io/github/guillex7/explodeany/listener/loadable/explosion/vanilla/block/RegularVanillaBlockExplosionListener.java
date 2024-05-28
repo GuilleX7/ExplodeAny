@@ -1,9 +1,11 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.block;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Material;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.data.ExplodingVanillaMaterial;
 import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
@@ -12,6 +14,7 @@ import io.github.guillex7.explodeany.configuration.loadable.vanilla.block.Regula
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
+import io.github.guillex7.explodeany.services.DebugManager;
 
 public class RegularVanillaBlockExplosionListener extends BaseVanillaBlockExplosionListener {
     @Override
@@ -33,6 +36,11 @@ public class RegularVanillaBlockExplosionListener extends BaseVanillaBlockExplos
         ExplodingVanillaMaterial blockMaterial = event.getBlockMaterial();
         String blockMaterialName = blockMaterial.getName();
         double explosionRadius = blockMaterial.getExplosionRadius();
+
+        if (DebugManager.getInstance().isDebugEnabled()) {
+            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected vanilla block explosion. Block ID: {0}",
+                    blockMaterialName);
+        }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(blockMaterialName);

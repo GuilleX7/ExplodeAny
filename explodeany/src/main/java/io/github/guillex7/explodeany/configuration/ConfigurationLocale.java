@@ -18,7 +18,9 @@ public enum ConfigurationLocale {
     CHECKTOOL_TOGGLED_ON("ChecktoolToggledOn"),
     CHECKTOOL_TOGGLED_OFF("ChecktoolToggledOff"),
     DISABLED_IN_THIS_WORLD("DisabledInThisWorld"),
-    RELOADED("Reloaded");
+    RELOADED("Reloaded"),
+    DEBUG_ENABLED("DebugEnabled"),
+    DEBUG_DISABLED("DebugDisabled");
 
     private final String path;
 

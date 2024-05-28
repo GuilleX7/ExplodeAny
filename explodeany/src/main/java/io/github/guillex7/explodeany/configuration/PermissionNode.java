@@ -9,6 +9,8 @@ public enum PermissionNode {
     CHECKTOOL_RESET("explodeany.checktool.reset"),
     CHECKTOOL_INFO("explodeany.checktool.info"),
     CONFIGURATION_SHOW("explodeany.configuration.show"),
+    DEBUG_ENABLE("explodeany.debug.enable"),
+    DEBUG_DISABLE("explodeany.debug.disable"),
     RELOAD("explodeany.reload");
 
     private final String key;

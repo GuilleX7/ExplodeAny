@@ -1,4 +1,4 @@
-package io.github.guillex7.explodeany.command.registrable.checktool;
+package io.github.guillex7.explodeany.services;
 
 import java.io.File;
 import java.io.FileInputStream;

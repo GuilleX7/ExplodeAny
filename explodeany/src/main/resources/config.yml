@@ -11,6 +11,8 @@ CannonProjectile: {}
 
 MagicEntity: {}
 
+CustomEntity: {}
+
 Locale:
     NotAllowed: "You are not allowed to perform this action!"
     Usage: "Usage: %DESCRIPTION%"
@@ -30,6 +32,8 @@ Locale:
     ChecktoolInfo: "Current checktool item: %PRETTY_ITEM%"
     DisabledInThisWorld: "This functionality is disabled in this world"
     Reloaded: "Reloaded successfully!"
+    DebugEnabled: "Debug mode has been enabled"
+    DebugDisabled: "Debug mode has been disabled"
 
 LocalePrefix: "[ExplodeAny] "
 

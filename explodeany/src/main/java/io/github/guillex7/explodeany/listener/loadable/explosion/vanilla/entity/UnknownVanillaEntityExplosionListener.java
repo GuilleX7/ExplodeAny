@@ -1,6 +1,7 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
@@ -15,6 +17,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
+import io.github.guillex7.explodeany.services.DebugManager;
 
 public class UnknownVanillaEntityExplosionListener extends BaseVanillaEntityExplosionListener {
     @Override
@@ -35,6 +38,11 @@ public class UnknownVanillaEntityExplosionListener extends BaseVanillaEntityExpl
 
         EntityType entityType = event.getEntityType();
         String entityTypeName = entityType.toString();
+
+        if (DebugManager.getInstance().isDebugEnabled()) {
+            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected custom entity explosion. Entity type: {0}",
+                    entityTypeName);
+        }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(entityTypeName);

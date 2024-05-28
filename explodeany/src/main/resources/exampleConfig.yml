@@ -358,6 +358,12 @@ Locale:
     # - Reloaded:
     #   (None)
     Reloaded: "Reloaded successfully!"
+    # - DebugEnabled:
+    #   (None)
+    DebugEnabled: "Debug mode has been enabled"
+    # - DebugDisabled:
+    #   (None)
+    DebugDisabled: "Debug mode has been disabled"
 
 # Prefix for all locale messages
 LocalePrefix: "[ExplodeAny] "

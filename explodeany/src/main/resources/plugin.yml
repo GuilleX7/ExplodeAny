@@ -1,6 +1,6 @@
 name: ExplodeAny
 main: io.github.guillex7.explodeany.ExplodeAny
-version: 1.9.0
+version: 1.10.0
 api-version: 1.13
 description: Allows to break any unbreakable block with explosions!
 author: GuilleX7
@@ -17,6 +17,7 @@ permissions:
         children:
             explodeany.checktool.*: true
             explodeany.configuration.*: true
+            explodeany.debug.*: true
             explodeany.reload: true
     explodeany.checktool.*:
         description: "Gives all permissions about checktool"
@@ -57,6 +58,18 @@ permissions:
             explodeany.configuration.show: true
     explodeany.configuration.show:
         description: "Gives permission to show configuration"
+        default: op
+    explodeany.debug.*:
+        description: "Gives all permissions about debugging"
+        default: op
+        children:
+            explodeany.debug.enable: true
+            explodeany.debug.disable: true
+    explodeany.debug.enable:
+        description: "Gives permission to enable debug mode"
+        default: op
+    explodeany.debug.disable:
+        description: "Gives permission to disable debug mode"
         default: op
     explodeany.reload:
         description: "Gives permission to use reload command"
