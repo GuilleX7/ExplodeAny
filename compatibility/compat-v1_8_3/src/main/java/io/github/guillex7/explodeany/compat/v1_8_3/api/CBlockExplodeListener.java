@@ -13,13 +13,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 
-import io.github.guillex7.explodeany.compat.common.data.ExplodingVanillaMaterial;
 import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.compat.common.event.IBukkitListener;
 
 public class CBlockExplodeListener implements IBukkitListener {
     protected final Consumer<EanyBlockExplodeEvent> eanyBlockExplodeEventConsumer;
-    protected Map<Location, ExplodingVanillaMaterial> identifiedExplosiveBlocks;
+    protected Map<Location, String> identifiedExplosiveBlocks;
 
     public CBlockExplodeListener(Consumer<EanyBlockExplodeEvent> eanyBlockExplodeEventConsumer) {
         this.eanyBlockExplodeEventConsumer = eanyBlockExplodeEventConsumer;
@@ -30,7 +29,7 @@ public class CBlockExplodeListener implements IBukkitListener {
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         if (!event.getBed().getWorld().getEnvironment().equals(Environment.NORMAL)) {
             Location bedLocation = event.getBed().getLocation();
-            identifiedExplosiveBlocks.put(bedLocation, ExplodingVanillaMaterial.BED);
+            identifiedExplosiveBlocks.put(bedLocation, "BED");
         }
     }
 
@@ -39,7 +38,7 @@ public class CBlockExplodeListener implements IBukkitListener {
         Location blockLocation = event.getBlock().getLocation();
 
         if (identifiedExplosiveBlocks.containsKey(blockLocation)) {
-            ExplodingVanillaMaterial explodingVanillaMaterial = identifiedExplosiveBlocks.get(blockLocation);
+            String explodingVanillaMaterial = identifiedExplosiveBlocks.get(blockLocation);
             identifiedExplosiveBlocks.remove(blockLocation);
 
             eanyBlockExplodeEventConsumer.accept(new EanyBlockExplodeEvent() {
@@ -49,7 +48,7 @@ public class CBlockExplodeListener implements IBukkitListener {
                 }
 
                 @Override
-                public ExplodingVanillaMaterial getBlockMaterial() {
+                public String getBlockMaterial() {
                     return explodingVanillaMaterial;
                 }
 

@@ -60,7 +60,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
             boolean definitionHasPriority = true;
 
             T entity = this.getEntityFromName(entityName);
-            if (this.isEntityValid(entity)) {
+            if (entity != null) {
                 fetchedEntities.add(entity);
             } else {
                 definitionHasPriority = false;
@@ -68,7 +68,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
                 if (entityGroup != null) {
                     for (String entityNameInGroup : entityGroup) {
                         T entityInGroup = this.getEntityFromName(entityNameInGroup);
-                        if (this.isEntityValid(entityInGroup)) {
+                        if (entityInGroup != null) {
                             fetchedEntities.add(entityInGroup);
                         }
                     }
@@ -239,7 +239,4 @@ public abstract class LoadableConfigurationSection<T extends Object> {
     public abstract String getSectionPath();
 
     public abstract T getEntityFromName(String name);
-
-    public abstract boolean isEntityValid(T entity);
-
 }

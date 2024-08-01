@@ -6,7 +6,7 @@ EnableMetrics: true
 Groups: {}
 
 VanillaEntity: {}
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}

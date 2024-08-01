@@ -11,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import io.github.guillex7.explodeany.compat.common.data.ExplodingVanillaMaterial;
 import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
 
 public class CBlockExplodeListener extends io.github.guillex7.explodeany.compat.v1_8_3.api.CBlockExplodeListener {
@@ -36,7 +35,7 @@ public class CBlockExplodeListener extends io.github.guillex7.explodeany.compat.
             return;
         }
 
-        this.identifiedExplosiveBlocks.put(clickedBlock.getLocation(), ExplodingVanillaMaterial.RESPAWN_ANCHOR);
+        this.identifiedExplosiveBlocks.put(clickedBlock.getLocation(), "RESPAWN_ANCHOR");
     }
 
     @Override

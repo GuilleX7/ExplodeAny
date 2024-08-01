@@ -24,17 +24,17 @@ public abstract class KnownVanillaEntityExplosionListener extends BaseVanillaEnt
         Entity entity = event.getEntity();
 
         ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
-        String entityTypeName = explodingEntity.getName();
+        String explodingEntityName = explodingEntity.getName();
         double explosionRadius = explodingEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
-            this.logDebugMessage(entityTypeName);
+            this.logDebugMessage(explodingEntityName);
         }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-                .getEntityMaterialConfigurations().get(entityTypeName);
+                .getEntityMaterialConfigurations().get(explodingEntityName);
         EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
-                .get(entityTypeName);
+                .get(explodingEntityName);
 
         if (materialConfigurations == null || entityConfiguration == null || explosionRadius == 0d) {
             return;
@@ -51,7 +51,7 @@ public abstract class KnownVanillaEntityExplosionListener extends BaseVanillaEnt
     @Override
     protected boolean isEventHandled(EntityExplodeEvent event) {
         return super.isEventHandled(event)
-                && ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().toString());
+                && ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name());
     }
 
     protected abstract void logDebugMessage(String entityTypeName);

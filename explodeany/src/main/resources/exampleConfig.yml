@@ -56,9 +56,9 @@ Groups:
 
 # This sections allows to customize the behaviour of Vanilla entities explosions
 # Allowed entity values are:
-# WITHER, ENDER_CRYSTAL, PRIMED_TNT, MINECART_TNT, CREEPER, CHARGED_CREEPER,
-# FIREBALL, DRAGON_FIREBALL, SMALL_FIREBALL, WITHER_SKULL, CHARGED_WITHER_SKULL,
-# BED, RESPAWN_ANCHOR
+# WITHER, ENDER_CRYSTAL (or END_CRYSTAL), PRIMED_TNT (or TNT), MINECART_TNT (or TNT_MINECART),
+# CREEPER, CHARGED_CREEPER, FIREBALL, DRAGON_FIREBALL, SMALL_FIREBALL, WITHER_SKULL,
+# CHARGED_WITHER_SKULL, BED, RESPAWN_ANCHOR
 # Note that every property that appears here can be used in any other entity section, like
 # CannonProjectile, MagicEntity or CustomEntity.
 VanillaEntity:

@@ -7,9 +7,10 @@ import com.elmakers.mine.bukkit.api.magic.MagicAPI;
 
 import io.github.guillex7.explodeany.compat.common.Version;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
+import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
-public class MagicVanillaEntityConfiguration extends BaseVanillaEntityConfiguration {
+public class MagicVanillaEntityConfiguration extends LoadableConfigurationSection<String> {
     private static final Version MINIMUM_SUPPORTED_BUKKIT_VERSION = new Version(1, 16);
 
     public static String getConfigurationId() {
@@ -30,7 +31,13 @@ public class MagicVanillaEntityConfiguration extends BaseVanillaEntityConfigurat
     }
 
     @Override
-    public boolean isEntityValid(String entity) {
-        return super.isEntityValid(entity) && ExplodingVanillaEntity.isEntityNameValid(entity);
+    public String getEntityName(String entity) {
+        return entity;
+    }
+
+    @Override
+    public String getEntityFromName(String name) {
+        ExplodingVanillaEntity explodingVanillaEntity = ExplodingVanillaEntity.fromEntityTypeName(name);
+        return explodingVanillaEntity != null ? explodingVanillaEntity.getName() : null;
     }
 }

@@ -30,11 +30,6 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
 
     @Override
     public String getEntityFromName(String name) {
-        return name;
-    }
-
-    @Override
-    public boolean isEntityValid(String entity) {
-        return entity != null && ProjectileStorage.getProjectile(entity) != null;
+        return ProjectileStorage.getProjectile(name) != null ? name : null;
     }
 }

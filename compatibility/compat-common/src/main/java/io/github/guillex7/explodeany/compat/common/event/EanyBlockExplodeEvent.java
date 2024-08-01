@@ -5,12 +5,10 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
-import io.github.guillex7.explodeany.compat.common.data.ExplodingVanillaMaterial;
-
 public interface EanyBlockExplodeEvent {
     public Location getBlockLocation();
 
-    public ExplodingVanillaMaterial getBlockMaterial();
+    public String getBlockMaterial();
 
     public List<Block> getBlockList();
 

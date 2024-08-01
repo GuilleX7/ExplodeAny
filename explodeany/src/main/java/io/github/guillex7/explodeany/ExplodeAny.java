@@ -12,7 +12,6 @@ import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.cannon.CannonProjectileConfiguration;
-import io.github.guillex7.explodeany.configuration.loadable.vanilla.block.RegularVanillaBlockConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.MagicVanillaEntityConfiguration;
@@ -88,7 +87,6 @@ public class ExplodeAny extends JavaPlugin {
         this.configurationManager.registerLoadableConfigurationSection(new CannonProjectileConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new MagicVanillaEntityConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new CustomVanillaEntityConfiguration());
-        this.configurationManager.registerLoadableConfigurationSection(new RegularVanillaBlockConfiguration());
         this.configurationManager.loadAllRegisteredLoadableConfigurationSections();
     }
 

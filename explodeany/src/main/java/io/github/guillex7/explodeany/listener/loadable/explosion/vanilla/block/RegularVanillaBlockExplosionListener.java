@@ -6,13 +6,13 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.data.ExplodingVanillaMaterial;
 import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
-import io.github.guillex7.explodeany.configuration.loadable.vanilla.block.RegularVanillaBlockConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
@@ -33,9 +33,10 @@ public class RegularVanillaBlockExplosionListener extends BaseVanillaBlockExplos
             return;
         }
 
-        ExplodingVanillaMaterial blockMaterial = event.getBlockMaterial();
-        String blockMaterialName = blockMaterial.getName();
-        double explosionRadius = blockMaterial.getExplosionRadius();
+        ExplodingVanillaEntity explodingVanillaEntity = ExplodingVanillaEntity
+                .fromEntityTypeName(event.getBlockMaterial());
+        String blockMaterialName = explodingVanillaEntity.getName();
+        double explosionRadius = explodingVanillaEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected vanilla block explosion. Block ID: {0}",
@@ -61,8 +62,13 @@ public class RegularVanillaBlockExplosionListener extends BaseVanillaBlockExplos
     }
 
     @Override
+    protected boolean isEventHandled(EanyBlockExplodeEvent event) {
+        return super.isEventHandled(event) && ExplodingVanillaEntity.isEntityNameValid(event.getBlockMaterial());
+    }
+
+    @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredLoadableConfigurationSection(RegularVanillaBlockConfiguration.getConfigurationId());
+                .getRegisteredLoadableConfigurationSection(RegularVanillaEntityConfiguration.getConfigurationId());
     }
 }
