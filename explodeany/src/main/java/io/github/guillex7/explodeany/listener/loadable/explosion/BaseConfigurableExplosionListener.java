@@ -1,5 +1,6 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion;
 
+import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.listener.loadable.LoadableListener;
 
@@ -12,7 +13,7 @@ public abstract class BaseConfigurableExplosionListener extends LoadableListener
 
     @Override
     public boolean shouldBeLoaded() {
-        return this.configuration.shouldBeLoaded();
+        return ConfigurationManager.getInstance().isConfigurationSectionLoaded(this.configuration.getSectionPath());
     }
 
     protected abstract LoadableConfigurationSection<?> getConfiguration();

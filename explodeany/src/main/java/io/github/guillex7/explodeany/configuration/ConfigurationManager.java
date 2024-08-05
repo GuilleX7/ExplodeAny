@@ -30,12 +30,14 @@ public final class ConfigurationManager {
 
     private static ConfigurationManager instance;
 
-    private final Map<String, LoadableConfigurationSection<?>> registeredLoadableConfigurationSections;
+    private final Map<String, LoadableConfigurationSection<?>> registeredConfigurationSectionsByPath;
+    private final Set<String> loadedConfigurationSectionsByPath;
     private final Set<Material> handledMaterials;
     private final ConfigurationFile configurationFile;
 
     private ConfigurationManager() {
-        this.registeredLoadableConfigurationSections = new HashMap<>();
+        this.registeredConfigurationSectionsByPath = new HashMap<>();
+        this.loadedConfigurationSectionsByPath = new HashSet<>();
         this.handledMaterials = new HashSet<>();
         this.configurationFile = new ConfigurationFile(ExplodeAny.getInstance(), "config.yml");
     }
@@ -55,12 +57,20 @@ public final class ConfigurationManager {
         return this.configurationFile;
     }
 
-    public Map<String, LoadableConfigurationSection<?>> getRegisteredLoadableConfigurationSections() {
-        return registeredLoadableConfigurationSections;
+    public Map<String, LoadableConfigurationSection<?>> getRegisteredConfigurationSectionsByPath() {
+        return registeredConfigurationSectionsByPath;
     }
 
-    public LoadableConfigurationSection<?> getRegisteredLoadableConfigurationSection(String sectionPath) {
-        return this.getRegisteredLoadableConfigurationSections().get(sectionPath);
+    public LoadableConfigurationSection<?> getRegisteredConfigurationSectionByPath(String sectionPath) {
+        return this.getRegisteredConfigurationSectionsByPath().get(sectionPath);
+    }
+
+    public Set<String> getLoadedConfigurationSectionsByPath() {
+        return loadedConfigurationSectionsByPath;
+    }
+
+    public boolean isConfigurationSectionLoaded(String sectionPath) {
+        return this.getLoadedConfigurationSectionsByPath().contains(sectionPath);
     }
 
     public Set<Material> getHandledMaterials() {
@@ -139,7 +149,7 @@ public final class ConfigurationManager {
     }
 
     public void registerLoadableConfigurationSection(LoadableConfigurationSection<?> loadableConfigurationSection) {
-        this.getRegisteredLoadableConfigurationSections().put(loadableConfigurationSection.getSectionPath(),
+        this.getRegisteredConfigurationSectionsByPath().put(loadableConfigurationSection.getSectionPath(),
                 loadableConfigurationSection);
     }
 
@@ -147,7 +157,7 @@ public final class ConfigurationManager {
         FileConfiguration config = this.getConfigurationFile().getConfig();
 
         for (LoadableConfigurationSection<?> loadableConfigurationSection : this
-                .getRegisteredLoadableConfigurationSections()
+                .getRegisteredConfigurationSectionsByPath()
                 .values()) {
             if (loadableConfigurationSection.shouldBeLoaded()) {
                 loadableConfigurationSection.clearEntityMaterialConfigurations();
@@ -156,12 +166,16 @@ public final class ConfigurationManager {
                         .getEntityMaterialConfigurations().values()) {
                     this.getHandledMaterials().addAll(map.keySet());
                 }
+                this.getLoadedConfigurationSectionsByPath().add(loadableConfigurationSection.getSectionPath());
+            } else {
+                this.getLoadedConfigurationSectionsByPath().remove(loadableConfigurationSection.getSectionPath());
             }
         }
     }
 
     public void unloadAllRegisteredLoadableConfigurationSections() {
-        this.getRegisteredLoadableConfigurationSections().clear();
+        this.getRegisteredConfigurationSectionsByPath().clear();
+        this.getLoadedConfigurationSectionsByPath().clear();
         this.getHandledMaterials().clear();
     }
 }

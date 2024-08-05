@@ -70,7 +70,7 @@ public class UnknownVanillaEntityExplosionListener extends BaseVanillaEntityExpl
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredLoadableConfigurationSection(CustomVanillaEntityConfiguration.getConfigurationId());
+                .getRegisteredConfigurationSectionByPath(CustomVanillaEntityConfiguration.getConfigurationId());
     }
 
     @Override

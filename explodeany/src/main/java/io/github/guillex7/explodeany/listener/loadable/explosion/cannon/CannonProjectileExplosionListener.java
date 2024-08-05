@@ -54,16 +54,15 @@ public final class CannonProjectileExplosionListener extends BaseConfigurableExp
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(projectileId);
-        if (materialConfigurations == null) {
-            return;
-        }
-
         EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(projectileId);
 
-        double explosionPower = projectile.getExplosionPower();
+        if (materialConfigurations == null || entityConfiguration == null) {
+            return;
+        }
+
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getImpactLocation(), explosionPower)) {
+                event.getImpactLocation(), projectile.getExplosionPower())) {
             event.setCancelled(true);
         }
     }
@@ -114,6 +113,6 @@ public final class CannonProjectileExplosionListener extends BaseConfigurableExp
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredLoadableConfigurationSection(CannonProjectileConfiguration.getConfigurationId());
+                .getRegisteredConfigurationSectionByPath(CannonProjectileConfiguration.getConfigurationId());
     }
 }

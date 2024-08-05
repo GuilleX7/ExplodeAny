@@ -39,6 +39,6 @@ public final class RegularVanillaEntityExplosionListener extends KnownVanillaEnt
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredLoadableConfigurationSection(RegularVanillaEntityConfiguration.getConfigurationId());
+                .getRegisteredConfigurationSectionByPath(RegularVanillaEntityConfiguration.getConfigurationId());
     }
 }

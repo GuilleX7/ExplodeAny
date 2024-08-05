@@ -69,6 +69,6 @@ public class RegularVanillaBlockExplosionListener extends BaseVanillaBlockExplos
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredLoadableConfigurationSection(RegularVanillaEntityConfiguration.getConfigurationId());
+                .getRegisteredConfigurationSectionByPath(RegularVanillaEntityConfiguration.getConfigurationId());
     }
 }

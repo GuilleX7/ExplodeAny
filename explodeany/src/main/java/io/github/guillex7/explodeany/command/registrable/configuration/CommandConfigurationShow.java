@@ -43,7 +43,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
 
         final String sectionPath = args[0];
         LoadableConfigurationSection<? extends Object> loadableConfigurationSection = configurationManager
-                .getRegisteredLoadableConfigurationSections()
+                .getRegisteredConfigurationSectionsByPath()
                 .get(sectionPath);
 
         if (loadableConfigurationSection == null) {
@@ -90,14 +90,14 @@ public class CommandConfigurationShow extends RegistrableCommand {
         final ConfigurationManager configurationManager = ConfigurationManager.getInstance();
 
         if (args.length == 1) {
-            autocompletion.addAll(configurationManager.getRegisteredLoadableConfigurationSections()
+            autocompletion.addAll(configurationManager.getRegisteredConfigurationSectionsByPath()
                     .keySet().stream().filter(sectionPath -> sectionPath.startsWith(args[0]))
                     .collect(Collectors.toList()));
         } else if (args.length >= 2) {
             final String sectionPath = args[0];
 
             LoadableConfigurationSection<? extends Object> loadableConfigurationSection = ConfigurationManager
-                    .getInstance().getRegisteredLoadableConfigurationSections().get(sectionPath);
+                    .getInstance().getRegisteredConfigurationSectionsByPath().get(sectionPath);
 
             if (loadableConfigurationSection == null) {
                 return;

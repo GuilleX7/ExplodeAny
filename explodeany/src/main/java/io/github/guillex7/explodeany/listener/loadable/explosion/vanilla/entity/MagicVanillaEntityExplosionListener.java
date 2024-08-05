@@ -48,6 +48,6 @@ public class MagicVanillaEntityExplosionListener extends KnownVanillaEntityExplo
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredLoadableConfigurationSection(MagicVanillaEntityConfiguration.getConfigurationId());
+                .getRegisteredConfigurationSectionByPath(MagicVanillaEntityConfiguration.getConfigurationId());
     }
 }

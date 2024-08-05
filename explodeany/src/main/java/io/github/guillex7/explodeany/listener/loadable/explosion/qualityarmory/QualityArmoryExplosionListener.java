@@ -108,6 +108,6 @@ public class QualityArmoryExplosionListener extends BaseConfigurableExplosionLis
     @Override
     protected LoadableConfigurationSection<?> getConfiguration() {
         return ConfigurationManager.getInstance()
-                .getRegisteredLoadableConfigurationSection(QualityArmoryExplosiveConfiguration.getConfigurationId());
+                .getRegisteredConfigurationSectionByPath(QualityArmoryExplosiveConfiguration.getConfigurationId());
     }
 }
