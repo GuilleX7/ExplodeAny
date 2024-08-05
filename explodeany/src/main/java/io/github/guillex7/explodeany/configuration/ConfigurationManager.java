@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
+import io.github.guillex7.explodeany.configuration.section.ChecktoolConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.util.MathUtils;
 import io.github.guillex7.explodeany.util.MessageFormatter;
@@ -84,6 +85,13 @@ public final class ConfigurationManager {
 
     public boolean doEnableMetrics() {
         return this.getConfigurationFile().getConfig().getBoolean(ENABLE_METRICS);
+    }
+
+    public ChecktoolConfiguration getChecktoolConfiguration() {
+        ConfigurationSection checktoolSection = this.getConfigurationFile().getConfig()
+                .getConfigurationSection(ChecktoolConfiguration.ROOT_PATH);
+        return checktoolSection == null ? ChecktoolConfiguration.byDefault()
+                : ChecktoolConfiguration.fromConfigurationSection(checktoolSection);
     }
 
     public String getLocalePrefix() {

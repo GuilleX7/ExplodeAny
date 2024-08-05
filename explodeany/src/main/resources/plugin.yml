@@ -24,6 +24,10 @@ permissions:
         default: op
         children:
             explodeany.checktool.use: true
+            explodeany.checktool.enable: true
+            explodeany.checktool.enable.others: true
+            explodeany.checktool.disable: true
+            explodeany.checktool.disable.others: true
             explodeany.checktool.toggle: true
             explodeany.checktool.toggle.others: true
             explodeany.checktool.give: true
@@ -32,6 +36,18 @@ permissions:
             explodeany.checktool.reset: true
     explodeany.checktool.use:
         description: "Gives permission to use checktool"
+        default: op
+    explodeany.checktool.enable:
+        description: "Gives permission to enable checktool use for yourself"
+        default: op
+    explodeany.checktool.enable.others:
+        description: "Gives permission to enable checktool use for others"
+        default: op
+    explodeany.checktool.disable:
+        description: "Gives permission to disable checktool use for yourself"
+        default: op
+    explodeany.checktool.disable.others:
+        description: "Gives permission to disable checktool use for others"
         default: op
     explodeany.checktool.toggle:
         description: "Gives permission to toggle checktool use for yourself"

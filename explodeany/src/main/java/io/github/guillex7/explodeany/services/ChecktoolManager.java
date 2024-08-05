@@ -6,8 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +19,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public class ChecktoolManager {
@@ -26,14 +27,17 @@ public class ChecktoolManager {
 
     private static ChecktoolManager instance;
 
-    private ItemStack checktool;
     private final File checktoolFile;
-    private final Set<Player> playersUsingChecktool;
+    private final Map<Player, Boolean> checktoolStateByPlayer;
+    private final ConfigurationManager configurationManager;
+
+    private ItemStack checktool;
 
     private ChecktoolManager() {
         this.checktool = this.getDefaultChecktool();
         this.checktoolFile = new File(this.getPlugin().getDataFolder(), CHECKTOOL_DUMP_FILENAME);
-        this.playersUsingChecktool = new HashSet<>();
+        this.checktoolStateByPlayer = new HashMap<>();
+        this.configurationManager = ConfigurationManager.getInstance();
         this.loadChecktool();
     }
 
@@ -49,15 +53,20 @@ public class ChecktoolManager {
     }
 
     public boolean isPlayerUsingChecktool(Player player) {
-        return this.playersUsingChecktool.contains(player);
+        if (this.configurationManager.getChecktoolConfiguration().isAlwaysEnabled()) {
+            return true;
+        }
+
+        return this.checktoolStateByPlayer.getOrDefault(player,
+                this.configurationManager.getChecktoolConfiguration().isEnabledByDefault());
     }
 
-    public void addPlayerUsingChecktool(Player player) {
-        this.playersUsingChecktool.add(player);
-    }
+    public void setPlayerIsUsingChecktool(Player player, boolean isUsingChecktool) {
+        if (this.configurationManager.getChecktoolConfiguration().isAlwaysEnabled()) {
+            return;
+        }
 
-    public void removePlayerUsingChecktool(Player player) {
-        this.playersUsingChecktool.remove(player);
+        this.checktoolStateByPlayer.put(player, isUsingChecktool);
     }
 
     private ItemStack getDefaultChecktool() {

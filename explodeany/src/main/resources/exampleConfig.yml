@@ -22,6 +22,43 @@ BlockDurability: 100.0
 # use bstats (https://bstats.org/) to gather all this data.
 EnableMetrics: true
 
+# This section allows to customize the behaviour of the checktool, which is an item that can be
+# used to check the durability of blocks.
+Checktool:
+    # If set to true, the checktool will be always enabled (the player only needs the permission to use it).
+    # If set to false, then the checktool can be toggled on and off by the player, given the player
+    # has the permission to do so.
+    # [Default] is false.
+    AlwaysEnabled: false
+    # In case the checktool is not always enabled, this property allows to set the default state of the checktool
+    # when the player logs in. If set to true, the checktool will be enabled by default. If set to false, the
+    # checktool will be disabled by default.
+    # [Default] is false.
+    EnabledByDefault: false
+    # Prevents the default vanilla behaviour of the item to be used when the checktool is in the player's hand
+    # when the player right-clicks a block that is handled by the plugin. If set to true, the plugin will
+    # prevent the item from being used. If set to false, the item will be used as if the plugin wasn't there.
+    # [Default] is true.
+    PreventActionWhenCheckingHandledBlocks: true
+    # Prevents the default vanilla behaviour of the item to be used when the checktool is in the player's hand
+    # when the player right-clicks a block that is not handled by the plugin. If set to true, the plugin will
+    # prevent the item from being used. If set to false, the item will be used as if the plugin wasn't there.
+    # [Default] is true.
+    PreventActionWhenCheckingNonHandledBlocks: true
+    # If set to true, using the checktool in a world where ExplodeAny is disabled will not send any message to the player.
+    # If set to false, the plugin will send a message to the player informing that the functionality is disabled in that world.
+    # [Default] is false.
+    SilentWhenCheckingOnDisabledWorlds: false
+    # If set to true, using the checktool without the permission to do so will not send any message to the player.
+    # If set to false, the plugin will send a message to the player informing that he/she doesn't have the permission.
+    # [Default] is false.
+    SilentWhenCheckingWithoutPermissions: false
+    # If set to true, the plugin will not send any message when the player checks a block that is not handled
+    # by the plugin. If set to false, the plugin will send a message to the player informing that the block is
+    # not handled.
+    # [Default] is false.
+    SilentWhenCheckingNonHandledBlocks: false
+
 # Named groups of materials and/or entitys. You can create groups with a mix of materials
 # and entities. When you use the group in a certain section, the plugin will choose only
 # the values that make sense for that section. If no value in the group makes sense for the
@@ -352,6 +389,9 @@ Locale:
     #   %ITEM% represents the checktool item's name
     #   %PRETTY_ITEM% represents the checktool item's name in a more readable way
     ChecktoolInfo: "Current checktool item: %PRETTY_ITEM%"
+    # - ChecktoolAlwaysEnabled:
+    #   (None)
+    ChecktoolAlwaysEnabled: "Checktool can't be toggled off"
     # - DisabledInThisWorld:
     #   (None)
     DisabledInThisWorld: "This functionality is disabled in this world"

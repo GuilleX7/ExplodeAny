@@ -21,8 +21,9 @@ public class CommandChecktool extends RegistrableCommand {
 
     @Override
     public List<RegistrableCommand> getSubcommands() {
-        return new ArrayList<>(Arrays.asList(new CommandChecktoolToggle(),
-                new CommandChecktoolReset(), new CommandChecktoolGive(), new CommandChecktoolSet(),
-                new CommandChecktoolInfo()));
+        return new ArrayList<>(
+                Arrays.asList(new CommandChecktoolEnable(), new CommandChecktoolDisable(), new CommandChecktoolToggle(),
+                        new CommandChecktoolReset(), new CommandChecktoolGive(), new CommandChecktoolSet(),
+                        new CommandChecktoolInfo()));
     }
 }

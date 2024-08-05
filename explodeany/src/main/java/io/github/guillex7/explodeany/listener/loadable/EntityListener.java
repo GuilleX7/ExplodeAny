@@ -63,27 +63,34 @@ public final class EntityListener extends LoadableListener {
             }
 
             if (!player.hasPermission(PermissionNode.CHECKTOOL_USE.getKey())) {
-                player.sendMessage(this.configurationManager.getLocale(ConfigurationLocale.NOT_ALLOWED));
+                if (!this.configurationManager.getChecktoolConfiguration().isSilentWhenCheckingWithoutPermissions()) {
+                    player.sendMessage(this.configurationManager.getLocale(ConfigurationLocale.NOT_ALLOWED));
+                }
                 return;
             }
 
             if (this.configurationManager.getDisabledWorlds().contains(player.getWorld().getName())) {
-                player.sendMessage(
-                        this.configurationManager.getLocale(ConfigurationLocale.DISABLED_IN_THIS_WORLD));
+                if (!this.configurationManager.getChecktoolConfiguration().isSilentWhenCheckingOnDisabledWorlds()) {
+                    player.sendMessage(this.configurationManager.getLocale(ConfigurationLocale.DISABLED_IN_THIS_WORLD));
+                }
                 return;
             }
 
-            event.setCancelled(true);
-            String formattedMessage;
-            Block clickedBlock = event.getClickedBlock();
+            final Block clickedBlock = event.getClickedBlock();
+            final String materialName = clickedBlock.getType().name();
+            final String prettyMaterialName = StringUtils.beautifyName(materialName);
+
             if (this.configurationManager.handlesBlock(clickedBlock)) {
-                formattedMessage = this.configurationManager.getLocale(ConfigurationLocale.CHECKTOOL_USE);
+                if (this.configurationManager.getChecktoolConfiguration()
+                        .doPreventActionWhenCheckingHandledBlocks()) {
+                    event.setCancelled(true);
+                }
 
                 BlockStatus blockStatus = this.blockDatabase.getBlockStatus(clickedBlock, false);
                 double durabilityPercentage = blockStatus.getDurability() / BlockStatus.getDefaultBlockDurability()
                         * 100;
 
-                formattedMessage = formattedMessage
+                final String formattedMessage = this.configurationManager.getLocale(ConfigurationLocale.CHECKTOOL_USE)
                         .replace("%DURABILITY_PERCENTAGE%",
                                 String.format("%.02f", durabilityPercentage))
                         .replace("%DURABILITY%",
@@ -95,20 +102,26 @@ public final class EntityListener extends LoadableListener {
                         .replace("%B_Y%",
                                 String.format("%d", clickedBlock.getLocation().getBlockY()))
                         .replace("%B_Z%",
-                                String.format("%d", clickedBlock.getLocation().getBlockZ()));
+                                String.format("%d", clickedBlock.getLocation().getBlockZ()))
+                        .replace("%MATERIAL%", materialName)
+                        .replace("%PRETTY_MATERIAL%", prettyMaterialName);
+
+                player.sendMessage(formattedMessage);
             } else {
-                formattedMessage = this.configurationManager
-                        .getLocale(ConfigurationLocale.CHECKTOOL_NOT_HANDLED);
+                if (this.configurationManager.getChecktoolConfiguration()
+                        .doPreventActionWhenCheckingNonHandledBlocks()) {
+                    event.setCancelled(true);
+                }
+
+                if (!this.configurationManager.getChecktoolConfiguration().isSilentWhenCheckingNonHandledBlocks()) {
+                    final String formattedMessage = this.configurationManager
+                            .getLocale(ConfigurationLocale.CHECKTOOL_NOT_HANDLED)
+                            .replace("%MATERIAL%", materialName)
+                            .replace("%PRETTY_MATERIAL%", prettyMaterialName);
+
+                    player.sendMessage(formattedMessage);
+                }
             }
-
-            String materialName = clickedBlock.getType().name();
-            String prettyMaterialName = StringUtils.beautifyName(materialName);
-
-            formattedMessage = formattedMessage
-                    .replace("%MATERIAL%", materialName)
-                    .replace("%PRETTY_MATERIAL%", prettyMaterialName);
-
-            player.sendMessage(formattedMessage);
         }
     }
 

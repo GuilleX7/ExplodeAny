@@ -3,6 +3,15 @@ CheckBlockDatabaseAtStartup: false
 BlockDurability: 100.0
 EnableMetrics: true
 
+Checktool:
+    AlwaysEnabled: false
+    EnabledByDefault: false
+    PreventActionWhenCheckingHandledBlocks: true
+    PreventActionWhenCheckingNonHandledBlocks: true
+    SilentWhenCheckingOnDisabledWorlds: false
+    SilentWhenCheckingWithoutPermissions: false
+    SilentWhenCheckingNonHandledBlocks: false
+
 Groups: {}
 
 VanillaEntity: {}
@@ -30,6 +39,7 @@ Locale:
     ChecktoolReset: "Checktool successfully reset to bare hand (Air)"
     ChecktoolNotHandled: "%PRETTY_MATERIAL% is not handled by the current configuration"
     ChecktoolInfo: "Current checktool item: %PRETTY_ITEM%"
+    ChecktoolAlwaysEnabled: "Checktool can't be toggled off because it's always enabled"
     DisabledInThisWorld: "This functionality is disabled in this world"
     Reloaded: "Reloaded successfully!"
     DebugEnabled: "Debug mode has been enabled"

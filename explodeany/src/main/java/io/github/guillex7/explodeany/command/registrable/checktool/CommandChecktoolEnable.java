@@ -15,17 +15,17 @@ import io.github.guillex7.explodeany.services.ChecktoolManager;
 import io.github.guillex7.explodeany.util.SetUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
-public class CommandChecktoolToggle extends RegistrableCommand {
-    private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_TOGGLE);
+public class CommandChecktoolEnable extends RegistrableCommand {
+    private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_ENABLE);
 
     @Override
     public String getName() {
-        return "toggle";
+        return "enable";
     }
 
     @Override
     public Set<String> getAliases() {
-        return SetUtils.createHashSetOf("t");
+        return SetUtils.createHashSetOf("on");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CommandChecktoolToggle extends RegistrableCommand {
             }
 
             receiver = (Player) sender;
-        } else if (sender.hasPermission(PermissionNode.CHECKTOOL_TOGGLE_OTHERS.getKey())) {
+        } else if (sender.hasPermission(PermissionNode.CHECKTOOL_ENABLE_OTHERS.getKey())) {
             String receiverName = args[0];
             Player possibleReceiver = Bukkit.getPlayer(receiverName);
 
@@ -86,15 +86,9 @@ public class CommandChecktoolToggle extends RegistrableCommand {
         ConfigurationLocale receiverLocaleMessage;
         ConfigurationLocale senderLocaleMessage;
 
-        if (checktoolManager.isPlayerUsingChecktool(receiver)) {
-            checktoolManager.setPlayerIsUsingChecktool(receiver, false);
-            receiverLocaleMessage = ConfigurationLocale.LEAVE_CHECKTOOL_MODE;
-            senderLocaleMessage = ConfigurationLocale.CHECKTOOL_TOGGLED_OFF;
-        } else {
-            checktoolManager.setPlayerIsUsingChecktool(receiver, true);
-            receiverLocaleMessage = ConfigurationLocale.ENTER_CHECKTOOL_MODE;
-            senderLocaleMessage = ConfigurationLocale.CHECKTOOL_TOGGLED_ON;
-        }
+        checktoolManager.setPlayerIsUsingChecktool(receiver, true);
+        receiverLocaleMessage = ConfigurationLocale.ENTER_CHECKTOOL_MODE;
+        senderLocaleMessage = ConfigurationLocale.CHECKTOOL_TOGGLED_ON;
 
         receiver.sendMessage(
                 ConfigurationManager.getInstance().getLocale(receiverLocaleMessage)

@@ -17,6 +17,7 @@ public enum ConfigurationLocale {
     CHECKTOOL_NOT_HANDLED("ChecktoolNotHandled"),
     CHECKTOOL_TOGGLED_ON("ChecktoolToggledOn"),
     CHECKTOOL_TOGGLED_OFF("ChecktoolToggledOff"),
+    CHECKTOOL_ALWAYS_ENABLED("ChecktoolAlwaysEnabled"),
     DISABLED_IN_THIS_WORLD("DisabledInThisWorld"),
     RELOADED("Reloaded"),
     DEBUG_ENABLED("DebugEnabled"),
