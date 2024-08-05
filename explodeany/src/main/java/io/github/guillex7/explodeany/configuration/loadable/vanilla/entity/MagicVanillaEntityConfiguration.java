@@ -20,7 +20,7 @@ public class MagicVanillaEntityConfiguration extends LoadableConfigurationSectio
     @Override
     public boolean shouldBeLoaded() {
         Plugin magicPlugin = Bukkit.getPluginManager().getPlugin("Magic");
-        return magicPlugin instanceof MagicAPI
+        return magicPlugin != null && magicPlugin.isEnabled() && magicPlugin instanceof MagicAPI
                 && CompatibilityManager.getInstance().getApi().getMinimumSupportedBukkitVersion()
                         .isEqualOrAfter(MINIMUM_SUPPORTED_BUKKIT_VERSION);
     }

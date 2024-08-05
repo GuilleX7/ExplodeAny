@@ -8,7 +8,7 @@ import io.github.guillex7.explodeany.listener.loadable.explosion.BaseConfigurabl
 
 public abstract class BaseVanillaEntityExplosionListener extends BaseConfigurableExplosionListener {
     protected boolean isEventHandled(EntityExplodeEvent event) {
-        return event.getEntity() != null
+        return !event.isCancelled() && event.getEntity() != null
                 && !ExplosionManager.getInstance().isEntitySpawnedByExplosionManager(event.getEntity())
                 && !ConfigurationManager.getInstance().getDisabledWorlds()
                         .contains(event.getLocation().getWorld().getName());

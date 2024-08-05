@@ -35,7 +35,7 @@ public final class CannonProjectileExplosionListener extends BaseConfigurableExp
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onProjectileImpact(ProjectileImpactEvent event) {
-        if (ConfigurationManager.getInstance().getDisabledWorlds()
+        if (event.isCancelled() || ConfigurationManager.getInstance().getDisabledWorlds()
                 .contains(event.getImpactLocation().getWorld().getName())) {
             return;
         }

@@ -32,7 +32,7 @@ public abstract class BaseVanillaBlockExplosionListener extends BaseConfigurable
     }
 
     protected boolean isEventHandled(EanyBlockExplodeEvent event) {
-        return event.getBlockLocation() != null && event.getBlockMaterial() != null
+        return !event.isCancelled() && event.getBlockLocation() != null && event.getBlockMaterial() != null
                 && !ConfigurationManager.getInstance().getDisabledWorlds()
                         .contains(event.getBlockLocation().getWorld().getName());
     }
