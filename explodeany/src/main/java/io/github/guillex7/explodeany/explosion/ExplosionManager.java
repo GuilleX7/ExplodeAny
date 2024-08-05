@@ -130,9 +130,9 @@ public class ExplosionManager {
         if (!materialConfigurations.isEmpty() || entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquids()
                 || entityBehavioralConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()
                 || entityBehavioralConfiguration.doesExplosionRemoveNearbyWaterloggedBlocks()) {
-            for (int x = cx - explosionRadius; x < cxpr; x++) {
-                for (int y = cy - explosionRadius; y < cypr; y++) {
-                    for (int z = cz - explosionRadius; z < czpr; z++) {
+            for (int x = cx - explosionRadius; x <= cxpr; x++) {
+                for (int y = cy - explosionRadius; y <= cypr; y++) {
+                    for (int z = cz - explosionRadius; z <= czpr; z++) {
                         final int dx = x - cx;
                         final int dy = y - cy;
                         final int dz = z - cz;
