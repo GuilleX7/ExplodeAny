@@ -125,7 +125,8 @@ public final class ConfigurationManager {
         ConfigurationSection localeSection = this.getConfigurationFile().getConfig()
                 .getConfigurationSection(LOCALE_SECTION);
         if (localeSection != null) {
-            for (String path : localeSection.getValues(false).keySet()) {
+            for (ConfigurationLocale locale : ConfigurationLocale.values()) {
+                String path = locale.getPath();
                 localeSection.set(path,
                         String.format("%s%s", localePrefix, MessageFormatter.colorize(localeSection.getString(path))));
             }
