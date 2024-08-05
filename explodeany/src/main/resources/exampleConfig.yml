@@ -307,6 +307,15 @@ MagicEntity:
         unbreakableBlocks:
             Damage: 25.0
 
+# This section allows to customize the behaviour of QualityArmory explosions.
+# The support for QualityArmory will be enabled automatically when it is detected.
+# Allowed entity values are:
+# RPG, HomingRPG, MiniNuke, Grenade, StickyGrenade, ProxyMine
+QualityArmory:
+    RPG:
+        OBSIDIAN:
+            Damage: 50.0
+
 # This section allows to customize the behaviour of custom Vanilla entities explosions, which
 # are entities introduced by mods in Forge servers.
 # Any entity name can be used here, since there's no way to check if the entity exists.

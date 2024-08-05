@@ -12,6 +12,7 @@ import io.github.guillex7.explodeany.command.registrable.RegistrableCommand;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.cannon.CannonProjectileConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.qualityarmor.QualityArmoryExplosiveConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.MagicVanillaEntityConfiguration;
@@ -20,6 +21,7 @@ import io.github.guillex7.explodeany.listener.loadable.BlockListener;
 import io.github.guillex7.explodeany.listener.loadable.EntityListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.ExplosionManagerExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.cannon.CannonProjectileExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.qualityarmory.QualityArmoryExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.block.RegularVanillaBlockExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity.MagicVanillaEntityExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity.RegularVanillaEntityExplosionListener;
@@ -87,6 +89,7 @@ public class ExplodeAny extends JavaPlugin {
         this.configurationManager.registerLoadableConfigurationSection(new CannonProjectileConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new MagicVanillaEntityConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new CustomVanillaEntityConfiguration());
+        this.configurationManager.registerLoadableConfigurationSection(new QualityArmoryExplosiveConfiguration());
         this.configurationManager.loadAllRegisteredLoadableConfigurationSections();
     }
 
@@ -107,6 +110,7 @@ public class ExplodeAny extends JavaPlugin {
         this.listenerManager.registerListener(new MagicVanillaEntityExplosionListener());
         this.listenerManager.registerListener(new UnknownVanillaEntityExplosionListener());
         this.listenerManager.registerListener(new RegularVanillaBlockExplosionListener());
+        this.listenerManager.registerListener(new QualityArmoryExplosionListener());
         this.listenerManager.loadAllListeners();
     }
 

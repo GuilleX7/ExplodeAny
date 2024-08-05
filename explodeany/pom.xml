@@ -91,16 +91,25 @@
             <scope>compile</scope>
         </dependency>
         <!-- External plugin support  -->
+        <!-- Cannons: https://www.spigotmc.org/resources/cannons.56764/ -->
         <dependency>
             <groupId>com.github.DerPavlov</groupId>
             <artifactId>Cannons</artifactId>
             <version>master-1437fe213f-1</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Magic: https://www.spigotmc.org/resources/magic.1056/ -->
         <dependency>
             <groupId>com.elmakers.mine.bukkit</groupId>
             <artifactId>MagicAPI</artifactId>
             <version>10.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- QualityArmor: https://www.spigotmc.org/resources/quality-armory.47561/ -->
+        <dependency>
+            <groupId>me.zombie_striker</groupId>
+            <artifactId>QualityArmory</artifactId>
+            <version>2.0.10</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
