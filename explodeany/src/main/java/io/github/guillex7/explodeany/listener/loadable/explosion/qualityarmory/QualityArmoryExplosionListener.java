@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
@@ -40,7 +41,7 @@ public class QualityArmoryExplosionListener implements LoadableListener {
                 .getRegisteredConfigurationSectionByPath(QualityArmoryExplosiveConfiguration.getConfigurationId());
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onQualityArmoryProjectileExplode(QAProjectileExplodeEvent event) {
         if (event.isCancelled()) {
             return;
@@ -59,7 +60,7 @@ public class QualityArmoryExplosionListener implements LoadableListener {
         this.handleExplosive(explosive, event.getLocation(), event);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onQualityArmoryThrowableExplode(QAThrowableExplodeEvent event) {
         if (event.isCancelled()) {
             return;
