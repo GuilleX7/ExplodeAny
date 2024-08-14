@@ -234,6 +234,8 @@ public abstract class LoadableConfigurationSection<T extends Object> {
 
     public abstract boolean shouldBeLoaded();
 
+    public abstract String getHumanReadableName();
+
     public abstract String getEntityName(T entity);
 
     public abstract String getSectionPath();

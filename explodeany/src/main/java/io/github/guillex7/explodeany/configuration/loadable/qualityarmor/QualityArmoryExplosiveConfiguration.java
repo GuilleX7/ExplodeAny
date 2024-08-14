@@ -20,6 +20,11 @@ public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSe
     }
 
     @Override
+    public String getHumanReadableName() {
+        return "QualityArmory explosives";
+    }
+
+    @Override
     public boolean shouldBeLoaded() {
         final PluginManager pluginManager = Bukkit.getPluginManager();
         final Plugin qualityArmoryPlugin = pluginManager.getPlugin("QualityArmory");

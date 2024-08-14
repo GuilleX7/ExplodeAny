@@ -167,6 +167,10 @@ public final class ConfigurationManager {
                     this.getHandledMaterials().addAll(map.keySet());
                 }
                 this.getLoadedConfigurationSectionsByPath().add(loadableConfigurationSection.getSectionPath());
+
+                this.getPlugin().getLogger()
+                        .info(String.format("Loaded support for %s",
+                                loadableConfigurationSection.getHumanReadableName()));
             } else {
                 this.getLoadedConfigurationSectionsByPath().remove(loadableConfigurationSection.getSectionPath());
             }

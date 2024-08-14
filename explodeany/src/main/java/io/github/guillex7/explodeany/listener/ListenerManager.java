@@ -1,20 +1,20 @@
 package io.github.guillex7.explodeany.listener;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.listener.loadable.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 
 public class ListenerManager {
     private static ListenerManager instance;
 
-    private final Map<String, LoadableListener> registeredListeners;
+    private final List<LoadableListener> registeredListeners;
 
     private ListenerManager() {
-        this.registeredListeners = new HashMap<>();
+        this.registeredListeners = new ArrayList<>();
     }
 
     public static ListenerManager getInstance() {
@@ -24,39 +24,34 @@ public class ListenerManager {
         return instance;
     }
 
-    public Map<String, LoadableListener> getRegisteredListeners() {
+    public List<LoadableListener> getRegisteredListeners() {
         return registeredListeners;
     }
 
     public void registerListener(LoadableListener explosionListener) {
-        this.getRegisteredListeners().put(explosionListener.getName(), explosionListener);
+        this.getRegisteredListeners().add(explosionListener);
     }
 
     public void loadAllListeners() {
-        for (LoadableListener listener : this.getRegisteredListeners().values()) {
+        for (LoadableListener listener : this.getRegisteredListeners()) {
             if (!listener.shouldBeLoaded()) {
                 continue;
             }
-            Bukkit.getServer().getPluginManager().registerEvents(listener.getEventListener(), ExplodeAny.getInstance());
-            if (listener.isAnnounceable()) {
-                this.getPlugin().getLogger().info(String.format("Enabled support for %s", listener.getName()));
-            }
+
+            listener.load();
+            Bukkit.getServer().getPluginManager().registerEvents(listener, ExplodeAny.getInstance());
         }
     }
 
     public void unloadAllListeners() {
-        for (LoadableListener explosionListener : this.getRegisteredListeners().values()) {
-            if (explosionListener.shouldBeLoaded()) {
-                explosionListener.unload();
+        for (LoadableListener listener : this.getRegisteredListeners()) {
+            if (listener.shouldBeLoaded()) {
+                listener.unload();
             }
         }
     }
 
     public void unregisterAllListeners() {
         this.getRegisteredListeners().clear();
-    }
-
-    private ExplodeAny getPlugin() {
-        return ExplodeAny.getInstance();
     }
 }

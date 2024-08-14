@@ -1,26 +1,43 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
+import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
-public abstract class KnownVanillaEntityExplosionListener extends BaseVanillaEntityExplosionListener {
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    public void onEntityExplode(EntityExplodeEvent event) {
-        if (!this.isEventHandled(event)) {
-            return;
-        }
+public class RegularVanillaEntityExplosionHandler implements VanillaEntityExplosionHandler {
+    private RegularVanillaEntityConfiguration configuration;
 
+    @Override
+    public boolean shouldBeLoaded() {
+        return ConfigurationManager.getInstance()
+                .isConfigurationSectionLoaded(RegularVanillaEntityConfiguration.getConfigurationId());
+    }
+
+    @Override
+    public void load() {
+        this.configuration = (RegularVanillaEntityConfiguration) ConfigurationManager.getInstance()
+                .getRegisteredConfigurationSectionByPath(RegularVanillaEntityConfiguration.getConfigurationId());
+    }
+
+    @Override
+    public boolean isEventHandled(EntityExplodeEvent event) {
+        return ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name());
+    }
+
+    @Override
+    public void onEntityExplode(EntityExplodeEvent event) {
         Entity entity = event.getEntity();
 
         ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
@@ -28,7 +45,8 @@ public abstract class KnownVanillaEntityExplosionListener extends BaseVanillaEnt
         double explosionRadius = explodingEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
-            this.logDebugMessage(explodingEntityName);
+            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected vanilla entity explosion. Entity type: {0}",
+                    explodingEntityName);
         }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
@@ -49,10 +67,7 @@ public abstract class KnownVanillaEntityExplosionListener extends BaseVanillaEnt
     }
 
     @Override
-    protected boolean isEventHandled(EntityExplodeEvent event) {
-        return super.isEventHandled(event)
-                && ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name());
+    public void unload() {
+        /* Do nothing */
     }
-
-    protected abstract void logDebugMessage(String entityTypeName);
 }

@@ -1,27 +1,23 @@
 package io.github.guillex7.explodeany.compat.v1_8_3.api;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World.Environment;
-import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 
 import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
-import io.github.guillex7.explodeany.compat.common.event.IBukkitListener;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 
-public class CBlockExplodeListener implements IBukkitListener {
-    protected final Consumer<EanyBlockExplodeEvent> eanyBlockExplodeEventConsumer;
+public class CBlockExplodeListener implements LoadableListener {
     protected Map<Location, String> identifiedExplosiveBlocks;
 
-    public CBlockExplodeListener(Consumer<EanyBlockExplodeEvent> eanyBlockExplodeEventConsumer) {
-        this.eanyBlockExplodeEventConsumer = eanyBlockExplodeEventConsumer;
+    public CBlockExplodeListener() {
         this.identifiedExplosiveBlocks = new HashMap<>();
     }
 
@@ -41,38 +37,19 @@ public class CBlockExplodeListener implements IBukkitListener {
             String explodingVanillaMaterial = identifiedExplosiveBlocks.get(blockLocation);
             identifiedExplosiveBlocks.remove(blockLocation);
 
-            eanyBlockExplodeEventConsumer.accept(new EanyBlockExplodeEvent() {
-                @Override
-                public Location getBlockLocation() {
-                    return blockLocation;
-                }
-
-                @Override
-                public String getBlockMaterial() {
-                    return explodingVanillaMaterial;
-                }
-
-                @Override
-                public List<Block> getBlockList() {
-                    return event.blockList();
-                }
-
-                @Override
-                public boolean isCancelled() {
-                    return event.isCancelled();
-                }
-
-                @Override
-                public void setCancelled(boolean cancelled) {
-                    event.setCancelled(cancelled);
-                }
-            });
+            Bukkit.getPluginManager()
+                    .callEvent(new EanyBlockExplodeEvent(blockLocation, explodingVanillaMaterial, event.blockList()));
         }
     }
 
     @Override
     public boolean shouldBeLoaded() {
         return true;
+    }
+
+    @Override
+    public void load() {
+        // Do nothing
     }
 
     @Override

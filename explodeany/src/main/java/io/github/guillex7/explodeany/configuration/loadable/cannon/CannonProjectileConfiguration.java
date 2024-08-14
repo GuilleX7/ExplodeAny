@@ -5,11 +5,17 @@ import org.bukkit.plugin.Plugin;
 
 import at.pavlov.cannons.Cannons;
 import at.pavlov.cannons.projectile.ProjectileStorage;
+
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 
 public final class CannonProjectileConfiguration extends LoadableConfigurationSection<String> {
     public static String getConfigurationId() {
         return "CannonProjectile";
+    }
+
+    @Override
+    public String getHumanReadableName() {
+        return "Cannons projectiles";
     }
 
     @Override

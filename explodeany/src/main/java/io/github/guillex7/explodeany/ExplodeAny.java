@@ -17,15 +17,13 @@ import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.Custo
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.MagicVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.listener.ListenerManager;
-import io.github.guillex7.explodeany.listener.loadable.BlockListener;
-import io.github.guillex7.explodeany.listener.loadable.EntityListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.ExplosionManagerExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.BlockBreakListener;
+import io.github.guillex7.explodeany.listener.loadable.PlayerInteractListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.EanyTaggedExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.cannon.CannonProjectileExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.qualityarmory.QualityArmoryExplosionListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.block.RegularVanillaBlockExplosionListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity.MagicVanillaEntityExplosionListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity.RegularVanillaEntityExplosionListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity.UnknownVanillaEntityExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.block.EanyBlockExplosionListener;
+import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity.VanillaEntityExplosionListener;
 
 public class ExplodeAny extends JavaPlugin {
     private static final String DATABASE_FILENAME = "blockDatabase.json";
@@ -102,14 +100,18 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void registerListeners() {
-        this.listenerManager.registerListener(new BlockListener());
-        this.listenerManager.registerListener(new EntityListener());
-        this.listenerManager.registerListener(new ExplosionManagerExplosionListener());
-        this.listenerManager.registerListener(new RegularVanillaEntityExplosionListener());
+        /* Miscellaneous */
+        this.listenerManager.registerListener(new BlockBreakListener());
+        this.listenerManager.registerListener(new PlayerInteractListener());
+        /* Explosion Manager */
+        this.listenerManager.registerListener(new EanyTaggedExplosionListener());
+        /* Compatibility */
+        this.listenerManager.registerListener(
+                this.compatibilityManager.getApi().getBukkitListenerUtils().createBlockExplodeListener());
+        /* Explosions */
+        this.listenerManager.registerListener(new VanillaEntityExplosionListener());
+        this.listenerManager.registerListener(new EanyBlockExplosionListener());
         this.listenerManager.registerListener(new CannonProjectileExplosionListener());
-        this.listenerManager.registerListener(new MagicVanillaEntityExplosionListener());
-        this.listenerManager.registerListener(new UnknownVanillaEntityExplosionListener());
-        this.listenerManager.registerListener(new RegularVanillaBlockExplosionListener());
         this.listenerManager.registerListener(new QualityArmoryExplosionListener());
         this.listenerManager.loadAllListeners();
     }

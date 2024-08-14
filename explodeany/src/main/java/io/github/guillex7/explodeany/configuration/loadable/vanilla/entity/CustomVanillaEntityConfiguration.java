@@ -20,6 +20,11 @@ public class CustomVanillaEntityConfiguration extends LoadableConfigurationSecti
     }
 
     @Override
+    public String getHumanReadableName() {
+        return "custom/modded entities and blocks";
+    }
+
+    @Override
     public boolean shouldBeLoaded() {
         return true;
     }

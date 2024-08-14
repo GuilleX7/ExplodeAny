@@ -1,14 +1,11 @@
 package io.github.guillex7.explodeany.compat.v1_8.api;
 
-import java.util.function.Consumer;
-
 import io.github.guillex7.explodeany.compat.common.api.IBukkitListenerUtils;
-import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
-import io.github.guillex7.explodeany.compat.common.event.IBukkitListener;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 
 public class CBukkitListenerUtils implements IBukkitListenerUtils {
     @Override
-    public IBukkitListener createBlockExplodeListener(Consumer<EanyBlockExplodeEvent> eanyBlockExplodeEventConsumer) {
+    public LoadableListener createBlockExplodeListener() {
         return new CBlockExplodeListener();
     }
 }

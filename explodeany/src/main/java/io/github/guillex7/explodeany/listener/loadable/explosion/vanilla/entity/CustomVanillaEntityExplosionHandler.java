@@ -11,7 +11,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
@@ -19,15 +18,24 @@ import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
-public class UnknownVanillaEntityExplosionListener extends BaseVanillaEntityExplosionListener {
+public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosionHandler {
+    private CustomVanillaEntityConfiguration configuration;
+
     @Override
-    public String getName() {
-        return "Custom entities explosions";
+    public boolean shouldBeLoaded() {
+        return ConfigurationManager.getInstance()
+                .isConfigurationSectionLoaded(CustomVanillaEntityConfiguration.getConfigurationId());
     }
 
     @Override
-    public boolean isAnnounceable() {
-        return false;
+    public void load() {
+        this.configuration = (CustomVanillaEntityConfiguration) ConfigurationManager.getInstance()
+                .getRegisteredConfigurationSectionByPath(CustomVanillaEntityConfiguration.getConfigurationId());
+    }
+
+    @Override
+    public boolean isEventHandled(EntityExplodeEvent event) {
+        return !ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().toString());
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
@@ -68,14 +76,7 @@ public class UnknownVanillaEntityExplosionListener extends BaseVanillaEntityExpl
     }
 
     @Override
-    protected LoadableConfigurationSection<?> getConfiguration() {
-        return ConfigurationManager.getInstance()
-                .getRegisteredConfigurationSectionByPath(CustomVanillaEntityConfiguration.getConfigurationId());
-    }
-
-    @Override
-    protected boolean isEventHandled(EntityExplodeEvent event) {
-        return super.isEventHandled(event)
-                && !ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().toString());
+    public void unload() {
+        /* Do nothing */
     }
 }

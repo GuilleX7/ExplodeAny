@@ -5,17 +5,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 
-public final class BlockListener extends LoadableListener {
+public final class BlockBreakListener implements LoadableListener {
     private final BlockDatabase blockDatabase;
 
-    public BlockListener() {
+    public BlockBreakListener() {
         this.blockDatabase = BlockDatabase.getInstance();
-    }
-
-    @Override
-    public String getName() {
-        return "Block";
     }
 
     @Override
@@ -24,8 +20,8 @@ public final class BlockListener extends LoadableListener {
     }
 
     @Override
-    public boolean isAnnounceable() {
-        return false;
+    public void load() {
+        /* Nothing to do */
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)

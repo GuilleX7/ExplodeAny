@@ -1,8 +1,8 @@
 package io.github.guillex7.explodeany.compat.v1_8.api;
 
-import io.github.guillex7.explodeany.compat.common.event.IBukkitListener;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 
-public class CBlockExplodeListener implements IBukkitListener {
+public class CBlockExplodeListener implements LoadableListener {
     @Override
     public final boolean shouldBeLoaded() {
         return false;
@@ -10,6 +10,11 @@ public class CBlockExplodeListener implements IBukkitListener {
 
     @Override
     public final void unload() {
+        // Do nothing
+    }
+
+    @Override
+    public void load() {
         // Do nothing
     }
 }

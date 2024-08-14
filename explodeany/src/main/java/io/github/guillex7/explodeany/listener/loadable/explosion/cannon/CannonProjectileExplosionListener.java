@@ -13,24 +13,27 @@ import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.projectile.Projectile;
 import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.cannon.CannonProjectileConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
-import io.github.guillex7.explodeany.listener.loadable.explosion.BaseConfigurableExplosionListener;
 import io.github.guillex7.explodeany.services.DebugManager;
 
-public final class CannonProjectileExplosionListener extends BaseConfigurableExplosionListener {
+public final class CannonProjectileExplosionListener implements LoadableListener {
+    private CannonProjectileConfiguration configuration;
+
     @Override
-    public String getName() {
-        return "Cannons explosions";
+    public boolean shouldBeLoaded() {
+        return ConfigurationManager.getInstance()
+                .isConfigurationSectionLoaded(CannonProjectileConfiguration.getConfigurationId());
     }
 
     @Override
-    public boolean isAnnounceable() {
-        return true;
+    public void load() {
+        this.configuration = (CannonProjectileConfiguration) ConfigurationManager.getInstance()
+                .getRegisteredConfigurationSectionByPath(CannonProjectileConfiguration.getConfigurationId());
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
@@ -108,11 +111,5 @@ public final class CannonProjectileExplosionListener extends BaseConfigurableExp
     public void unload() {
         ProjectileImpactEvent.getHandlerList().unregister(this);
         ProjectilePiercingEvent.getHandlerList().unregister(this);
-    }
-
-    @Override
-    protected LoadableConfigurationSection<?> getConfiguration() {
-        return ConfigurationManager.getInstance()
-                .getRegisteredConfigurationSectionByPath(CannonProjectileConfiguration.getConfigurationId());
     }
 }

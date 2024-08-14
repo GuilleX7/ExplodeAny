@@ -9,14 +9,13 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 
 import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.qualityarmor.QualityArmoryExplosiveConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.QualityArmoryExplosive;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
-import io.github.guillex7.explodeany.listener.loadable.explosion.BaseConfigurableExplosionListener;
 import io.github.guillex7.explodeany.services.DebugManager;
 
 import me.zombie_striker.qg.api.QAProjectileExplodeEvent;
@@ -26,15 +25,19 @@ import me.zombie_striker.qg.miscitems.ProxyMines;
 import me.zombie_striker.qg.miscitems.StickyGrenades;
 import me.zombie_striker.qg.miscitems.ThrowableItems;
 
-public class QualityArmoryExplosionListener extends BaseConfigurableExplosionListener {
+public class QualityArmoryExplosionListener implements LoadableListener {
+    private QualityArmoryExplosiveConfiguration configuration;
+
     @Override
-    public String getName() {
-        return "QualityArmory";
+    public boolean shouldBeLoaded() {
+        return ConfigurationManager.getInstance()
+                .isConfigurationSectionLoaded(QualityArmoryExplosiveConfiguration.getConfigurationId());
     }
 
     @Override
-    public boolean isAnnounceable() {
-        return true;
+    public void load() {
+        this.configuration = (QualityArmoryExplosiveConfiguration) ConfigurationManager.getInstance()
+                .getRegisteredConfigurationSectionByPath(QualityArmoryExplosiveConfiguration.getConfigurationId());
     }
 
     @EventHandler
@@ -103,11 +106,5 @@ public class QualityArmoryExplosionListener extends BaseConfigurableExplosionLis
     public void unload() {
         QAProjectileExplodeEvent.getHandlerList().unregister(this);
         QAThrowableExplodeEvent.getHandlerList().unregister(this);
-    }
-
-    @Override
-    protected LoadableConfigurationSection<?> getConfiguration() {
-        return ConfigurationManager.getInstance()
-                .getRegisteredConfigurationSectionByPath(QualityArmoryExplosiveConfiguration.getConfigurationId());
     }
 }

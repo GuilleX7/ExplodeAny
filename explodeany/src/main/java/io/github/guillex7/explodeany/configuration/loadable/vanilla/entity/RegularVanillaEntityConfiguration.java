@@ -9,6 +9,11 @@ public class RegularVanillaEntityConfiguration extends LoadableConfigurationSect
     }
 
     @Override
+    public String getHumanReadableName() {
+        return "Vanilla entities and blocks";
+    }
+
+    @Override
     public boolean shouldBeLoaded() {
         return true;
     }

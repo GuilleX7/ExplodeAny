@@ -18,6 +18,11 @@ public class MagicVanillaEntityConfiguration extends LoadableConfigurationSectio
     }
 
     @Override
+    public String getHumanReadableName() {
+        return "Magic entities";
+    }
+
+    @Override
     public boolean shouldBeLoaded() {
         Plugin magicPlugin = Bukkit.getPluginManager().getPlugin("Magic");
         return magicPlugin != null && magicPlugin.isEnabled() && magicPlugin instanceof MagicAPI

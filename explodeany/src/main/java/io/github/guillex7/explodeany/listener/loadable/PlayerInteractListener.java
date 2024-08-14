@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
@@ -18,22 +19,17 @@ import io.github.guillex7.explodeany.services.ChecktoolManager;
 import io.github.guillex7.explodeany.util.ItemStackUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
-public final class EntityListener extends LoadableListener {
+public final class PlayerInteractListener implements LoadableListener {
     private final ChecktoolManager checktoolManager;
     private final ConfigurationManager configurationManager;
     private final BlockDatabase blockDatabase;
     private final CompatibilityManager compatibilityManager;
 
-    public EntityListener() {
+    public PlayerInteractListener() {
         this.checktoolManager = ChecktoolManager.getInstance();
         this.configurationManager = ConfigurationManager.getInstance();
         this.blockDatabase = BlockDatabase.getInstance();
         this.compatibilityManager = CompatibilityManager.getInstance();
-    }
-
-    @Override
-    public String getName() {
-        return "Entity";
     }
 
     @Override
@@ -42,8 +38,8 @@ public final class EntityListener extends LoadableListener {
     }
 
     @Override
-    public boolean isAnnounceable() {
-        return false;
+    public void load() {
+        /* Nothing to do */
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)

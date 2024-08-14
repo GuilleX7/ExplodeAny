@@ -1,7 +1,5 @@
 package io.github.guillex7.explodeany.compat.v1_16_1.api;
 
-import java.util.function.Consumer;
-
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
@@ -11,13 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
-
 public class CBlockExplodeListener extends io.github.guillex7.explodeany.compat.v1_8_3.api.CBlockExplodeListener {
-    public CBlockExplodeListener(Consumer<EanyBlockExplodeEvent> eanyBlockExplodeEventConsumer) {
-        super(eanyBlockExplodeEventConsumer);
-    }
-
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();

@@ -4,11 +4,13 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
+import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
@@ -16,19 +18,22 @@ import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
-public class RegularVanillaBlockExplosionListener extends BaseVanillaBlockExplosionListener {
-    @Override
-    public String getName() {
-        return "Vanilla blocks";
-    }
+public class EanyBlockExplosionListener implements LoadableListener {
+    private RegularVanillaEntityConfiguration configuration;
 
     @Override
-    public boolean isAnnounceable() {
+    public boolean shouldBeLoaded() {
         return true;
     }
 
     @Override
-    protected void onBlockExplode(EanyBlockExplodeEvent event) {
+    public void load() {
+        this.configuration = (RegularVanillaEntityConfiguration) ConfigurationManager.getInstance()
+                .getRegisteredConfigurationSectionByPath(RegularVanillaEntityConfiguration.getConfigurationId());
+    }
+
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
+    private void onBlockExplode(EanyBlockExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
@@ -61,14 +66,15 @@ public class RegularVanillaBlockExplosionListener extends BaseVanillaBlockExplos
         }
     }
 
-    @Override
-    protected boolean isEventHandled(EanyBlockExplodeEvent event) {
-        return super.isEventHandled(event) && ExplodingVanillaEntity.isEntityNameValid(event.getBlockMaterial());
+    private boolean isEventHandled(EanyBlockExplodeEvent event) {
+        return !event.isCancelled() && event.getBlockLocation() != null && event.getBlockMaterial() != null
+                && !ConfigurationManager.getInstance().getDisabledWorlds()
+                        .contains(event.getBlockLocation().getWorld().getName())
+                && ExplodingVanillaEntity.isEntityNameValid(event.getBlockMaterial());
     }
 
     @Override
-    protected LoadableConfigurationSection<?> getConfiguration() {
-        return ConfigurationManager.getInstance()
-                .getRegisteredConfigurationSectionByPath(RegularVanillaEntityConfiguration.getConfigurationId());
+    public void unload() {
+        EanyBlockExplodeEvent.getHandlerList().unregister(this);
     }
 }
