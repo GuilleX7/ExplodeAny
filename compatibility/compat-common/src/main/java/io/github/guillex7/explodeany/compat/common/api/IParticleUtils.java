@@ -1,7 +1,7 @@
 package io.github.guillex7.explodeany.compat.common.api;
 
-import io.github.guillex7.explodeany.compat.common.data.ParticleData;
+import io.github.guillex7.explodeany.compat.common.data.EanyParticleData;
 
 public interface IParticleUtils {
-    IParticle createParticle(ParticleData particleData);
+    IParticle createParticle(EanyParticleData particleData);
 }

@@ -4,12 +4,14 @@ import io.github.guillex7.explodeany.compat.common.ICompatibilityApi;
 import io.github.guillex7.explodeany.compat.common.Version;
 import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
 import io.github.guillex7.explodeany.compat.common.api.IBukkitListenerUtils;
+import io.github.guillex7.explodeany.compat.common.api.IBukkitUtils;
 import io.github.guillex7.explodeany.compat.common.api.IParticleUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPersistentStorageUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPlayerInteractionEventUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPlayerInventoryUtils;
 import io.github.guillex7.explodeany.compat.v1_8.api.CBlockDataUtils;
 import io.github.guillex7.explodeany.compat.v1_8.api.CBukkitListenerUtils;
+import io.github.guillex7.explodeany.compat.v1_8.api.CBukkitUtils;
 import io.github.guillex7.explodeany.compat.v1_8.api.CParticleUtils;
 import io.github.guillex7.explodeany.compat.v1_8.api.CPersistentStorageUtils;
 import io.github.guillex7.explodeany.compat.v1_8.api.CPlayerInteractionEventUtils;
@@ -24,6 +26,7 @@ public class CompatibilityApi implements ICompatibilityApi {
     private IPlayerInteractionEventUtils playerInteractionEventUtils;
     private IPlayerInventoryUtils playerInventoryUtils;
     private IBukkitListenerUtils bukkitListenerUtils;
+    private IBukkitUtils bukkitUtils;
 
     @Override
     public void load() {
@@ -33,6 +36,7 @@ public class CompatibilityApi implements ICompatibilityApi {
         this.playerInteractionEventUtils = new CPlayerInteractionEventUtils();
         this.playerInventoryUtils = new CPlayerInventoryUtils();
         this.bukkitListenerUtils = new CBukkitListenerUtils();
+        this.bukkitUtils = new CBukkitUtils();
     }
 
     @Override
@@ -68,5 +72,10 @@ public class CompatibilityApi implements ICompatibilityApi {
     @Override
     public IBukkitListenerUtils getBukkitListenerUtils() {
         return bukkitListenerUtils;
+    }
+
+    @Override
+    public IBukkitUtils getBukkitUtils() {
+        return bukkitUtils;
     }
 }

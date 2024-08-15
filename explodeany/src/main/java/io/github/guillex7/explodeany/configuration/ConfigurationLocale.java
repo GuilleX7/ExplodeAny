@@ -9,6 +9,7 @@ public enum ConfigurationLocale {
     ENTER_CHECKTOOL_MODE("EnterChecktoolMode"),
     LEAVE_CHECKTOOL_MODE("LeaveChecktoolMode"),
     CHECKTOOL_USE("ChecktoolUse"),
+    CHECKTOOL_USE_BOSS_BAR("ChecktoolUseBossBar"),
     CHECKTOOL_SET("ChecktoolSet"),
     CHECKTOOL_NOT_PERSISTED("ChecktoolNotPersisted"),
     CHECKTOOL_GIVEN("ChecktoolGiven"),

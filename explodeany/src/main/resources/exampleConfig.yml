@@ -58,6 +58,26 @@ Checktool:
     # not handled.
     # [Default] is false.
     SilentWhenCheckingNonHandledBlocks: false
+    # If set to true, the plugin will not send any message when the player checks a block that is handled
+    # by the plugin. If set to false, the plugin will send a message to the player informing the block's durability.
+    # [Default] is false.
+    SilentWhenCheckingHandledBlocks: false
+    # If set to true, a boss bar will be displayed to the player when he/she checks a block's durability.
+    # [Default] is false.
+    ShowBossBar: false
+    # Color of the boss bar that will be displayed to the player when he/she checks a block's durability.
+    # Allowed values are: PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE.
+    # [Default] is PURPLE.
+    BossBarColor: PURPLE
+    # Style of the boss bar that will be displayed to the player when he/she checks a block's durability.
+    # Allowed values are: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20.
+    # [Default] is SOLID.
+    BossBarStyle: SOLID
+    # Time in ticks that the boss bar will be displayed to the player when he/she checks a block's durability.
+    # Remember that 1 second is 20 ticks.
+    # [Minimum] is 1 (0.05s)
+    # [Default] is 30 (1.5s)
+    BossBarDuration: 30
 
 # Named groups of materials and/or entitys. You can create groups with a mix of materials
 # and entities. When you use the group in a certain section, the plugin will choose only
@@ -379,10 +399,20 @@ Locale:
     #   %B_X% the X coordinate of the targeted block
     #   %B_Y% the Y coordinate of the targeted block
     #   %B_Z% the Z coordinate of the targeted block
-    #   %DURABILITY% the clicked block's durability and
+    #   %DURABILITY% the clicked block's durability
     #   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability),
     #   %DURABILITY_PERCENTAGE% the clicked block's durability as a percentage (excluding the % symbol)
     ChecktoolUse: "Block health: %DURABILITY_PERCENTAGE%% (%PRETTY_MATERIAL%)"
+    # - ChecktoolUseBossBar:
+    #   %MATERIAL% represents the clicked block's type,
+    #   %PRETTY_MATERIAL% represents the clicked block's type in a more readable way,
+    #   %B_X% the X coordinate of the targeted block
+    #   %B_Y% the Y coordinate of the targeted block
+    #   %B_Z% the Z coordinate of the targeted block
+    #   %DURABILITY% the clicked block's durability
+    #   %MAX_DURABILITY% the maximum durability a block can have (same as BlockDurability),
+    #   %DURABILITY_PERCENTAGE% the clicked block's durability as a percentage (excluding the % symbol)
+    ChecktoolUseBossBar: "%PRETTY_MATERIAL%: %DURABILITY_PERCENTAGE%%"
     # - ChecktoolSet:
     #   %ITEM% represents the checktool item's name
     #   %PRETTY_ITEM% represents the checktool item's name in a more readable way

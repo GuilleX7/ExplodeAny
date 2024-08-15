@@ -2,10 +2,10 @@ package io.github.guillex7.explodeany.compat.v1_14.api;
 
 import org.bukkit.World;
 
-import io.github.guillex7.explodeany.compat.common.data.ParticleData;
+import io.github.guillex7.explodeany.compat.common.data.EanyParticleData;
 
 public class CParticle extends io.github.guillex7.explodeany.compat.v1_13.api.CParticle {
-    public CParticle(ParticleData particleData) {
+    public CParticle(EanyParticleData particleData) {
         super(particleData);
     }
 

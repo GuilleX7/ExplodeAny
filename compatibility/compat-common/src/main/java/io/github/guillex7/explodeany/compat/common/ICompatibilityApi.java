@@ -2,6 +2,7 @@ package io.github.guillex7.explodeany.compat.common;
 
 import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
 import io.github.guillex7.explodeany.compat.common.api.IBukkitListenerUtils;
+import io.github.guillex7.explodeany.compat.common.api.IBukkitUtils;
 import io.github.guillex7.explodeany.compat.common.api.IParticleUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPersistentStorageUtils;
 import io.github.guillex7.explodeany.compat.common.api.IPlayerInteractionEventUtils;
@@ -23,4 +24,6 @@ public interface ICompatibilityApi {
     public IPlayerInventoryUtils getPlayerInventoryUtils();
 
     public IBukkitListenerUtils getBukkitListenerUtils();
+
+    public IBukkitUtils getBukkitUtils();
 }

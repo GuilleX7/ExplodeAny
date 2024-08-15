@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.plugin.Plugin;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.data.MetaPersistentDataType;
+import io.github.guillex7.explodeany.compat.common.data.EanyMetaPersistentDataType;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.MagicVanillaEntityConfiguration;
@@ -42,7 +42,7 @@ public class MagicVanillaEntityExplosionHandler implements VanillaEntityExplosio
     private boolean isEntitySpawnedByMagic(Entity entity) {
         return magicPlugin != null
                 && CompatibilityManager.getInstance().getApi().getPersistentStorageUtils().getForEntity(entity)
-                        .has(magicPlugin, MAGIC_SPAWNED_KEY, MetaPersistentDataType.BYTE);
+                        .has(magicPlugin, MAGIC_SPAWNED_KEY, EanyMetaPersistentDataType.BYTE);
     }
 
     @Override

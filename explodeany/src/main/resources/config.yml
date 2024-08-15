@@ -1,5 +1,5 @@
 UseBlockDatabase: false
-CheckBlockDatabaseAtStartup: false                                
+CheckBlockDatabaseAtStartup: false
 BlockDurability: 100.0
 EnableMetrics: true
 
@@ -11,6 +11,11 @@ Checktool:
     SilentWhenCheckingOnDisabledWorlds: false
     SilentWhenCheckingWithoutPermissions: false
     SilentWhenCheckingNonHandledBlocks: false
+    SilentWhenCheckingHandledBlocks: false
+    ShowBossBar: false
+    BossBarColor: PURPLE
+    BossBarStyle: SOLID
+    BossBarDuration: 30
 
 Groups: {}
 
@@ -37,6 +42,7 @@ Locale:
     ChecktoolToggledOn: Checktool mode toggled on for player %NAME%
     ChecktoolToggledOff: Checktool mode toggled off for player %NAME%
     ChecktoolUse: "Block health: %DURABILITY_PERCENTAGE%% (%PRETTY_MATERIAL%)"
+    ChecktoolUseBossBar: "%PRETTY_MATERIAL%: %DURABILITY_PERCENTAGE%%"
     ChecktoolSet: "Checktool successfully set to %PRETTY_ITEM%!"
     ChecktoolNotPersisted: "Checktool item was set to %PRETTY_ITEM%, but it couldn't be persisted"
     ChecktoolGiven: "A checktool (%PRETTY_ITEM%) was given to player %NAME%"

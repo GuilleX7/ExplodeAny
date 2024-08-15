@@ -2,7 +2,7 @@ package io.github.guillex7.explodeany.compat.common.data;
 
 import org.bukkit.Material;
 
-public class ParticleData {
+public class EanyParticleData {
     private String name;
     private int red;
     private int green;
@@ -10,7 +10,7 @@ public class ParticleData {
     private double size;
     private Material material;
 
-    public ParticleData(String name, int red, int green, int blue, double size, Material material) {
+    public EanyParticleData(String name, int red, int green, int blue, double size, Material material) {
         this.name = name;
         this.red = red;
         this.green = green;

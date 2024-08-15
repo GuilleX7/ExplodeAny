@@ -11,14 +11,17 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.compat.common.api.IBossBar;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.StringUtils;
 
@@ -29,6 +32,8 @@ public class ChecktoolManager {
 
     private final File checktoolFile;
     private final Map<Player, Boolean> checktoolStateByPlayer;
+    private final Map<Player, IBossBar> checktoolBossBarByPlayer;
+    private final Map<Player, BukkitTask> checktoolBossBarTaskByPlayer;
     private final ConfigurationManager configurationManager;
 
     private ItemStack checktool;
@@ -37,6 +42,8 @@ public class ChecktoolManager {
         this.checktool = this.getDefaultChecktool();
         this.checktoolFile = new File(this.getPlugin().getDataFolder(), CHECKTOOL_DUMP_FILENAME);
         this.checktoolStateByPlayer = new HashMap<>();
+        this.checktoolBossBarByPlayer = new HashMap<>();
+        this.checktoolBossBarTaskByPlayer = new HashMap<>();
         this.configurationManager = ConfigurationManager.getInstance();
         this.loadChecktool();
     }
@@ -142,5 +149,42 @@ public class ChecktoolManager {
             this.getPlugin().getLogger().info("Checktool item was set, but it couldn't be persisted");
             return false;
         }
+    }
+
+    public void hideChecktoolBossBarForPlayer(Player player) {
+        BukkitTask task = this.checktoolBossBarTaskByPlayer.get(player);
+        if (task != null) {
+            task.cancel();
+        }
+
+        IBossBar bossBar = this.checktoolBossBarByPlayer.get(player);
+        if (bossBar != null) {
+            bossBar.removePlayer(player);
+        }
+
+        this.checktoolBossBarByPlayer.remove(player);
+        this.checktoolBossBarTaskByPlayer.remove(player);
+    }
+
+    public void setChecktoolBossBarForPlayer(Player player, IBossBar bossBar, int bossBarDuration) {
+        BukkitTask oldTask = this.checktoolBossBarTaskByPlayer.get(player);
+        if (oldTask != null) {
+            oldTask.cancel();
+        }
+
+        IBossBar oldBossBar = this.checktoolBossBarByPlayer.get(player);
+        if (oldBossBar != null) {
+            oldBossBar.removePlayer(player);
+        }
+
+        bossBar.addPlayer(player);
+
+        this.checktoolBossBarByPlayer.put(player, bossBar);
+        this.checktoolBossBarTaskByPlayer.put(player, Bukkit.getScheduler().runTaskLater(this.getPlugin(), () -> {
+            bossBar.removePlayer(player);
+
+            this.checktoolBossBarByPlayer.remove(player);
+            this.checktoolBossBarTaskByPlayer.remove(player);
+        }, bossBarDuration));
     }
 }

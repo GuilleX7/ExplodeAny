@@ -7,14 +7,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import io.github.guillex7.explodeany.compat.common.api.IParticle;
-import io.github.guillex7.explodeany.compat.common.data.ParticleData;
+import io.github.guillex7.explodeany.compat.common.data.EanyParticleData;
 
 public class CParticle implements IParticle {
-    protected ParticleData particleData;
+    protected EanyParticleData particleData;
     protected Particle particle;
     protected Object extra;
 
-    public CParticle(ParticleData particleData) {
+    public CParticle(EanyParticleData particleData) {
         this.particleData = particleData;
         this.particle = this.getParticleFromParticleData(particleData);
         if (this.particle != null) {
@@ -25,7 +25,7 @@ public class CParticle implements IParticle {
         }
     }
 
-    protected Object getExtraFromParticleData(Particle particle, ParticleData particleData) {
+    protected Object getExtraFromParticleData(Particle particle, EanyParticleData particleData) {
         Class<?> dataTypeClazz = this.getExtraTypeDataForParticle(particle);
 
         if (ItemStack.class.equals(dataTypeClazz)) {
@@ -45,7 +45,7 @@ public class CParticle implements IParticle {
         return !Void.class.equals(this.getExtraTypeDataForParticle(particle));
     }
 
-    protected Particle getParticleFromParticleData(ParticleData particleData) {
+    protected Particle getParticleFromParticleData(EanyParticleData particleData) {
         try {
             return Particle.valueOf(particleData.getName());
         } catch (Exception e) {

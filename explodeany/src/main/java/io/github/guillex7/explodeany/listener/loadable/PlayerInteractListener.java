@@ -10,11 +10,13 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
+import io.github.guillex7.explodeany.compat.common.api.IBossBar;
 import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.PermissionNode;
+import io.github.guillex7.explodeany.configuration.section.ChecktoolConfiguration;
 import io.github.guillex7.explodeany.services.ChecktoolManager;
 import io.github.guillex7.explodeany.util.ItemStackUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
@@ -50,23 +52,25 @@ public final class PlayerInteractListener implements LoadableListener {
                 && this.compatibilityManager.getApi().getPlayerInteractionEventUtils()
                         .doesInteractionUseMainHand(event)
                 && this.checktoolManager.isPlayerUsingChecktool(player)) {
-            ItemStack itemInHand = new ItemStack(this.compatibilityManager.getApi().getPlayerInventoryUtils()
+            final ItemStack itemInHand = new ItemStack(this.compatibilityManager.getApi().getPlayerInventoryUtils()
                     .getItemInMainHand(player.getInventory()));
-            ItemStack checktool = this.checktoolManager.getChecktool();
+            final ItemStack checktool = this.checktoolManager.getChecktool();
 
             if (!ItemStackUtils.areItemStacksSimilar(itemInHand, checktool)) {
                 return;
             }
 
+            final ChecktoolConfiguration checktoolConfiguration = this.configurationManager.getChecktoolConfiguration();
+
             if (!player.hasPermission(PermissionNode.CHECKTOOL_USE.getKey())) {
-                if (!this.configurationManager.getChecktoolConfiguration().isSilentWhenCheckingWithoutPermissions()) {
+                if (!checktoolConfiguration.isSilentWhenCheckingWithoutPermissions()) {
                     player.sendMessage(this.configurationManager.getLocale(ConfigurationLocale.NOT_ALLOWED));
                 }
                 return;
             }
 
             if (this.configurationManager.getDisabledWorlds().contains(player.getWorld().getName())) {
-                if (!this.configurationManager.getChecktoolConfiguration().isSilentWhenCheckingOnDisabledWorlds()) {
+                if (!checktoolConfiguration.isSilentWhenCheckingOnDisabledWorlds()) {
                     player.sendMessage(this.configurationManager.getLocale(ConfigurationLocale.DISABLED_IN_THIS_WORLD));
                 }
                 return;
@@ -77,32 +81,63 @@ public final class PlayerInteractListener implements LoadableListener {
             final String prettyMaterialName = StringUtils.beautifyName(materialName);
 
             if (this.configurationManager.handlesBlock(clickedBlock)) {
-                if (this.configurationManager.getChecktoolConfiguration()
-                        .doPreventActionWhenCheckingHandledBlocks()) {
+                if (checktoolConfiguration.doPreventActionWhenCheckingHandledBlocks()) {
                     event.setCancelled(true);
                 }
 
-                BlockStatus blockStatus = this.blockDatabase.getBlockStatus(clickedBlock, false);
-                double durabilityPercentage = blockStatus.getDurability() / BlockStatus.getDefaultBlockDurability()
-                        * 100;
+                final BlockStatus blockStatus = this.blockDatabase.getBlockStatus(clickedBlock, false);
+                final double durabilityPercentage = blockStatus.getDurability()
+                        / BlockStatus.getDefaultBlockDurability();
+                final double prettyDurabilityPercentage = durabilityPercentage * 100;
 
-                final String formattedMessage = this.configurationManager.getLocale(ConfigurationLocale.CHECKTOOL_USE)
-                        .replace("%DURABILITY_PERCENTAGE%",
-                                String.format("%.02f", durabilityPercentage))
-                        .replace("%DURABILITY%",
-                                String.format("%.02f", blockStatus.getDurability()))
-                        .replace("%MAX_DURABILITY%",
-                                String.format("%.02f", BlockStatus.getDefaultBlockDurability()))
-                        .replace("%B_X%",
-                                String.format("%d", clickedBlock.getLocation().getBlockX()))
-                        .replace("%B_Y%",
-                                String.format("%d", clickedBlock.getLocation().getBlockY()))
-                        .replace("%B_Z%",
-                                String.format("%d", clickedBlock.getLocation().getBlockZ()))
-                        .replace("%MATERIAL%", materialName)
-                        .replace("%PRETTY_MATERIAL%", prettyMaterialName);
+                if (!checktoolConfiguration.isSilentWhenCheckingHandledBlocks()) {
+                    final String formattedMessage = this.configurationManager
+                            .getLocale(ConfigurationLocale.CHECKTOOL_USE)
+                            .replace("%DURABILITY_PERCENTAGE%",
+                                    String.format("%.02f", prettyDurabilityPercentage))
+                            .replace("%DURABILITY%",
+                                    String.format("%.02f", blockStatus.getDurability()))
+                            .replace("%MAX_DURABILITY%",
+                                    String.format("%.02f", BlockStatus.getDefaultBlockDurability()))
+                            .replace("%B_X%",
+                                    String.format("%d", clickedBlock.getLocation().getBlockX()))
+                            .replace("%B_Y%",
+                                    String.format("%d", clickedBlock.getLocation().getBlockY()))
+                            .replace("%B_Z%",
+                                    String.format("%d", clickedBlock.getLocation().getBlockZ()))
+                            .replace("%MATERIAL%", materialName)
+                            .replace("%PRETTY_MATERIAL%", prettyMaterialName);
 
-                player.sendMessage(formattedMessage);
+                    player.sendMessage(formattedMessage);
+                }
+
+                if (checktoolConfiguration.doShowBossBar()) {
+                    final String formattedBossBarTitle = this.configurationManager
+                            .getLocale(ConfigurationLocale.CHECKTOOL_USE_BOSS_BAR)
+                            .replace("%DURABILITY_PERCENTAGE%",
+                                    String.format("%.02f", prettyDurabilityPercentage))
+                            .replace("%DURABILITY%",
+                                    String.format("%.02f", blockStatus.getDurability()))
+                            .replace("%MAX_DURABILITY%",
+                                    String.format("%.02f", BlockStatus.getDefaultBlockDurability()))
+                            .replace("%B_X%",
+                                    String.format("%d", clickedBlock.getLocation().getBlockX()))
+                            .replace("%B_Y%",
+                                    String.format("%d", clickedBlock.getLocation().getBlockY()))
+                            .replace("%B_Z%",
+                                    String.format("%d", clickedBlock.getLocation().getBlockZ()))
+                            .replace("%MATERIAL%", materialName)
+                            .replace("%PRETTY_MATERIAL%", prettyMaterialName);
+
+                    IBossBar checktoolBossBar = this.compatibilityManager.getApi().getBukkitUtils().createBossBar(
+                            formattedBossBarTitle, checktoolConfiguration.getBossBarColor(),
+                            checktoolConfiguration.getBossBarStyle());
+
+                    checktoolBossBar.setProgress(durabilityPercentage);
+
+                    this.checktoolManager.setChecktoolBossBarForPlayer(player, checktoolBossBar,
+                            checktoolConfiguration.getBossBarDuration());
+                }
             } else {
                 if (this.configurationManager.getChecktoolConfiguration()
                         .doPreventActionWhenCheckingNonHandledBlocks()) {
@@ -117,6 +152,8 @@ public final class PlayerInteractListener implements LoadableListener {
 
                     player.sendMessage(formattedMessage);
                 }
+
+                ChecktoolManager.getInstance().hideChecktoolBossBarForPlayer(player);
             }
         }
     }
