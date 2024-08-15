@@ -15,6 +15,7 @@ import io.github.guillex7.explodeany.configuration.loadable.cannon.CannonProject
 import io.github.guillex7.explodeany.configuration.loadable.qualityarmor.QualityArmoryExplosiveConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.TCEVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.MagicVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.listener.ListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.BlockBreakListener;
@@ -88,6 +89,7 @@ public class ExplodeAny extends JavaPlugin {
         this.configurationManager.registerLoadableConfigurationSection(new MagicVanillaEntityConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new CustomVanillaEntityConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new QualityArmoryExplosiveConfiguration());
+        this.configurationManager.registerLoadableConfigurationSection(new TCEVanillaEntityConfiguration());
         this.configurationManager.loadAllRegisteredLoadableConfigurationSections();
     }
 
@@ -108,9 +110,10 @@ public class ExplodeAny extends JavaPlugin {
         /* Compatibility */
         this.listenerManager.registerListener(
                 this.compatibilityManager.getApi().getBukkitListenerUtils().createBlockExplodeListener());
-        /* Explosions */
+        /* Vanilla explosions */
         this.listenerManager.registerListener(new VanillaEntityExplosionListener());
         this.listenerManager.registerListener(new EanyBlockExplosionListener());
+        /* Third party explosions */
         this.listenerManager.registerListener(new CannonProjectileExplosionListener());
         this.listenerManager.registerListener(new QualityArmoryExplosionListener());
         this.listenerManager.loadAllListeners();

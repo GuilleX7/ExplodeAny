@@ -5,7 +5,7 @@ api-version: 1.13
 description: Allows to break any unbreakable block with explosions!
 author: GuilleX7
 website: https://github.com/GuilleX7/ExplodeAny
-softdepend: [Cannons, Magic, QualityArmory]
+softdepend: [Cannons, Magic, QualityArmory, ThrowableCreeperEggs]
 commands:
     explodeany:
         description: "General command"

@@ -23,6 +23,28 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <groupId>dev.pixelmania</groupId>
+                    <artifactId>throwablecreepereggs</artifactId>
+                    <version>2.3.0</version>
+                    <packaging>jar</packaging>
+                    <file>${basedir}/lib/dev-pixelmania-throwablecreepereggs-2.3.0.jar</file>
+                    <generatePom>true</generatePom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-dev-pixelmania-throwablecreepereggs</id>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>clean</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.4.1</version>
                 <executions>
@@ -110,6 +132,13 @@
             <groupId>me.zombie_striker</groupId>
             <artifactId>QualityArmory</artifactId>
             <version>2.0.10</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- ThrowableCreeperEggs: https://www.spigotmc.org/resources/throwable-creeper-eggs.75877/ -->
+        <dependency>
+            <groupId>dev.pixelmania</groupId>
+            <artifactId>throwablecreepereggs</artifactId>
+            <version>2.3.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

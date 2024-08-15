@@ -18,6 +18,6 @@ Official pages:
 
 This repository contains a multi-module Maven project. In order to build it, you will need at least a valid installation of JDK 8 and Maven.
 
-To generate a JAR file, open a console and type `mvn package` at the root directory to build the entire project. The final JAR file will be placed in the `explodeany/target` folder. 
+To generate a JAR file, open a console and type `mvn clean` at the root directory. This will install some local dependencies. Then, type `mvn package` at the root directory to build the entire project. The final JAR file will be placed in the `explodeany/target` folder.
 
-Every dependency should be automatically resolved by Maven using our repositories (check the `pom.xml` file)
+Every dependency should be automatically resolved by Maven using both remote repositories and the local Maven repository (check the `pom.xml` file)

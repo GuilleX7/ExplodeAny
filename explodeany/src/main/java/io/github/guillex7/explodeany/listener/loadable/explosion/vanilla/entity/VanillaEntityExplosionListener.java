@@ -29,6 +29,7 @@ public class VanillaEntityExplosionListener implements LoadableListener {
 
     private void registerHandlers() {
         this.registeredHandlers.add(new MagicVanillaEntityExplosionHandler());
+        this.registeredHandlers.add(new TCEVanillaEntityExplosionHandler());
         this.registeredHandlers.add(new RegularVanillaEntityExplosionHandler());
         this.registeredHandlers.add(new CustomVanillaEntityExplosionHandler());
     }
