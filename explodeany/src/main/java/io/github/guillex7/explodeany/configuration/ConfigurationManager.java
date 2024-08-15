@@ -131,14 +131,18 @@ public final class ConfigurationManager {
     }
 
     private void parseLocale() {
-        String localePrefix = this.getLocalePrefix();
-        ConfigurationSection localeSection = this.getConfigurationFile().getConfig()
+        final ConfigurationSection localeSection = this.getConfigurationFile().getConfig()
                 .getConfigurationSection(LOCALE_SECTION);
+
         if (localeSection != null) {
+            final String localePrefix = this.getLocalePrefix();
             for (ConfigurationLocale locale : ConfigurationLocale.values()) {
-                String path = locale.getPath();
+                final String path = locale.getPath();
+                final boolean skipPrefix = ConfigurationLocale.CHECKTOOL_USE_BOSS_BAR.getPath().equals(path);
+
                 localeSection.set(path,
-                        String.format("%s%s", localePrefix, MessageFormatter.colorize(localeSection.getString(path))));
+                        String.format("%s%s", !skipPrefix ? localePrefix : "",
+                                MessageFormatter.colorize(localeSection.getString(path))));
             }
         }
     }
