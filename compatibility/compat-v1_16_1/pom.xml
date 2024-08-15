@@ -8,13 +8,13 @@
     <parent>
         <groupId>io.github.guillex7</groupId>
         <artifactId>explodeany-parent</artifactId>
-        <version>1.10.1</version>
+        <version>1.11.0</version>
         <relativePath>../..</relativePath>
     </parent>
 
     <groupId>io.github.guillex7.explodeany</groupId>
     <artifactId>compat-v1_16_1</artifactId>
-    <name>Compatibility for Bukkit v1.14+</name>
+    <name>Compatibility for Bukkit v1.16.1+</name>
 
     <packaging>jar</packaging>
 
