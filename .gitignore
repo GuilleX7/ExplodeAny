@@ -80,8 +80,9 @@ local.properties
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
-*.jar
+# Package Files
+# Disabled due to local libraries being stored in the file system
+# *.jar
 *.war
 *.nar
 *.ear
