@@ -87,7 +87,6 @@ public class ChecktoolManager {
 
             try (InputStream inputStream = new FileInputStream(this.checktoolFile);
                     BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(inputStream)) {
-
                 configurationSerializationLogger.setLevel(Level.OFF);
                 this.checktool = (ItemStack) objectInputStream.readObject();
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);

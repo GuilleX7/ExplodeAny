@@ -27,7 +27,7 @@ public class ConfigurationFile {
         this.fileConfiguration = new YamlConfiguration();
         try {
             this.fileConfiguration.load(this.file);
-        } catch (IOException exception) {
+        } catch (IOException | IllegalArgumentException exception) {
             this.plugin.getLogger()
                     .severe(String.format("Could not load configuration file (%s), does it exist?", this.fileName));
         } catch (InvalidConfigurationException exception) {
@@ -36,11 +36,17 @@ public class ConfigurationFile {
                             exception.getMessage()));
         }
 
-        InputStream defaultFileStream = this.plugin.getResource(this.fileName);
-        if (defaultFileStream != null) {
-            YamlConfiguration defaultConfig = YamlConfiguration
-                    .loadConfiguration(new InputStreamReader(defaultFileStream));
-            this.fileConfiguration.setDefaults(defaultConfig);
+        try (InputStream defaultFileStream = this.plugin.getResource(this.fileName);
+                InputStreamReader defaultFileStreamReader = new InputStreamReader(defaultFileStream)) {
+            if (defaultFileStream != null) {
+                YamlConfiguration defaultConfig = YamlConfiguration
+                        .loadConfiguration(defaultFileStreamReader);
+                this.fileConfiguration.setDefaults(defaultConfig);
+            }
+        } catch (Exception exception) {
+            this.plugin.getLogger().warning(
+                    String.format("Could not load default configuration file (%s), defaults won't be applied",
+                            this.fileName));
         }
     }
 
