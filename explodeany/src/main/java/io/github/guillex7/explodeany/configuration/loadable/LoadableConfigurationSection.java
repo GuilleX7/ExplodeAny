@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.bukkit.Material;
@@ -18,6 +18,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 
 public abstract class LoadableConfigurationSection<T extends Object> {
+
     private static final String MATERIALS_SECTION = "Materials";
     private static final String PROPERTIES_SECTION = "Properties";
 
@@ -29,7 +30,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         this.entityConfigurations = new HashMap<>();
     }
 
-    private final ExplodeAny getPlugin() {
+    private ExplodeAny getPlugin() {
         return ExplodeAny.getInstance();
     }
 
@@ -54,7 +55,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         this.fetchEntities(configurationSection);
     }
 
-    private final void fetchEntities(ConfigurationSection entitiesSection) {
+    private void fetchEntities(ConfigurationSection entitiesSection) {
         for (String entityName : entitiesSection.getKeys(false)) {
             List<T> fetchedEntities = new ArrayList<>();
             boolean definitionHasPriority = true;
@@ -123,7 +124,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         }
     }
 
-    private final Map<Material, EntityMaterialConfiguration> fetchMaterials(ConfigurationSection entitySection) {
+    private Map<Material, EntityMaterialConfiguration> fetchMaterials(ConfigurationSection entitySection) {
         Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
 
         for (String materialName : entitySection.getKeys(false)) {
@@ -173,7 +174,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         return materialConfigurations;
     }
 
-    private final void putAndMergeEntityMaterialConfigurations(T entity,
+    private void putAndMergeEntityMaterialConfigurations(T entity,
             Map<Material, EntityMaterialConfiguration> materialConfigurations, boolean definitionHasPriority) {
         if (!this.getEntityMaterialConfigurations().containsKey(entity)) {
             this.getEntityMaterialConfigurations().put(entity, materialConfigurations);
@@ -186,7 +187,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         }
     }
 
-    private final void putAndMergeEntityConfigurations(T entity, EntityConfiguration entityConfiguration,
+    private void putAndMergeEntityConfigurations(T entity, EntityConfiguration entityConfiguration,
             boolean definitionHasPriority) {
         if (definitionHasPriority) {
             this.getEntityConfigurations().put(entity, entityConfiguration);
@@ -195,7 +196,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         }
     }
 
-    private final void putAndMergeMaterialConfigurations(
+    private void putAndMergeMaterialConfigurations(
             Map<Material, EntityMaterialConfiguration> materialConfigurations, Material material,
             EntityMaterialConfiguration entityMaterialConfiguration, boolean definitionHasPriority) {
         if (definitionHasPriority) {

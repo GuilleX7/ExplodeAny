@@ -16,6 +16,7 @@ import io.github.guillex7.explodeany.util.SetUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public class CommandChecktoolSet extends RegistrableCommand {
+
     private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_SET);
 
     @Override
@@ -30,6 +31,10 @@ public class CommandChecktoolSet extends RegistrableCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
+        if (sender == null) {
+            return false;
+        }
+
         if (!(sender instanceof Player)) {
             sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.ONLY_PLAYER_ALLOWED));
             return true;

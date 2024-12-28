@@ -1,6 +1,6 @@
 package io.github.guillex7.explodeany.services;
 
-public class DebugManager {
+public final class DebugManager {
     private boolean isDebugEnabled;
 
     private static DebugManager instance;

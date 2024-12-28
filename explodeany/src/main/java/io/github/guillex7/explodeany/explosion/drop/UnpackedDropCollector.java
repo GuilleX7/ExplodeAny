@@ -14,10 +14,12 @@ public class UnpackedDropCollector implements DropCollector {
         this.collectedItems = new ArrayList<>();
     }
 
+    @Override
     public void collect(Material material, Location location) {
         collectedItems.add(new UnpackedDropItem(material, location));
     }
 
+    @Override
     public void dropCollectedItems(Location location) {
         for (UnpackedDropItem item : collectedItems) {
             location.getWorld().dropItemNaturally(item.location, new ItemStack(item.material));

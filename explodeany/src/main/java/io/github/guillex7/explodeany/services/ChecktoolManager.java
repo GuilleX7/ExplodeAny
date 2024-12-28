@@ -25,7 +25,7 @@ import io.github.guillex7.explodeany.compat.common.api.IBossBar;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.StringUtils;
 
-public class ChecktoolManager {
+public final class ChecktoolManager {
     private static final String CHECKTOOL_DUMP_FILENAME = "checktool.dump";
 
     private static ChecktoolManager instance;

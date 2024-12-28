@@ -24,13 +24,13 @@ public class ParticleConfiguration {
     private static final String SIZE_PATH = "Size";
     private static final String MATERIAL_PATH = "Material";
 
-    private IParticle particle;
-    private double deltaX;
-    private double deltaY;
-    private double deltaZ;
-    private int amount;
-    private double speed;
-    private boolean force;
+    private final IParticle particle;
+    private final double deltaX;
+    private final double deltaY;
+    private final double deltaZ;
+    private final int amount;
+    private final double speed;
+    private final boolean force;
 
     public static ParticleConfiguration byDefault() {
         return new ParticleConfiguration(null, 1.0d, 1.0d, 1.0d, 1000, 1.0d, false);

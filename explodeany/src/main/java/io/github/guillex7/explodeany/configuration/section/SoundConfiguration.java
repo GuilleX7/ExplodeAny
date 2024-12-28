@@ -12,9 +12,9 @@ public class SoundConfiguration {
     private static final String VOLUME_PATH = "Volume";
     private static final String PITCH_PATH = "Pitch";
 
-    private Sound sound;
-    private double volume;
-    private double pitch;
+    private final Sound sound;
+    private final double volume;
+    private final double pitch;
 
     public static SoundConfiguration byDefault() {
         return new SoundConfiguration(null, 1.0d, 1.0d);

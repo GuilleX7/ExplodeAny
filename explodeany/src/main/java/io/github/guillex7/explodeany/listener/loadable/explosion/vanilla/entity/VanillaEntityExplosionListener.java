@@ -1,7 +1,7 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,8 +12,8 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
 public class VanillaEntityExplosionListener implements LoadableListener {
-    private List<VanillaEntityExplosionHandler> registeredHandlers;
-    private List<VanillaEntityExplosionHandler> loadedHandlers;
+    private final List<VanillaEntityExplosionHandler> registeredHandlers;
+    private final List<VanillaEntityExplosionHandler> loadedHandlers;
 
     public VanillaEntityExplosionListener() {
         this.registeredHandlers = new ArrayList<>();

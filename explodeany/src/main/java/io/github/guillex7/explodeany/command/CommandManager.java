@@ -16,6 +16,7 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandManager implements TabExecutor {
+
     private static CommandManager instance;
 
     private final Map<String, RegistrableCommand> registeredCommands;
@@ -68,7 +69,7 @@ public class CommandManager implements TabExecutor {
         }
 
         if (!rootCommand.execute(sender, Arrays.copyOfRange(args, i, args.length))) {
-            String usageDescription = "";
+            String usageDescription;
             if (!rootCommand.isTerminal()) {
                 final String possibleSubcommands = rootCommand.getSubcommands()
                         .stream().filter(subcommand -> subcommand.isCommandSenderAllowedToUse(sender))
@@ -80,6 +81,7 @@ public class CommandManager implements TabExecutor {
             } else {
                 usageDescription = String.format("/%s &7%s", breadcrumbsBuilder.toString(), rootCommand.getUsage());
             }
+
             sender.sendMessage(
                     ConfigurationManager.getInstance().getLocale(ConfigurationLocale.USAGE)
                             .replace("%DESCRIPTION%", MessageFormatter.colorize(usageDescription)));

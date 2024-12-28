@@ -30,19 +30,19 @@ public enum ExplodingVanillaEntity {
     public static ExplodingVanillaEntity fromEntityTypeName(String entityTypeName) {
         String uppercasedEntityTypeName = entityTypeName.toUpperCase();
 
-        // Hint: some entities were renamed after Minecraft 1.21
-        if ("TNT".equals(uppercasedEntityTypeName)) {
-            return ExplodingVanillaEntity.PRIMED_TNT;
-        } else if ("TNT_MINECART".equals(uppercasedEntityTypeName)) {
-            return ExplodingVanillaEntity.MINECART_TNT;
-        } else if ("END_CRYSTAL".equals(uppercasedEntityTypeName)) {
-            return ExplodingVanillaEntity.ENDER_CRYSTAL;
-        } else {
-            try {
-                return ExplodingVanillaEntity.valueOf(uppercasedEntityTypeName);
-            } catch (IllegalArgumentException | NullPointerException e) {
-                return null;
-            }
+        switch (uppercasedEntityTypeName) {
+            case "TNT":
+                return ExplodingVanillaEntity.PRIMED_TNT;
+            case "TNT_MINECART":
+                return ExplodingVanillaEntity.MINECART_TNT;
+            case "END_CRYSTAL":
+                return ExplodingVanillaEntity.ENDER_CRYSTAL;
+            default:
+                try {
+                    return ExplodingVanillaEntity.valueOf(uppercasedEntityTypeName);
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    return null;
+                }
         }
     }
 

@@ -5,8 +5,6 @@ import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import io.github.guillex7.explodeany.ExplodeAny;
@@ -38,7 +36,7 @@ public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosi
         return !ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().toString());
     }
 
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
+    @Override
     public void onEntityExplode(EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;

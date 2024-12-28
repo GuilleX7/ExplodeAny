@@ -13,15 +13,15 @@ public class EntityBehavioralConfiguration {
     private static final String EXPLOSION_REMOVE_NEARBY_WATERLOGGED_BLOCKS_SURFACE_PATH = "ExplosionRemoveNearbyWaterloggedBlocksOnSurface";
     private static final String EXPLOSION_REMOVE_NEARBY_WATERLOGGED_BLOCKS_UNDERWATER_PATH = "ExplosionRemoveNearbyWaterloggedBlocksUnderwater";
 
-    private boolean explosionRemoveWaterloggedStateFromNearbyBlocks;
-    private boolean explosionRemoveWaterloggedStateFromNearbyBlocksSurface;
-    private boolean explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater;
-    private boolean explosionRemoveNearbyLiquids;
-    private boolean explosionRemoveNearbyLiquidsSurface;
-    private boolean explosionRemoveNearbyLiquidsUnderwater;
-    private boolean explosionRemoveNearbyWaterloggedBlocks;
-    private boolean explosionRemoveNearbyWaterloggedBlocksSurface;
-    private boolean explosionRemoveNearbyWaterloggedBlocksUnderwater;
+    private final boolean explosionRemoveWaterloggedStateFromNearbyBlocks;
+    private final boolean explosionRemoveWaterloggedStateFromNearbyBlocksSurface;
+    private final boolean explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater;
+    private final boolean explosionRemoveNearbyLiquids;
+    private final boolean explosionRemoveNearbyLiquidsSurface;
+    private final boolean explosionRemoveNearbyLiquidsUnderwater;
+    private final boolean explosionRemoveNearbyWaterloggedBlocks;
+    private final boolean explosionRemoveNearbyWaterloggedBlocksSurface;
+    private final boolean explosionRemoveNearbyWaterloggedBlocksUnderwater;
 
     public static EntityBehavioralConfiguration byDefault() {
         return new EntityBehavioralConfiguration(

@@ -10,6 +10,7 @@ import java.util.Set;
 import org.bukkit.command.CommandSender;
 
 public abstract class RegistrableCommand {
+
     private Map<String, RegistrableCommand> mappedSubcommands;
     private Set<String> allNames;
 
@@ -39,7 +40,7 @@ public abstract class RegistrableCommand {
     }
 
     public void onTabComplete(CommandSender sender, String[] args, List<String> autocompletion) {
-        return;
+        /** Nothing to do */
     }
 
     public abstract String getName();
@@ -56,7 +57,7 @@ public abstract class RegistrableCommand {
         return allNames;
     }
 
-    private final void mapSubcommands() {
+    private void mapSubcommands() {
         if (this.mappedSubcommands == null) {
             this.mappedSubcommands = new HashMap<>();
         } else {
@@ -71,7 +72,7 @@ public abstract class RegistrableCommand {
         }
     }
 
-    private final void mapAllNames() {
+    private void mapAllNames() {
         if (this.allNames == null) {
             this.allNames = new HashSet<>();
         } else {

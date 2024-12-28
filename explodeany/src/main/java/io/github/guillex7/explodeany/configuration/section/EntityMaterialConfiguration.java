@@ -12,13 +12,13 @@ public class EntityMaterialConfiguration {
     private static final String UNDERWATER_DAMAGE_FACTOR_PATH = "UnderwaterDamageFactor";
     private static final String FANCY_UNDERWATER_DETECTION_PATH = "FancyUnderwaterDetection";
 
-    private double damage;
-    private double dropChance;
-    private double distanceAttenuationFactor;
-    private double underwaterDamageFactor;
-    private boolean fancyUnderwaterDetection;
-    private SoundConfiguration soundConfiguration;
-    private ParticleConfiguration particleConfiguration;
+    private final double damage;
+    private final double dropChance;
+    private final double distanceAttenuationFactor;
+    private final double underwaterDamageFactor;
+    private final boolean fancyUnderwaterDetection;
+    private final SoundConfiguration soundConfiguration;
+    private final ParticleConfiguration particleConfiguration;
 
     public static EntityMaterialConfiguration byDefault() {
         return new EntityMaterialConfiguration(ConfigurationManager.getInstance().getBlockDurability(), 0.0d, 0.0d,

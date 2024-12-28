@@ -16,6 +16,7 @@ import io.github.guillex7.explodeany.util.SetUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public class CommandChecktoolDisable extends RegistrableCommand {
+
     private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_DISABLE);
 
     @Override
@@ -35,6 +36,10 @@ public class CommandChecktoolDisable extends RegistrableCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
+        if (sender == null) {
+            return false;
+        }
+
         Player receiver;
 
         if (args.length == 0) {
@@ -79,7 +84,7 @@ public class CommandChecktoolDisable extends RegistrableCommand {
             return true;
         }
 
-        final boolean areSenderAndReceiverSamePlayer = receiver.getName() == sender.getName();
+        final boolean areSenderAndReceiverSamePlayer = receiver.getName().equals(sender.getName());
         final ChecktoolManager checktoolManager = ChecktoolManager.getInstance();
         final String checktoolItemName = checktoolManager.getChecktool().getType().name();
 

@@ -20,18 +20,18 @@ public class ChecktoolConfiguration {
     private static final String BOSS_BAR_STYLE = "BossBarStyle";
     private static final String BOSS_BAR_DURATION = "BossBarDuration";
 
-    private boolean alwaysEnabled;
-    private boolean enabledByDefault;
-    private boolean preventActionWhenCheckingHandledBlocks;
-    private boolean preventActionWhenCheckingNonHandledBlocks;
-    private boolean silentWhenCheckingOnDisabledWorlds;
-    private boolean silentWhenCheckingWithoutPermissions;
-    private boolean silentWhenCheckingNonHandledBlocks;
-    private boolean silentWhenCheckingHandledBlocks;
-    private boolean showBossBar;
-    private EanyBossBarColor bossBarColor;
-    private EanyBossBarStyle bossBarStyle;
-    private int bossBarDuration;
+    private final boolean alwaysEnabled;
+    private final boolean enabledByDefault;
+    private final boolean preventActionWhenCheckingHandledBlocks;
+    private final boolean preventActionWhenCheckingNonHandledBlocks;
+    private final boolean silentWhenCheckingOnDisabledWorlds;
+    private final boolean silentWhenCheckingWithoutPermissions;
+    private final boolean silentWhenCheckingNonHandledBlocks;
+    private final boolean silentWhenCheckingHandledBlocks;
+    private final boolean showBossBar;
+    private final EanyBossBarColor bossBarColor;
+    private final EanyBossBarStyle bossBarStyle;
+    private final int bossBarDuration;
 
     public static ChecktoolConfiguration byDefault() {
         return new ChecktoolConfiguration(false,

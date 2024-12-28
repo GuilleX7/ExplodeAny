@@ -20,6 +20,7 @@ import io.github.guillex7.explodeany.block.exception.BlockDatabaseException;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 
 public class BlockDatabase {
+
     private static BlockDatabase instance;
     private static final TypeToken<Map<BlockLocation, BlockStatus>> DATABASE_TYPE_TOKEN = new TypeToken<Map<BlockLocation, BlockStatus>>() {
     };
@@ -143,13 +144,15 @@ public class BlockDatabase {
         }
     }
 
-    private boolean isEntryNotSane(Entry<BlockLocation, BlockStatus> entry, boolean deep) {
+    private boolean isEntryNotSane(Entry<BlockLocation, BlockStatus> entry, boolean checkDeeply) {
         BlockStatus blockStatus = entry.getValue();
         if (blockStatus.shouldBreak()) {
             return true;
         }
+
         blockStatus.sanitize();
-        if (deep) {
+
+        if (checkDeeply) {
             Block block = entry.getKey().toBlock();
             return block.isEmpty() || !ConfigurationManager.getInstance().handlesBlock(block)
                     || !blockStatus.isCongruentWith(block);

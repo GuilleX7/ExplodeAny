@@ -1,6 +1,7 @@
 package io.github.guillex7.explodeany.configuration.loadable.vanilla.entity;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Material;
 
@@ -11,6 +12,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
 public class CustomVanillaEntityConfiguration extends LoadableConfigurationSection<String> {
+
     public static String getConfigurationId() {
         return "CustomEntity";
     }
@@ -38,9 +40,7 @@ public class CustomVanillaEntityConfiguration extends LoadableConfigurationSecti
     protected boolean areEntityAndMaterialConfigurationsValid(String entity, EntityConfiguration entityConfiguration,
             Map<Material, EntityMaterialConfiguration> materialConfigurations) {
         if (entityConfiguration.getExplosionRadius() <= 0) {
-            this.getPlugin().getLogger().warning(
-                    "Invalid configuration for custom entity " + entity
-                            + ": explosion radius must be explicitly set to a positive value.");
+            this.getPlugin().getLogger().log(Level.WARNING, "Invalid configuration for custom entity {0}: explosion radius must be explicitly set to a positive value.", entity);
             return false;
         }
 

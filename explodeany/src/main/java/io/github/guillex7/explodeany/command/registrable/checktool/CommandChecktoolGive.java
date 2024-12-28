@@ -17,6 +17,7 @@ import io.github.guillex7.explodeany.util.SetUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public class CommandChecktoolGive extends RegistrableCommand {
+
     private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_GIVE);
 
     @Override
@@ -31,6 +32,10 @@ public class CommandChecktoolGive extends RegistrableCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
+        if (sender == null) {
+            return false;
+        }
+
         Player receiver;
 
         if (args.length == 0) {

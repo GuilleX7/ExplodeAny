@@ -11,9 +11,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ConfigurationFile {
-    private JavaPlugin plugin;
-    private String fileName;
-    private File file;
+    private final JavaPlugin plugin;
+    private final String fileName;
+    private final File file;
     private FileConfiguration fileConfiguration;
 
     public ConfigurationFile(JavaPlugin plugin, String fileName) {

@@ -33,7 +33,7 @@ public class EanyBlockExplosionListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    private void onBlockExplode(EanyBlockExplodeEvent event) {
+    public void onBlockExplode(EanyBlockExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }

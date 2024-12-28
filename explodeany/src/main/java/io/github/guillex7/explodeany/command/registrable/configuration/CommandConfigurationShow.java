@@ -106,7 +106,6 @@ public class CommandConfigurationShow extends RegistrableCommand {
             if (args.length == 2) {
                 autocompletion.addAll(loadableConfigurationSection.getEntitiesNames().stream()
                         .filter(entityName -> entityName.startsWith(args[1])).collect(Collectors.toList()));
-                return;
             } else if (args.length == 3) {
                 final String entityName = args[1];
                 final Object entity = loadableConfigurationSection.getEntityFromName(entityName);
