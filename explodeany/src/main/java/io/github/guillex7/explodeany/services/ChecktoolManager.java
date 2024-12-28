@@ -26,6 +26,7 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public final class ChecktoolManager {
+
     private static final String CHECKTOOL_DUMP_FILENAME = "checktool.dump";
 
     private static ChecktoolManager instance;
@@ -116,14 +117,13 @@ public final class ChecktoolManager {
 
         try {
             this.checktoolFile.createNewFile();
-        } catch (Exception e) {
+        } catch (IOException | SecurityException e) {
             checktoolWasPersistedSuccessfully = false;
         }
 
         if (this.checktoolFile.exists() && this.checktoolFile.canWrite()) {
             try (OutputStream outputStream = new FileOutputStream(this.checktoolFile);
                     BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(outputStream)) {
-
                 objectOutputStream.writeObject(this.checktool);
                 checktoolWasPersistedSuccessfully = true;
             } catch (Exception e) {
