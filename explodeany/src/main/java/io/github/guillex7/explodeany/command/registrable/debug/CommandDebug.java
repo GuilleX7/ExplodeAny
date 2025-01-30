@@ -13,6 +13,6 @@ public class CommandDebug extends RegistrableCommand {
 
     @Override
     public List<RegistrableCommand> getSubcommands() {
-        return Arrays.asList(new CommandDebugEnable(), new CommandDebugDisable());
+        return Arrays.asList(new CommandDebugEnable(), new CommandDebugDisable(), new CommandDebugServer());
     }
 }

@@ -59,6 +59,7 @@
                                     <include>io.github.guillex7.explodeany</include>
                                     <include>com.google.code.gson</include>
                                     <include>org.bstats</include>
+                                    <include>net.freeutils</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -69,6 +70,10 @@
                                 <relocation>
                                     <pattern>org.bstats</pattern>
                                     <shadedPattern>io.github.guillex7.explodeany.bstats</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.freeutils</pattern>
+                                    <shadedPattern>io.github.guillex7.explodeany.jlhttp</shadedPattern>
                                 </relocation>
                             </relocations>
                             <filters>
@@ -112,6 +117,13 @@
             <version>3.0.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>net.freeutils</groupId>
+            <artifactId>jlhttp</artifactId>
+            <version>3.2</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- External plugin support  -->
         <!-- Cannons: https://www.spigotmc.org/resources/cannons.56764/ -->
         <dependency>
