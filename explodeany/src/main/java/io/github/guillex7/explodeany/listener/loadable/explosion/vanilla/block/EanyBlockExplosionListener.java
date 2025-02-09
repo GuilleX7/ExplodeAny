@@ -58,7 +58,7 @@ public class EanyBlockExplosionListener implements LoadableListener {
         }
 
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getBlockLocation(), explosionRadius)) {
+                event.getBlockLocation(), explosionRadius, false)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations,

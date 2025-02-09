@@ -22,9 +22,9 @@ public final class ConfigurationManager {
     private static final String USE_BLOCK_DATABASE_ITEM = "UseBlockDatabase";
     private static final String CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM = "CheckBlockDatabaseAtStartup";
     private static final String BLOCK_DURABILITY_ITEM = "BlockDurability";
-    private static final String ENABLE_METRICS = "EnableMetrics";
-    private static final String GROUPS_SECTION = "Groups";
-    private static final String LOCALE_SECTION = "Locale";
+    private static final String ENABLE_METRICS_ITEM = "EnableMetrics";
+    private static final String GROUPS_SECTION_ITEM = "Groups";
+    private static final String LOCALE_SECTION_ITEM = "Locale";
     private static final String LOCALE_PREFIX_ITEM = "LocalePrefix";
     private static final String DISABLED_WORLDS_ITEM = "DisabledWorlds";
 
@@ -94,7 +94,7 @@ public final class ConfigurationManager {
     }
 
     public boolean doEnableMetrics() {
-        return this.getConfigurationFile().getConfig().getBoolean(ENABLE_METRICS);
+        return this.getConfigurationFile().getConfig().getBoolean(ENABLE_METRICS_ITEM);
     }
 
     public ChecktoolConfiguration getChecktoolConfiguration() {
@@ -114,7 +114,7 @@ public final class ConfigurationManager {
 
     public Map<String, List<String>> getGroups() {
         ConfigurationSection groupsSection = this.getConfigurationFile().getConfig()
-                .getConfigurationSection(GROUPS_SECTION);
+                .getConfigurationSection(GROUPS_SECTION_ITEM);
         Map<String, List<String>> groups = new HashMap<>();
         for (String groupName : groupsSection.getKeys(false)) {
             groups.put(groupName, groupsSection.getStringList(groupName));
@@ -132,7 +132,7 @@ public final class ConfigurationManager {
 
     private void parseLocale() {
         final ConfigurationSection localeSection = this.getConfigurationFile().getConfig()
-                .getConfigurationSection(LOCALE_SECTION);
+                .getConfigurationSection(LOCALE_SECTION_ITEM);
 
         if (localeSection != null) {
             final String localePrefix = this.getLocalePrefix();
@@ -149,7 +149,7 @@ public final class ConfigurationManager {
 
     public String getLocale(ConfigurationLocale locale) {
         return this.getConfigurationFile().getConfig()
-                .getString(String.format("%s.%s", LOCALE_SECTION, locale.getPath()));
+                .getString(String.format("%s.%s", LOCALE_SECTION_ITEM, locale.getPath()));
     }
 
     public void registerLoadableConfigurationSection(LoadableConfigurationSection<?> loadableConfigurationSection) {

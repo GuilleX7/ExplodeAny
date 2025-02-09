@@ -62,7 +62,7 @@ public class TCEVanillaEntityExplosionHandler implements VanillaEntityExplosionH
         }
 
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getLocation(), explosionRadius)) {
+                event.getLocation(), explosionRadius, false)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList());

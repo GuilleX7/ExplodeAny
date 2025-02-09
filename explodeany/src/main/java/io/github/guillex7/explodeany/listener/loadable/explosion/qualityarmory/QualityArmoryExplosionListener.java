@@ -17,6 +17,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.QualityArmoryExplosive;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
+import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
 import io.github.guillex7.explodeany.services.DebugManager;
 
 import me.zombie_striker.qg.api.QAProjectileExplodeEvent;
@@ -98,7 +99,8 @@ public class QualityArmoryExplosionListener implements LoadableListener {
         }
 
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                location, explosive.getExplosionRadius())) {
+                location, explosive.getExplosionRadius(),
+                BlockLiquidDetector.isLocationSurroundedByLiquid(location))) {
             event.setCancelled(true);
         }
     }

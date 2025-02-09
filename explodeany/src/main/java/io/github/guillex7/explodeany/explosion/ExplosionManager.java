@@ -36,14 +36,10 @@ public class ExplosionManager {
     public static final String EXPLOSION_MANAGER_SPAWNED_TAG = "eany-em-spawned";
     public static final String EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG = "eany-em-explosion-metadata";
 
-    private final BlockLiquidDetector blockLiquidDetector;
-    private final TrajectoryExplosionLiquidDetector trajectoryExplosionWaterDetector;
     private final IBlockDataUtils blockDataUtils;
     private final BlockDatabase blockDatabase;
 
     private ExplosionManager() {
-        this.blockLiquidDetector = new BlockLiquidDetector();
-        this.trajectoryExplosionWaterDetector = new TrajectoryExplosionLiquidDetector();
         this.blockDataUtils = CompatibilityManager.getInstance().getApi().getBlockDataUtils();
         this.blockDatabase = BlockDatabase.getInstance();
     }
@@ -91,15 +87,17 @@ public class ExplosionManager {
     }
 
     public boolean manageExplosion(Map<Material, EntityMaterialConfiguration> materialConfigurations,
-            EntityConfiguration entityConfiguration, Location sourceLocation, double originalRawExplosionRadius) {
-        final boolean isSourceLocationLiquid = sourceLocation.getBlock().isLiquid();
-        final boolean isSourceLocationLiquidlike = this.blockLiquidDetector.isBlockLiquidlike(sourceLocation);
+            EntityConfiguration entityConfiguration, Location sourceLocation, double originalRawExplosionRadius,
+            boolean forceApplyingUnderwaterRules) {
 
         double rawExplosionRadius = entityConfiguration.getExplosionRadius() != 0d
                 ? entityConfiguration.getExplosionRadius()
                 : originalRawExplosionRadius;
 
-        if (isSourceLocationLiquidlike) {
+        final boolean isSourceLocationLiquidlike = BlockLiquidDetector.isLocationLiquidlike(sourceLocation);
+        final boolean isSourceLocationUnderwater = isSourceLocationLiquidlike || forceApplyingUnderwaterRules;
+
+        if (isSourceLocationUnderwater) {
             rawExplosionRadius *= entityConfiguration.getUnderwaterExplosionFactor();
         } else {
             rawExplosionRadius *= entityConfiguration.getExplosionFactor();
@@ -121,9 +119,9 @@ public class ExplosionManager {
 
         final Consumer<Block> waterloggedBlockConsumer = this.getWaterloggedBlockConsumer(
                 entityBehavioralConfiguration,
-                isSourceLocationLiquidlike);
+                isSourceLocationUnderwater);
         final Consumer<Block> liquidBlockConsumer = this.getLiquidBlockConsumer(entityBehavioralConfiguration,
-                isSourceLocationLiquidlike);
+                isSourceLocationUnderwater);
         final DropCollector dropCollector = this.getDropCollector(entityConfiguration, materialConfigurations);
 
         // Hint: This is a very expensive operation, so we only do it if we have to.
@@ -160,7 +158,7 @@ public class ExplosionManager {
 
                         this.damageBlock(materialConfiguration, block, sourceBlockLocation,
                                 explosionRadius, squaredExplosionRadius,
-                                squaredDistance, isSourceLocationLiquidlike, dropCollector);
+                                squaredDistance, isSourceLocationUnderwater, dropCollector);
                     }
                 }
             }
@@ -170,7 +168,7 @@ public class ExplosionManager {
         entityConfiguration.getParticleConfiguration().spawnAt(sourceLocation);
 
         if (entityConfiguration.doesExplosionDamageBlocksUnderwater() && isSourceLocationLiquidlike) {
-            if (isSourceLocationLiquid) {
+            if (sourceLocation.getBlock().isLiquid()) {
                 sourceLocation.getBlock().setType(Material.AIR);
             } else {
                 this.blockDataUtils.setIsBlockWaterlogged(sourceLocation.getBlock(), false);
@@ -203,15 +201,15 @@ public class ExplosionManager {
     private void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
             Location sourceBlockLocation, int explosionRadius, double squaredExplosionRadius,
             double squaredDistance,
-            boolean isSourceLocationLiquidlike, DropCollector dropCollector) {
+            boolean isSourceLocationUnderwater, DropCollector dropCollector) {
         final Location targetBlockLocation = targetBlock.getLocation();
 
         double effectiveDamage = materialConfiguration.getDamage();
 
         if (materialConfiguration.isUnderwaterAffected()
-                && this.areUnderwaterRulesApplicable(materialConfiguration, sourceBlockLocation,
+                && this.areUnderwaterRulesApplicableForTargetBlock(materialConfiguration, sourceBlockLocation,
                         targetBlockLocation,
-                        isSourceLocationLiquidlike, explosionRadius)) {
+                        isSourceLocationUnderwater, explosionRadius)) {
             effectiveDamage *= materialConfiguration.getUnderwaterDamageFactor();
         }
 
@@ -234,31 +232,31 @@ public class ExplosionManager {
         }
     }
 
-    private boolean areUnderwaterRulesApplicable(EntityMaterialConfiguration materialConfiguration,
+    private boolean areUnderwaterRulesApplicableForTargetBlock(EntityMaterialConfiguration materialConfiguration,
             Location sourceBlockLocation,
             Location targetBlockLocation,
-            boolean isSourceLocationLiquidlike, int explosionRadius) {
+            boolean isSourceLocationUnderwater, int explosionRadius) {
         return materialConfiguration.isFancyUnderwaterDetection()
-                ? this.trajectoryExplosionWaterDetector.isLiquidInTrajectory(sourceBlockLocation, targetBlockLocation,
+                ? TrajectoryExplosionLiquidDetector.isLiquidInTrajectory(sourceBlockLocation, targetBlockLocation,
                         explosionRadius)
-                : isSourceLocationLiquidlike;
+                : isSourceLocationUnderwater;
     }
 
     private Consumer<Block> getWaterloggedBlockConsumer(EntityBehavioralConfiguration entityBehavioralConfiguration,
-            boolean isSourceLocationLiquidlike) {
+            boolean isSourceLocationUnderwater) {
         final boolean doesExplosionRemoveNearbyWaterloggedBlocksSurface = entityBehavioralConfiguration
-                .doesExplosionRemoveNearbyWaterloggedBlocksSurface() && !isSourceLocationLiquidlike;
+                .doesExplosionRemoveNearbyWaterloggedBlocksSurface() && !isSourceLocationUnderwater;
         final boolean doesExplosionRemoveNearbyWaterloggedBlocksUnderwater = entityBehavioralConfiguration
-                .doesExplosionRemoveNearbyWaterloggedBlocksUnderwater() && isSourceLocationLiquidlike;
+                .doesExplosionRemoveNearbyWaterloggedBlocksUnderwater() && isSourceLocationUnderwater;
         final boolean doesExplosionRemoveNearbyWaterloggedBlocks = entityBehavioralConfiguration
                 .doesExplosionRemoveNearbyWaterloggedBlocks()
                 && (doesExplosionRemoveNearbyWaterloggedBlocksSurface
                         || doesExplosionRemoveNearbyWaterloggedBlocksUnderwater);
 
         final boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface = entityBehavioralConfiguration
-                .doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface() && !isSourceLocationLiquidlike;
+                .doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface() && !isSourceLocationUnderwater;
         final boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater = entityBehavioralConfiguration
-                .doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater() && isSourceLocationLiquidlike;
+                .doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater() && isSourceLocationUnderwater;
         final boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocks = entityBehavioralConfiguration
                 .doesExplosionRemoveWaterloggedStateFromNearbyBlocks()
                 && (doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface
@@ -283,11 +281,11 @@ public class ExplosionManager {
     }
 
     private Consumer<Block> getLiquidBlockConsumer(EntityBehavioralConfiguration entityBehavioralConfiguration,
-            boolean isSourceLocationLiquidlike) {
+            boolean isSourceLocationUnderwater) {
         final boolean doesExplosionRemoveNearbyLiquidsSurface = entityBehavioralConfiguration
-                .doesExplosionRemoveNearbyLiquidsSurface() && !isSourceLocationLiquidlike;
+                .doesExplosionRemoveNearbyLiquidsSurface() && !isSourceLocationUnderwater;
         final boolean doesExplosionRemoveNearbyLiquidsUnderwater = entityBehavioralConfiguration
-                .doesExplosionRemoveNearbyLiquidsUnderwater() && isSourceLocationLiquidlike;
+                .doesExplosionRemoveNearbyLiquidsUnderwater() && isSourceLocationUnderwater;
         final boolean doesExplosionRemoveNearbyLiquids = entityBehavioralConfiguration
                 .doesExplosionRemoveNearbyLiquids()
                 && (doesExplosionRemoveNearbyLiquidsSurface || doesExplosionRemoveNearbyLiquidsUnderwater);
