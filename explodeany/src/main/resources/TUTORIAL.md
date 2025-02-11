@@ -77,11 +77,11 @@ As you can notice, the material itself starts another section, which represents 
 There are many properties you can use to describe how a block should be affected by a given explosion. You can use all the properties are listed here: https://github.com/GuilleX7/ExplodeAny/blob/main/explodeany/src/main/resources/exampleConfig.yml#L196
 
 These properties are:
-- `Damage`: basically represents the damage the block will take from the explosion
-- `DropChance`: the chance of the block breaking naturally, thus dropping an item
-- `DistanceAttenuationFactor`: which is a factor that specifies how the damage is attenuated due to distance
-- `UnderwaterDamageFactor`: which is a factor that specifies how the damage is attenuated due to the explosion finding water in its trajectory
-- `FancyUnderwaterDetection`: this one specifies how water should be looked for in the explosion so that "UnderwaterDamageFactor" is applied or not
+- `Damage`: represents the maximum damage that the block will take from the explosion
+- `DropChance`: the chance of the block breaking naturally, thus dropping an item when breaking
+- `DistanceAttenuationFactor`: which is a factor that specifies how the damage is attenuated due to distance. When it is 0, all blocks in range take the same damage (no attenuation). When it is 1, blocks that are farther from the center of the explosion will take much less damage than the blocks in the center. Value in between are also allowed, thus allowing gradual attenuation
+- `UnderwaterDamageFactor`: which is a factor that specifies how the damage is attenuated due to the explosion finding water in its trajectory. When it is 0, blocks underwater won't take damage. When it is 1, blocks underwater will take the same amount of damage than if they were on the surface. Values greater than 1 increase the damage that blocks underwater take
+- `FancyUnderwaterDetection`: this one specifies how water should be looked for in the explosion so that "UnderwaterDamageFactor" is applied or not. When it is false, the explosion will be considered underwater if its center is underwater, thus all blocks in range will have underwater attenuation. When it is true, a ray will be traced from the center to the explosion to each block individually, applying or not the underwater attenuation depending on whether there's water in between the center and each specific block
 - `Particles`: defines which particles (if any) should spawn when the block is broken by the explosion
 - `Sound`: defines which sound (if any) should be played when the block is broken by the explosion
 
@@ -126,7 +126,7 @@ VanillaEntity:
         Properties:
             # Here you can set properties of the explosion itself (when triggered by PRIMED_TNT)
             # This one in particular enables this explosion to do damage underwater!
-            DamageBlocksUnderwater: true
+            ExplosionDamageBlocksUnderwater: true
         Materials:
             OBSIDIAN:
                 # Here you can set how OBSIDIAN is affected by explosions triggered by PRIMED_TNT
@@ -164,7 +164,7 @@ VanillaEntity:
         Properties:
             # Here you can set properties of the explosion itself (when triggered by PRIMED_TNT)
             # This one in particular enables this explosion to do damage underwater!
-            DamageBlocksUnderwater: true
+            ExplosionDamageBlocksUnderwater: true
         Materials:
             OBSIDIAN:
                 # Here you can set how OBSIDIAN is affected by explosions triggered by PRIMED_TNT
@@ -192,7 +192,7 @@ VanillaEntity:
         Properties:
             # Here you can set properties of the explosion itself (when triggered by PRIMED_TNT)
             # This one in particular enables this explosion to do damage underwater!
-            DamageBlocksUnderwater: true
+            ExplosionDamageBlocksUnderwater: true
         Materials:
             MyBelovedMaterials:
                 # Here you can set how OBSIDIAN is affected by explosions triggered by PRIMED_TNT
@@ -214,7 +214,7 @@ VanillaEntity:
         Properties:
             # Here you can set properties of the explosion itself (when triggered by PRIMED_TNT)
             # This one in particular enables this explosion to do damage underwater!
-            DamageBlocksUnderwater: true
+            ExplosionDamageBlocksUnderwater: true
         Materials:
             OBSIDIAN:
                 # Here you can set how OBSIDIAN is affected by explosions triggered by PRIMED_TNT
@@ -250,7 +250,7 @@ VanillaEntity:
         Properties:
             # Here you can set properties of the explosion itself (when triggered by PRIMED_TNT)
             # This one in particular enables this explosion to do damage underwater!
-            DamageBlocksUnderwater: true
+            ExplosionDamageBlocksUnderwater: true
         Materials:
             UnbreakableBlocks:
                 # Here you can set how OBSIDIAN, CRYING_OBSIDIAN and BEDROCK are affected by explosions triggered by PRIMED_TNT
