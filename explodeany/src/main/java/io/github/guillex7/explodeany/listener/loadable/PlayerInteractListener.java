@@ -80,7 +80,7 @@ public final class PlayerInteractListener implements LoadableListener {
             final String materialName = clickedBlock.getType().name();
             final String prettyMaterialName = StringUtils.beautifyName(materialName);
 
-            if (this.configurationManager.handlesBlock(clickedBlock)) {
+            if (this.configurationManager.doHandlesBlock(clickedBlock)) {
                 if (checktoolConfiguration.doPreventActionWhenCheckingHandledBlocks()) {
                     event.setCancelled(true);
                 }

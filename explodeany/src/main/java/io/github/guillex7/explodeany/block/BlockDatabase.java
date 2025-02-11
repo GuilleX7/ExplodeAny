@@ -154,7 +154,7 @@ public class BlockDatabase {
 
         if (checkDeeply) {
             Block block = entry.getKey().toBlock();
-            return block.isEmpty() || !ConfigurationManager.getInstance().handlesBlock(block)
+            return block.isEmpty() || !ConfigurationManager.getInstance().doHandlesBlock(block)
                     || !blockStatus.isCongruentWith(block);
         }
         return false;

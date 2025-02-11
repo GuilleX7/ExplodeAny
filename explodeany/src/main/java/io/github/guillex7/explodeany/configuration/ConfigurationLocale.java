@@ -24,13 +24,13 @@ public enum ConfigurationLocale {
     DEBUG_ENABLED("DebugEnabled"),
     DEBUG_DISABLED("DebugDisabled");
 
-    private final String path;
+    private final String key;
 
-    private ConfigurationLocale(String path) {
-        this.path = path;
+    private ConfigurationLocale(String key) {
+        this.key = key;
     }
 
-    public String getPath() {
-        return path;
+    public String getKey() {
+        return key;
     }
 }

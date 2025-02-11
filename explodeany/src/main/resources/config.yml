@@ -19,6 +19,12 @@ Checktool:
 
 Groups: {}
 
+Materials:
+    OBSIDIAN:
+        Regeneration:
+            DelayAfterExplosion: 10s
+            Duration: 60s
+
 VanillaEntity: {}
 
 CannonProjectile: {}
@@ -58,3 +64,17 @@ Locale:
 LocalePrefix: "[ExplodeAny] "
 
 DisabledWorlds: {}
+
+WorldHoleProtection:
+    world:
+        Materials:
+            - BEDROCK
+        YLevels:
+            - 0
+            - -64
+    world_nether:
+        Materials:
+            - BEDROCK
+        YLevels:
+            - 127
+

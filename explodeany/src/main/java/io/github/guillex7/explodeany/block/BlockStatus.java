@@ -11,7 +11,7 @@ public class BlockStatus {
     private double durability;
 
     public static double getDefaultBlockDurability() {
-        return ConfigurationManager.getInstance().getBlockDurability();
+        return ConfigurationManager.getInstance().getGlobalBlockDurability();
     }
 
     public static BlockStatus defaultForBlock(Block block) {

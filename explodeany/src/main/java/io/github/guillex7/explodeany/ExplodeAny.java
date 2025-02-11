@@ -83,14 +83,13 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void loadConfiguration() {
-        this.configurationManager.loadConfiguration();
         this.configurationManager.registerLoadableConfigurationSection(new RegularVanillaEntityConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new CannonProjectileConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new MagicVanillaEntityConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new CustomVanillaEntityConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new QualityArmoryExplosiveConfiguration());
         this.configurationManager.registerLoadableConfigurationSection(new TCEVanillaEntityConfiguration());
-        this.configurationManager.loadAllRegisteredLoadableConfigurationSections();
+        this.configurationManager.loadConfiguration();
     }
 
     public void loadDatabase() {
@@ -135,7 +134,7 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void unloadConfiguration() {
-        this.configurationManager.unloadAllRegisteredLoadableConfigurationSections();
+        this.configurationManager.unregisterAllLoadableConfigurationSections();
     }
 
     public void unloadDatabase() {

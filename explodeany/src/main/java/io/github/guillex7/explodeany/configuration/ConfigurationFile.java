@@ -23,7 +23,7 @@ public class ConfigurationFile {
         this.fileConfiguration = null;
     }
 
-    public void reload() {
+    public void reloadConfig() {
         this.fileConfiguration = new YamlConfiguration();
         try {
             this.fileConfiguration.load(this.file);
@@ -50,7 +50,7 @@ public class ConfigurationFile {
         }
     }
 
-    public void saveDefault() {
+    public void saveDefaultFileIfMissing() {
         if (!this.file.exists()) {
             this.plugin.saveResource(this.fileName, false);
         }
@@ -58,7 +58,7 @@ public class ConfigurationFile {
 
     public FileConfiguration getConfig() {
         if (this.fileConfiguration == null) {
-            this.reload();
+            this.reloadConfig();
         }
         return this.fileConfiguration;
     }
