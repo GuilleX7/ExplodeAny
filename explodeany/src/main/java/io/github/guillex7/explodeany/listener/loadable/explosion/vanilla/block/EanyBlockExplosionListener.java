@@ -62,7 +62,7 @@ public class EanyBlockExplosionListener implements LoadableListener {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations,
-                    event.getBlockList());
+                    event.getBlockList(), event.getBlockLocation());
         }
     }
 

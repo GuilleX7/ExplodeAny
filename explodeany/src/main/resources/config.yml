@@ -66,15 +66,11 @@ LocalePrefix: "[ExplodeAny] "
 DisabledWorlds: {}
 
 WorldHoleProtection:
-    world:
-        Materials:
-            - BEDROCK
-        YLevels:
-            - 0
-            - -64
-    world_nether:
-        Materials:
-            - BEDROCK
-        YLevels:
-            - 127
-
+    # default:
+    #     Heights:
+    #         - -64 # Bedrock layer post-1.18
+    #         - 0 # Bedrock layer pre-1.18
+    # world_nether:
+    #     Heights:
+    #         - 127
+    #         - 0

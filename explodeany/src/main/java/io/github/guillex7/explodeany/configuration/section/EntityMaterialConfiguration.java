@@ -21,7 +21,8 @@ public class EntityMaterialConfiguration {
     private final ParticleConfiguration particleConfiguration;
 
     public static EntityMaterialConfiguration byDefault() {
-        return new EntityMaterialConfiguration(ConfigurationManager.getInstance().getGlobalBlockDurability(), 0.0d, 0.0d,
+        return new EntityMaterialConfiguration(ConfigurationManager.getInstance().getGlobalBlockDurability(), 0.0d,
+                0.0d,
                 0.5d, false, SoundConfiguration.byDefault(), ParticleConfiguration.byDefault());
     }
 

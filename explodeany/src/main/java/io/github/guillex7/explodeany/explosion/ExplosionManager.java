@@ -20,9 +20,11 @@ import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
 import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
+import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.section.EntityBehavioralConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.configuration.section.WorldHoleProtection;
 import io.github.guillex7.explodeany.explosion.drop.DropCollector;
 import io.github.guillex7.explodeany.explosion.drop.UnpackedDropCollector;
 import io.github.guillex7.explodeany.explosion.drop.PackedDropCollector;
@@ -38,10 +40,12 @@ public class ExplosionManager {
 
     private final IBlockDataUtils blockDataUtils;
     private final BlockDatabase blockDatabase;
+    private final ConfigurationManager configurationManager;
 
     private ExplosionManager() {
         this.blockDataUtils = CompatibilityManager.getInstance().getApi().getBlockDataUtils();
         this.blockDatabase = BlockDatabase.getInstance();
+        this.configurationManager = ConfigurationManager.getInstance();
     }
 
     public static ExplosionManager getInstance() {
@@ -52,12 +56,25 @@ public class ExplosionManager {
     }
 
     public void removeHandledBlocksFromList(Map<Material, EntityMaterialConfiguration> materialConfigurations,
-            List<Block> blockList) {
+            List<Block> blockList, Location sourceLocation) {
+        final WorldHoleProtection worldHoleProtection = this.configurationManager
+                .getWorldHoleProtection(sourceLocation.getWorld().getName());
+
         Iterator<Block> iterator = blockList.iterator();
-        while (iterator.hasNext()) {
-            Block block = iterator.next();
-            if (materialConfigurations.containsKey(block.getType())) {
-                iterator.remove();
+        if (!worldHoleProtection.doProtectUnhandledBlocks()) {
+            while (iterator.hasNext()) {
+                Block block = iterator.next();
+                if (materialConfigurations.containsKey(block.getType())) {
+                    iterator.remove();
+                }
+            }
+        } else {
+            while (iterator.hasNext()) {
+                Block block = iterator.next();
+                if (materialConfigurations.containsKey(block.getType())
+                        || worldHoleProtection.isHeightProtected(block.getY())) {
+                    iterator.remove();
+                }
             }
         }
     }
@@ -89,7 +106,6 @@ public class ExplosionManager {
     public boolean manageExplosion(Map<Material, EntityMaterialConfiguration> materialConfigurations,
             EntityConfiguration entityConfiguration, Location sourceLocation, double originalRawExplosionRadius,
             boolean forceApplyingUnderwaterRules) {
-
         double rawExplosionRadius = entityConfiguration.getExplosionRadius() != 0d
                 ? entityConfiguration.getExplosionRadius()
                 : originalRawExplosionRadius;
@@ -112,10 +128,13 @@ public class ExplosionManager {
         final int czpr = cz + explosionRadius;
         final int squaredExplosionRadius = explosionRadius * explosionRadius;
         final World sourceWorld = sourceLocation.getWorld();
+        final String sourceWorldName = sourceWorld.getName();
         final Location sourceBlockLocation = new Location(sourceWorld, cx, cy, cz);
 
         final EntityBehavioralConfiguration entityBehavioralConfiguration = entityConfiguration
                 .getEntityBehavioralConfiguration();
+        final WorldHoleProtection worldHoleProtection = this.configurationManager
+                .getWorldHoleProtection(sourceWorldName);
 
         final Consumer<Block> waterloggedBlockConsumer = this.getWaterloggedBlockConsumer(
                 entityBehavioralConfiguration,
@@ -128,8 +147,12 @@ public class ExplosionManager {
         if (!materialConfigurations.isEmpty() || entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquids()
                 || entityBehavioralConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()
                 || entityBehavioralConfiguration.doesExplosionRemoveNearbyWaterloggedBlocks()) {
-            for (int x = cx - explosionRadius; x <= cxpr; x++) {
-                for (int y = cy - explosionRadius; y <= cypr; y++) {
+            for (int y = cy - explosionRadius; y <= cypr; y++) {
+                if (worldHoleProtection.isHeightProtected(y)) {
+                    continue;
+                }
+
+                for (int x = cx - explosionRadius; x <= cxpr; x++) {
                     for (int z = cz - explosionRadius; z <= czpr; z++) {
                         final int dx = x - cx;
                         final int dy = y - cy;

@@ -14,6 +14,7 @@ import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.section.ChecktoolConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.configuration.section.WorldHoleProtection;
 import io.github.guillex7.explodeany.util.MathUtils;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
@@ -43,6 +44,8 @@ public final class ConfigurationManager {
     private Map<ConfigurationLocale, String> localeStrings;
     private String localePrefix;
     private Set<String> disabledWorlds;
+    private Map<String, WorldHoleProtection> worldHoleProtections;
+    private WorldHoleProtection defaultWorldHoleProtection;
 
     private ConfigurationManager() {
         this.configurationFile = new ConfigurationFile(ExplodeAny.getInstance(), "config.yml");
@@ -53,6 +56,8 @@ public final class ConfigurationManager {
         this.handledMaterials = new HashSet<>();
         this.localeStrings = new HashMap<>();
         this.disabledWorlds = new HashSet<>();
+        this.worldHoleProtections = new HashMap<>();
+        this.defaultWorldHoleProtection = WorldHoleProtection.byDefault();
     }
 
     public static ConfigurationManager getInstance() {
@@ -226,6 +231,29 @@ public final class ConfigurationManager {
         return this.disabledWorlds;
     }
 
+    public void loadWorldHoleProtections() {
+        this.worldHoleProtections.clear();
+
+        ConfigurationSection worldHoleProtectionsSection = this.getConfigurationFile().getConfig()
+                .getConfigurationSection(WORLD_HOLE_PROTECTION_ITEM);
+        if (worldHoleProtectionsSection != null) {
+            for (String worldName : worldHoleProtectionsSection.getKeys(false)) {
+                if (!worldName.equals("default")) {
+                    this.worldHoleProtections.put(worldName,
+                            WorldHoleProtection
+                                    .fromConfigSection(worldHoleProtectionsSection.getConfigurationSection(worldName)));
+                } else {
+                    this.defaultWorldHoleProtection = WorldHoleProtection
+                            .fromConfigSection(worldHoleProtectionsSection.getConfigurationSection(worldName));
+                }
+            }
+        }
+    }
+
+    public WorldHoleProtection getWorldHoleProtection(String worldName) {
+        return this.worldHoleProtections.getOrDefault(worldName, this.defaultWorldHoleProtection);
+    }
+
     public void loadConfiguration() {
         this.getConfigurationFile().saveDefaultFileIfMissing();
         this.getConfigurationFile().reloadConfig();
@@ -242,5 +270,6 @@ public final class ConfigurationManager {
         this.loadLocalePrefix();
         this.loadLocale();
         this.loadDisabledWorlds();
+        this.loadWorldHoleProtections();
     }
 }

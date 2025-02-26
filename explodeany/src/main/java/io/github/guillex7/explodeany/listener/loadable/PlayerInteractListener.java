@@ -52,26 +52,30 @@ public final class PlayerInteractListener implements LoadableListener {
                 && this.compatibilityManager.getApi().getPlayerInteractionEventUtils()
                         .doesInteractionUseMainHand(event)
                 && this.checktoolManager.isPlayerUsingChecktool(player)) {
-            final ItemStack itemInHand = new ItemStack(this.compatibilityManager.getApi().getPlayerInventoryUtils()
-                    .getItemInMainHand(player.getInventory()));
+            final ItemStack itemInHand = new ItemStack(
+                    this.compatibilityManager.getApi().getPlayerInventoryUtils()
+                            .getItemInMainHand(player.getInventory()));
             final ItemStack checktool = this.checktoolManager.getChecktool();
 
             if (!ItemStackUtils.areItemStacksSimilar(itemInHand, checktool)) {
                 return;
             }
 
-            final ChecktoolConfiguration checktoolConfiguration = this.configurationManager.getChecktoolConfiguration();
+            final ChecktoolConfiguration checktoolConfiguration = this.configurationManager
+                    .getChecktoolConfiguration();
 
             if (!player.hasPermission(PermissionNode.CHECKTOOL_USE.getKey())) {
                 if (!checktoolConfiguration.isSilentWhenCheckingWithoutPermissions()) {
-                    player.sendMessage(this.configurationManager.getLocale(ConfigurationLocale.NOT_ALLOWED));
+                    player.sendMessage(this.configurationManager
+                            .getLocale(ConfigurationLocale.NOT_ALLOWED));
                 }
                 return;
             }
 
             if (this.configurationManager.getDisabledWorlds().contains(player.getWorld().getName())) {
                 if (!checktoolConfiguration.isSilentWhenCheckingOnDisabledWorlds()) {
-                    player.sendMessage(this.configurationManager.getLocale(ConfigurationLocale.DISABLED_IN_THIS_WORLD));
+                    player.sendMessage(this.configurationManager
+                            .getLocale(ConfigurationLocale.DISABLED_IN_THIS_WORLD));
                 }
                 return;
             }
@@ -94,17 +98,26 @@ public final class PlayerInteractListener implements LoadableListener {
                     final String formattedMessage = this.configurationManager
                             .getLocale(ConfigurationLocale.CHECKTOOL_USE)
                             .replace("%DURABILITY_PERCENTAGE%",
-                                    String.format("%.02f", prettyDurabilityPercentage))
+                                    String.format("%.02f",
+                                            prettyDurabilityPercentage))
                             .replace("%DURABILITY%",
-                                    String.format("%.02f", blockStatus.getDurability()))
+                                    String.format("%.02f",
+                                            blockStatus.getDurability()))
                             .replace("%MAX_DURABILITY%",
-                                    String.format("%.02f", BlockStatus.getDefaultBlockDurability()))
+                                    String.format("%.02f", BlockStatus
+                                            .getDefaultBlockDurability()))
                             .replace("%B_X%",
-                                    String.format("%d", clickedBlock.getLocation().getBlockX()))
+                                    String.format("%d",
+                                            clickedBlock.getLocation()
+                                                    .getBlockX()))
                             .replace("%B_Y%",
-                                    String.format("%d", clickedBlock.getLocation().getBlockY()))
+                                    String.format("%d",
+                                            clickedBlock.getLocation()
+                                                    .getBlockY()))
                             .replace("%B_Z%",
-                                    String.format("%d", clickedBlock.getLocation().getBlockZ()))
+                                    String.format("%d",
+                                            clickedBlock.getLocation()
+                                                    .getBlockZ()))
                             .replace("%MATERIAL%", materialName)
                             .replace("%PRETTY_MATERIAL%", prettyMaterialName);
 
@@ -115,23 +128,34 @@ public final class PlayerInteractListener implements LoadableListener {
                     final String formattedBossBarTitle = this.configurationManager
                             .getLocale(ConfigurationLocale.CHECKTOOL_USE_BOSS_BAR)
                             .replace("%DURABILITY_PERCENTAGE%",
-                                    String.format("%.02f", prettyDurabilityPercentage))
+                                    String.format("%.02f",
+                                            prettyDurabilityPercentage))
                             .replace("%DURABILITY%",
-                                    String.format("%.02f", blockStatus.getDurability()))
+                                    String.format("%.02f",
+                                            blockStatus.getDurability()))
                             .replace("%MAX_DURABILITY%",
-                                    String.format("%.02f", BlockStatus.getDefaultBlockDurability()))
+                                    String.format("%.02f", BlockStatus
+                                            .getDefaultBlockDurability()))
                             .replace("%B_X%",
-                                    String.format("%d", clickedBlock.getLocation().getBlockX()))
+                                    String.format("%d",
+                                            clickedBlock.getLocation()
+                                                    .getBlockX()))
                             .replace("%B_Y%",
-                                    String.format("%d", clickedBlock.getLocation().getBlockY()))
+                                    String.format("%d",
+                                            clickedBlock.getLocation()
+                                                    .getBlockY()))
                             .replace("%B_Z%",
-                                    String.format("%d", clickedBlock.getLocation().getBlockZ()))
+                                    String.format("%d",
+                                            clickedBlock.getLocation()
+                                                    .getBlockZ()))
                             .replace("%MATERIAL%", materialName)
                             .replace("%PRETTY_MATERIAL%", prettyMaterialName);
 
-                    IBossBar checktoolBossBar = this.compatibilityManager.getApi().getBukkitUtils().createBossBar(
-                            formattedBossBarTitle, checktoolConfiguration.getBossBarColor(),
-                            checktoolConfiguration.getBossBarStyle());
+                    IBossBar checktoolBossBar = this.compatibilityManager.getApi().getBukkitUtils()
+                            .createBossBar(
+                                    formattedBossBarTitle,
+                                    checktoolConfiguration.getBossBarColor(),
+                                    checktoolConfiguration.getBossBarStyle());
 
                     checktoolBossBar.setProgress(durabilityPercentage);
 
@@ -144,7 +168,8 @@ public final class PlayerInteractListener implements LoadableListener {
                     event.setCancelled(true);
                 }
 
-                if (!this.configurationManager.getChecktoolConfiguration().isSilentWhenCheckingNonHandledBlocks()) {
+                if (!this.configurationManager.getChecktoolConfiguration()
+                        .isSilentWhenCheckingNonHandledBlocks()) {
                     final String formattedMessage = this.configurationManager
                             .getLocale(ConfigurationLocale.CHECKTOOL_NOT_HANDLED)
                             .replace("%MATERIAL%", materialName)

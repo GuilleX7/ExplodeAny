@@ -4,14 +4,14 @@ Welcome to this crash course on configuring ExplodeAny! Let's start with the emp
 
 ```yaml
 UseBlockDatabase: false
-CheckBlockDatabaseAtStartup: false                                
+CheckBlockDatabaseAtStartup: false
 BlockDurability: 100.0
 EnableMetrics: true
 
 Groups: {}
 
 VanillaEntity: {}
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -50,7 +50,7 @@ Let's imagine you want to add some configuration to a vanilla entity, for instan
 ```yaml
 VanillaEntity:
     PRIMED_TNT: {}
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -65,7 +65,7 @@ This is where the materials that are going to be affected by that entity explosi
 VanillaEntity:
     PRIMED_TNT:
         OBSIDIAN: {}
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -77,13 +77,14 @@ As you can notice, the material itself starts another section, which represents 
 There are many properties you can use to describe how a block should be affected by a given explosion. You can use all the properties are listed here: https://github.com/GuilleX7/ExplodeAny/blob/main/explodeany/src/main/resources/exampleConfig.yml#L196
 
 These properties are:
-- `Damage`: represents the maximum damage that the block will take from the explosion
-- `DropChance`: the chance of the block breaking naturally, thus dropping an item when breaking
-- `DistanceAttenuationFactor`: which is a factor that specifies how the damage is attenuated due to distance. When it is 0, all blocks in range take the same damage (no attenuation). When it is 1, blocks that are farther from the center of the explosion will take much less damage than the blocks in the center. Value in between are also allowed, thus allowing gradual attenuation
-- `UnderwaterDamageFactor`: which is a factor that specifies how the damage is attenuated due to the explosion finding water in its trajectory. When it is 0, blocks underwater won't take damage. When it is 1, blocks underwater will take the same amount of damage than if they were on the surface. Values greater than 1 increase the damage that blocks underwater take
-- `FancyUnderwaterDetection`: this one specifies how water should be looked for in the explosion so that "UnderwaterDamageFactor" is applied or not. When it is false, the explosion will be considered underwater if its center is underwater, thus all blocks in range will have underwater attenuation. When it is true, a ray will be traced from the center to the explosion to each block individually, applying or not the underwater attenuation depending on whether there's water in between the center and each specific block
-- `Particles`: defines which particles (if any) should spawn when the block is broken by the explosion
-- `Sound`: defines which sound (if any) should be played when the block is broken by the explosion
+
+-   `Damage`: represents the maximum damage that the block will take from the explosion
+-   `DropChance`: the chance of the block breaking naturally, thus dropping an item when breaking
+-   `DistanceAttenuationFactor`: which is a factor that specifies how the damage is attenuated due to distance. When it is 0, all blocks in range take the same damage (no attenuation). When it is 1, blocks that are farther from the center of the explosion will take much less damage than the blocks in the center. Value in between are also allowed, thus allowing gradual attenuation
+-   `UnderwaterDamageFactor`: which is a factor that specifies how the damage is attenuated due to the explosion finding water in its trajectory. When it is 0, blocks underwater won't take damage. When it is 1, blocks underwater will take the same amount of damage than if they were on the surface. Values greater than 1 increase the damage that blocks underwater take
+-   `FancyUnderwaterDetection`: this one specifies how water should be looked for in the explosion so that "UnderwaterDamageFactor" is applied or not. When it is false, the explosion will be considered underwater if its center is underwater, thus all blocks in range will have underwater attenuation. When it is true, a ray will be traced from the center to the explosion to each block individually, applying or not the underwater attenuation depending on whether there's water in between the center and each specific block
+-   `Particles`: defines which particles (if any) should spawn when the block is broken by the explosion
+-   `Sound`: defines which sound (if any) should be played when the block is broken by the explosion
 
 So, for example, if we want OBSIDIAN to take 50.0 damage points from PRIMED_TNT and make it drop 50% of the times it is broken, we would end up with the following configuration:
 
@@ -93,7 +94,7 @@ VanillaEntity:
         OBSIDIAN:
             Damage: 50.0
             DropChance: 50.0
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -110,7 +111,7 @@ VanillaEntity:
             OBSIDIAN:
                 Damage: 50.0
                 DropChance: 50.0
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -132,7 +133,7 @@ VanillaEntity:
                 # Here you can set how OBSIDIAN is affected by explosions triggered by PRIMED_TNT
                 Damage: 50.0
                 DropChance: 50.0
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -143,16 +144,17 @@ CustomEntity: {}
 The "entity properties" are given by the section `Properties` inside the proper entity. All the properties you can put in here are listed here: https://github.com/GuilleX7/ExplodeAny/blob/main/explodeany/src/main/resources/exampleConfig.yml#L68
 
 These properties are:
-- `ExplosionRadius`: it allows you to override the original explosion radius of a given explosion, if it had any originally. For CustomEntity (for example, for explosions triggered by mods), this must be specified, since ExplodeAny has no way to know what the original radius of the explosion was.
-- `ExplosionFactor`: this is a multiplicative factor that will be applied to the explosion. If you want to magnify (or reduce) a given explosion radius, you can use this. Otherwise, keep it at 1.0.
-- `ReplaceOriginalExplosion`: this one can be tricky. If you just specify a ExplosionRadius, you will change the radius of the explosion **for ExplodeAny only**. That means, if a vanilla TNT is set a radius of 20.0, the vanilla explosion will break blocks in the original radius like usual, but ExplodeAny will try to damage blocks that are handled by it in a radius of 20 blocks. If you set this to true, then ExplodeAny will cancel the vanilla explosion and, instead, will trigger another vanilla explosion that is capable of damaging blocks up to 20 blocks away, thus truly increasing the explosion radius.
-- `UnderwaterExplosionFactor`: this allows to magnify/reduce the radius of the explosion when it takes place underwater
-- `ExplosionDamageBlocksUnderwater`: normally, vanilla explosions do not break blocks underwater. However, if you set this to true, ExplodeAny will do something similar to `ReplaceOriginalExplosion`, and it will replace the original vanilla explosion with another one capable of breaking blocks underwater. You can have both `ReplaceOriginalExplosion` and `ExplosionDamageBlocksUnderwater` set to true, since ExplodeAny will replace the original explosion with a proper explosion according to the configuration.
-- `ExplosionRemoveWaterloggedStateFromNearbyBlocks`: just says if the explosion should remove waterlogged state from blocks affected by the explosion
-- `ExplosionRemoveNearbyWaterloggedBlocks`: just says if the explosion should remove waterlogged blocks affected by the explosion
-- `ExplosionRemoveNearbyLiquids`: just says if the explosion should remove liquids affected by the explosion
-- `PackDroppedItems`: this is only useful in case you are planning to have huge explosions (with radius > 20) and high drop chances, where A LOT of dropped items can appear at once. In that case, having this set to true will try to combine many dropped items into packs, preventing clients from crashing due to having to render a huge amount of items.
-- `Particles` and `Sound`: same as before, but this time they will spawn every time the explosion takes place.
+
+-   `ExplosionRadius`: it allows you to override the original explosion radius of a given explosion, if it had any originally. For CustomEntity (for example, for explosions triggered by mods), this must be specified, since ExplodeAny has no way to know what the original radius of the explosion was.
+-   `ExplosionFactor`: this is a multiplicative factor that will be applied to the explosion. If you want to magnify (or reduce) a given explosion radius, you can use this. Otherwise, keep it at 1.0.
+-   `ReplaceOriginalExplosion`: this one can be tricky. If you just specify a ExplosionRadius, you will change the radius of the explosion **for ExplodeAny only**. That means, if a vanilla TNT is set a radius of 20.0, the vanilla explosion will break blocks in the original radius like usual, but ExplodeAny will try to damage blocks that are handled by it in a radius of 20 blocks. If you set this to true, then ExplodeAny will cancel the vanilla explosion and, instead, will trigger another vanilla explosion that is capable of damaging blocks up to 20 blocks away, thus truly increasing the explosion radius.
+-   `UnderwaterExplosionFactor`: this allows to magnify/reduce the radius of the explosion when it takes place underwater
+-   `ExplosionDamageBlocksUnderwater`: normally, vanilla explosions do not break blocks underwater. However, if you set this to true, ExplodeAny will do something similar to `ReplaceOriginalExplosion`, and it will replace the original vanilla explosion with another one capable of breaking blocks underwater. You can have both `ReplaceOriginalExplosion` and `ExplosionDamageBlocksUnderwater` set to true, since ExplodeAny will replace the original explosion with a proper explosion according to the configuration.
+-   `ExplosionRemoveWaterloggedStateFromNearbyBlocks`: just says if the explosion should remove waterlogged state from blocks affected by the explosion
+-   `ExplosionRemoveNearbyWaterloggedBlocks`: just says if the explosion should remove waterlogged blocks affected by the explosion
+-   `ExplosionRemoveNearbyLiquids`: just says if the explosion should remove liquids affected by the explosion
+-   `PackDroppedItems`: this is only useful in case you are planning to have huge explosions (with radius > 20) and high drop chances, where A LOT of dropped items can appear at once. In that case, having this set to true will try to combine many dropped items into packs, preventing clients from crashing due to having to render a huge amount of items.
+-   `Particles` and `Sound`: same as before, but this time they will spawn every time the explosion takes place.
 
 That's everything about configuring entities and explosions. But there's something more: in exampleConfig.yml, you can notice I didn't used regular VanillaEntity names (like PRIMED_TNT) nor material names (like OBSIDIAN), but rather used `unbreakableBlocks` and `dangerousEntity`. These names represent groups, which are a collection of entities or materials that can be used to specify properties for many entities/materials at the same time. You can even mix entities and materials within the same group: ExplodeAny will know which names are appropiate for the section you are using the group in.
 
@@ -170,7 +172,7 @@ VanillaEntity:
                 # Here you can set how OBSIDIAN is affected by explosions triggered by PRIMED_TNT
                 Damage: 50.0
                 DropChance: 50.0
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -198,7 +200,7 @@ VanillaEntity:
                 # Here you can set how OBSIDIAN is affected by explosions triggered by PRIMED_TNT
                 Damage: 50.0
                 DropChance: 50.0
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -228,11 +230,11 @@ VanillaEntity:
                 # Here you can set how BEDROCK is affected by explosions triggered by PRIMED_TNT
                 Damage: 50.0
                 DropChance: 50.0
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
- 
+
 CustomEntity: {}
 ```
 
@@ -256,7 +258,7 @@ VanillaEntity:
                 # Here you can set how OBSIDIAN, CRYING_OBSIDIAN and BEDROCK are affected by explosions triggered by PRIMED_TNT
                 Damage: 50.0
                 DropChance: 50.0
-            
+
 CannonProjectile: {}
 
 MagicEntity: {}
@@ -268,9 +270,9 @@ Notice how everything we explained here is applicable for every other section in
 
 ## Compatibility with mods
 
-ExplodeAny is a plugin that uses the Bukkit API, so it can't interact in any way with mods. That means there's no way for ExplodeAny to detect or add direct support for mods that run on Forge, Fabric or any other mod loader like we do for other plugins. However, we tried my best to increase ExplodeAny compatibility with those mods, so we came up with a new section, `CustomEntity`, that *might* be useful for your use case if you're reading this.
+ExplodeAny is a plugin that uses the Bukkit API, so it can't interact in any way with mods. That means there's no way for ExplodeAny to detect or add direct support for mods that run on Forge, Fabric or any other mod loader like we do for other plugins. However, we tried my best to increase ExplodeAny compatibility with those mods, so we came up with a new section, `CustomEntity`, that _might_ be useful for your use case if you're reading this.
 
-While ExplodeAny doesn't know about mods, it *does* know about entities and blocks registered in the Vanilla registry. Behind the scenes, there are some ways a mod can add explosions to the game. Very often, they do one of the following:
+While ExplodeAny doesn't know about mods, it _does_ know about entities and blocks registered in the Vanilla registry. Behind the scenes, there are some ways a mod can add explosions to the game. Very often, they do one of the following:
 
 1. The mod registers a new entity that causes an explosion
 2. The mod uses an already registered entity that causes an explosion (like vanilla TNT)

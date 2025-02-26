@@ -40,7 +40,9 @@ public class CustomVanillaEntityConfiguration extends LoadableConfigurationSecti
     protected boolean areEntityAndMaterialConfigurationsValid(String entity, EntityConfiguration entityConfiguration,
             Map<Material, EntityMaterialConfiguration> materialConfigurations) {
         if (entityConfiguration.getExplosionRadius() <= 0) {
-            this.getPlugin().getLogger().log(Level.WARNING, "Invalid configuration for custom entity {0}: explosion radius must be explicitly set to a positive value.", entity);
+            this.getPlugin().getLogger().log(Level.WARNING,
+                    "Invalid configuration for custom entity {0}: explosion radius must be explicitly set to a positive value.",
+                    entity);
             return false;
         }
 

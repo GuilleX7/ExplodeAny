@@ -69,7 +69,8 @@ public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosi
                 event.getLocation(), explosionRadius, false)) {
             event.setCancelled(true);
         } else {
-            ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList());
+            ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList(),
+                    event.getLocation());
         }
     }
 

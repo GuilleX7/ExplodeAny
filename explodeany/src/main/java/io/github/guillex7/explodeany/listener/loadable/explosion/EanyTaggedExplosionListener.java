@@ -28,7 +28,7 @@ public class EanyTaggedExplosionListener implements LoadableListener {
         ExplosionMetadata explosionMetadata = ExplosionManager.getInstance()
                 .getExplosionManagerMetadataFromEntity(event.getEntity());
         ExplosionManager.getInstance().removeHandledBlocksFromList(explosionMetadata.materialConfigurations,
-                event.blockList());
+                event.blockList(), event.getLocation());
         explosionMetadata.dropCollector.dropCollectedItems(event.getLocation());
     }
 
