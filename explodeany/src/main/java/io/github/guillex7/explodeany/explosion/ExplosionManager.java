@@ -250,7 +250,8 @@ public class ExplosionManager {
             targetBlock.setType(Material.AIR);
             this.blockDatabase.removeBlockStatus(targetBlock);
             if (materialConfiguration.shouldBeDropped()) {
-                dropCollector.collect(targetBlockMaterial, targetBlockLocation);
+                dropCollector.collect(materialConfiguration.getDropMaterial() == null ? targetBlockMaterial
+                        : materialConfiguration.getDropMaterial(), targetBlockLocation);
             }
         }
     }
