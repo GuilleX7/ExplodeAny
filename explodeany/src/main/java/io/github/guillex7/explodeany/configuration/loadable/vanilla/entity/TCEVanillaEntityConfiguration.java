@@ -1,5 +1,10 @@
 package io.github.guillex7.explodeany.configuration.loadable.vanilla.entity;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -36,5 +41,12 @@ public class TCEVanillaEntityConfiguration extends LoadableConfigurationSection<
     @Override
     public ExplodingVanillaEntity getEntityFromName(String name) {
         return ExplodingVanillaEntity.fromEntityTypeName(name);
+    }
+
+    @Override
+    public List<ExplodingVanillaEntity> getEntitiesFromPattern(Pattern pattern, String name) {
+        return Arrays.stream(ExplodingVanillaEntity.values())
+                .filter(entity -> pattern.matcher(entity.getName()).matches())
+                .collect(Collectors.toList());
     }
 }

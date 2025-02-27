@@ -1,7 +1,10 @@
 package io.github.guillex7.explodeany.configuration.loadable.vanilla.entity;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 
@@ -57,5 +60,10 @@ public class CustomVanillaEntityConfiguration extends LoadableConfigurationSecti
     public String getEntityFromName(String name) {
         String uppercasedName = name.toUpperCase();
         return ExplodingVanillaEntity.fromEntityTypeName(uppercasedName) == null ? uppercasedName : null;
+    }
+
+    @Override
+    public List<String> getEntitiesFromPattern(Pattern pattern, String name) {
+        return Arrays.asList(name);
     }
 }

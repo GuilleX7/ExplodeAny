@@ -1,5 +1,9 @@
 package io.github.guillex7.explodeany.configuration.loadable.cannon;
 
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -37,5 +41,12 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
     @Override
     public String getEntityFromName(String name) {
         return ProjectileStorage.getProjectile(name) != null ? name : null;
+    }
+
+    @Override
+    public List<String> getEntitiesFromPattern(Pattern pattern, String name) {
+        return ProjectileStorage.getProjectileIds().stream()
+                .filter(projectileId -> pattern.matcher(projectileId).matches())
+                .collect(Collectors.toList());
     }
 }

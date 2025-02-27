@@ -1,5 +1,9 @@
 package io.github.guillex7.explodeany.configuration.loadable.qualityarmor;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -59,5 +63,18 @@ public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSe
     @Override
     public QualityArmoryExplosive getEntityFromName(String name) {
         return QualityArmoryExplosive.fromName(name);
+    }
+
+    @Override
+    public List<QualityArmoryExplosive> getEntitiesFromPattern(Pattern pattern, String name) {
+        List<QualityArmoryExplosive> matchedEntities = new ArrayList<>();
+
+        for (QualityArmoryExplosive entity : QualityArmoryExplosive.values()) {
+            if (pattern.matcher(entity.getName()).matches()) {
+                matchedEntities.add(entity);
+            }
+        }
+
+        return matchedEntities;
     }
 }
