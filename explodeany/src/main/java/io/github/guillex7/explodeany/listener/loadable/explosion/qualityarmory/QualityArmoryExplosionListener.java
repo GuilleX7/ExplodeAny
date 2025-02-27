@@ -92,8 +92,8 @@ public class QualityArmoryExplosionListener implements LoadableListener {
 
     private void handleExplosive(QualityArmoryExplosive explosive, Location location, Cancellable event) {
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-                .getEntityMaterialConfigurations().get(explosive.getName());
-        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations().get(explosive.getName());
+                .getEntityMaterialConfigurations().get(explosive);
+        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations().get(explosive);
         if (materialConfigurations == null || entityConfiguration == null) {
             return;
         }

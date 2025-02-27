@@ -10,7 +10,7 @@ import io.github.guillex7.explodeany.configuration.loadable.LoadableConfiguratio
 import io.github.guillex7.explodeany.data.QualityArmoryExplosive;
 import me.zombie_striker.qg.QAMain;
 
-public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSection<String> {
+public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSection<QualityArmoryExplosive> {
     public static String getConfigurationId() {
         return "QualityArmory";
     }
@@ -47,18 +47,17 @@ public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSe
     }
 
     @Override
-    public String getEntityName(String entity) {
-        return entity;
-    }
-
-    @Override
     public String getSectionPath() {
         return QualityArmoryExplosiveConfiguration.getConfigurationId();
     }
 
     @Override
-    public String getEntityFromName(String name) {
-        QualityArmoryExplosive explosive = QualityArmoryExplosive.fromName(name);
-        return explosive != null ? explosive.getName() : null;
+    public String getEntityName(QualityArmoryExplosive entity) {
+        return entity.getName();
+    }
+
+    @Override
+    public QualityArmoryExplosive getEntityFromName(String name) {
+        return QualityArmoryExplosive.fromName(name);
     }
 }

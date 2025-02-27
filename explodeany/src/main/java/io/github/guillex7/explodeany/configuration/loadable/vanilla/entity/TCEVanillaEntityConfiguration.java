@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
-public class TCEVanillaEntityConfiguration extends LoadableConfigurationSection<String> {
+public class TCEVanillaEntityConfiguration extends LoadableConfigurationSection<ExplodingVanillaEntity> {
     public static String getConfigurationId() {
         return "ThrowableCreeperEggs";
     }
@@ -29,13 +29,12 @@ public class TCEVanillaEntityConfiguration extends LoadableConfigurationSection<
     }
 
     @Override
-    public String getEntityName(String entity) {
-        return entity;
+    public String getEntityName(ExplodingVanillaEntity entity) {
+        return entity.getName();
     }
 
     @Override
-    public String getEntityFromName(String name) {
-        ExplodingVanillaEntity explodingVanillaEntity = ExplodingVanillaEntity.fromEntityTypeName(name);
-        return explodingVanillaEntity != null ? explodingVanillaEntity.getName() : null;
+    public ExplodingVanillaEntity getEntityFromName(String name) {
+        return ExplodingVanillaEntity.fromEntityTypeName(name);
     }
 }

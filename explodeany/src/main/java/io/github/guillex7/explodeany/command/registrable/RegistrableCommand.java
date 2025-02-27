@@ -10,7 +10,6 @@ import java.util.Set;
 import org.bukkit.command.CommandSender;
 
 public abstract class RegistrableCommand {
-
     private Map<String, RegistrableCommand> mappedSubcommands;
     private Set<String> allNames;
 
@@ -57,7 +56,7 @@ public abstract class RegistrableCommand {
         return allNames;
     }
 
-    private void mapSubcommands() {
+    private final void mapSubcommands() {
         if (this.mappedSubcommands == null) {
             this.mappedSubcommands = new HashMap<>();
         } else {
@@ -72,7 +71,7 @@ public abstract class RegistrableCommand {
         }
     }
 
-    private void mapAllNames() {
+    private final void mapAllNames() {
         if (this.allNames == null) {
             this.allNames = new HashSet<>();
         } else {

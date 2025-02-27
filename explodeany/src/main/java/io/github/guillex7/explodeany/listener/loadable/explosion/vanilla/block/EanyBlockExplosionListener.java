@@ -38,20 +38,19 @@ public class EanyBlockExplosionListener implements LoadableListener {
             return;
         }
 
-        ExplodingVanillaEntity explodingVanillaEntity = ExplodingVanillaEntity
+        ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity
                 .fromEntityTypeName(event.getBlockMaterial());
-        String blockMaterialName = explodingVanillaEntity.getName();
-        double explosionRadius = explodingVanillaEntity.getExplosionRadius();
+        double explosionRadius = explodingEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected vanilla block explosion. Block ID: {0}",
-                    blockMaterialName);
+                    explodingEntity.getName());
         }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-                .getEntityMaterialConfigurations().get(blockMaterialName);
+                .getEntityMaterialConfigurations().get(explodingEntity);
         EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
-                .get(blockMaterialName);
+                .get(explodingEntity);
 
         if (materialConfigurations == null || entityConfiguration == null || explosionRadius == 0d) {
             return;

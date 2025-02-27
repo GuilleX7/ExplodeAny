@@ -10,7 +10,7 @@ import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
-public class MagicVanillaEntityConfiguration extends LoadableConfigurationSection<String> {
+public class MagicVanillaEntityConfiguration extends LoadableConfigurationSection<ExplodingVanillaEntity> {
     private static final Version MINIMUM_SUPPORTED_BUKKIT_VERSION = new Version(1, 16);
 
     public static String getConfigurationId() {
@@ -36,13 +36,12 @@ public class MagicVanillaEntityConfiguration extends LoadableConfigurationSectio
     }
 
     @Override
-    public String getEntityName(String entity) {
-        return entity;
+    public String getEntityName(ExplodingVanillaEntity entity) {
+        return entity.getName();
     }
 
     @Override
-    public String getEntityFromName(String name) {
-        ExplodingVanillaEntity explodingVanillaEntity = ExplodingVanillaEntity.fromEntityTypeName(name);
-        return explodingVanillaEntity != null ? explodingVanillaEntity.getName() : null;
+    public ExplodingVanillaEntity getEntityFromName(String name) {
+        return ExplodingVanillaEntity.fromEntityTypeName(name);
     }
 }

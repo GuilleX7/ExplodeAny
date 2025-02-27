@@ -215,7 +215,7 @@ public class ExplosionManager {
     private void spawnManagedExplosion(Location location,
             Map<Material, EntityMaterialConfiguration> materialConfigurations, double explosionRadius,
             DropCollector dropCollector) {
-        TNTPrimed explosiveEntity = (TNTPrimed) location.getWorld().spawn(location, TNTPrimed.class);
+        TNTPrimed explosiveEntity = location.getWorld().spawn(location, TNTPrimed.class);
         this.attachExplosionManagerMetadataToEntity(explosiveEntity, materialConfigurations, dropCollector);
         explosiveEntity.setFuseTicks(0);
         explosiveEntity.setYield((float) explosionRadius);

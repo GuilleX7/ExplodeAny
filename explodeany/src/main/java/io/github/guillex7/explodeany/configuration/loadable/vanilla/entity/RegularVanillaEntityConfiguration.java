@@ -3,7 +3,7 @@ package io.github.guillex7.explodeany.configuration.loadable.vanilla.entity;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
-public class RegularVanillaEntityConfiguration extends LoadableConfigurationSection<String> {
+public class RegularVanillaEntityConfiguration extends LoadableConfigurationSection<ExplodingVanillaEntity> {
     public static String getConfigurationId() {
         return "VanillaEntity";
     }
@@ -24,13 +24,12 @@ public class RegularVanillaEntityConfiguration extends LoadableConfigurationSect
     }
 
     @Override
-    public String getEntityName(String entity) {
-        return entity;
+    public String getEntityName(ExplodingVanillaEntity entity) {
+        return entity.getName();
     }
 
     @Override
-    public String getEntityFromName(String name) {
-        ExplodingVanillaEntity explodingVanillaEntity = ExplodingVanillaEntity.fromEntityTypeName(name);
-        return explodingVanillaEntity != null ? explodingVanillaEntity.getName() : null;
+    public ExplodingVanillaEntity getEntityFromName(String name) {
+        return ExplodingVanillaEntity.fromEntityTypeName(name);
     }
 }

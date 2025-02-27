@@ -56,18 +56,17 @@ public class MagicVanillaEntityExplosionHandler implements VanillaEntityExplosio
         Entity entity = event.getEntity();
 
         ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
-        String explodingEntityName = explodingEntity.getName();
         double explosionRadius = explodingEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected Magic entity explosion. Entity type: {0}",
-                    explodingEntityName);
+                    explodingEntity.getName());
         }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-                .getEntityMaterialConfigurations().get(explodingEntityName);
+                .getEntityMaterialConfigurations().get(explodingEntity);
         EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
-                .get(explodingEntityName);
+                .get(explodingEntity);
 
         if (materialConfigurations == null || entityConfiguration == null || explosionRadius == 0d) {
             return;

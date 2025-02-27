@@ -12,7 +12,6 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
 public class CustomVanillaEntityConfiguration extends LoadableConfigurationSection<String> {
-
     public static String getConfigurationId() {
         return "CustomEntity";
     }
@@ -23,7 +22,7 @@ public class CustomVanillaEntityConfiguration extends LoadableConfigurationSecti
 
     @Override
     public String getHumanReadableName() {
-        return "custom/modded entities and blocks";
+        return "Custom/modded entities and blocks";
     }
 
     @Override

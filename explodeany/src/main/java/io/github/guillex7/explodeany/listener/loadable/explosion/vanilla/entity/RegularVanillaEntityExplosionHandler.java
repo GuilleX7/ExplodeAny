@@ -38,21 +38,20 @@ public class RegularVanillaEntityExplosionHandler implements VanillaEntityExplos
 
     @Override
     public void onEntityExplode(EntityExplodeEvent event) {
-        Entity entity = event.getEntity();
+        final Entity entity = event.getEntity();
 
-        ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
-        String explodingEntityName = explodingEntity.getName();
-        double explosionRadius = explodingEntity.getExplosionRadius();
+        final ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
+        final double explosionRadius = explodingEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected vanilla entity explosion. Entity type: {0}",
-                    explodingEntityName);
+                    explodingEntity.getName());
         }
 
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-                .getEntityMaterialConfigurations().get(explodingEntityName);
-        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
-                .get(explodingEntityName);
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+                .getEntityMaterialConfigurations().get(explodingEntity);
+        final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
+                .get(explodingEntity);
 
         if (materialConfigurations == null || entityConfiguration == null || explosionRadius == 0d) {
             return;
