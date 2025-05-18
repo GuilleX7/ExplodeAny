@@ -93,6 +93,10 @@ public class Duration {
             builder.append(milliseconds % MILLISECONDS_IN_SECOND).append("ms");
         }
 
+        if (builder.length() == 0) {
+            return "0s";
+        }
+
         return builder.toString().trim();
     }
 }

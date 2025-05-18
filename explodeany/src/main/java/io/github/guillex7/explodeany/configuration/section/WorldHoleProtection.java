@@ -46,9 +46,9 @@ public class WorldHoleProtection {
     @Override
     public String toString() {
         return String.format(
-                "Heights: %s\n"
+                "&fHeights: %s\n"
                         + "Protect unhandled blocks: %s",
-                heights.stream().map(x -> x.toString()).collect(Collectors.joining(", ")),
+                heights.size() > 0 ? heights.stream().map(x -> x.toString()).collect(Collectors.joining(", ")) : "none",
                 protectUnhandledBlocks);
     }
 }

@@ -61,10 +61,10 @@ public class MaterialConfiguration {
 
         if (!timeToFullRegeneration.isZero()) {
             builder.append(String.format(
-                    "&fTime to full regeneration: %d\n"
-                            + "&fDelay before start regenerating: %d\n",
-                    timeToFullRegeneration.asMilliseconds(),
-                    delayBeforeStartRegenerating.asMilliseconds()));
+                    "&fTime to full regeneration: %s\n"
+                            + "&fDelay before start regenerating: %s\n",
+                    timeToFullRegeneration.toString(),
+                    delayBeforeStartRegenerating.toString()));
         } else {
             builder.append("&f(Disabled)\n");
         }

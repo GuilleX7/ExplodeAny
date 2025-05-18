@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -221,6 +222,12 @@ public final class ConfigurationManager {
         return this.materialConfigurations.getOrDefault(material, this.defaultMaterialConfiguration);
     }
 
+    public Set<String> getMaterialConfigurationNames() {
+        return this.materialConfigurations.keySet().stream()
+                .map(Material::name)
+                .collect(Collectors.toSet());
+    }
+
     public Set<Material> getHandledMaterials() {
         return handledMaterials;
     }
@@ -291,6 +298,10 @@ public final class ConfigurationManager {
 
     public WorldHoleProtection getWorldHoleProtection(String worldName) {
         return this.worldHoleProtections.getOrDefault(worldName, this.defaultWorldHoleProtection);
+    }
+
+    public Set<String> getWorldHoleProtectionWorldNames() {
+        return this.worldHoleProtections.keySet();
     }
 
     public void loadConfiguration() {
