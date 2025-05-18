@@ -46,32 +46,24 @@ public class BlockDatabase {
         return ExplodeAny.getInstance();
     }
 
-    private Map<BlockLocation, BlockStatus> getDatabase() {
-        return database;
-    }
-
-    private void setDatabase(Map<BlockLocation, BlockStatus> database) {
-        this.database = database;
-    }
-
-    public BlockStatus getBlockStatus(Block block) {
-        return this.getBlockStatus(block, true);
-    }
-
-    public BlockStatus getBlockStatus(Block block, boolean persistIfAbsentOrIncongruent) {
+    public BlockStatus getOrCreateBlockStatus(Block block) {
         BlockLocation blockLocation = BlockLocation.fromBlock(block);
-        BlockStatus blockStatus = this.getDatabase().get(blockLocation);
+        BlockStatus blockStatus = this.database.get(blockLocation);
+
         if (blockStatus == null || !blockStatus.isCongruentWith(block)) {
             blockStatus = BlockStatus.defaultForBlock(block);
-            if (persistIfAbsentOrIncongruent) {
-                this.getDatabase().put(blockLocation, blockStatus);
-            }
+            this.database.put(blockLocation, blockStatus);
         }
+
         return blockStatus;
     }
 
     public void removeBlockStatus(Block block) {
-        this.getDatabase().remove(BlockLocation.fromBlock(block));
+        this.database.remove(BlockLocation.fromBlock(block));
+    }
+
+    public void clear() {
+        this.database.clear();
     }
 
     public void loadFromFile(File databaseFile) {
@@ -80,7 +72,7 @@ public class BlockDatabase {
             return;
         }
 
-        this.setDatabase(this.deserializeDatabaseFile(databaseFile));
+        this.database = this.deserializeDatabaseFile(databaseFile);
     }
 
     private Map<BlockLocation, BlockStatus> deserializeDatabaseFile(File databaseFile) {
@@ -117,7 +109,7 @@ public class BlockDatabase {
             }
         }
 
-        this.serializeDatabaseFile(databaseFile, this.getDatabase());
+        this.serializeDatabaseFile(databaseFile, this.database);
     }
 
     private void serializeDatabaseFile(File databaseFile, Map<BlockLocation, BlockStatus> database) {
@@ -135,7 +127,7 @@ public class BlockDatabase {
     }
 
     public void sanitize() {
-        Iterator<Entry<BlockLocation, BlockStatus>> iterator = this.getDatabase().entrySet().iterator();
+        Iterator<Entry<BlockLocation, BlockStatus>> iterator = this.database.entrySet().iterator();
         while (iterator.hasNext()) {
             Entry<BlockLocation, BlockStatus> entry = iterator.next();
             if (this.isEntryNotSane(entry, ConfigurationManager.getInstance().doCheckBlockDatabaseAtStartup())) {

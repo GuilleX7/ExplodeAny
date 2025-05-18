@@ -55,12 +55,12 @@ public class ExplosionManager {
         return instance;
     }
 
-    public void removeHandledBlocksFromList(Map<Material, EntityMaterialConfiguration> materialConfigurations,
-            List<Block> blockList, Location sourceLocation) {
+    public void removeHandledBlocksFromList(final Map<Material, EntityMaterialConfiguration> materialConfigurations,
+            final List<Block> blockList, final Location sourceLocation) {
         final WorldHoleProtection worldHoleProtection = this.configurationManager
                 .getWorldHoleProtection(sourceLocation.getWorld().getName());
 
-        Iterator<Block> iterator = blockList.iterator();
+        final Iterator<Block> iterator = blockList.iterator();
         if (!worldHoleProtection.doProtectUnhandledBlocks()) {
             while (iterator.hasNext()) {
                 Block block = iterator.next();
@@ -79,8 +79,9 @@ public class ExplosionManager {
         }
     }
 
-    private void attachExplosionManagerMetadataToEntity(Entity entity,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations, DropCollector dropCollector) {
+    private void attachExplosionManagerMetadataToEntity(final Entity entity,
+            final Map<Material, EntityMaterialConfiguration> materialConfigurations,
+            final DropCollector dropCollector) {
         entity.setMetadata(EXPLOSION_MANAGER_SPAWNED_TAG,
                 new FixedMetadataValue(ExplodeAny.getInstance(), true));
         entity.setMetadata(EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG,
@@ -88,11 +89,11 @@ public class ExplosionManager {
                         new ExplosionMetadata(materialConfigurations, dropCollector)));
     }
 
-    public boolean isEntitySpawnedByExplosionManager(Entity entity) {
+    public final boolean isEntitySpawnedByExplosionManager(Entity entity) {
         return entity.hasMetadata(EXPLOSION_MANAGER_SPAWNED_TAG);
     }
 
-    public ExplosionMetadata getExplosionManagerMetadataFromEntity(Entity entity) {
+    public final ExplosionMetadata getExplosionManagerMetadataFromEntity(Entity entity) {
         List<MetadataValue> metadataValueList = entity.getMetadata(EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG);
 
         if (!metadataValueList.isEmpty()) {
@@ -103,9 +104,10 @@ public class ExplosionManager {
         }
     }
 
-    public boolean manageExplosion(Map<Material, EntityMaterialConfiguration> materialConfigurations,
-            EntityConfiguration entityConfiguration, Location sourceLocation, double originalRawExplosionRadius,
-            boolean forceApplyingUnderwaterRules) {
+    public final boolean manageExplosion(final Map<Material, EntityMaterialConfiguration> materialConfigurations,
+            final EntityConfiguration entityConfiguration, final Location sourceLocation,
+            final double originalRawExplosionRadius,
+            final boolean forceApplyingUnderwaterRules) {
         double rawExplosionRadius = entityConfiguration.getExplosionRadius() != 0d
                 ? entityConfiguration.getExplosionRadius()
                 : originalRawExplosionRadius;
@@ -147,6 +149,8 @@ public class ExplosionManager {
         if (!materialConfigurations.isEmpty() || entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquids()
                 || entityBehavioralConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()
                 || entityBehavioralConfiguration.doesExplosionRemoveNearbyWaterloggedBlocks()) {
+            final long currentTime = System.currentTimeMillis();
+
             for (int y = cy - explosionRadius; y <= cypr; y++) {
                 if (worldHoleProtection.isHeightProtected(y)) {
                     continue;
@@ -163,12 +167,12 @@ public class ExplosionManager {
                             continue;
                         }
 
-                        Block block = sourceWorld.getBlockAt(x, y, z);
+                        final Block block = sourceWorld.getBlockAt(x, y, z);
                         if (block.isEmpty()) {
                             continue;
                         }
 
-                        EntityMaterialConfiguration materialConfiguration = materialConfigurations
+                        final EntityMaterialConfiguration materialConfiguration = materialConfigurations
                                 .get(block.getType());
                         if (materialConfiguration == null) {
                             if (this.blockDataUtils.isBlockWaterlogged(block)) {
@@ -181,7 +185,7 @@ public class ExplosionManager {
 
                         this.damageBlock(materialConfiguration, block, sourceBlockLocation,
                                 explosionRadius, squaredExplosionRadius,
-                                squaredDistance, isSourceLocationUnderwater, dropCollector);
+                                squaredDistance, isSourceLocationUnderwater, dropCollector, currentTime);
                     }
                 }
             }
@@ -212,19 +216,19 @@ public class ExplosionManager {
         return false;
     }
 
-    private void spawnManagedExplosion(Location location,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations, double explosionRadius,
-            DropCollector dropCollector) {
-        TNTPrimed explosiveEntity = location.getWorld().spawn(location, TNTPrimed.class);
+    private void spawnManagedExplosion(final Location location,
+            final Map<Material, EntityMaterialConfiguration> materialConfigurations, final double explosionRadius,
+            final DropCollector dropCollector) {
+        final TNTPrimed explosiveEntity = location.getWorld().spawn(location, TNTPrimed.class);
         this.attachExplosionManagerMetadataToEntity(explosiveEntity, materialConfigurations, dropCollector);
         explosiveEntity.setFuseTicks(0);
         explosiveEntity.setYield((float) explosionRadius);
     }
 
-    private void damageBlock(EntityMaterialConfiguration materialConfiguration, Block targetBlock,
-            Location sourceBlockLocation, int explosionRadius, double squaredExplosionRadius,
-            double squaredDistance,
-            boolean isSourceLocationUnderwater, DropCollector dropCollector) {
+    private void damageBlock(final EntityMaterialConfiguration materialConfiguration, final Block targetBlock,
+            final Location sourceBlockLocation, final int explosionRadius, final double squaredExplosionRadius,
+            final double squaredDistance,
+            final boolean isSourceLocationUnderwater, final DropCollector dropCollector, final long currentTime) {
         final Location targetBlockLocation = targetBlock.getLocation();
 
         double effectiveDamage = materialConfiguration.getDamage();
@@ -239,8 +243,8 @@ public class ExplosionManager {
         effectiveDamage *= 1
                 - materialConfiguration.getDistanceAttenuationFactor() * (squaredDistance - 1) / squaredExplosionRadius;
 
-        final BlockStatus affectedBlockStatus = this.blockDatabase.getBlockStatus(targetBlock);
-        affectedBlockStatus.damage(effectiveDamage);
+        final BlockStatus affectedBlockStatus = this.blockDatabase.getOrCreateBlockStatus(targetBlock);
+        affectedBlockStatus.damage(effectiveDamage, currentTime);
 
         if (affectedBlockStatus.shouldBreak()) {
             materialConfiguration.getSoundConfiguration().playAt(targetBlockLocation);
@@ -256,10 +260,10 @@ public class ExplosionManager {
         }
     }
 
-    private boolean areUnderwaterRulesApplicableForTargetBlock(EntityMaterialConfiguration materialConfiguration,
-            Location sourceBlockLocation,
-            Location targetBlockLocation,
-            boolean isSourceLocationUnderwater, int explosionRadius) {
+    private boolean areUnderwaterRulesApplicableForTargetBlock(final EntityMaterialConfiguration materialConfiguration,
+            final Location sourceBlockLocation,
+            final Location targetBlockLocation,
+            final boolean isSourceLocationUnderwater, final int explosionRadius) {
         return materialConfiguration.isFancyUnderwaterDetection()
                 ? TrajectoryExplosionLiquidDetector.isLiquidInTrajectory(sourceBlockLocation, targetBlockLocation,
                         explosionRadius)
@@ -304,8 +308,8 @@ public class ExplosionManager {
         return waterloggedBlockConsumer;
     }
 
-    private Consumer<Block> getLiquidBlockConsumer(EntityBehavioralConfiguration entityBehavioralConfiguration,
-            boolean isSourceLocationUnderwater) {
+    private Consumer<Block> getLiquidBlockConsumer(final EntityBehavioralConfiguration entityBehavioralConfiguration,
+            final boolean isSourceLocationUnderwater) {
         final boolean doesExplosionRemoveNearbyLiquidsSurface = entityBehavioralConfiguration
                 .doesExplosionRemoveNearbyLiquidsSurface() && !isSourceLocationUnderwater;
         final boolean doesExplosionRemoveNearbyLiquidsUnderwater = entityBehavioralConfiguration
@@ -328,8 +332,8 @@ public class ExplosionManager {
         return liquidBlockConsumer;
     }
 
-    private DropCollector getDropCollector(EntityConfiguration entityConfiguration,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations) {
+    private DropCollector getDropCollector(final EntityConfiguration entityConfiguration,
+            final Map<Material, EntityMaterialConfiguration> materialConfigurations) {
         return entityConfiguration.doPackDroppedItems()
                 ? new PackedDropCollector(materialConfigurations)
                 : new UnpackedDropCollector();

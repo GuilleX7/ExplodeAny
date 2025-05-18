@@ -2,6 +2,7 @@ package io.github.guillex7.explodeany.configuration.section;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -40,5 +41,14 @@ public class WorldHoleProtection {
 
     public boolean doProtectUnhandledBlocks() {
         return protectUnhandledBlocks;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Heights: %s\n"
+                        + "Protect unhandled blocks: %s",
+                heights.stream().map(x -> x.toString()).collect(Collectors.joining(", ")),
+                protectUnhandledBlocks);
     }
 }

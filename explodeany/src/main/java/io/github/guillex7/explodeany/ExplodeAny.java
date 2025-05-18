@@ -96,7 +96,6 @@ public class ExplodeAny extends JavaPlugin {
         if (this.configurationManager.doUseBlockDatabase()) {
             this.blockDatabase.loadFromFile(new File(this.getDataFolder(), this.getDatabaseFilename()));
             this.blockDatabase.sanitize();
-            this.unloadDatabase();
         }
     }
 
@@ -141,6 +140,7 @@ public class ExplodeAny extends JavaPlugin {
         if (this.configurationManager.doUseBlockDatabase()) {
             this.blockDatabase.saveToFile(new File(this.getDataFolder(), this.getDatabaseFilename()));
         }
+        this.blockDatabase.clear();
     }
 
     public void unregisterCommands() {

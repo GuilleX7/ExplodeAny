@@ -23,10 +23,10 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.api.IBossBar;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
+import io.github.guillex7.explodeany.data.Duration;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public final class ChecktoolManager {
-
     private static final String CHECKTOOL_DUMP_FILENAME = "checktool.dump";
 
     private static ChecktoolManager instance;
@@ -165,7 +165,7 @@ public final class ChecktoolManager {
         this.checktoolBossBarTaskByPlayer.remove(player);
     }
 
-    public void setChecktoolBossBarForPlayer(Player player, IBossBar bossBar, int bossBarDuration) {
+    public void setChecktoolBossBarForPlayer(Player player, IBossBar bossBar, Duration bossBarDuration) {
         BukkitTask oldTask = this.checktoolBossBarTaskByPlayer.get(player);
         if (oldTask != null) {
             oldTask.cancel();
@@ -184,6 +184,6 @@ public final class ChecktoolManager {
 
             this.checktoolBossBarByPlayer.remove(player);
             this.checktoolBossBarTaskByPlayer.remove(player);
-        }, bossBarDuration));
+        }, bossBarDuration.asMilliseconds()));
     }
 }

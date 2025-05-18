@@ -89,9 +89,9 @@ public final class PlayerInteractListener implements LoadableListener {
                     event.setCancelled(true);
                 }
 
-                final BlockStatus blockStatus = this.blockDatabase.getBlockStatus(clickedBlock, false);
-                final double durabilityPercentage = blockStatus.getDurability()
-                        / BlockStatus.getDefaultBlockDurability();
+                final BlockStatus blockStatus = this.blockDatabase.getOrCreateBlockStatus(clickedBlock);
+                final double currentDurability = blockStatus.getDurability(System.currentTimeMillis());
+                final double durabilityPercentage = currentDurability / blockStatus.getMaximumDurability();
                 final double prettyDurabilityPercentage = durabilityPercentage * 100;
 
                 if (!checktoolConfiguration.isSilentWhenCheckingHandledBlocks()) {
@@ -102,10 +102,9 @@ public final class PlayerInteractListener implements LoadableListener {
                                             prettyDurabilityPercentage))
                             .replace("%DURABILITY%",
                                     String.format("%.02f",
-                                            blockStatus.getDurability()))
+                                            currentDurability))
                             .replace("%MAX_DURABILITY%",
-                                    String.format("%.02f", BlockStatus
-                                            .getDefaultBlockDurability()))
+                                    String.format("%.02f", blockStatus.getMaximumDurability()))
                             .replace("%B_X%",
                                     String.format("%d",
                                             clickedBlock.getLocation()
@@ -132,10 +131,9 @@ public final class PlayerInteractListener implements LoadableListener {
                                             prettyDurabilityPercentage))
                             .replace("%DURABILITY%",
                                     String.format("%.02f",
-                                            blockStatus.getDurability()))
+                                            currentDurability))
                             .replace("%MAX_DURABILITY%",
-                                    String.format("%.02f", BlockStatus
-                                            .getDefaultBlockDurability()))
+                                    String.format("%.02f", blockStatus.getMaximumDurability()))
                             .replace("%B_X%",
                                     String.format("%d",
                                             clickedBlock.getLocation()

@@ -4,6 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.guillex7.explodeany.compat.common.data.EanyBossBarColor;
 import io.github.guillex7.explodeany.compat.common.data.EanyBossBarStyle;
+import io.github.guillex7.explodeany.data.Duration;
 
 public class ChecktoolConfiguration {
     public static final String ROOT_PATH = "Checktool";
@@ -31,7 +32,7 @@ public class ChecktoolConfiguration {
     private final boolean showBossBar;
     private final EanyBossBarColor bossBarColor;
     private final EanyBossBarStyle bossBarStyle;
-    private final int bossBarDuration;
+    private final Duration bossBarDuration;
 
     public static ChecktoolConfiguration byDefault() {
         return new ChecktoolConfiguration(false,
@@ -45,7 +46,7 @@ public class ChecktoolConfiguration {
                 false,
                 EanyBossBarColor.PURPLE,
                 EanyBossBarStyle.SOLID,
-                30);
+                Duration.ofTicks(30));
     }
 
     public static ChecktoolConfiguration fromConfigurationSection(ConfigurationSection section) {
@@ -65,6 +66,11 @@ public class ChecktoolConfiguration {
             bossBarStyle = defaults.bossBarStyle;
         }
 
+        Duration bossBarDuration = Duration.parse(section.getString(BOSS_BAR_DURATION));
+        if (bossBarDuration.isZero()) {
+            bossBarDuration = defaults.bossBarDuration;
+        }
+
         return new ChecktoolConfiguration(
                 section.getBoolean(ALWAYS_ENABLED_PATH, defaults.alwaysEnabled),
                 section.getBoolean(ENABLED_BY_DEFAULT_PATH, defaults.enabledByDefault),
@@ -81,8 +87,7 @@ public class ChecktoolConfiguration {
                 section.getBoolean(SILENT_WHEN_CHECKING_HANDLED_BLOCKS_PATH,
                         defaults.silentWhenCheckingHandledBlocks),
                 section.getBoolean(SHOW_BOSS_BAR, defaults.showBossBar),
-                bossBarColor, bossBarStyle,
-                section.getInt(BOSS_BAR_DURATION, defaults.bossBarDuration));
+                bossBarColor, bossBarStyle, bossBarDuration);
     }
 
     public ChecktoolConfiguration(boolean alwaysEnabled, boolean enabledByDefault,
@@ -91,7 +96,7 @@ public class ChecktoolConfiguration {
             boolean silentWhenCheckingOnDisabledWorlds,
             boolean silentWhenCheckingWithoutPermissions, boolean silentWhenCheckingNonHandledBlocks,
             boolean silentWhenCheckingHandledBlocks, boolean showBossBar, EanyBossBarColor bossBarColor,
-            EanyBossBarStyle bossBarStyle, int bossBarDuration) {
+            EanyBossBarStyle bossBarStyle, Duration bossBarDuration) {
         this.alwaysEnabled = alwaysEnabled;
         this.enabledByDefault = enabledByDefault;
         this.preventActionWhenCheckingHandledBlocks = preventActionWhenCheckingHandledBlocks;
@@ -150,7 +155,7 @@ public class ChecktoolConfiguration {
         return bossBarStyle;
     }
 
-    public int getBossBarDuration() {
+    public Duration getBossBarDuration() {
         return bossBarDuration;
     }
 
@@ -168,7 +173,7 @@ public class ChecktoolConfiguration {
                         + "Show boss bar: %s\n"
                         + "Boss bar color: %s\n"
                         + "Boss bar style: %s\n"
-                        + "Boss bar duration: %d ticks",
+                        + "Boss bar duration: %s",
                 alwaysEnabled,
                 enabledByDefault,
                 preventActionWhenCheckingHandledBlocks,

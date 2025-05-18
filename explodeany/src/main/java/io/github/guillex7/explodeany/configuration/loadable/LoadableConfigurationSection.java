@@ -268,12 +268,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
     }
 
     public final Material getMaterialFromName(String name) {
-        Material material;
-        try {
-            material = Material.valueOf(name.toUpperCase());
-        } catch (Exception e) {
-            material = null;
-        }
+        Material material = Material.getMaterial(name.toUpperCase());
 
         if (Material.WATER.equals(material) || Material.LAVA.equals(material)) {
             material = null;

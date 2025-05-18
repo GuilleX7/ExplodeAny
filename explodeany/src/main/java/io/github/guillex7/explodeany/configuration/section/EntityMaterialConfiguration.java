@@ -84,8 +84,8 @@ public class EntityMaterialConfiguration {
         return dropChance;
     }
 
-    public int getDropChancePercentage() {
-        return (int) (this.getDropChance() * 100);
+    public double getDropChancePercentage() {
+        return this.getDropChance() * 100;
     }
 
     public boolean shouldBeDropped() {
@@ -125,7 +125,7 @@ public class EntityMaterialConfiguration {
         return String.format(
                 "&7<General>\n"
                         + "&fDamage: %.2f\n"
-                        + "&fDrop chance: %d%%\n"
+                        + "&fDrop chance: %.2f%%\n"
                         + "&fDrop material: %s\n"
                         + "&fDistance attenuation factor: x%.2f\n"
                         + "&fUnderwater damage factor: x%.2f\n"

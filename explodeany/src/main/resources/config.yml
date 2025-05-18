@@ -19,11 +19,7 @@ Checktool:
 
 Groups: {}
 
-Materials:
-    OBSIDIAN:
-        Regeneration:
-            DelayAfterExplosion: 10s
-            Duration: 60s
+Materials: {}
 
 VanillaEntity: {}
 

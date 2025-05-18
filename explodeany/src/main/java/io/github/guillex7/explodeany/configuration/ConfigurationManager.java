@@ -14,20 +14,22 @@ import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.configuration.section.ChecktoolConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.configuration.section.MaterialConfiguration;
 import io.github.guillex7.explodeany.configuration.section.WorldHoleProtection;
 import io.github.guillex7.explodeany.util.MathUtils;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public final class ConfigurationManager {
-    private static final String USE_BLOCK_DATABASE_ITEM = "UseBlockDatabase";
-    private static final String CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM = "CheckBlockDatabaseAtStartup";
-    private static final String BLOCK_DURABILITY_ITEM = "BlockDurability";
-    private static final String ENABLE_METRICS_ITEM = "EnableMetrics";
-    private static final String GROUPS_SECTION_ITEM = "Groups";
-    private static final String LOCALE_SECTION_ITEM = "Locale";
-    private static final String LOCALE_PREFIX_ITEM = "LocalePrefix";
-    private static final String DISABLED_WORLDS_ITEM = "DisabledWorlds";
-    private static final String WORLD_HOLE_PROTECTION_ITEM = "WorldHoleProtection";
+    public static final String USE_BLOCK_DATABASE_ITEM = "UseBlockDatabase";
+    public static final String CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM = "CheckBlockDatabaseAtStartup";
+    public static final String BLOCK_DURABILITY_ITEM = "BlockDurability";
+    public static final String ENABLE_METRICS_ITEM = "EnableMetrics";
+    public static final String GROUPS_SECTION_ITEM = "Groups";
+    public static final String MATERIALS_SECTION_ITEM = "Materials";
+    public static final String LOCALE_SECTION_ITEM = "Locale";
+    public static final String LOCALE_PREFIX_ITEM = "LocalePrefix";
+    public static final String DISABLED_WORLDS_ITEM = "DisabledWorlds";
+    public static final String WORLD_HOLE_PROTECTION_ITEM = "WorldHoleProtection";
 
     private static ConfigurationManager instance;
 
@@ -40,6 +42,8 @@ public final class ConfigurationManager {
     private Map<String, List<String>> groups;
     private Map<String, LoadableConfigurationSection<?>> registeredConfigurationSectionsByPath;
     private Set<String> loadedConfigurationSectionPaths;
+    private Map<Material, MaterialConfiguration> materialConfigurations;
+    private MaterialConfiguration defaultMaterialConfiguration;
     private Set<Material> handledMaterials;
     private Map<ConfigurationLocale, String> localeStrings;
     private String localePrefix;
@@ -53,6 +57,8 @@ public final class ConfigurationManager {
         this.groups = new HashMap<>();
         this.registeredConfigurationSectionsByPath = new HashMap<>();
         this.loadedConfigurationSectionPaths = new HashSet<>();
+        this.materialConfigurations = new HashMap<>();
+        this.defaultMaterialConfiguration = MaterialConfiguration.byDefault();
         this.handledMaterials = new HashSet<>();
         this.localeStrings = new HashMap<>();
         this.disabledWorlds = new HashSet<>();
@@ -182,6 +188,39 @@ public final class ConfigurationManager {
         return this.getLoadedConfigurationSectionPaths().contains(sectionPath);
     }
 
+    public void loadMaterialConfigurations() {
+        this.materialConfigurations.clear();
+
+        ConfigurationSection materialConfigurationsSection = this.getConfigurationFile().getConfig()
+                .getConfigurationSection(ConfigurationManager.MATERIALS_SECTION_ITEM);
+        if (materialConfigurationsSection != null) {
+            for (String materialName : materialConfigurationsSection.getKeys(false)) {
+                Material material = Material.getMaterial(materialName);
+                if (material == null) {
+                    this.getPlugin().getLogger().warning(
+                            String.format("Material %s is not valid and its properties will not be loaded",
+                                    materialName));
+                    continue;
+                }
+
+                ConfigurationSection materialConfigurationSection = materialConfigurationsSection
+                        .getConfigurationSection(materialName);
+                if (materialConfigurationSection == null) {
+                    this.getPlugin().getLogger().warning(
+                            String.format("The section %s.%s is invalid and will not be loaded",
+                                    ConfigurationManager.MATERIALS_SECTION_ITEM, materialName));
+                }
+
+                this.materialConfigurations.put(material,
+                        MaterialConfiguration.fromConfigurationSection(materialConfigurationSection));
+            }
+        }
+    }
+
+    public MaterialConfiguration getMaterialConfiguration(Material material) {
+        return this.materialConfigurations.getOrDefault(material, this.defaultMaterialConfiguration);
+    }
+
     public Set<Material> getHandledMaterials() {
         return handledMaterials;
     }
@@ -266,6 +305,7 @@ public final class ConfigurationManager {
         this.loadDoEnableMetrics();
         this.loadChecktoolConfiguration();
         this.loadGroups();
+        this.loadMaterialConfigurations();
         this.loadAllRegisteredLoadableConfigurationSections();
         this.loadLocalePrefix();
         this.loadLocale();
