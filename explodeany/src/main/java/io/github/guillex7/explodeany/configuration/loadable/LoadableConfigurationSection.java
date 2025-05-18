@@ -44,6 +44,11 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         return entityConfigurations;
     }
 
+    public final void clear() {
+        this.entityMaterialConfigurations.clear();
+        this.entityConfigurations.clear();
+    }
+
     public final Set<String> getLoadedEntityNames() {
         return this.getEntityConfigurations().keySet().stream().map(this::getEntityName).collect(Collectors.toSet());
     }
@@ -57,11 +62,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         }
     }
 
-    public final void clearEntityMaterialConfigurations() {
-        this.entityMaterialConfigurations.clear();
-    }
-
-    public final void fetchEntityMaterialConfigurations(FileConfiguration configuration) {
+    public final void fetchFromConfiguration(FileConfiguration configuration) {
         ConfigurationSection configurationSection = configuration.getConfigurationSection(this.getSectionPath());
         if (configurationSection == null) {
             return;

@@ -10,6 +10,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class CBlockExplodeListener extends io.github.guillex7.explodeany.compat.v1_8_3.api.CBlockExplodeListener {
+    private static final String RESPAWN_ANCHOR_ENTITY_NAME = "RESPAWN_ANCHOR";
+
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
@@ -27,7 +29,8 @@ public class CBlockExplodeListener extends io.github.guillex7.explodeany.compat.
             return;
         }
 
-        this.identifiedExplosiveBlocks.put(clickedBlock.getLocation(), "RESPAWN_ANCHOR");
+        this.identifiedExplosiveBlocks.put(clickedBlock.getLocation(),
+                CBlockExplodeListener.RESPAWN_ANCHOR_ENTITY_NAME);
     }
 
     @Override

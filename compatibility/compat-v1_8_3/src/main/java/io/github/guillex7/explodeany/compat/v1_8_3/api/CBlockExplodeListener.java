@@ -15,6 +15,8 @@ import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 
 public class CBlockExplodeListener implements LoadableListener {
+    private static final String BED_BLOCK_NAME = "BED";
+
     protected Map<Location, String> identifiedExplosiveBlocks;
 
     public CBlockExplodeListener() {
@@ -25,7 +27,7 @@ public class CBlockExplodeListener implements LoadableListener {
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         if (!event.getBed().getWorld().getEnvironment().equals(Environment.NORMAL)) {
             Location bedLocation = event.getBed().getLocation();
-            identifiedExplosiveBlocks.put(bedLocation, "BED");
+            identifiedExplosiveBlocks.put(bedLocation, CBlockExplodeListener.BED_BLOCK_NAME);
         }
     }
 
@@ -39,6 +41,10 @@ public class CBlockExplodeListener implements LoadableListener {
 
             Bukkit.getPluginManager()
                     .callEvent(new EanyBlockExplodeEvent(blockLocation, explodingVanillaMaterial, event.blockList()));
+        } else {
+            Bukkit.getPluginManager()
+                    .callEvent(new EanyBlockExplodeEvent(blockLocation, null,
+                            event.blockList()));
         }
     }
 

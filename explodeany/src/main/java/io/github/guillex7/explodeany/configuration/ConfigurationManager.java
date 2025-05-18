@@ -166,8 +166,8 @@ public final class ConfigurationManager {
                 .getRegisteredConfigurationSectionsByPath()
                 .values()) {
             if (loadableConfigurationSection.shouldBeLoaded()) {
-                loadableConfigurationSection.clearEntityMaterialConfigurations();
-                loadableConfigurationSection.fetchEntityMaterialConfigurations(this.getConfigurationFile().getConfig());
+                loadableConfigurationSection.clear();
+                loadableConfigurationSection.fetchFromConfiguration(this.getConfigurationFile().getConfig());
                 for (Map<Material, EntityMaterialConfiguration> map : loadableConfigurationSection
                         .getEntityMaterialConfigurations().values()) {
                     this.getHandledMaterials().addAll(map.keySet());

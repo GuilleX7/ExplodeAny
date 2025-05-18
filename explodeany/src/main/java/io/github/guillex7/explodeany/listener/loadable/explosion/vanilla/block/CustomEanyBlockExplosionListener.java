@@ -1,13 +1,12 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity;
+package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.block;
 
 import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.entity.EntityExplodeEvent;
 
 import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
@@ -15,13 +14,14 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
-public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosionHandler {
+public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandler {
+    private static final String UNKNOWN_BLOCK_NAME = "UNKNOWN";
+
     private CustomVanillaEntityConfiguration configuration;
 
     @Override
     public boolean shouldBeLoaded() {
-        return ConfigurationManager.getInstance()
-                .isConfigurationSectionLoaded(CustomVanillaEntityConfiguration.getConfigurationId());
+        return true;
     }
 
     @Override
@@ -30,29 +30,23 @@ public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosi
                 .getRegisteredConfigurationSectionByPath(CustomVanillaEntityConfiguration.getConfigurationId());
     }
 
-    @Override
-    public boolean isEventHandled(EntityExplodeEvent event) {
-        return true;
-    }
-
-    @Override
-    public void onEntityExplode(EntityExplodeEvent event) {
+    public void onBlockExplode(EanyBlockExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
 
-        EntityType entityType = event.getEntityType();
-        String entityTypeName = entityType.toString();
+        String entityBlockName = event.getBlockMaterial() == null ? CustomEanyBlockExplosionListener.UNKNOWN_BLOCK_NAME
+                : event.getBlockMaterial();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
-            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected custom entity explosion. Entity type: {0}",
-                    entityTypeName);
+            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected custom block explosion. Block type: {0}",
+                    entityBlockName);
         }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-                .getEntityMaterialConfigurations().get(entityTypeName);
+                .getEntityMaterialConfigurations().get(entityBlockName);
         EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
-                .get(entityTypeName);
+                .get(entityBlockName);
 
         if (materialConfigurations == null || entityConfiguration == null) {
             return;
@@ -65,16 +59,20 @@ public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosi
         }
 
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getLocation(), explosionRadius, false)) {
+                event.getBlockLocation(), explosionRadius, false)) {
             event.setCancelled(true);
         } else {
-            ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList(),
-                    event.getLocation());
+            ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.getBlockList(),
+                    event.getBlockLocation());
         }
+    }
+
+    public boolean isEventHandled(EanyBlockExplodeEvent event) {
+        return true;
     }
 
     @Override
     public void unload() {
-        /* Do nothing */
+        // Do nothing
     }
 }
