@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.util.MathUtils;
 
 public class SoundConfiguration {
@@ -24,9 +25,15 @@ public class SoundConfiguration {
         SoundConfiguration defaults = SoundConfiguration.byDefault();
 
         Sound sound;
+        String soundString = section.getString(NAME_PATH, "").toUpperCase();
         try {
-            sound = Sound.valueOf(section.getString(NAME_PATH, "").toUpperCase());
+            sound = Sound.valueOf(soundString);
         } catch (Exception e) {
+            if (!soundString.equals("")) {
+                ExplodeAny.getInstance().getLogger()
+                        .warning(String.format("Invalid sound '%s' in configuration section '%s'. Using default value.",
+                                section.getString(NAME_PATH), section.getCurrentPath()));
+            }
             sound = null;
         }
 
@@ -66,9 +73,9 @@ public class SoundConfiguration {
     @Override
     public String toString() {
         return this.isValid() ? String.format(
-                "Sound name: %s\n" +
-                        "Volume: %.2f\n" +
-                        "Pitch: %.2f",
+                "Sound name: %s\n"
+                + "Volume: %.2f\n"
+                + "Pitch: %.2f",
                 this.getSound().name(), this.getVolume(), this.getPitch())
                 : "(None)";
     }

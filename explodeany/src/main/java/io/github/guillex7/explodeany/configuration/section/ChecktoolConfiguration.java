@@ -2,6 +2,7 @@ package io.github.guillex7.explodeany.configuration.section;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.data.EanyBossBarColor;
 import io.github.guillex7.explodeany.compat.common.data.EanyBossBarStyle;
 import io.github.guillex7.explodeany.data.Duration;
@@ -53,16 +54,24 @@ public class ChecktoolConfiguration {
         ChecktoolConfiguration defaults = ChecktoolConfiguration.byDefault();
 
         EanyBossBarColor bossBarColor;
+        String bossBarColorString = section.getString(BOSS_BAR_COLOR, defaults.bossBarColor.name());
         try {
-            bossBarColor = EanyBossBarColor.valueOf(section.getString(BOSS_BAR_COLOR, defaults.bossBarColor.name()));
+            bossBarColor = EanyBossBarColor.valueOf(bossBarColorString);
         } catch (IllegalArgumentException e) {
+            ExplodeAny.getInstance().getLogger().warning(String.format(
+                    "Invalid boss bar color '%s' in configuration section '%s'. Using default value '%s'.",
+                    bossBarColorString, section.getCurrentPath(), defaults.bossBarColor.name()));
             bossBarColor = defaults.bossBarColor;
         }
 
         EanyBossBarStyle bossBarStyle;
+        String bossBarStyleString = section.getString(BOSS_BAR_STYLE, defaults.bossBarStyle.name());
         try {
-            bossBarStyle = EanyBossBarStyle.valueOf(section.getString(BOSS_BAR_STYLE, defaults.bossBarStyle.name()));
+            bossBarStyle = EanyBossBarStyle.valueOf(bossBarStyleString);
         } catch (IllegalArgumentException e) {
+            ExplodeAny.getInstance().getLogger().warning(String.format(
+                    "Invalid boss bar style '%s' in configuration section '%s'. Using default value '%s'.",
+                    bossBarStyleString, section.getCurrentPath(), defaults.bossBarStyle.name()));
             bossBarStyle = defaults.bossBarStyle;
         }
 
@@ -163,17 +172,17 @@ public class ChecktoolConfiguration {
     public String toString() {
         return String.format(
                 "Always enabled: %s\n"
-                        + "Enabled by default: %s\n"
-                        + "Prevent action when checking handled blocks: %s\n"
-                        + "Prevent action when checking non handled blocks: %s\n"
-                        + "Silent when checking on disabled worlds: %s\n"
-                        + "Silent when checking without permissions: %s\n"
-                        + "Silent when checking non handled blocks: %s\n"
-                        + "Silent when checking handled blocks: %s\n"
-                        + "Show boss bar: %s\n"
-                        + "Boss bar color: %s\n"
-                        + "Boss bar style: %s\n"
-                        + "Boss bar duration: %s",
+                + "Enabled by default: %s\n"
+                + "Prevent action when checking handled blocks: %s\n"
+                + "Prevent action when checking non handled blocks: %s\n"
+                + "Silent when checking on disabled worlds: %s\n"
+                + "Silent when checking without permissions: %s\n"
+                + "Silent when checking non handled blocks: %s\n"
+                + "Silent when checking handled blocks: %s\n"
+                + "Show boss bar: %s\n"
+                + "Boss bar color: %s\n"
+                + "Boss bar style: %s\n"
+                + "Boss bar duration: %s",
                 alwaysEnabled,
                 enabledByDefault,
                 preventActionWhenCheckingHandledBlocks,

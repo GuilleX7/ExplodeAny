@@ -12,8 +12,8 @@ public class WorldHoleProtection {
     private static final String HEIGHTS_PATH = "Heights";
     private static final String PROTECT_UNHANDLED_BLOCKS_PATH = "ProtectUnhandledBlocks";
 
-    private Set<Integer> heights;
-    private boolean protectUnhandledBlocks;
+    private final Set<Integer> heights;
+    private final boolean protectUnhandledBlocks;
 
     public static WorldHoleProtection of(Set<Integer> heights, boolean protectUnhandledBlocks) {
         return new WorldHoleProtection(heights, protectUnhandledBlocks);
@@ -26,7 +26,7 @@ public class WorldHoleProtection {
     public static WorldHoleProtection fromConfigSection(ConfigurationSection section) {
         final WorldHoleProtection defaults = WorldHoleProtection.byDefault();
 
-        return new WorldHoleProtection(new HashSet<Integer>(section.getIntegerList(HEIGHTS_PATH)),
+        return new WorldHoleProtection(new HashSet<>(section.getIntegerList(HEIGHTS_PATH)),
                 section.getBoolean(PROTECT_UNHANDLED_BLOCKS_PATH, defaults.protectUnhandledBlocks));
     }
 
@@ -47,8 +47,8 @@ public class WorldHoleProtection {
     public String toString() {
         return String.format(
                 "&fHeights: %s\n"
-                        + "Protect unhandled blocks: %s",
-                heights.size() > 0 ? heights.stream().map(x -> x.toString()).collect(Collectors.joining(", ")) : "none",
+                + "Protect unhandled blocks: %s",
+                !heights.isEmpty() ? heights.stream().map(x -> x.toString()).collect(Collectors.joining(", ")) : "none",
                 protectUnhandledBlocks);
     }
 }

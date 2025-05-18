@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.api.IParticle;
 import io.github.guillex7.explodeany.compat.common.data.EanyParticleData;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
@@ -44,12 +45,13 @@ public class ParticleConfiguration {
         int green = MathUtils.ensureRange(section.getInt(GREEN_PATH, 0), 255, 0);
         int blue = MathUtils.ensureRange(section.getInt(BLUE_PATH, 0), 255, 0);
         double size = MathUtils.ensureMin(section.getDouble(SIZE_PATH, 1), 0);
-        Material material;
 
-        try {
-            material = Material.valueOf(section.getString(MATERIAL_PATH, "").toUpperCase());
-        } catch (Exception e) {
-            material = null;
+        String materialString = section.getString(MATERIAL_PATH, "").toUpperCase();
+        Material material = Material.getMaterial(materialString);
+        if (material == null && !materialString.equals("")) {
+            ExplodeAny.getInstance().getLogger()
+                    .warning(String.format("Invalid material '%s' in configuration section '%s'. Using default value.",
+                            section.getString(MATERIAL_PATH), section.getCurrentPath()));
         }
 
         IParticle particle = CompatibilityManager.getInstance().getApi().getParticleUtils()
@@ -117,10 +119,10 @@ public class ParticleConfiguration {
     public String toString() {
         return this.isValid() ? String.format(
                 "%s\n"
-                        + "dX: %.2f dY: %.2f dZ: %.2f\n"
-                        + "Amount: %d\n"
-                        + "Speed: %.2f\n"
-                        + "Force: %b",
+                + "dX: %.2f dY: %.2f dZ: %.2f\n"
+                + "Amount: %d\n"
+                + "Speed: %.2f\n"
+                + "Force: %b",
                 this.getParticle().toString(), this.getDeltaX(), this.getDeltaY(), this.getDeltaZ(), this.getAmount(),
                 this.getSpeed(), this.isForce())
                 : "(None)";

@@ -2,7 +2,9 @@ package io.github.guillex7.explodeany.configuration.section;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
 
+import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MathUtils;
 
@@ -37,9 +39,20 @@ public class EntityMaterialConfiguration {
                 .getConfigurationSection(ParticleConfiguration.ROOT_PATH);
 
         Material dropMaterial;
+        String dropMaterialString = "";
         try {
-            dropMaterial = Material.valueOf(section.getString(DROP_MATERIAL_PATH, "").toUpperCase());
-        } catch (IllegalArgumentException e) {
+            dropMaterialString = section.getString(DROP_MATERIAL_PATH, "");
+            dropMaterial = Material.valueOf(dropMaterialString.toUpperCase());
+            // Hint: some materials are not valid for ItemStack
+            @SuppressWarnings("unused")
+            ItemStack item = new ItemStack(dropMaterial, 1);
+        } catch (Exception e) {
+            if (!dropMaterialString.equals("")) {
+                ExplodeAny.getInstance().getLogger()
+                        .warning(String.format(
+                                "Invalid drop material '%s' in configuration section '%s'. Using default value.",
+                                section.getString(DROP_MATERIAL_PATH), section.getCurrentPath()));
+            }
             dropMaterial = defaults.getDropMaterial();
         }
 
@@ -124,16 +137,16 @@ public class EntityMaterialConfiguration {
     public String toString() {
         return String.format(
                 "&7<General>\n"
-                        + "&fDamage: %.2f\n"
-                        + "&fDrop chance: %.2f%%\n"
-                        + "&fDrop material: %s\n"
-                        + "&fDistance attenuation factor: x%.2f\n"
-                        + "&fUnderwater damage factor: x%.2f\n"
-                        + "&fFancy underwater detection: %b\n"
-                        + "\n&7<Sound>\n"
-                        + "&f%s\n"
-                        + "\n&7<Particle>\n"
-                        + "&f%s",
+                + "&fDamage: %.2f\n"
+                + "&fDrop chance: %.2f%%\n"
+                + "&fDrop material: %s\n"
+                + "&fDistance attenuation factor: x%.2f\n"
+                + "&fUnderwater damage factor: x%.2f\n"
+                + "&fFancy underwater detection: %b\n"
+                + "\n&7<Sound>\n"
+                + "&f%s\n"
+                + "\n&7<Particle>\n"
+                + "&f%s",
                 this.getDamage(), this.getDropChancePercentage(),
                 this.getDropMaterial() == null ? "(not customized)" : this.getDropMaterial().toString(),
                 this.getDistanceAttenuationFactor(),
