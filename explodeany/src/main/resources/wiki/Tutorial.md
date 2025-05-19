@@ -1,6 +1,6 @@
-## The basics
+## Getting started
 
-Welcome to this crash course on configuring ExplodeAny! Let's start with the empty configuration, which should look something like this (don't worry if yours is different, some features might have been added since your version!):
+Welcome to this crash course on ExplodeAny! Let's start with an empty configuration, which should look like this (don't worry if yours is different, some features might have been added since your version!):
 
 ```yaml
 UseBlockDatabase: false
@@ -8,13 +8,33 @@ CheckBlockDatabaseAtStartup: false
 BlockDurability: 100.0
 EnableMetrics: true
 
+Checktool:
+    AlwaysEnabled: false
+    EnabledByDefault: false
+    PreventActionWhenCheckingHandledBlocks: true
+    PreventActionWhenCheckingNonHandledBlocks: true
+    SilentWhenCheckingOnDisabledWorlds: false
+    SilentWhenCheckingWithoutPermissions: false
+    SilentWhenCheckingNonHandledBlocks: false
+    SilentWhenCheckingHandledBlocks: false
+    ShowBossBar: false
+    BossBarColor: PURPLE
+    BossBarStyle: SOLID
+    BossBarDuration: 30
+
 Groups: {}
+
+Materials: {}
 
 VanillaEntity: {}
 
 CannonProjectile: {}
 
 MagicEntity: {}
+
+QualityArmory: {}
+
+ThrowableCreeperEggs: {}
 
 CustomEntity: {}
 
@@ -29,18 +49,33 @@ Locale:
     ChecktoolToggledOn: Checktool mode toggled on for player %NAME%
     ChecktoolToggledOff: Checktool mode toggled off for player %NAME%
     ChecktoolUse: "Block health: %DURABILITY_PERCENTAGE%% (%PRETTY_MATERIAL%)"
+    ChecktoolUseBossBar: "%PRETTY_MATERIAL%: %DURABILITY_PERCENTAGE%%"
     ChecktoolSet: "Checktool successfully set to %PRETTY_ITEM%!"
     ChecktoolNotPersisted: "Checktool item was set to %PRETTY_ITEM%, but it couldn't be persisted"
     ChecktoolGiven: "A checktool (%PRETTY_ITEM%) was given to player %NAME%"
     ChecktoolReset: "Checktool successfully reset to bare hand (Air)"
     ChecktoolNotHandled: "%PRETTY_MATERIAL% is not handled by the current configuration"
     ChecktoolInfo: "Current checktool item: %PRETTY_ITEM%"
+    ChecktoolAlwaysEnabled: "Checktool can't be toggled off because it's always enabled"
     DisabledInThisWorld: "This functionality is disabled in this world"
     Reloaded: "Reloaded successfully!"
+    DebugEnabled: "Debug mode has been enabled"
+    DebugDisabled: "Debug mode has been disabled"
 
 LocalePrefix: "[ExplodeAny] "
 
 DisabledWorlds: {}
+
+WorldHoleProtection:
+    # default:
+    #     Heights:
+    #         - -64 # Bedrock layer post-1.18
+    #         - 0 # Bedrock layer pre-1.18
+    # world_nether:
+    #     Heights:
+    #         - 127
+    #         - 0
+
 ```
 
 There are four interesting keys over there, `VanillaEntity`, `CannonProjectile`, `MagicEntity` and `CustomEntity`. All of them work pretty much the same way, but for simplicity, we will focus on `VanillaEntity`, since it refers to entities that exist in the base game. For example, when we talk about entities like TNT, creepers, withers, etc, we refer to `VanillaEntity` entities.
@@ -49,7 +84,7 @@ Let's imagine you want to add some configuration to a vanilla entity, for instan
 
 ```yaml
 VanillaEntity:
-    PRIMED_TNT: {}
+    TNT: {}
 
 CannonProjectile: {}
 
@@ -58,12 +93,12 @@ MagicEntity: {}
 CustomEntity: {}
 ```
 
-You can see VanillaEntity is actually a section that can contain vanilla entity names (like PRIMED_TNT), which in turn represent another section.
+You can see VanillaEntity is actually a section that can contain vanilla entity names (like TNT), which in turn represent another section.
 This is where the materials that are going to be affected by that entity explosion should be listed. You can add the materials in the same as we did for the entity:
 
 ```yaml
 VanillaEntity:
-    PRIMED_TNT:
+    TNT:
         OBSIDIAN: {}
 
 CannonProjectile: {}
@@ -73,7 +108,7 @@ MagicEntity: {}
 CustomEntity: {}
 ```
 
-As you can notice, the material itself starts another section, which represents how the OBSIDIAN block should be affected by a PRIMED_TNT explosion in particular.
+As you can notice, the material itself starts another section, which represents how the OBSIDIAN block should be affected by a TNT explosion in particular.
 There are many properties you can use to describe how a block should be affected by a given explosion. You can use all the properties are listed here: https://github.com/GuilleX7/ExplodeAny/blob/main/explodeany/src/main/resources/exampleConfig.yml#L196
 
 These properties are:
