@@ -19,7 +19,6 @@ import io.github.guillex7.explodeany.data.QualityArmoryExplosive;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
 import io.github.guillex7.explodeany.services.DebugManager;
-
 import me.zombie_striker.qg.api.QAProjectileExplodeEvent;
 import me.zombie_striker.qg.api.QAThrowableExplodeEvent;
 import me.zombie_striker.qg.miscitems.Grenade;

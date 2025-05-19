@@ -34,7 +34,7 @@ public class MaterialConfiguration {
         this.delayBeforeStartRegenerating = delayBeforeStartRegenerating;
         this.durabilityRegenerationPerMillisecond = !timeToFullRegeneration.isZero()
                 ? ConfigurationManager.getInstance().getGlobalBlockDurability()
-                        / (double) timeToFullRegeneration.asMilliseconds()
+                / (double) timeToFullRegeneration.asMilliseconds()
                 : 0.0d;
     }
 
@@ -62,7 +62,7 @@ public class MaterialConfiguration {
         if (!timeToFullRegeneration.isZero()) {
             builder.append(String.format(
                     "&fTime to full regeneration: %s\n"
-                            + "&fDelay before start regenerating: %s\n",
+                    + "&fDelay before start regenerating: %s\n",
                     timeToFullRegeneration.toString(),
                     delayBeforeStartRegenerating.toString()));
         } else {

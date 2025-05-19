@@ -75,7 +75,6 @@ WorldHoleProtection:
     #     Heights:
     #         - 127
     #         - 0
-
 ```
 
 There are four interesting keys over there, `VanillaEntity`, `CannonProjectile`, `MagicEntity` and `CustomEntity`. All of them work pretty much the same way, but for simplicity, we will focus on `VanillaEntity`, since it refers to entities that exist in the base game. For example, when we talk about entities like TNT, creepers, withers, etc, we refer to `VanillaEntity` entities.

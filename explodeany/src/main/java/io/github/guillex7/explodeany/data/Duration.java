@@ -8,7 +8,7 @@ public class Duration {
     private static final long MILLISECONDS_IN_WEEK = MILLISECONDS_IN_DAY * 7;
     private static final long MILLISECONDS_IN_TICK = 50;
 
-    private long milliseconds;
+    private final long milliseconds;
 
     public static Duration ofMilliseconds(long milliseconds) {
         return new Duration(milliseconds);

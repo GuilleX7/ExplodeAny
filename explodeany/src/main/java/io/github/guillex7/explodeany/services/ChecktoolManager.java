@@ -87,7 +87,7 @@ public final class ChecktoolManager {
             Level previousConfigurationSerializationLevel = configurationSerializationLogger.getLevel();
 
             try (InputStream inputStream = new FileInputStream(this.checktoolFile);
-                    BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(inputStream)) {
+                 BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(inputStream)) {
                 configurationSerializationLogger.setLevel(Level.OFF);
                 this.checktool = (ItemStack) objectInputStream.readObject();
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);
@@ -123,7 +123,7 @@ public final class ChecktoolManager {
 
         if (this.checktoolFile.exists() && this.checktoolFile.canWrite()) {
             try (OutputStream outputStream = new FileOutputStream(this.checktoolFile);
-                    BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(outputStream)) {
+                 BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(outputStream)) {
                 objectOutputStream.writeObject(this.checktool);
                 checktoolWasPersistedSuccessfully = true;
             } catch (Exception e) {

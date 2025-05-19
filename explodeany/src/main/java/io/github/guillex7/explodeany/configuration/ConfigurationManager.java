@@ -40,16 +40,16 @@ public final class ConfigurationManager {
     private double globalBlockDurability;
     private boolean doEnableMetrics;
     private ChecktoolConfiguration checktoolConfiguration;
-    private Map<String, List<String>> groups;
-    private Map<String, LoadableConfigurationSection<?>> registeredConfigurationSectionsByPath;
-    private Set<String> loadedConfigurationSectionPaths;
-    private Map<Material, MaterialConfiguration> materialConfigurations;
-    private MaterialConfiguration defaultMaterialConfiguration;
-    private Set<Material> handledMaterials;
-    private Map<ConfigurationLocale, String> localeStrings;
+    private final Map<String, List<String>> groups;
+    private final Map<String, LoadableConfigurationSection<?>> registeredConfigurationSectionsByPath;
+    private final Set<String> loadedConfigurationSectionPaths;
+    private final Map<Material, MaterialConfiguration> materialConfigurations;
+    private final MaterialConfiguration defaultMaterialConfiguration;
+    private final Set<Material> handledMaterials;
+    private final Map<ConfigurationLocale, String> localeStrings;
     private String localePrefix;
     private Set<String> disabledWorlds;
-    private Map<String, WorldHoleProtection> worldHoleProtections;
+    private final Map<String, WorldHoleProtection> worldHoleProtections;
     private WorldHoleProtection defaultWorldHoleProtection;
 
     private ConfigurationManager() {
@@ -251,13 +251,12 @@ public final class ConfigurationManager {
                 .getConfigurationSection(LOCALE_SECTION_ITEM);
 
         if (localeSection != null) {
-            final String localePrefix = this.getLocalePrefix();
             for (ConfigurationLocale localeKey : ConfigurationLocale.values()) {
                 final String key = localeKey.getKey();
                 final boolean skipPrefix = ConfigurationLocale.CHECKTOOL_USE_BOSS_BAR.getKey().equals(key);
 
                 this.localeStrings.put(localeKey,
-                        String.format("%s%s", !skipPrefix ? localePrefix : "",
+                        String.format("%s%s", !skipPrefix ? this.localePrefix : "",
                                 MessageFormatter.colorize(localeSection.getString(key))));
             }
         }

@@ -82,7 +82,7 @@ public class CParticle implements IParticle {
     public boolean isValid() {
         return this.particle != null;
     }
-    
+
     @Override
     public String toString() {
         return this.isValid() ? this.particleData.toString() : "(None)";

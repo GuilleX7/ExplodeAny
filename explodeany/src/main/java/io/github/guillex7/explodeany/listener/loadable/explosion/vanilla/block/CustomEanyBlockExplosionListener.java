@@ -30,6 +30,7 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
                 .getRegisteredConfigurationSectionByPath(CustomVanillaEntityConfiguration.getConfigurationId());
     }
 
+    @Override
     public void onBlockExplode(EanyBlockExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
@@ -67,6 +68,7 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
         }
     }
 
+    @Override
     public boolean isEventHandled(EanyBlockExplodeEvent event) {
         return true;
     }

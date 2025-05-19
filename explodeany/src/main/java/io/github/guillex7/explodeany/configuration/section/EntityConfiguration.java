@@ -134,19 +134,19 @@ public class EntityConfiguration {
 
         return String.format(
                 "&7<General>\n"
-                        + "&fExplosion radius: %s\n"
-                        + "&fExplosion factor: x%.2f\n"
-                        + "&fReplace original explosion: %b\n"
-                        + "&fUnderwater explosion factor: x%.2f\n"
-                        + "&fDamage blocks underwater: %b\n"
-                        + "&fReplace underwater original explosion: %b\n"
-                        + "&fPack dropped items: %b\n"
-                        + "\n&7<Behavior>\n"
-                        + "&f%s\n"
-                        + "\n&7<Sound>\n"
-                        + "&f%s\n"
-                        + "\n&7<Particle>\n"
-                        + "&f%s",
+                + "&fExplosion radius: %s\n"
+                + "&fExplosion factor: x%.2f\n"
+                + "&fReplace original explosion: %b\n"
+                + "&fUnderwater explosion factor: x%.2f\n"
+                + "&fDamage blocks underwater: %b\n"
+                + "&fReplace underwater original explosion: %b\n"
+                + "&fPack dropped items: %b\n"
+                + "\n&7<Behavior>\n"
+                + "&f%s\n"
+                + "\n&7<Sound>\n"
+                + "&f%s\n"
+                + "\n&7<Particle>\n"
+                + "&f%s",
                 explosionRadiusString, this.getExplosionFactor(), this.doReplaceOriginalExplosion(),
                 this.getUnderwaterExplosionFactor(), this.doesExplosionDamageBlocksUnderwater(),
                 this.doReplaceOriginalExplosionWhenUnderwater(), this.doPackDroppedItems(),

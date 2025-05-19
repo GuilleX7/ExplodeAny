@@ -8,13 +8,13 @@ import io.github.guillex7.explodeany.configuration.section.MaterialConfiguration
 import io.github.guillex7.explodeany.util.MathUtils;
 
 public class BlockStatus {
-    private Material material;
+    private final Material material;
     private double durability;
     private long lastDamaged;
 
     // Hint: not really part of this class, but cached for performance
-    private double maximumDurability;
-    private MaterialConfiguration materialConfiguration;
+    private final double maximumDurability;
+    private final MaterialConfiguration materialConfiguration;
 
     public static BlockStatus defaultForBlock(Block block) {
         return new BlockStatus(block.getType(), ConfigurationManager.getInstance().getGlobalBlockDurability(), -1);
@@ -48,8 +48,8 @@ public class BlockStatus {
             final long elapsedTimeForRegeneration = currentTime - this.lastDamaged
                     - this.materialConfiguration.getDelayBeforeRegeneration().asMilliseconds();
             if (elapsedTimeForRegeneration > 0) {
-                currentDurability = Math.min(this.durability + elapsedTimeForRegeneration
-                        * this.materialConfiguration.getDurabilityRegenerationPerMillisecond(), this.maximumDurability);
+                currentDurability = Math.min(this.durability + elapsedTimeForRegeneration * this.materialConfiguration.
+                        getDurabilityRegenerationPerMillisecond(), this.maximumDurability);
             }
         }
 

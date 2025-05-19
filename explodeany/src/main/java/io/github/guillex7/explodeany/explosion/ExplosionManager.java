@@ -26,8 +26,8 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.configuration.section.WorldHoleProtection;
 import io.github.guillex7.explodeany.explosion.drop.DropCollector;
-import io.github.guillex7.explodeany.explosion.drop.UnpackedDropCollector;
 import io.github.guillex7.explodeany.explosion.drop.PackedDropCollector;
+import io.github.guillex7.explodeany.explosion.drop.UnpackedDropCollector;
 import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
 import io.github.guillex7.explodeany.explosion.liquid.TrajectoryExplosionLiquidDetector;
 import io.github.guillex7.explodeany.explosion.metadata.ExplosionMetadata;
@@ -279,7 +279,7 @@ public class ExplosionManager {
         final boolean doesExplosionRemoveNearbyWaterloggedBlocks = entityBehavioralConfiguration
                 .doesExplosionRemoveNearbyWaterloggedBlocks()
                 && (doesExplosionRemoveNearbyWaterloggedBlocksSurface
-                        || doesExplosionRemoveNearbyWaterloggedBlocksUnderwater);
+                || doesExplosionRemoveNearbyWaterloggedBlocksUnderwater);
 
         final boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface = entityBehavioralConfiguration
                 .doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface() && !isSourceLocationUnderwater;
@@ -288,7 +288,7 @@ public class ExplosionManager {
         final boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocks = entityBehavioralConfiguration
                 .doesExplosionRemoveWaterloggedStateFromNearbyBlocks()
                 && (doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface
-                        || doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater);
+                || doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater);
 
         final Consumer<Block> waterloggedBlockConsumer;
 

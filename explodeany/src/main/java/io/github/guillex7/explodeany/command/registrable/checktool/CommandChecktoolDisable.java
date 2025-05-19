@@ -16,7 +16,6 @@ import io.github.guillex7.explodeany.util.SetUtils;
 import io.github.guillex7.explodeany.util.StringUtils;
 
 public class CommandChecktoolDisable extends RegistrableCommand {
-
     private final Set<PermissionNode> REQUIRED_PERMISSIONS = SetUtils.createHashSetOf(PermissionNode.CHECKTOOL_DISABLE);
 
     @Override

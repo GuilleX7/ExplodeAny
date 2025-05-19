@@ -1,16 +1,16 @@
-- **explodeany / eany:**
-  - **checktool / check / ct:**
-    - **enable / on** [playerName]**:** Enables the use of the checktool for the given player, of the current player if no player was specified
-    - **disable / off** [playerName]**:** Disables the use of the checktool for the given player, of the current player if no player was specified
-    - **toggle / t** [playerName]**:** Toggle the use of the checktool for the given player, or the current player if no player was specified
-    - **give** [playerName]**:** Gives a checktool item to either the current player or the player whose name matches the parameter
-    - **reset:** Sets air as the checktool (bare hands)
-    - **set:** Sets the item that the current player is holding in his main hand as the checktool
-    - **info:** Check the current checktool
-  - **configuration / config:**
-    - **show** \<section\> \<entity\> [material]**:** Shows the current entity or material configuration
-  - **debug:**
-    - **enable / on:** Enables the debug mode
-    - **disable / off:** Disables the debug mode
-  - **reload:** Reloads the plugin and the configuration file from the disk
-  - **about:** Shows about information
+-   **explodeany / eany:**
+    -   **checktool / check / ct:**
+        -   **enable / on** [playerName]**:** Enables the use of the checktool for the given player, of the current player if no player was specified
+        -   **disable / off** [playerName]**:** Disables the use of the checktool for the given player, of the current player if no player was specified
+        -   **toggle / t** [playerName]**:** Toggle the use of the checktool for the given player, or the current player if no player was specified
+        -   **give** [playerName]**:** Gives a checktool item to either the current player or the player whose name matches the parameter
+        -   **reset:** Sets air as the checktool (bare hands)
+        -   **set:** Sets the item that the current player is holding in his main hand as the checktool
+        -   **info:** Check the current checktool
+    -   **configuration / config:**
+        -   **show** \<section\> \<entity\> [material]**:** Shows the current entity or material configuration
+    -   **debug:**
+        -   **enable / on:** Enables the debug mode
+        -   **disable / off:** Disables the debug mode
+    -   **reload:** Reloads the plugin and the configuration file from the disk
+    -   **about:** Shows about information

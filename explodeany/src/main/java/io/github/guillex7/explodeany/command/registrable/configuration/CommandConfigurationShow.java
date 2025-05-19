@@ -19,10 +19,10 @@ import io.github.guillex7.explodeany.util.MessageFormatter;
 import io.github.guillex7.explodeany.util.SetUtils;
 
 public class CommandConfigurationShow extends RegistrableCommand {
-    private static final String globalSectionName = "Global";
-    private static final String checktoolSectionName = "Checktool";
-    private static final String worldHoleProtectionSectionName = "WorldHoleProtection";
-    private static final String materialSectionName = "Material";
+    private static final String GLOBAL_SECTION_NAME = "Global";
+    private static final String CHECKTOOL_SECTION_NAME = "Checktool";
+    private static final String WORLD_HOLE_PROTECTION_SECTION_NAME = "WorldHoleProtection";
+    private static final String MATERIAL_SECTION_NAME = "Material";
 
     private final List<String> fixedSectionNames;
 
@@ -30,8 +30,8 @@ public class CommandConfigurationShow extends RegistrableCommand {
             .createHashSetOf(PermissionNode.CONFIGURATION_SHOW);
 
     public CommandConfigurationShow() {
-        fixedSectionNames = Arrays.asList(globalSectionName, checktoolSectionName,
-                worldHoleProtectionSectionName, materialSectionName);
+        fixedSectionNames = Arrays.asList(GLOBAL_SECTION_NAME, CHECKTOOL_SECTION_NAME,
+                WORLD_HOLE_PROTECTION_SECTION_NAME, MATERIAL_SECTION_NAME);
     }
 
     @Override
@@ -58,21 +58,21 @@ public class CommandConfigurationShow extends RegistrableCommand {
         final ConfigurationManager configurationManager = ConfigurationManager.getInstance();
         final String sectionPath = args[0];
         switch (sectionPath) {
-            case CommandConfigurationShow.globalSectionName:
-                return showGlobalConfiguration(sender, sectionPath, configurationManager, args);
-            case CommandConfigurationShow.checktoolSectionName:
-                return showChecktoolConfiguration(sender, sectionPath, configurationManager, args);
-            case CommandConfigurationShow.worldHoleProtectionSectionName:
+            case CommandConfigurationShow.GLOBAL_SECTION_NAME:
+                return showGlobalConfiguration(sender, configurationManager);
+            case CommandConfigurationShow.CHECKTOOL_SECTION_NAME:
+                return showChecktoolConfiguration(sender, sectionPath, configurationManager);
+            case CommandConfigurationShow.WORLD_HOLE_PROTECTION_SECTION_NAME:
                 return showWorldHoleProtectionConfiguration(sender, sectionPath, configurationManager, args);
-            case CommandConfigurationShow.materialSectionName:
+            case CommandConfigurationShow.MATERIAL_SECTION_NAME:
                 return showMaterialConfiguration(sender, sectionPath, configurationManager, args);
             default:
                 return showEntityOrEntityMaterialConfiguration(sender, sectionPath, configurationManager, args);
         }
     }
 
-    private boolean showGlobalConfiguration(CommandSender sender, String sectionPath,
-            ConfigurationManager configurationManager, String[] args) {
+    private boolean showGlobalConfiguration(CommandSender sender,
+            ConfigurationManager configurationManager) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(MessageFormatter.colorize(String.format("&8= %s\n", "Global properties")));
         stringBuilder.append(String.format("&fUse block database: %s\n",
@@ -85,14 +85,13 @@ public class CommandConfigurationShow extends RegistrableCommand {
                 configurationManager.doEnableMetrics()));
         stringBuilder.append(String.format("&fDisabled worlds: %s\n",
                 configurationManager.getDisabledWorlds().isEmpty() ? "none"
-                        : configurationManager.getDisabledWorlds().stream().collect(Collectors.joining(", "))));
+                : configurationManager.getDisabledWorlds().stream().collect(Collectors.joining(", "))));
         sender.sendMessage(MessageFormatter.colorize(stringBuilder.toString()));
         return true;
     }
 
     private boolean showChecktoolConfiguration(CommandSender sender, String sectionPath,
-            ConfigurationManager configurationManager,
-            String[] args) {
+            ConfigurationManager configurationManager) {
         ChecktoolConfiguration checktoolConfiguration = configurationManager.getChecktoolConfiguration();
         sender.sendMessage(MessageFormatter.colorize(String.format(
                 "&8= %s\n&f%s", sectionPath, checktoolConfiguration.toString())));
@@ -210,17 +209,17 @@ public class CommandConfigurationShow extends RegistrableCommand {
         }
 
         switch (userSectionName) {
-            case CommandConfigurationShow.globalSectionName:
+            case CommandConfigurationShow.GLOBAL_SECTION_NAME:
                 return;
-            case CommandConfigurationShow.checktoolSectionName:
+            case CommandConfigurationShow.CHECKTOOL_SECTION_NAME:
                 return;
-            case CommandConfigurationShow.worldHoleProtectionSectionName:
+            case CommandConfigurationShow.WORLD_HOLE_PROTECTION_SECTION_NAME:
                 if (args.length == 2) {
                     autocompletion.addAll(configurationManager.getWorldHoleProtectionWorldNames().stream()
                             .filter(worldName -> worldName.startsWith(args[1])).collect(Collectors.toList()));
                 }
                 return;
-            case CommandConfigurationShow.materialSectionName:
+            case CommandConfigurationShow.MATERIAL_SECTION_NAME:
                 if (args.length == 2) {
                     autocompletion.addAll(configurationManager.getMaterialConfigurationNames().stream()
                             .filter(materialName -> materialName.startsWith(args[1])).collect(Collectors.toList()));
@@ -254,7 +253,6 @@ public class CommandConfigurationShow extends RegistrableCommand {
                                     .filter(materialName -> materialName.startsWith(userMaterialName))
                                     .collect(Collectors.toList()));
                 }
-                return;
             }
         }
     }

@@ -37,7 +37,7 @@ public class ConfigurationFile {
         }
 
         try (InputStream defaultFileStream = this.plugin.getResource(this.fileName);
-                InputStreamReader defaultFileStreamReader = new InputStreamReader(defaultFileStream)) {
+             InputStreamReader defaultFileStreamReader = new InputStreamReader(defaultFileStream)) {
             if (defaultFileStream != null) {
                 YamlConfiguration defaultConfig = YamlConfiguration
                         .loadConfiguration(defaultFileStreamReader);

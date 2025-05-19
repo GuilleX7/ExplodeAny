@@ -7,10 +7,10 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 public class BlockLocation {
-    private UUID worldUuid;
-    private int x;
-    private int y;
-    private int z;
+    private final UUID worldUuid;
+    private final int x;
+    private final int y;
+    private final int z;
 
     public static BlockLocation fromBlock(Block block) {
         return new BlockLocation(block.getWorld().getUID(), block.getX(), block.getY(), block.getZ());
@@ -64,24 +64,32 @@ public class BlockLocation {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         BlockLocation other = (BlockLocation) obj;
         if (worldUuid == null) {
-            if (other.worldUuid != null)
+            if (other.worldUuid != null) {
                 return false;
-        } else if (!worldUuid.equals(other.worldUuid))
+            }
+        } else if (!worldUuid.equals(other.worldUuid)) {
             return false;
-        if (x != other.x)
+        }
+        if (x != other.x) {
             return false;
-        if (y != other.y)
+        }
+        if (y != other.y) {
             return false;
-        if (z != other.z)
+        }
+        if (z != other.z) {
             return false;
+        }
         return true;
     }
 }

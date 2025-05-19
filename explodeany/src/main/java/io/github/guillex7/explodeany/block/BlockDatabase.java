@@ -20,7 +20,6 @@ import io.github.guillex7.explodeany.block.exception.BlockDatabaseException;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 
 public class BlockDatabase {
-
     private static BlockDatabase instance;
     private static final TypeToken<Map<BlockLocation, BlockStatus>> DATABASE_TYPE_TOKEN = new TypeToken<Map<BlockLocation, BlockStatus>>() {
     };

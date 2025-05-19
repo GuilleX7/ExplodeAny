@@ -12,10 +12,10 @@ import io.github.guillex7.explodeany.compat.common.api.IPlayerInventoryUtils;
 import io.github.guillex7.explodeany.compat.v1_13.api.CBlockDataUtils;
 import io.github.guillex7.explodeany.compat.v1_13.api.CParticleUtils;
 import io.github.guillex7.explodeany.compat.v1_8.api.CPersistentStorageUtils;
+import io.github.guillex7.explodeany.compat.v1_8_3.api.CBukkitListenerUtils;
 import io.github.guillex7.explodeany.compat.v1_9.api.CBukkitUtils;
 import io.github.guillex7.explodeany.compat.v1_9.api.CPlayerInteractionEventUtils;
 import io.github.guillex7.explodeany.compat.v1_9.api.CPlayerInventoryUtils;
-import io.github.guillex7.explodeany.compat.v1_8_3.api.CBukkitListenerUtils;
 
 public class CompatibilityApi implements ICompatibilityApi {
     private final Version minimumSupportedBukkitVersion = new Version(1, 13);

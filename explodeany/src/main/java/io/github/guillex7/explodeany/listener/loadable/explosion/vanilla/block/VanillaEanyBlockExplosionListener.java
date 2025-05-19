@@ -28,6 +28,7 @@ public class VanillaEanyBlockExplosionListener implements EanyBlockExplosionHand
                 .getRegisteredConfigurationSectionByPath(RegularVanillaEntityConfiguration.getConfigurationId());
     }
 
+    @Override
     public void onBlockExplode(EanyBlockExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
@@ -60,6 +61,7 @@ public class VanillaEanyBlockExplosionListener implements EanyBlockExplosionHand
         }
     }
 
+    @Override
     public boolean isEventHandled(EanyBlockExplodeEvent event) {
         return event.getBlockMaterial() != null
                 && ExplodingVanillaEntity.isEntityNameValid(event.getBlockMaterial());

@@ -16,7 +16,6 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 
 public class CommandManager implements TabExecutor {
-
     private static CommandManager instance;
 
     private final Map<String, RegistrableCommand> registeredCommands;

@@ -16,15 +16,15 @@ public class Version implements Comparable<Version> {
     }
 
     public Version(int major, int minor, int patch) {
-        this.numbers = new int[] { major, minor, patch };
+        this.numbers = new int[]{major, minor, patch};
     }
 
     public Version(int major, int minor) {
-        this.numbers = new int[] { major, minor };
+        this.numbers = new int[]{major, minor};
     }
 
     public Version(int major) {
-        this.numbers = new int[] { major };
+        this.numbers = new int[]{major};
     }
 
     public static Version invalid() {

@@ -12,13 +12,13 @@ public class CompatibilityManager {
     private ICompatibilityApi api;
 
     private CompatibilityManager() {
-        this.registeredApis = new ICompatibilityApi[] {
-                new io.github.guillex7.explodeany.compat.v1_16_1.CompatibilityApi(),
-                new io.github.guillex7.explodeany.compat.v1_14.CompatibilityApi(),
-                new io.github.guillex7.explodeany.compat.v1_13.CompatibilityApi(),
-                new io.github.guillex7.explodeany.compat.v1_9.CompatibilityApi(),
-                new io.github.guillex7.explodeany.compat.v1_8_3.CompatibilityApi(),
-                new io.github.guillex7.explodeany.compat.v1_8.CompatibilityApi()
+        this.registeredApis = new ICompatibilityApi[]{
+            new io.github.guillex7.explodeany.compat.v1_16_1.CompatibilityApi(),
+            new io.github.guillex7.explodeany.compat.v1_14.CompatibilityApi(),
+            new io.github.guillex7.explodeany.compat.v1_13.CompatibilityApi(),
+            new io.github.guillex7.explodeany.compat.v1_9.CompatibilityApi(),
+            new io.github.guillex7.explodeany.compat.v1_8_3.CompatibilityApi(),
+            new io.github.guillex7.explodeany.compat.v1_8.CompatibilityApi()
         };
     }
 
