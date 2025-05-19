@@ -67,7 +67,10 @@ public class CommandManager implements TabExecutor {
             return true;
         }
 
-        if (!rootCommand.execute(sender, Arrays.copyOfRange(args, i, args.length))) {
+        final boolean hasCommandExecutedSuccesfully = rootCommand.execute(sender,
+                Arrays.copyOfRange(args, i, args.length));
+
+        if (!hasCommandExecutedSuccesfully) {
             String usageDescription;
             if (!rootCommand.isTerminal()) {
                 final String possibleSubcommands = rootCommand.getSubcommands()
@@ -85,6 +88,7 @@ public class CommandManager implements TabExecutor {
                     ConfigurationManager.getInstance().getLocale(ConfigurationLocale.USAGE)
                             .replace("%DESCRIPTION%", MessageFormatter.colorize(usageDescription)));
         }
+
         return true;
     }
 
