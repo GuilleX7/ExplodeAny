@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -34,6 +35,7 @@ import io.github.guillex7.explodeany.explosion.metadata.ExplosionMetadata;
 
 public class ExplosionManager {
     private static ExplosionManager instance;
+    private static final int CHUNK_RADIUS = 8;
 
     public static final String EXPLOSION_MANAGER_SPAWNED_TAG = "eany-em-spawned";
     public static final String EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG = "eany-em-explosion-metadata";
@@ -132,6 +134,13 @@ public class ExplosionManager {
         final World sourceWorld = sourceLocation.getWorld();
         final String sourceWorldName = sourceWorld.getName();
         final Location sourceBlockLocation = new Location(sourceWorld, cx, cy, cz);
+
+        if (!Bukkit.isOwnedByCurrentRegion(sourceLocation, explosionRadius / CHUNK_RADIUS)) {
+            ExplodeAny.getInstance().getLogger()
+                    .warning("Explosion at " + sourceLocation
+                            + " was not handled to protect thread safety. Please report this to the plugin author if you see this message often.");
+            return false;
+        }
 
         final EntityBehavioralConfiguration entityBehavioralConfiguration = entityConfiguration
                 .getEntityBehavioralConfiguration();

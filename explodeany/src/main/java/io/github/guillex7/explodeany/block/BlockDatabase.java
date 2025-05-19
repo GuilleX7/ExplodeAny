@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.block.Block;
 
@@ -31,7 +32,7 @@ public class BlockDatabase {
     }
 
     private BlockDatabase() {
-        this.database = new HashMap<>();
+        this.database = new ConcurrentHashMap<>();
     }
 
     public static BlockDatabase getInstance() {
@@ -143,11 +144,18 @@ public class BlockDatabase {
 
         blockStatus.sanitize();
 
-        if (checkDeeply) {
-            Block block = entry.getKey().toBlock();
-            return block.isEmpty() || !ConfigurationManager.getInstance().doHandlesBlock(block)
-                    || !blockStatus.isCongruentWith(block);
-        }
+
+        // Deep sanitization happens in the global region thread, so checking
+        // blocks is not allowed unless we moved to the proper region thread, but
+        // there's no guarantee that blocks are close enough to be in the same
+        // region.
+
+        // if (deep) {
+        //     Block block = entry.getKey().toBlock();
+        //     return block.isEmpty() || !ConfigurationManager.getInstance().handlesBlock(block)
+        //             || !blockStatus.isCongruentWith(block);
+        // }
+
         return false;
     }
 }
