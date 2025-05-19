@@ -10,9 +10,9 @@ import org.bukkit.event.HandlerList;
 
 public class EanyBlockExplodeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private Location blockLocation;
-    private String blockMaterial;
-    private List<Block> blockList;
+    private final Location blockLocation;
+    private final String blockMaterial;
+    private final List<Block> blockList;
     private boolean isCancelled = false;
 
     public static HandlerList getHandlerList() {

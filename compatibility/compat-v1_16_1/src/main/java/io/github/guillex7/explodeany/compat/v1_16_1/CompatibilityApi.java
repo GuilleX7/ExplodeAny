@@ -28,6 +28,7 @@ public class CompatibilityApi implements ICompatibilityApi {
     private IBukkitListenerUtils bukkitListenerUtils;
     private IBukkitUtils bukkitUtils;
 
+    @Override
     public void load() {
         this.blockDataUtils = new CBlockDataUtils();
         this.particleUtils = new CParticleUtils();

@@ -35,9 +35,9 @@ public class CompatibilityManager {
     }
 
     private ICompatibilityApi getMaximumApiForEnvironment(Version bukkitVersion) {
-        for (ICompatibilityApi api : this.registeredApis) {
-            if (bukkitVersion.isEqualOrAfter(api.getMinimumSupportedBukkitVersion())) {
-                return api;
+        for (ICompatibilityApi registeredApi : this.registeredApis) {
+            if (bukkitVersion.isEqualOrAfter(registeredApi.getMinimumSupportedBukkitVersion())) {
+                return registeredApi;
             }
         }
 

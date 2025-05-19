@@ -11,14 +11,17 @@ public class CBossBar implements IBossBar {
         /* Not supported */
     }
 
+    @Override
     public void addPlayer(Player player) {
         /* Not supported */
     }
 
+    @Override
     public void removePlayer(Player player) {
         /* Not supported */
     }
 
+    @Override
     public void setProgress(double progress) {
         /* Not supported */
     }

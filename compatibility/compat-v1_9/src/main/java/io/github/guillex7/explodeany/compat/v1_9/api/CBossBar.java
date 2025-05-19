@@ -17,14 +17,17 @@ public class CBossBar implements IBossBar {
         this.bossBar = Bukkit.createBossBar(title, this.getBarColor(color), this.getBarStyle(style));
     }
 
+    @Override
     public void addPlayer(Player player) {
         this.bossBar.addPlayer(player);
     }
 
+    @Override
     public void removePlayer(Player player) {
         this.bossBar.removePlayer(player);
     }
 
+    @Override
     public void setProgress(double progress) {
         this.bossBar.setProgress(progress);
     }

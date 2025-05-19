@@ -16,6 +16,9 @@ public class CParticle implements IParticle {
 
     public CParticle(EanyParticleData particleData) {
         this.particleData = particleData;
+    }
+
+    public void loadInternalParticle() {
         this.particle = this.getParticleFromParticleData(particleData);
         if (this.particle != null) {
             this.extra = this.getExtraFromParticleData(this.particle, particleData);
