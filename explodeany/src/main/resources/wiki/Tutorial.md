@@ -20,7 +20,7 @@ Checktool:
     ShowBossBar: false
     BossBarColor: PURPLE
     BossBarStyle: SOLID
-    BossBarDuration: 30
+    BossBarDuration: 1500ms
 
 Groups: {}
 
@@ -64,17 +64,9 @@ Locale:
 
 LocalePrefix: "[ExplodeAny] "
 
-DisabledWorlds: {}
+DisabledWorlds: []
 
-WorldHoleProtection:
-    # default:
-    #     Heights:
-    #         - -64 # Bedrock layer post-1.18
-    #         - 0 # Bedrock layer pre-1.18
-    # world_nether:
-    #     Heights:
-    #         - 127
-    #         - 0
+WorldHoleProtection: {}
 ```
 
 There are four interesting keys over there, `VanillaEntity`, `CannonProjectile`, `MagicEntity` and `CustomEntity`. All of them work pretty much the same way, but for simplicity, we will focus on `VanillaEntity`, since it refers to entities that exist in the base game. For example, when we talk about entities like TNT, creepers, withers, etc, we refer to `VanillaEntity` entities.

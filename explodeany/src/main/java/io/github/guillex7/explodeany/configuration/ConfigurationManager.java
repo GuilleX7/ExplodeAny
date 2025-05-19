@@ -19,6 +19,7 @@ import io.github.guillex7.explodeany.configuration.section.MaterialConfiguration
 import io.github.guillex7.explodeany.configuration.section.WorldHoleProtection;
 import io.github.guillex7.explodeany.util.MathUtils;
 import io.github.guillex7.explodeany.util.MessageFormatter;
+import io.github.guillex7.explodeany.util.NamePatternUtils;
 
 public final class ConfigurationManager {
     public static final String USE_BLOCK_DATABASE_ITEM = "UseBlockDatabase";
@@ -192,28 +193,65 @@ public final class ConfigurationManager {
     public void loadMaterialConfigurations() {
         this.materialConfigurations.clear();
 
-        ConfigurationSection materialConfigurationsSection = this.getConfigurationFile().getConfig()
+        final ConfigurationSection materialConfigurationsSection = this.getConfigurationFile().getConfig()
                 .getConfigurationSection(ConfigurationManager.MATERIALS_SECTION_ITEM);
-        if (materialConfigurationsSection != null) {
-            for (String materialName : materialConfigurationsSection.getKeys(false)) {
-                Material material = Material.getMaterial(materialName);
-                if (material == null) {
-                    this.getPlugin().getLogger().warning(
-                            String.format("Material %s is not valid and its properties will not be loaded",
-                                    materialName));
-                    continue;
-                }
+        if (materialConfigurationsSection == null) {
+            return;
+        }
 
-                ConfigurationSection materialConfigurationSection = materialConfigurationsSection
-                        .getConfigurationSection(materialName);
-                if (materialConfigurationSection == null) {
-                    this.getPlugin().getLogger().warning(
-                            String.format("The section %s.%s is invalid and will not be loaded",
-                                    ConfigurationManager.MATERIALS_SECTION_ITEM, materialName));
-                }
+        for (String materialName : materialConfigurationsSection.getKeys(false)) {
+            final Set<Material> validMaterials = new HashSet<>();
+            final Set<String> invalidMaterials = new HashSet<>();
+            boolean doDefinitionHavePriority = true;
 
-                this.materialConfigurations.put(material,
-                        MaterialConfiguration.fromConfigurationSection(materialConfigurationSection));
+            final List<Material> materials = NamePatternUtils.getMaterialsFromNameOrPattern(materialName);
+            if (!materials.isEmpty()) {
+                validMaterials.addAll(materials);
+            } else {
+                doDefinitionHavePriority = false;
+                List<String> group = ConfigurationManager.getInstance().getGroups().get(materialName);
+                if (group != null) {
+                    for (String materialNameEntry : group) {
+                        List<Material> materialsForNameEntry = NamePatternUtils.getMaterialsFromNameOrPattern(
+                                materialNameEntry);
+                        if (!materialsForNameEntry.isEmpty()) {
+                            validMaterials.addAll(materialsForNameEntry);
+                        } else {
+                            invalidMaterials.add(materialNameEntry);
+                        }
+                    }
+                }
+            }
+
+            if (validMaterials.isEmpty()) {
+                this.getPlugin().getLogger()
+                        .warning(String.format("%s is an invalid material or material group for %s and won't be loaded",
+                                materialName, materialConfigurationsSection.getName()));
+                continue;
+            } else if (!invalidMaterials.isEmpty()) {
+                this.getPlugin().getLogger()
+                        .warning(String.format(
+                                "%s is a valid material group, but some of its materials are not valid: %s",
+                                materialName, String.join(", ", invalidMaterials)));
+            }
+
+            final ConfigurationSection materialConfigurationSection = materialConfigurationsSection
+                    .getConfigurationSection(materialName);
+            if (materialConfigurationSection == null) {
+                this.getPlugin().getLogger().warning(
+                        String.format("The section %s.%s is invalid and will not be loaded",
+                                ConfigurationManager.MATERIALS_SECTION_ITEM, materialName));
+                continue;
+            }
+
+            final MaterialConfiguration materialConfiguration = MaterialConfiguration
+                    .fromConfigurationSection(materialConfigurationSection);
+            for (Material material : validMaterials) {
+                if (doDefinitionHavePriority) {
+                    materialConfigurations.put(material, materialConfiguration);
+                } else {
+                    materialConfigurations.putIfAbsent(material, materialConfiguration);
+                }
             }
         }
     }
@@ -306,8 +344,6 @@ public final class ConfigurationManager {
     public void loadConfiguration() {
         this.getConfigurationFile().saveDefaultFileIfMissing();
         this.getConfigurationFile().reloadConfig();
-        this.getPlugin().saveResource("exampleConfig.yml", true);
-        this.getPlugin().saveResource("TUTORIAL.md", true);
 
         this.loadDoUseBlockDatabase();
         this.loadDoCheckBlockDatabaseAtStartup();

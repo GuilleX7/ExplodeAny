@@ -17,12 +17,13 @@ import io.github.guillex7.explodeany.configuration.section.MaterialConfiguration
 import io.github.guillex7.explodeany.configuration.section.WorldHoleProtection;
 import io.github.guillex7.explodeany.util.MessageFormatter;
 import io.github.guillex7.explodeany.util.SetUtils;
+import io.github.guillex7.explodeany.util.NamePatternUtils;
 
 public class CommandConfigurationShow extends RegistrableCommand {
     private static final String GLOBAL_SECTION_NAME = "Global";
     private static final String CHECKTOOL_SECTION_NAME = "Checktool";
     private static final String WORLD_HOLE_PROTECTION_SECTION_NAME = "WorldHoleProtection";
-    private static final String MATERIAL_SECTION_NAME = "Material";
+    private static final String MATERIALS_SECTION_NAME = "Materials";
 
     private final List<String> fixedSectionNames;
 
@@ -31,7 +32,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
 
     public CommandConfigurationShow() {
         fixedSectionNames = Arrays.asList(GLOBAL_SECTION_NAME, CHECKTOOL_SECTION_NAME,
-                WORLD_HOLE_PROTECTION_SECTION_NAME, MATERIAL_SECTION_NAME);
+                WORLD_HOLE_PROTECTION_SECTION_NAME, MATERIALS_SECTION_NAME);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
                 return showChecktoolConfiguration(sender, sectionPath, configurationManager);
             case CommandConfigurationShow.WORLD_HOLE_PROTECTION_SECTION_NAME:
                 return showWorldHoleProtectionConfiguration(sender, sectionPath, configurationManager, args);
-            case CommandConfigurationShow.MATERIAL_SECTION_NAME:
+            case CommandConfigurationShow.MATERIALS_SECTION_NAME:
                 return showMaterialConfiguration(sender, sectionPath, configurationManager, args);
             default:
                 return showEntityOrEntityMaterialConfiguration(sender, sectionPath, configurationManager, args);
@@ -175,7 +176,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
         }
 
         final String materialName = args[2];
-        final Material material = loadableConfigurationSection.getMaterialFromName(materialName);
+        final Material material = NamePatternUtils.getMaterialFromName(materialName);
         if (material == null
                 || !loadableConfigurationSection.getEntityMaterialConfigurations().get(entity).containsKey(material)) {
             sender.sendMessage(String.format("Material %s does not exist for entity %s in section %s.", materialName,
@@ -219,7 +220,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
                             .filter(worldName -> worldName.startsWith(args[1])).collect(Collectors.toList()));
                 }
                 return;
-            case CommandConfigurationShow.MATERIAL_SECTION_NAME:
+            case CommandConfigurationShow.MATERIALS_SECTION_NAME:
                 if (args.length == 2) {
                     autocompletion.addAll(configurationManager.getMaterialConfigurationNames().stream()
                             .filter(materialName -> materialName.startsWith(args[1])).collect(Collectors.toList()));

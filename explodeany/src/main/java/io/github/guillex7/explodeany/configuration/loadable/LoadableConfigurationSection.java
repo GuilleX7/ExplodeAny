@@ -19,6 +19,7 @@ import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.util.NamePatternUtils;
 
 public abstract class LoadableConfigurationSection<T extends Object> {
     private static final String MATERIALS_SECTION = "Materials";
@@ -157,7 +158,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
             Set<String> invalidMaterials = new HashSet<>();
             boolean doDefinitionHavePriority = true;
 
-            List<Material> materials = this.getMaterialsFromNameOrPattern(materialName);
+            List<Material> materials = NamePatternUtils.getMaterialsFromNameOrPattern(materialName);
             if (!materials.isEmpty()) {
                 validMaterials.addAll(materials);
             } else {
@@ -165,7 +166,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
                 List<String> group = ConfigurationManager.getInstance().getGroups().get(materialName);
                 if (group != null) {
                     for (String materialNameEntry : group) {
-                        List<Material> materialsForNameEntry = this.getMaterialsFromNameOrPattern(materialNameEntry);
+                        List<Material> materialsForNameEntry = NamePatternUtils.getMaterialsFromNameOrPattern(materialNameEntry);
                         if (!materialsForNameEntry.isEmpty()) {
                             validMaterials.addAll(materialsForNameEntry);
                         } else {
@@ -239,24 +240,10 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         }
     }
 
-    private Pattern getPatternFromNamePattern(String namePattern, boolean isCaseSensitive) {
-        namePattern = namePattern.replace("*", ".*");
-
-        try {
-            return Pattern.compile(namePattern, isCaseSensitive ? 0 : Pattern.CASE_INSENSITIVE);
-        } catch (Exception e) {
-            this.getPlugin().getLogger().warning(String.format("Couldn't parse the name pattern: %s", namePattern));
-            return null;
-        }
-    }
-
-    private boolean isNamePattern(String name) {
-        return name.contains("*");
-    }
-
     private List<T> getEntitiesFromNameOrPattern(String nameOrPattern) {
-        if (this.isNamePattern(nameOrPattern)) {
-            Pattern pattern = this.getPatternFromNamePattern(nameOrPattern, this.isEntityNameCaseSensitive());
+        if (NamePatternUtils.isNamePattern(nameOrPattern)) {
+            Pattern pattern = NamePatternUtils.
+                    getPatternFromNamePattern(nameOrPattern, this.isEntityNameCaseSensitive());
             if (pattern == null) {
                 return new ArrayList<>();
             }
@@ -265,35 +252,6 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         } else {
             T entity = this.getEntityFromName(nameOrPattern);
             return entity != null ? Arrays.asList(entity) : new ArrayList<>();
-        }
-    }
-
-    public final Material getMaterialFromName(String name) {
-        Material material = Material.getMaterial(name.toUpperCase());
-
-        if (Material.WATER.equals(material) || Material.LAVA.equals(material)) {
-            material = null;
-        }
-
-        return material;
-    }
-
-    private List<Material> getMaterialsFromPattern(Pattern pattern) {
-        return Arrays.stream(Material.values()).filter(material -> pattern.matcher(material.name()).matches())
-                .collect(Collectors.toList());
-    }
-
-    private List<Material> getMaterialsFromNameOrPattern(String nameOrPattern) {
-        if (this.isNamePattern(nameOrPattern)) {
-            Pattern pattern = this.getPatternFromNamePattern(nameOrPattern, false);
-            if (pattern == null) {
-                return new ArrayList<>();
-            }
-
-            return this.getMaterialsFromPattern(pattern);
-        } else {
-            Material material = this.getMaterialFromName(nameOrPattern);
-            return material != null ? Arrays.asList(material) : new ArrayList<>();
         }
     }
 
