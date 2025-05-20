@@ -2,7 +2,7 @@
 
 # ExplodeAny
 
-Revamp your Minecraft explosions! Control any blast with ExplodeAny - the ultimate TNT plugin. From TNT breaking obsidian to underwater explosions causing damage. Easily customizable, lightweight, compatible with any Bukkit version better than 1.7+. Get Ready To Explode Like Never Before!™
+Revamp your Minecraft explosions! Control any blast with ExplodeAny - the ultimate TNT plugin. From TNT breaking obsidian to underwater explosions causing damage. Easily customizable, lightweight, compatible with any Bukkit version better than 1.8+. Get Ready To Explode Like Never Before!™
 
 Official pages:
 
