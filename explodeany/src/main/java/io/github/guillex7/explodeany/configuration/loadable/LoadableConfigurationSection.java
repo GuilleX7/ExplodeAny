@@ -166,7 +166,8 @@ public abstract class LoadableConfigurationSection<T extends Object> {
                 List<String> group = ConfigurationManager.getInstance().getGroups().get(materialName);
                 if (group != null) {
                     for (String materialNameEntry : group) {
-                        List<Material> materialsForNameEntry = NamePatternUtils.getMaterialsFromNameOrPattern(materialNameEntry);
+                        List<Material> materialsForNameEntry = NamePatternUtils
+                                .getMaterialsFromNameOrPattern(materialNameEntry);
                         if (!materialsForNameEntry.isEmpty()) {
                             validMaterials.addAll(materialsForNameEntry);
                         } else {
@@ -211,7 +212,8 @@ public abstract class LoadableConfigurationSection<T extends Object> {
     private void putAndMergeEntityMaterialConfigurations(T entity,
             Map<Material, EntityMaterialConfiguration> materialConfigurations, boolean definitionHasPriority) {
         if (!this.getEntityMaterialConfigurations().containsKey(entity)) {
-            this.getEntityMaterialConfigurations().put(entity, materialConfigurations);
+            this.getEntityMaterialConfigurations().put(entity, new HashMap<>());
+            this.getEntityMaterialConfigurations().get(entity).putAll(materialConfigurations);
         } else if (definitionHasPriority) {
             this.getEntityMaterialConfigurations().get(entity).putAll(materialConfigurations);
         } else {
@@ -242,8 +244,8 @@ public abstract class LoadableConfigurationSection<T extends Object> {
 
     private List<T> getEntitiesFromNameOrPattern(String nameOrPattern) {
         if (NamePatternUtils.isNamePattern(nameOrPattern)) {
-            Pattern pattern = NamePatternUtils.
-                    getPatternFromNamePattern(nameOrPattern, this.isEntityNameCaseSensitive());
+            Pattern pattern = NamePatternUtils.getPatternFromNamePattern(nameOrPattern,
+                    this.isEntityNameCaseSensitive());
             if (pattern == null) {
                 return new ArrayList<>();
             }
