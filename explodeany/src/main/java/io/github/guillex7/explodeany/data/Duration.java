@@ -61,6 +61,10 @@ public class Duration {
         return milliseconds;
     }
 
+    public long asTicks() {
+        return milliseconds / MILLISECONDS_IN_TICK;
+    }
+
     public boolean isZero() {
         return milliseconds == 0;
     }

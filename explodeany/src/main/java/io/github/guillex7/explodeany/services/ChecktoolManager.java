@@ -184,6 +184,6 @@ public final class ChecktoolManager {
 
             this.checktoolBossBarByPlayer.remove(player);
             this.checktoolBossBarTaskByPlayer.remove(player);
-        }, bossBarDuration.asMilliseconds()));
+        }, bossBarDuration.asTicks()));
     }
 }
