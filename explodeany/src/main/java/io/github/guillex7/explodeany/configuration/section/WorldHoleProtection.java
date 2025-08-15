@@ -45,10 +45,15 @@ public class WorldHoleProtection {
 
     @Override
     public String toString() {
-        return String.format(
-                "&fHeights: %s\n"
-                + "Protect unhandled blocks: %s",
-                !heights.isEmpty() ? heights.stream().map(x -> x.toString()).collect(Collectors.joining(", ")) : "none",
-                protectUnhandledBlocks);
+        StringBuilder builder = new StringBuilder();
+        builder.append("&fHeights: ");
+        if (!heights.isEmpty()) {
+            builder.append(heights.stream().map(Object::toString).collect(Collectors.joining(", ")));
+        } else {
+            builder.append("none");
+        }
+        builder.append("\n");
+        builder.append("Protect unhandled blocks: ").append(protectUnhandledBlocks);
+        return builder.toString();
     }
 }

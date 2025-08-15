@@ -135,22 +135,22 @@ public class EntityMaterialConfiguration {
 
     @Override
     public String toString() {
-        return String.format(
-                "&7<General>\n"
-                + "&fDamage: %.2f\n"
-                + "&fDrop chance: %.2f%%\n"
-                + "&fDrop material: %s\n"
-                + "&fDistance attenuation factor: x%.2f\n"
-                + "&fUnderwater damage factor: x%.2f\n"
-                + "&fFancy underwater detection: %b\n"
-                + "\n&7<Sound>\n"
-                + "&f%s\n"
-                + "\n&7<Particle>\n"
-                + "&f%s",
-                this.getDamage(), this.getDropChancePercentage(),
-                this.getDropMaterial() == null ? "(not customized)" : this.getDropMaterial().toString(),
-                this.getDistanceAttenuationFactor(),
-                this.getUnderwaterDamageFactor(), this.isFancyUnderwaterDetection(),
-                this.getSoundConfiguration().toString(), this.getParticleConfiguration().toString());
+        StringBuilder builder = new StringBuilder();
+        builder.append("&7<General>\n");
+        builder.append("&fDamage: ").append(String.format("%.2f", this.getDamage())).append("\n");
+        builder.append("&fDrop chance: ").append(String.format("%.2f", this.getDropChancePercentage())).append("%%\n");
+        builder.append("&fDrop material: ")
+                .append(this.getDropMaterial() == null ? "(not customized)" : this.getDropMaterial().toString())
+                .append("\n");
+        builder.append("&fDistance attenuation factor: x")
+                .append(String.format("%.2f", this.getDistanceAttenuationFactor())).append("\n");
+        builder.append("&fUnderwater damage factor: x").append(String.format("%.2f", this.getUnderwaterDamageFactor()))
+                .append("\n");
+        builder.append("&fFancy underwater detection: ").append(this.isFancyUnderwaterDetection()).append("\n");
+        builder.append("\n&7<Sound>\n");
+        builder.append("&f").append(this.getSoundConfiguration().toString()).append("\n");
+        builder.append("\n&7<Particle>\n");
+        builder.append("&f").append(this.getParticleConfiguration().toString());
+        return builder.toString();
     }
 }

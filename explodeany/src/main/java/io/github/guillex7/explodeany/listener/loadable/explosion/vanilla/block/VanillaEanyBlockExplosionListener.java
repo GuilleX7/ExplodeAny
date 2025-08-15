@@ -53,7 +53,7 @@ public class VanillaEanyBlockExplosionListener implements EanyBlockExplosionHand
         }
 
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getBlockLocation(), explosionRadius, false)) {
+                event.getBlockLocation(), explosionRadius)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations,

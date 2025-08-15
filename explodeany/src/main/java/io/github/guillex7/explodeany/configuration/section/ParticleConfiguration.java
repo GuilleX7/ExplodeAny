@@ -117,14 +117,23 @@ public class ParticleConfiguration {
 
     @Override
     public String toString() {
-        return this.isValid() ? String.format(
-                "%s\n"
-                + "dX: %.2f dY: %.2f dZ: %.2f\n"
-                + "Amount: %d\n"
-                + "Speed: %.2f\n"
-                + "Force: %b",
-                this.getParticle().toString(), this.getDeltaX(), this.getDeltaY(), this.getDeltaZ(), this.getAmount(),
-                this.getSpeed(), this.isForce())
-                : "(None)";
+        if (!this.isValid()) {
+            return "(None)";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.getParticle().toString()).append("\n");
+        builder.append("dX: ").append(String.format("%.2f", this.getDeltaX()))
+                .append(" dY: ").append(String.format("%.2f", this.getDeltaY()))
+                .append(" dZ: ").append(String.format("%.2f", this.getDeltaZ())).append("\n");
+        builder.append("Amount: ").append(this.getAmount()).append("\n");
+        builder.append("Speed: ").append(String.format("%.2f", this.getSpeed())).append("\n");
+        builder.append("Force: ").append(this.isForce());
+        return builder.toString();
+    }
+
+    public ParticleConfiguration clone() {
+        return new ParticleConfiguration(this.particle, this.deltaX, this.deltaY, this.deltaZ, this.amount, this.speed,
+                this.force);
     }
 }

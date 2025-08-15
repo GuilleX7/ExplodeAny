@@ -170,30 +170,24 @@ public class ChecktoolConfiguration {
 
     @Override
     public String toString() {
-        return String.format(
-                "Always enabled: %s\n"
-                + "Enabled by default: %s\n"
-                + "Prevent action when checking handled blocks: %s\n"
-                + "Prevent action when checking non handled blocks: %s\n"
-                + "Silent when checking on disabled worlds: %s\n"
-                + "Silent when checking without permissions: %s\n"
-                + "Silent when checking non handled blocks: %s\n"
-                + "Silent when checking handled blocks: %s\n"
-                + "Show boss bar: %s\n"
-                + "Boss bar color: %s\n"
-                + "Boss bar style: %s\n"
-                + "Boss bar duration: %s",
-                alwaysEnabled,
-                enabledByDefault,
-                preventActionWhenCheckingHandledBlocks,
-                preventActionWhenCheckingNonHandledBlocks,
-                silentWhenCheckingOnDisabledWorlds,
-                silentWhenCheckingWithoutPermissions,
-                silentWhenCheckingNonHandledBlocks,
-                silentWhenCheckingHandledBlocks,
-                showBossBar,
-                bossBarColor,
-                bossBarStyle,
-                bossBarDuration);
+        StringBuilder builder = new StringBuilder();
+        builder.append("Always enabled: ").append(alwaysEnabled).append("\n");
+        builder.append("Enabled by default: ").append(enabledByDefault).append("\n");
+        builder.append("Prevent action when checking handled blocks: ").append(preventActionWhenCheckingHandledBlocks)
+                .append("\n");
+        builder.append("Prevent action when checking non handled blocks: ")
+                .append(preventActionWhenCheckingNonHandledBlocks).append("\n");
+        builder.append("Silent when checking on disabled worlds: ").append(silentWhenCheckingOnDisabledWorlds)
+                .append("\n");
+        builder.append("Silent when checking without permissions: ").append(silentWhenCheckingWithoutPermissions)
+                .append("\n");
+        builder.append("Silent when checking non handled blocks: ").append(silentWhenCheckingNonHandledBlocks)
+                .append("\n");
+        builder.append("Silent when checking handled blocks: ").append(silentWhenCheckingHandledBlocks).append("\n");
+        builder.append("Show boss bar: ").append(showBossBar).append("\n");
+        builder.append("Boss bar color: ").append(bossBarColor).append("\n");
+        builder.append("Boss bar style: ").append(bossBarStyle).append("\n");
+        builder.append("Boss bar duration: ").append(bossBarDuration);
+        return builder.toString();
     }
 }

@@ -44,7 +44,7 @@ public final class PlayerInteractListener implements LoadableListener {
         /* Nothing to do */
     }
 
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
