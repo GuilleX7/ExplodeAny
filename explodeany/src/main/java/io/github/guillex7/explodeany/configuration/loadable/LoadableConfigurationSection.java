@@ -139,12 +139,14 @@ public abstract class LoadableConfigurationSection<T extends Object> {
             }
 
             for (T fetchedEntity : validEntities) {
-                EntityConfiguration finalEntityConfiguration = this.fetchSpecificEntityConfiguration(fetchedEntity,
-                        entityConfiguration, propertiesSection);
+                if (propertiesSection != null) {
+                    entityConfiguration = this.fetchSpecificEntityConfiguration(fetchedEntity,
+                            entityConfiguration, propertiesSection);
+                }
 
-                if (this.areEntityAndMaterialConfigurationsValid(fetchedEntity, finalEntityConfiguration,
+                if (this.areEntityAndMaterialConfigurationsValid(fetchedEntity, entityConfiguration,
                         materialConfigurations)) {
-                    this.putAndMergeEntityConfigurations(fetchedEntity, finalEntityConfiguration,
+                    this.putAndMergeEntityConfigurations(fetchedEntity, entityConfiguration,
                             doesDefinitionHavePriority);
                     this.putAndMergeEntityMaterialConfigurations(fetchedEntity, materialConfigurations,
                             doesDefinitionHavePriority);

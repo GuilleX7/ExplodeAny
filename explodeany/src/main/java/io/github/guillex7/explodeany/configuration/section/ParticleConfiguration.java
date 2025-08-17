@@ -11,7 +11,6 @@ import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.util.MathUtils;
 
 public class ParticleConfiguration {
-    public static final String ROOT_PATH = "Particles";
     private static final String NAME_PATH = "Name";
     private static final String DELTA_X_PATH = "DeltaX";
     private static final String DELTA_Y_PATH = "DeltaY";

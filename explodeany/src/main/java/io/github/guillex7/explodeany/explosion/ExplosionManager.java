@@ -199,8 +199,8 @@ public class ExplosionManager {
             }
         }
 
-        entityConfiguration.getSoundConfiguration().playAt(sourceLocation);
-        entityConfiguration.getParticleConfiguration().spawnAt(sourceLocation);
+        entityConfiguration.getOnExplodeSoundConfiguration().playAt(sourceLocation);
+        entityConfiguration.getOnExplodeParticleConfiguration().spawnAt(sourceLocation);
 
         if (entityConfiguration.doesExplosionDamageBlocksUnderwater() && isSourceLocationUnderwater) {
             if (!flags.contains(ExplosionFlag.FORCE_DISABLE_VANILLA_UNDERWATER_DAMAGE)) {
@@ -257,8 +257,8 @@ public class ExplosionManager {
         affectedBlockStatus.damage(effectiveDamage, currentTime);
 
         if (affectedBlockStatus.shouldBreak()) {
-            materialConfiguration.getSoundConfiguration().playAt(targetBlockLocation);
-            materialConfiguration.getParticleConfiguration().spawnAt(targetBlockLocation);
+            materialConfiguration.getOnBreakSoundConfiguration().playAt(targetBlockLocation);
+            materialConfiguration.getOnBreakParticleConfiguration().spawnAt(targetBlockLocation);
 
             final Material targetBlockMaterial = targetBlock.getType();
             targetBlock.setType(Material.AIR);
@@ -267,6 +267,9 @@ public class ExplosionManager {
                 dropCollector.collect(materialConfiguration.getDropMaterial() == null ? targetBlockMaterial
                         : materialConfiguration.getDropMaterial(), targetBlockLocation);
             }
+        } else {
+            materialConfiguration.getOnHitSoundConfiguration().playAt(targetBlockLocation);
+            materialConfiguration.getOnHitParticleConfiguration().spawnAt(targetBlockLocation);
         }
     }
 

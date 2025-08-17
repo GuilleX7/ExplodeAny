@@ -8,7 +8,6 @@ import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.util.MathUtils;
 
 public class SoundConfiguration {
-    public static final String ROOT_PATH = "Sound";
     private static final String NAME_PATH = "Name";
     private static final String VOLUME_PATH = "Volume";
     private static final String PITCH_PATH = "Pitch";
