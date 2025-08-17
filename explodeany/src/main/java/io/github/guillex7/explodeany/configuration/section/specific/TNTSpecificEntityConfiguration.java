@@ -10,7 +10,7 @@ public class TNTSpecificEntityConfiguration implements SpecificEntityConfigurati
     private final boolean doSnapToBlockGridOnPriming;
     private final boolean doDisableExplosionChaining;
 
-    public static final String minimumDistanceToDamageBlocksUnderwaterPath = "MinimumDistanceTravelledToDamageBlocksUnderwater";
+    public static final String minimumDistanceToDamageBlocksUnderwaterPath = "MinimumTravelDistanceToDamageBlocksUnderwater";
     public static final String doSnapToBlockGridOnPrimingPath = "SnapToBlockGridOnPriming";
     public static final String doDisableExplosionChainingPath = "DisableExplosionChaining";
 
