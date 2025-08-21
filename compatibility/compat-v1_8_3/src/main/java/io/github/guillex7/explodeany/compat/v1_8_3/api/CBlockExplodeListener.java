@@ -34,18 +34,20 @@ public class CBlockExplodeListener implements LoadableListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
     public void onBlockExplode(BlockExplodeEvent event) {
         Location blockLocation = event.getBlock().getLocation();
+        EanyBlockExplodeEvent eanyEvent;
 
         if (identifiedExplosiveBlocks.containsKey(blockLocation)) {
             String explodingVanillaMaterial = identifiedExplosiveBlocks.get(blockLocation);
             identifiedExplosiveBlocks.remove(blockLocation);
 
-            Bukkit.getPluginManager()
-                    .callEvent(new EanyBlockExplodeEvent(blockLocation, explodingVanillaMaterial, event.blockList()));
+            eanyEvent = new EanyBlockExplodeEvent(blockLocation, explodingVanillaMaterial, event.blockList());
         } else {
-            Bukkit.getPluginManager()
-                    .callEvent(new EanyBlockExplodeEvent(blockLocation, null,
-                            event.blockList()));
+            eanyEvent = new EanyBlockExplodeEvent(blockLocation, null, event.blockList());
         }
+
+        Bukkit.getPluginManager().callEvent(eanyEvent);
+
+        event.setCancelled(eanyEvent.isCancelled());
     }
 
     @Override

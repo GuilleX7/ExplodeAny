@@ -7,7 +7,7 @@
 
     <groupId>io.github.guillex7</groupId>
     <artifactId>explodeany-parent</artifactId>
-    <version>1.12.1</version>
+    <version>1.13.0-dev.2</version>
     <name>ExplodeAny parent project</name>
 
     <packaging>pom</packaging>
@@ -30,12 +30,17 @@
         <module>compatibility/compat-v1_8_3</module>
         <module>compatibility/compat-v1_9</module>
         <module>compatibility/compat-v1_13</module>
+        <module>compatibility/compat-v1_13_paper</module>
         <module>compatibility/compat-v1_14</module>
+        <module>compatibility/compat-v1_14_paper</module>
         <module>compatibility/compat-v1_16_1</module>
+        <module>compatibility/compat-v1_16_1_paper</module>
+        <module>compatibility/compat-v1_19_4_paper</module>
+        <module>compatibility/compat-v1_20</module>
     </modules>
 
     <properties>
-        <explodeany.version>1.12.1</explodeany.version>
+        <explodeany.version>1.13.0-dev.2</explodeany.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

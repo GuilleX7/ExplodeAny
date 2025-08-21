@@ -1,6 +1,6 @@
 package io.github.guillex7.explodeany.compat.v1_8_3;
 
-import io.github.guillex7.explodeany.compat.common.ICompatibilityApi;
+import io.github.guillex7.explodeany.compat.common.ACompatibilityApi;
 import io.github.guillex7.explodeany.compat.common.Version;
 import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
 import io.github.guillex7.explodeany.compat.common.api.IBukkitListenerUtils;
@@ -17,7 +17,7 @@ import io.github.guillex7.explodeany.compat.v1_8.api.CPlayerInteractionEventUtil
 import io.github.guillex7.explodeany.compat.v1_8.api.CPlayerInventoryUtils;
 import io.github.guillex7.explodeany.compat.v1_8_3.api.CBukkitListenerUtils;
 
-public class CompatibilityApi implements ICompatibilityApi {
+public class CompatibilityApi extends ACompatibilityApi {
     private final Version minimumSupportedBukkitVersion = new Version(1, 8, 3);
 
     private IBlockDataUtils blockDataUtils;

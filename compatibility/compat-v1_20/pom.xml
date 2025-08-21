@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.guillex7</groupId>
+        <artifactId>explodeany-parent</artifactId>
+        <version>1.13.0-dev.2</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <groupId>io.github.guillex7.explodeany</groupId>
+    <artifactId>compat-v1_20</artifactId>
+    <name>Compatibility for Bukkit v1.20+</name>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-common</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_16_1</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.20-R0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

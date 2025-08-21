@@ -19,6 +19,7 @@ import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.Regul
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.TCEVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.listener.ListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.BlockBreakListener;
+import io.github.guillex7.explodeany.listener.loadable.EanyTNTPrimeListener;
 import io.github.guillex7.explodeany.listener.loadable.PlayerInteractListener;
 import io.github.guillex7.explodeany.listener.loadable.EntitySpawnListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.EanyTaggedExplosionListener;
@@ -78,8 +79,8 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void announceCompatibility() {
-        this.getLogger().info(String.format("Compatibility layer for Bukkit v%s+ (detected Bukkit version: v%s)",
-                this.compatibilityManager.getApi().getMinimumSupportedBukkitVersion(),
+        this.getLogger().info(String.format("Compatibility layer for %s (detected Bukkit version: v%s)",
+                this.compatibilityManager.getApi().getFullName(),
                 this.compatibilityManager.getBukkitVersion()));
     }
 
@@ -105,11 +106,14 @@ public class ExplodeAny extends JavaPlugin {
         this.listenerManager.registerListener(new BlockBreakListener());
         this.listenerManager.registerListener(new PlayerInteractListener());
         this.listenerManager.registerListener(new EntitySpawnListener());
+        this.listenerManager.registerListener(new EanyTNTPrimeListener());
         /* Explosion Manager */
         this.listenerManager.registerListener(new EanyTaggedExplosionListener());
         /* Compatibility */
         this.listenerManager.registerListener(
                 this.compatibilityManager.getApi().getBukkitListenerUtils().createBlockExplodeListener());
+        this.listenerManager.registerListener(this.compatibilityManager.getApi()
+                .getBukkitListenerUtils().createTNTPrimeEventListener());
         /* Vanilla explosions */
         this.listenerManager.registerListener(new VanillaEntityExplosionListener());
         this.listenerManager.registerListener(new EanyBlockExplosionListener());

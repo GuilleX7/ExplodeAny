@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.guillex7</groupId>
+        <artifactId>explodeany-parent</artifactId>
+        <version>1.13.0-dev.2</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <groupId>io.github.guillex7.explodeany</groupId>
+    <artifactId>compat-v1_14_paper</artifactId>
+    <name>Compatibility for Paper v1.14+</name>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-common</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_14</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_13_paper</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.destroystokyo.paper</groupId>
+                    <artifactId>paper-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.14-R0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

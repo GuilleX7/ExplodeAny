@@ -8,4 +8,9 @@ public class CBukkitListenerUtils implements IBukkitListenerUtils {
     public LoadableListener createBlockExplodeListener() {
         return new CBlockExplodeListener();
     }
+
+    @Override
+    public LoadableListener createTNTPrimeEventListener() {
+        return new CTNTPrimeListener();
+    }
 }

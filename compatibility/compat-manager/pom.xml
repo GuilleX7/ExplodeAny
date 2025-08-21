@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.github.guillex7</groupId>
         <artifactId>explodeany-parent</artifactId>
-        <version>1.12.1</version>
+        <version>1.13.0-dev.2</version>
         <relativePath>../..</relativePath>
     </parent>
 
@@ -70,6 +70,17 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_13_paper</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.destroystokyo.paper</groupId>
+                    <artifactId>paper-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
             <artifactId>compat-v1_14</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
@@ -81,7 +92,51 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_14_paper</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.destroystokyo.paper</groupId>
+                    <artifactId>paper-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
             <artifactId>compat-v1_16_1</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_16_1_paper</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.destroystokyo.paper</groupId>
+                    <artifactId>paper-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_19_4_paper</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.papermc.paper</groupId>
+                    <artifactId>paper-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_20</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
