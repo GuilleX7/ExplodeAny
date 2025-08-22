@@ -116,6 +116,14 @@ public class EntityBehavioralConfiguration {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
+        builder.append(String.format("Remove nearby waterlogged blocks: %s",
+                explosionRemoveNearbyWaterloggedBlocks ? "\n" : "false\n"));
+        if (explosionRemoveNearbyWaterloggedBlocks) {
+            builder.append(String.format(" - On surface: %s\n - Underwater: %s\n",
+                    explosionRemoveNearbyWaterloggedBlocksSurface,
+                    explosionRemoveNearbyWaterloggedBlocksUnderwater));
+        }
+
         builder.append(String.format("Remove nearby waterlogged state: %s",
                 explosionRemoveWaterloggedStateFromNearbyBlocks ? "\n" : "false\n"));
         if (explosionRemoveWaterloggedStateFromNearbyBlocks) {
@@ -130,14 +138,6 @@ public class EntityBehavioralConfiguration {
             builder.append(String.format(" - On surface: %s\n - Underwater: %s\n",
                     explosionRemoveNearbyLiquidsSurface,
                     explosionRemoveNearbyLiquidsUnderwater));
-        }
-
-        builder.append(String.format("Remove nearby waterlogged blocks: %s",
-                explosionRemoveNearbyWaterloggedBlocks ? "\n" : "false\n"));
-        if (explosionRemoveNearbyWaterloggedBlocks) {
-            builder.append(String.format(" - On surface: %s\n - Underwater: %s\n",
-                    explosionRemoveNearbyWaterloggedBlocksSurface,
-                    explosionRemoveNearbyWaterloggedBlocksUnderwater));
         }
 
         return builder.toString();
