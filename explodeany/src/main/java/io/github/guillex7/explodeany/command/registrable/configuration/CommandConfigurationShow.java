@@ -74,20 +74,20 @@ public class CommandConfigurationShow extends RegistrableCommand {
 
     private boolean showGlobalConfiguration(CommandSender sender,
             ConfigurationManager configurationManager) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(MessageFormatter.colorize(String.format("&8= %s\n", "Global properties")));
-        stringBuilder.append(String.format("&fUse block database: %s\n",
+        StringBuilder builder = new StringBuilder();
+        builder.append(MessageFormatter.colorize(String.format("&8= %s\n", "Global properties")));
+        builder.append(String.format("&fUse block database: %s\n",
                 configurationManager.doUseBlockDatabase()));
-        stringBuilder.append(String.format("&fSanitize block database at startup: %s\n",
+        builder.append(String.format("&fSanitize block database at startup: %s\n",
                 configurationManager.doCheckBlockDatabaseAtStartup()));
-        stringBuilder.append(String.format("&fDefault block durability: %.2f\n",
+        builder.append(String.format("&fDefault block durability: %.2f\n",
                 configurationManager.getGlobalBlockDurability()));
-        stringBuilder.append(String.format("&fEnable metrics: %s\n",
+        builder.append(String.format("&fEnable metrics: %s\n",
                 configurationManager.doEnableMetrics()));
-        stringBuilder.append(String.format("&fDisabled worlds: %s\n",
+        builder.append(String.format("&fDisabled worlds: %s\n",
                 configurationManager.getDisabledWorlds().isEmpty() ? "none"
-                : configurationManager.getDisabledWorlds().stream().collect(Collectors.joining(", "))));
-        sender.sendMessage(MessageFormatter.colorize(stringBuilder.toString()));
+                        : configurationManager.getDisabledWorlds().stream().collect(Collectors.joining(", "))));
+        sender.sendMessage(MessageFormatter.colorize(builder.toString()));
         return true;
     }
 
@@ -167,10 +167,11 @@ public class CommandConfigurationShow extends RegistrableCommand {
             return true;
         }
 
+        final String reifiedEntityName = loadableConfigurationSection.reifyEntityName(entityName);
         if (args.length == 2) {
             sender.sendMessage(MessageFormatter
                     .colorize(String.format("&8= %s > %s\n%s", sectionPath,
-                            loadableConfigurationSection.reifyEntityName(entityName),
+                            reifiedEntityName,
                             loadableConfigurationSection.getEntityConfigurations().get(entity).toString())));
             return true;
         }
@@ -186,7 +187,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
 
         sender.sendMessage(MessageFormatter
                 .colorize(String.format("&8= %s > %s > %s\n%s", sectionPath,
-                        loadableConfigurationSection.reifyEntityName(entityName), material.name(),
+                        reifiedEntityName, material.name(),
                         loadableConfigurationSection.getEntityMaterialConfigurations().get(entity).get(material)
                                 .toString())));
         return true;

@@ -60,7 +60,7 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
         }
 
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getBlockLocation(), explosionRadius, false)) {
+                event.getBlockLocation(), explosionRadius)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.getBlockList(),

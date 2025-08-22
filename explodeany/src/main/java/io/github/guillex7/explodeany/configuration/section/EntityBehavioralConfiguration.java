@@ -142,4 +142,17 @@ public class EntityBehavioralConfiguration {
 
         return builder.toString();
     }
+
+    public EntityBehavioralConfiguration clone() {
+        return new EntityBehavioralConfiguration(
+                this.explosionRemoveWaterloggedStateFromNearbyBlocks,
+                this.explosionRemoveWaterloggedStateFromNearbyBlocksSurface,
+                this.explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater,
+                this.explosionRemoveNearbyLiquids,
+                this.explosionRemoveNearbyLiquidsSurface,
+                this.explosionRemoveNearbyLiquidsUnderwater,
+                this.explosionRemoveNearbyWaterloggedBlocks,
+                this.explosionRemoveNearbyWaterloggedBlocksSurface,
+                this.explosionRemoveNearbyWaterloggedBlocksUnderwater);
+    }
 }

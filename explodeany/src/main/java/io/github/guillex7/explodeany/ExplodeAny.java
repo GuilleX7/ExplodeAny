@@ -20,6 +20,7 @@ import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.TCEVa
 import io.github.guillex7.explodeany.listener.ListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.BlockBreakListener;
 import io.github.guillex7.explodeany.listener.loadable.PlayerInteractListener;
+import io.github.guillex7.explodeany.listener.loadable.EntitySpawnListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.EanyTaggedExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.cannon.CannonProjectileExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.qualityarmory.QualityArmoryExplosionListener;
@@ -103,6 +104,7 @@ public class ExplodeAny extends JavaPlugin {
         /* Miscellaneous */
         this.listenerManager.registerListener(new BlockBreakListener());
         this.listenerManager.registerListener(new PlayerInteractListener());
+        this.listenerManager.registerListener(new EntitySpawnListener());
         /* Explosion Manager */
         this.listenerManager.registerListener(new EanyTaggedExplosionListener());
         /* Compatibility */

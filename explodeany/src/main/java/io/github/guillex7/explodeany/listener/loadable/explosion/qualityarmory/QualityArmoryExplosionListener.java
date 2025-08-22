@@ -1,5 +1,6 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion.qualityarmory;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -16,6 +17,7 @@ import io.github.guillex7.explodeany.configuration.loadable.qualityarmor.Quality
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.QualityArmoryExplosive;
+import io.github.guillex7.explodeany.explosion.ExplosionFlag;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
 import io.github.guillex7.explodeany.services.DebugManager;
@@ -97,9 +99,13 @@ public class QualityArmoryExplosionListener implements LoadableListener {
             return;
         }
 
+        EnumSet<ExplosionFlag> flags = EnumSet.noneOf(ExplosionFlag.class);
+        if (BlockLiquidDetector.isLocationSurroundedByLiquid(location)) {
+            flags.add(ExplosionFlag.FORCE_IS_SOURCE_LOCATION_UNDERWATER);
+        }
+
         if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                location, explosive.getExplosionRadius(),
-                BlockLiquidDetector.isLocationSurroundedByLiquid(location))) {
+                location, explosive.getExplosionRadius(), flags)) {
             event.setCancelled(true);
         }
     }

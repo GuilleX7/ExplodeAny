@@ -1,5 +1,6 @@
 package io.github.guillex7.explodeany.explosion;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -106,14 +107,21 @@ public class ExplosionManager {
 
     public final boolean manageExplosion(final Map<Material, EntityMaterialConfiguration> materialConfigurations,
             final EntityConfiguration entityConfiguration, final Location sourceLocation,
+            final double originalRawExplosionRadius) {
+        return this.manageExplosion(materialConfigurations, entityConfiguration, sourceLocation,
+                originalRawExplosionRadius, EnumSet.noneOf(ExplosionFlag.class));
+    }
+
+    public final boolean manageExplosion(final Map<Material, EntityMaterialConfiguration> materialConfigurations,
+            final EntityConfiguration entityConfiguration, final Location sourceLocation,
             final double originalRawExplosionRadius,
-            final boolean forceApplyingUnderwaterRules) {
+            final EnumSet<ExplosionFlag> flags) {
         double rawExplosionRadius = entityConfiguration.getExplosionRadius() != 0d
                 ? entityConfiguration.getExplosionRadius()
                 : originalRawExplosionRadius;
 
-        final boolean isSourceLocationLiquidlike = BlockLiquidDetector.isLocationLiquidlike(sourceLocation);
-        final boolean isSourceLocationUnderwater = isSourceLocationLiquidlike || forceApplyingUnderwaterRules;
+        final boolean isSourceLocationUnderwater = BlockLiquidDetector.isLocationLiquidlike(sourceLocation)
+                || flags.contains(ExplosionFlag.FORCE_IS_SOURCE_LOCATION_UNDERWATER);
 
         if (isSourceLocationUnderwater) {
             rawExplosionRadius *= entityConfiguration.getUnderwaterExplosionFactor();
@@ -194,11 +202,13 @@ public class ExplosionManager {
         entityConfiguration.getSoundConfiguration().playAt(sourceLocation);
         entityConfiguration.getParticleConfiguration().spawnAt(sourceLocation);
 
-        if (entityConfiguration.doesExplosionDamageBlocksUnderwater() && isSourceLocationLiquidlike) {
-            if (sourceLocation.getBlock().isLiquid()) {
-                sourceLocation.getBlock().setType(Material.AIR);
-            } else {
-                this.blockDataUtils.setIsBlockWaterlogged(sourceLocation.getBlock(), false);
+        if (entityConfiguration.doesExplosionDamageBlocksUnderwater() && isSourceLocationUnderwater) {
+            if (!flags.contains(ExplosionFlag.FORCE_DISABLE_VANILLA_UNDERWATER_DAMAGE)) {
+                if (sourceLocation.getBlock().isLiquid()) {
+                    sourceLocation.getBlock().setType(Material.AIR);
+                } else {
+                    this.blockDataUtils.setIsBlockWaterlogged(sourceLocation.getBlock(), false);
+                }
             }
 
             this.spawnManagedExplosion(sourceLocation, materialConfigurations, rawExplosionRadius,
@@ -279,7 +289,7 @@ public class ExplosionManager {
         final boolean doesExplosionRemoveNearbyWaterloggedBlocks = entityBehavioralConfiguration
                 .doesExplosionRemoveNearbyWaterloggedBlocks()
                 && (doesExplosionRemoveNearbyWaterloggedBlocksSurface
-                || doesExplosionRemoveNearbyWaterloggedBlocksUnderwater);
+                        || doesExplosionRemoveNearbyWaterloggedBlocksUnderwater);
 
         final boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface = entityBehavioralConfiguration
                 .doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface() && !isSourceLocationUnderwater;
@@ -288,7 +298,7 @@ public class ExplosionManager {
         final boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocks = entityBehavioralConfiguration
                 .doesExplosionRemoveWaterloggedStateFromNearbyBlocks()
                 && (doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface
-                || doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater);
+                        || doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater);
 
         final Consumer<Block> waterloggedBlockConsumer;
 

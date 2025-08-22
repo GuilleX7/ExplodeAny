@@ -72,11 +72,18 @@ public class SoundConfiguration {
 
     @Override
     public String toString() {
-        return this.isValid() ? String.format(
-                "Sound name: %s\n"
-                + "Volume: %.2f\n"
-                + "Pitch: %.2f",
-                this.getSound().name(), this.getVolume(), this.getPitch())
-                : "(None)";
+        if (!this.isValid()) {
+            return "(None)";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("Sound name: ").append(this.getSound().name()).append("\n");
+        builder.append("Volume: ").append(String.format("%.2f", this.getVolume())).append("\n");
+        builder.append("Pitch: ").append(String.format("%.2f", this.getPitch()));
+        return builder.toString();
+    }
+
+    public SoundConfiguration clone() {
+        return new SoundConfiguration(this.sound, this.volume, this.pitch);
     }
 }

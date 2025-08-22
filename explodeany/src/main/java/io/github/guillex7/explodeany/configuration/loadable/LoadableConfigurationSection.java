@@ -139,9 +139,12 @@ public abstract class LoadableConfigurationSection<T extends Object> {
             }
 
             for (T fetchedEntity : validEntities) {
-                if (this.areEntityAndMaterialConfigurationsValid(fetchedEntity, entityConfiguration,
+                EntityConfiguration finalEntityConfiguration = this.fetchSpecificEntityConfiguration(fetchedEntity,
+                        entityConfiguration, propertiesSection);
+
+                if (this.areEntityAndMaterialConfigurationsValid(fetchedEntity, finalEntityConfiguration,
                         materialConfigurations)) {
-                    this.putAndMergeEntityConfigurations(fetchedEntity, entityConfiguration,
+                    this.putAndMergeEntityConfigurations(fetchedEntity, finalEntityConfiguration,
                             doesDefinitionHavePriority);
                     this.putAndMergeEntityMaterialConfigurations(fetchedEntity, materialConfigurations,
                             doesDefinitionHavePriority);
@@ -264,6 +267,11 @@ public abstract class LoadableConfigurationSection<T extends Object> {
 
     protected boolean isEntityNameCaseSensitive() {
         return false;
+    }
+
+    protected EntityConfiguration fetchSpecificEntityConfiguration(T entity, EntityConfiguration entityConfiguration,
+            ConfigurationSection propertiesSection) {
+        return entityConfiguration;
     }
 
     public abstract boolean shouldBeLoaded();
