@@ -37,7 +37,7 @@ public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSe
             return false;
         }
 
-        final Version qualityArmoryVersion = Version.fromString(qualityArmoryPlugin.getDescription().getVersion());
+        final Version qualityArmoryVersion = Version.fromString(qualityArmoryPlugin.getPluginMeta().getVersion());
         final Version minimumSupportedQualityArmoryVersion = new Version(2, 0, 10);
 
         if (qualityArmoryVersion.isBefore(minimumSupportedQualityArmoryVersion)) {
