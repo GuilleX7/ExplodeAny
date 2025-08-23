@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.github.guillex7</groupId>
         <artifactId>explodeany-parent</artifactId>
-        <version>1.13.0</version>
+        <version>1.13.0-folia.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
