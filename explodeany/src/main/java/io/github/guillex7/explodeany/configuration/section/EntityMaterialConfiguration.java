@@ -207,7 +207,7 @@ public class EntityMaterialConfiguration {
         final StringBuilder builder = new StringBuilder();
         builder.append("&7<General>\n");
         builder.append("&fDamage: ").append(String.format("%.2f", this.getDamage())).append("\n");
-        builder.append("&fDrop chance: ").append(String.format("%.2f", this.getDropChancePercentage())).append("%%\n");
+        builder.append("&fDrop chance: ").append(String.format("%.2f", this.getDropChancePercentage())).append("%\n");
         builder.append("&fDrop material: ")
                 .append(this.getDropMaterial() == null ? "(not customized)" : this.getDropMaterial().toString())
                 .append("\n");
