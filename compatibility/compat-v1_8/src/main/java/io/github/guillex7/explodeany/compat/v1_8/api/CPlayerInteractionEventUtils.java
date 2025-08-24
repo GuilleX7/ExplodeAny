@@ -6,7 +6,7 @@ import io.github.guillex7.explodeany.compat.common.api.IPlayerInteractionEventUt
 
 public class CPlayerInteractionEventUtils implements IPlayerInteractionEventUtils {
     @Override
-    public boolean doesInteractionUseMainHand(PlayerInteractEvent event) {
+    public boolean doesInteractionUseMainHand(final PlayerInteractEvent event) {
         return true;
     }
 }

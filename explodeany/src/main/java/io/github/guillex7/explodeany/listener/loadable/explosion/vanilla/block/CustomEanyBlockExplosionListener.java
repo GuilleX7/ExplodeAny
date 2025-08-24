@@ -31,12 +31,13 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
     }
 
     @Override
-    public void onBlockExplode(EanyBlockExplodeEvent event) {
+    public void onBlockExplode(final EanyBlockExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
 
-        String entityBlockName = event.getBlockMaterial() == null ? CustomEanyBlockExplosionListener.UNKNOWN_BLOCK_NAME
+        final String entityBlockName = event.getBlockMaterial() == null
+                ? CustomEanyBlockExplosionListener.UNKNOWN_BLOCK_NAME
                 : event.getBlockMaterial();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
@@ -44,16 +45,16 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
                     entityBlockName);
         }
 
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(entityBlockName);
-        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
+        final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(entityBlockName);
 
         if (materialConfigurations == null || entityConfiguration == null) {
             return;
         }
 
-        double explosionRadius = entityConfiguration.getExplosionRadius();
+        final double explosionRadius = entityConfiguration.getExplosionRadius();
 
         if (explosionRadius == 0d) {
             return;
@@ -69,7 +70,7 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
     }
 
     @Override
-    public boolean isEventHandled(EanyBlockExplodeEvent event) {
+    public boolean isEventHandled(final EanyBlockExplodeEvent event) {
         return true;
     }
 

@@ -20,8 +20,8 @@ import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.TCEVa
 import io.github.guillex7.explodeany.listener.ListenerManager;
 import io.github.guillex7.explodeany.listener.loadable.BlockBreakListener;
 import io.github.guillex7.explodeany.listener.loadable.EanyTNTPrimeListener;
-import io.github.guillex7.explodeany.listener.loadable.PlayerInteractListener;
 import io.github.guillex7.explodeany.listener.loadable.EntitySpawnListener;
+import io.github.guillex7.explodeany.listener.loadable.PlayerInteractListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.EanyTaggedExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.cannon.CannonProjectileExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.qualityarmory.QualityArmoryExplosionListener;
@@ -126,7 +126,7 @@ public class ExplodeAny extends JavaPlugin {
     public void registerCommands() {
         this.commandManager.registerCommand(new CommandEany());
 
-        for (RegistrableCommand command : this.commandManager.getRegisteredCommands().values()) {
+        for (final RegistrableCommand command : this.commandManager.getRegisteredCommands().values()) {
             this.getCommand(command.getName()).setExecutor(this.commandManager);
         }
     }
@@ -167,11 +167,11 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public String getDatabaseFilename() {
-        return DATABASE_FILENAME;
+        return ExplodeAny.DATABASE_FILENAME;
     }
 
     public int getMetricsPluginId() {
-        return METRICS_PLUGIN_ID;
+        return ExplodeAny.METRICS_PLUGIN_ID;
     }
 
     public static ExplodeAny getInstance() {

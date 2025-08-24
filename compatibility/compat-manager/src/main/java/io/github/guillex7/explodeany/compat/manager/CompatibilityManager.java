@@ -13,6 +13,7 @@ public class CompatibilityManager {
 
     private CompatibilityManager() {
         this.registeredApis = new ACompatibilityApi[] {
+                new io.github.guillex7.explodeany.compat.v1_21_paper.CompatibilityApi(),
                 new io.github.guillex7.explodeany.compat.v1_20.CompatibilityApi(),
                 new io.github.guillex7.explodeany.compat.v1_19_4_paper.CompatibilityApi(),
                 new io.github.guillex7.explodeany.compat.v1_16_1_paper.CompatibilityApi(),
@@ -28,10 +29,10 @@ public class CompatibilityManager {
     }
 
     public static CompatibilityManager getInstance() {
-        if (instance == null) {
-            instance = new CompatibilityManager();
+        if (CompatibilityManager.instance == null) {
+            CompatibilityManager.instance = new CompatibilityManager();
         }
-        return instance;
+        return CompatibilityManager.instance;
     }
 
     public void loadMaximumApiForEnvironment() {
@@ -39,8 +40,8 @@ public class CompatibilityManager {
         this.api.load();
     }
 
-    private ACompatibilityApi getMaximumApiForEnvironment(Version bukkitVersion) {
-        for (ACompatibilityApi registeredApi : this.registeredApis) {
+    private ACompatibilityApi getMaximumApiForEnvironment(final Version bukkitVersion) {
+        for (final ACompatibilityApi registeredApi : this.registeredApis) {
             if (bukkitVersion.isEqualOrAfter(registeredApi.getMinimumSupportedBukkitVersion())
                     && registeredApi.isEnvironmentSuitable()) {
                 return registeredApi;
@@ -55,6 +56,6 @@ public class CompatibilityManager {
     }
 
     public ACompatibilityApi getApi() {
-        return api;
+        return this.api;
     }
 }

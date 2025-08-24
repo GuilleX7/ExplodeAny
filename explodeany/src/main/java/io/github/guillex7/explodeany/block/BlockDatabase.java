@@ -27,7 +27,7 @@ public class BlockDatabase {
     private Map<BlockLocation, BlockStatus> database;
 
     private static TypeToken<Map<BlockLocation, BlockStatus>> getDatabaseTypeToken() {
-        return DATABASE_TYPE_TOKEN;
+        return BlockDatabase.DATABASE_TYPE_TOKEN;
     }
 
     private BlockDatabase() {
@@ -35,18 +35,18 @@ public class BlockDatabase {
     }
 
     public static BlockDatabase getInstance() {
-        if (instance == null) {
-            instance = new BlockDatabase();
+        if (BlockDatabase.instance == null) {
+            BlockDatabase.instance = new BlockDatabase();
         }
-        return instance;
+        return BlockDatabase.instance;
     }
 
     private ExplodeAny getPlugin() {
         return ExplodeAny.getInstance();
     }
 
-    public BlockStatus getOrCreateBlockStatus(Block block) {
-        BlockLocation blockLocation = BlockLocation.fromBlock(block);
+    public BlockStatus getOrCreateBlockStatus(final Block block) {
+        final BlockLocation blockLocation = BlockLocation.fromBlock(block);
         BlockStatus blockStatus = this.database.get(blockLocation);
 
         if (blockStatus == null || !blockStatus.isCongruentWith(block)) {
@@ -57,7 +57,7 @@ public class BlockDatabase {
         return blockStatus;
     }
 
-    public void removeBlockStatus(Block block) {
+    public void removeBlockStatus(final Block block) {
         this.database.remove(BlockLocation.fromBlock(block));
     }
 
@@ -65,7 +65,7 @@ public class BlockDatabase {
         this.database.clear();
     }
 
-    public void loadFromFile(File databaseFile) {
+    public void loadFromFile(final File databaseFile) {
         if (!databaseFile.exists() || !databaseFile.canRead()) {
             this.getPlugin().getLogger().info("Database doesn't exist yet, will create a new database");
             return;
@@ -74,23 +74,23 @@ public class BlockDatabase {
         this.database = this.deserializeDatabaseFile(databaseFile);
     }
 
-    private Map<BlockLocation, BlockStatus> deserializeDatabaseFile(File databaseFile) {
+    private Map<BlockLocation, BlockStatus> deserializeDatabaseFile(final File databaseFile) {
         Map<BlockLocation, BlockStatus> loadedDatabase;
         try (FileReader fileReader = new FileReader(databaseFile)) {
-            GsonBuilder gsonBuilder = new GsonBuilder();
+            final GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(BlockLocation.class, new BlockLocationAdapter());
             gsonBuilder.registerTypeAdapter(BlockStatus.class, new BlockStatusAdapter());
             gsonBuilder.enableComplexMapKeySerialization();
-            Gson gson = gsonBuilder.create();
+            final Gson gson = gsonBuilder.create();
 
-            loadedDatabase = gson.fromJson(fileReader, getDatabaseTypeToken().getType());
+            loadedDatabase = gson.fromJson(fileReader, BlockDatabase.getDatabaseTypeToken().getType());
 
             if (loadedDatabase == null) {
                 throw new BlockDatabaseException();
             } else {
                 this.getPlugin().getLogger().info("Database loaded successfully");
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             loadedDatabase = new HashMap<>();
             this.getPlugin().getLogger().warning("Couldn't load database, creating an empty one");
         }
@@ -98,11 +98,11 @@ public class BlockDatabase {
         return loadedDatabase;
     }
 
-    public void saveToFile(File databaseFile) {
+    public void saveToFile(final File databaseFile) {
         if (!databaseFile.exists()) {
             try {
                 databaseFile.createNewFile();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 this.getPlugin().getLogger().warning("Couldn't create a new database file! Database won't be saved");
                 return;
             }
@@ -111,32 +111,32 @@ public class BlockDatabase {
         this.serializeDatabaseFile(databaseFile, this.database);
     }
 
-    private void serializeDatabaseFile(File databaseFile, Map<BlockLocation, BlockStatus> database) {
+    private void serializeDatabaseFile(final File databaseFile, final Map<BlockLocation, BlockStatus> database) {
         try (FileWriter fileWriter = new FileWriter(databaseFile)) {
-            GsonBuilder gsonBuilder = new GsonBuilder();
+            final GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(BlockLocation.class, new BlockLocationAdapter());
             gsonBuilder.registerTypeAdapter(BlockStatus.class, new BlockStatusAdapter());
             gsonBuilder.enableComplexMapKeySerialization();
-            Gson gson = gsonBuilder.create();
-            fileWriter.write(gson.toJson(database, getDatabaseTypeToken().getType()));
+            final Gson gson = gsonBuilder.create();
+            fileWriter.write(gson.toJson(database, BlockDatabase.getDatabaseTypeToken().getType()));
             this.getPlugin().getLogger().info("Database saved successfully");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             this.getPlugin().getLogger().warning("Couldn't save database");
         }
     }
 
     public void sanitize() {
-        Iterator<Entry<BlockLocation, BlockStatus>> iterator = this.database.entrySet().iterator();
+        final Iterator<Entry<BlockLocation, BlockStatus>> iterator = this.database.entrySet().iterator();
         while (iterator.hasNext()) {
-            Entry<BlockLocation, BlockStatus> entry = iterator.next();
+            final Entry<BlockLocation, BlockStatus> entry = iterator.next();
             if (this.isEntryNotSane(entry, ConfigurationManager.getInstance().doCheckBlockDatabaseAtStartup())) {
                 iterator.remove();
             }
         }
     }
 
-    private boolean isEntryNotSane(Entry<BlockLocation, BlockStatus> entry, boolean checkDeeply) {
-        BlockStatus blockStatus = entry.getValue();
+    private boolean isEntryNotSane(final Entry<BlockLocation, BlockStatus> entry, final boolean checkDeeply) {
+        final BlockStatus blockStatus = entry.getValue();
         if (blockStatus.shouldBreak()) {
             return true;
         }
@@ -144,7 +144,7 @@ public class BlockDatabase {
         blockStatus.sanitize();
 
         if (checkDeeply) {
-            Block block = entry.getKey().toBlock();
+            final Block block = entry.getKey().toBlock();
             return block.isEmpty() || !ConfigurationManager.getInstance().doHandlesBlock(block)
                     || !blockStatus.isCongruentWith(block);
         }

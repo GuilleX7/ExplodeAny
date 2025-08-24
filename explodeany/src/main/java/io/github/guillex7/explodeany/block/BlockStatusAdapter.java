@@ -11,7 +11,7 @@ import com.google.gson.stream.JsonWriter;
 
 public class BlockStatusAdapter extends TypeAdapter<BlockStatus> {
     @Override
-    public void write(JsonWriter out, BlockStatus value) throws IOException {
+    public void write(final JsonWriter out, final BlockStatus value) throws IOException {
         out.beginArray();
         out.value(value.getRawDurability());
         out.value(value.getMaterial().name());
@@ -20,10 +20,10 @@ public class BlockStatusAdapter extends TypeAdapter<BlockStatus> {
     }
 
     @Override
-    public BlockStatus read(JsonReader in) throws IOException {
+    public BlockStatus read(final JsonReader in) throws IOException {
         in.beginArray();
-        double durability = in.nextDouble();
-        Material material = Material.getMaterial(in.nextString());
+        final double durability = in.nextDouble();
+        final Material material = Material.getMaterial(in.nextString());
         long lastDamaged = -1;
         if (in.hasNext() && in.peek() == JsonToken.NUMBER) {
             lastDamaged = in.nextLong();

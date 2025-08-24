@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
-import io.github.guillex7.explodeany.compat.common.api.IBossBar;
+import io.github.guillex7.explodeany.compat.common.data.IBossBar;
 import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
@@ -45,10 +45,10 @@ public final class PlayerInteractListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    public void onPlayerInteractEvent(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+    public void onPlayerInteractEvent(final PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
 
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
+        if (Action.RIGHT_CLICK_BLOCK.equals(event.getAction())
                 && this.compatibilityManager.getApi().getPlayerInteractionEventUtils()
                         .doesInteractionUseMainHand(event)
                 && this.checktoolManager.isPlayerUsingChecktool(player)) {
@@ -91,7 +91,8 @@ public final class PlayerInteractListener implements LoadableListener {
 
                 final BlockStatus blockStatus = this.blockDatabase.getOrCreateBlockStatus(clickedBlock);
                 final double currentDurability = blockStatus.getDurability(System.currentTimeMillis());
-                final double durabilityPercentage = currentDurability / blockStatus.getMaximumDurability();
+                final double durabilityPercentage = currentDurability
+                        / blockStatus.getMaximumDurability();
                 final double prettyDurabilityPercentage = durabilityPercentage * 100;
 
                 if (!checktoolConfiguration.isSilentWhenCheckingHandledBlocks()) {
@@ -104,7 +105,8 @@ public final class PlayerInteractListener implements LoadableListener {
                                     String.format("%.02f",
                                             currentDurability))
                             .replace("%MAX_DURABILITY%",
-                                    String.format("%.02f", blockStatus.getMaximumDurability()))
+                                    String.format("%.02f", blockStatus
+                                            .getMaximumDurability()))
                             .replace("%B_X%",
                                     String.format("%d",
                                             clickedBlock.getLocation()
@@ -133,7 +135,8 @@ public final class PlayerInteractListener implements LoadableListener {
                                     String.format("%.02f",
                                             currentDurability))
                             .replace("%MAX_DURABILITY%",
-                                    String.format("%.02f", blockStatus.getMaximumDurability()))
+                                    String.format("%.02f", blockStatus
+                                            .getMaximumDurability()))
                             .replace("%B_X%",
                                     String.format("%d",
                                             clickedBlock.getLocation()
@@ -149,7 +152,8 @@ public final class PlayerInteractListener implements LoadableListener {
                             .replace("%MATERIAL%", materialName)
                             .replace("%PRETTY_MATERIAL%", prettyMaterialName);
 
-                    IBossBar checktoolBossBar = this.compatibilityManager.getApi().getBukkitUtils()
+                    final IBossBar checktoolBossBar = this.compatibilityManager.getApi()
+                            .getBukkitUtils()
                             .createBossBar(
                                     formattedBossBarTitle,
                                     checktoolConfiguration.getBossBarColor(),

@@ -16,8 +16,8 @@ import io.github.guillex7.explodeany.configuration.section.ChecktoolConfiguratio
 import io.github.guillex7.explodeany.configuration.section.MaterialConfiguration;
 import io.github.guillex7.explodeany.configuration.section.WorldHoleProtection;
 import io.github.guillex7.explodeany.util.MessageFormatter;
-import io.github.guillex7.explodeany.util.SetUtils;
 import io.github.guillex7.explodeany.util.NamePatternUtils;
+import io.github.guillex7.explodeany.util.SetUtils;
 
 public class CommandConfigurationShow extends RegistrableCommand {
     private static final String GLOBAL_SECTION_NAME = "Global";
@@ -31,8 +31,10 @@ public class CommandConfigurationShow extends RegistrableCommand {
             .createHashSetOf(PermissionNode.CONFIGURATION_SHOW);
 
     public CommandConfigurationShow() {
-        fixedSectionNames = Arrays.asList(GLOBAL_SECTION_NAME, CHECKTOOL_SECTION_NAME,
-                WORLD_HOLE_PROTECTION_SECTION_NAME, MATERIALS_SECTION_NAME);
+        this.fixedSectionNames = Arrays.asList(CommandConfigurationShow.GLOBAL_SECTION_NAME,
+                CommandConfigurationShow.CHECKTOOL_SECTION_NAME,
+                CommandConfigurationShow.WORLD_HOLE_PROTECTION_SECTION_NAME,
+                CommandConfigurationShow.MATERIALS_SECTION_NAME);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
     }
 
     @Override
-    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
+    public boolean isCommandSenderAllowedToUse(final CommandSender sender) {
         return this.REQUIRED_PERMISSIONS.stream().allMatch(permission -> sender.hasPermission(permission.getKey()));
     }
 
@@ -51,7 +53,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String[] args) {
+    public boolean execute(final CommandSender sender, final String[] args) {
         if (args.length < 1) {
             return false;
         }
@@ -60,21 +62,21 @@ public class CommandConfigurationShow extends RegistrableCommand {
         final String sectionPath = args[0];
         switch (sectionPath) {
             case CommandConfigurationShow.GLOBAL_SECTION_NAME:
-                return showGlobalConfiguration(sender, configurationManager);
+                return this.showGlobalConfiguration(sender, configurationManager);
             case CommandConfigurationShow.CHECKTOOL_SECTION_NAME:
-                return showChecktoolConfiguration(sender, sectionPath, configurationManager);
+                return this.showChecktoolConfiguration(sender, sectionPath, configurationManager);
             case CommandConfigurationShow.WORLD_HOLE_PROTECTION_SECTION_NAME:
-                return showWorldHoleProtectionConfiguration(sender, sectionPath, configurationManager, args);
+                return this.showWorldHoleProtectionConfiguration(sender, sectionPath, configurationManager, args);
             case CommandConfigurationShow.MATERIALS_SECTION_NAME:
-                return showMaterialConfiguration(sender, sectionPath, configurationManager, args);
+                return this.showMaterialConfiguration(sender, sectionPath, configurationManager, args);
             default:
-                return showEntityOrEntityMaterialConfiguration(sender, sectionPath, configurationManager, args);
+                return this.showEntityOrEntityMaterialConfiguration(sender, sectionPath, configurationManager, args);
         }
     }
 
-    private boolean showGlobalConfiguration(CommandSender sender,
-            ConfigurationManager configurationManager) {
-        StringBuilder builder = new StringBuilder();
+    private boolean showGlobalConfiguration(final CommandSender sender,
+            final ConfigurationManager configurationManager) {
+        final StringBuilder builder = new StringBuilder();
         builder.append(MessageFormatter.colorize(String.format("&8= %s\n", "Global properties")));
         builder.append(String.format("&fUse block database: %s\n",
                 configurationManager.doUseBlockDatabase()));
@@ -91,17 +93,17 @@ public class CommandConfigurationShow extends RegistrableCommand {
         return true;
     }
 
-    private boolean showChecktoolConfiguration(CommandSender sender, String sectionPath,
-            ConfigurationManager configurationManager) {
-        ChecktoolConfiguration checktoolConfiguration = configurationManager.getChecktoolConfiguration();
+    private boolean showChecktoolConfiguration(final CommandSender sender, final String sectionPath,
+            final ConfigurationManager configurationManager) {
+        final ChecktoolConfiguration checktoolConfiguration = configurationManager.getChecktoolConfiguration();
         sender.sendMessage(MessageFormatter.colorize(String.format(
                 "&8= %s\n&f%s", sectionPath, checktoolConfiguration.toString())));
         return true;
     }
 
-    public boolean showWorldHoleProtectionConfiguration(CommandSender sender, String sectionPath,
-            ConfigurationManager configurationManager,
-            String[] args) {
+    public boolean showWorldHoleProtectionConfiguration(final CommandSender sender, final String sectionPath,
+            final ConfigurationManager configurationManager,
+            final String[] args) {
         if (args.length < 2) {
             sender.sendMessage("Command usage: /configuration show WorldHoleProtection <worldName>");
             return true;
@@ -119,16 +121,16 @@ public class CommandConfigurationShow extends RegistrableCommand {
         return true;
     }
 
-    private boolean showMaterialConfiguration(CommandSender sender, String sectionPath,
-            ConfigurationManager configurationManager,
-            String[] args) {
+    private boolean showMaterialConfiguration(final CommandSender sender, final String sectionPath,
+            final ConfigurationManager configurationManager,
+            final String[] args) {
         if (args.length < 2) {
             sender.sendMessage("Command usage: /configuration show Material <materialName>");
             return true;
         }
 
         final String materialName = args[1];
-        Material material = Material.getMaterial(materialName);
+        final Material material = Material.getMaterial(materialName);
         if (material == null) {
             sender.sendMessage(String.format("Material %s is invalid", materialName, sectionPath));
             return true;
@@ -146,9 +148,9 @@ public class CommandConfigurationShow extends RegistrableCommand {
         return true;
     }
 
-    private boolean showEntityOrEntityMaterialConfiguration(CommandSender sender, String sectionPath,
-            ConfigurationManager configurationManager,
-            String[] args) {
+    private boolean showEntityOrEntityMaterialConfiguration(final CommandSender sender, final String sectionPath,
+            final ConfigurationManager configurationManager,
+            final String[] args) {
         if (args.length < 2) {
             sender.sendMessage("Command usage: /configuration show <section> <entityName> [<materialName>]");
             return true;
@@ -194,7 +196,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
     }
 
     @Override
-    public void onTabComplete(CommandSender sender, String[] args, List<String> autocompletion) {
+    public void onTabComplete(final CommandSender sender, final String[] args, final List<String> autocompletion) {
         if (args.length < 1) {
             return;
         }
@@ -202,7 +204,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
         final ConfigurationManager configurationManager = ConfigurationManager.getInstance();
         final String userSectionName = args[0];
         if (args.length == 1) {
-            autocompletion.addAll(fixedSectionNames.stream().filter(sectionName -> sectionName
+            autocompletion.addAll(this.fixedSectionNames.stream().filter(sectionName -> sectionName
                     .startsWith(userSectionName)).collect(Collectors.toList()));
             autocompletion.addAll(configurationManager.getRegisteredConfigurationSectionsByPath()
                     .keySet().stream().filter(sectionPath -> sectionPath.startsWith(userSectionName))
@@ -228,7 +230,7 @@ public class CommandConfigurationShow extends RegistrableCommand {
                 }
                 return;
             default: {
-                LoadableConfigurationSection<? extends Object> loadableConfigurationSection = ConfigurationManager
+                final LoadableConfigurationSection<? extends Object> loadableConfigurationSection = ConfigurationManager
                         .getInstance().getRegisteredConfigurationSectionsByPath().get(userSectionName);
                 if (loadableConfigurationSection == null) {
                     return;

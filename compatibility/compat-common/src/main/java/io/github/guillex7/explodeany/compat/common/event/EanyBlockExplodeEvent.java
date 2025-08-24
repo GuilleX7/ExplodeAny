@@ -16,39 +16,40 @@ public class EanyBlockExplodeEvent extends Event implements Cancellable {
     private boolean isCancelled = false;
 
     public static HandlerList getHandlerList() {
-        return handlers;
+        return EanyBlockExplodeEvent.handlers;
     }
 
-    public EanyBlockExplodeEvent(Location blockLocation, String blockMaterial, List<Block> blockList) {
+    public EanyBlockExplodeEvent(final Location blockLocation, final String blockMaterial,
+            final List<Block> blockList) {
         this.blockLocation = blockLocation;
         this.blockMaterial = blockMaterial;
         this.blockList = blockList;
     }
 
     public Location getBlockLocation() {
-        return blockLocation;
+        return this.blockLocation;
     }
 
     public String getBlockMaterial() {
-        return blockMaterial;
+        return this.blockMaterial;
     }
 
     public List<Block> getBlockList() {
-        return blockList;
+        return this.blockList;
     }
 
     @Override
     public boolean isCancelled() {
-        return isCancelled;
+        return this.isCancelled;
     }
 
     @Override
-    public void setCancelled(boolean cancel) {
-        isCancelled = cancel;
+    public void setCancelled(final boolean cancel) {
+        this.isCancelled = cancel;
     }
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
+        return EanyBlockExplodeEvent.handlers;
     }
 }

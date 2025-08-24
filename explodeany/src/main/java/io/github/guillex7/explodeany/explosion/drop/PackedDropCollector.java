@@ -13,19 +13,19 @@ import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfigu
 public class PackedDropCollector implements DropCollector {
     final Map<Material, Integer> collectedItems;
 
-    public PackedDropCollector(Map<Material, EntityMaterialConfiguration> materialConfigurations) {
+    public PackedDropCollector(final Map<Material, EntityMaterialConfiguration> materialConfigurations) {
         this.collectedItems = new HashMap<>(materialConfigurations.size(), 1);
     }
 
     @Override
-    public void collect(Material material, Location location) {
+    public void collect(final Material material, final Location location) {
         this.collectedItems.put(material, this.collectedItems.getOrDefault(material, 0) + 1);
     }
 
     @Override
-    public void dropCollectedItems(Location location) {
+    public void dropCollectedItems(final Location location) {
         final World world = location.getWorld();
-        for (Map.Entry<Material, Integer> entry : this.collectedItems.entrySet()) {
+        for (final Map.Entry<Material, Integer> entry : this.collectedItems.entrySet()) {
             world.dropItemNaturally(location, new ItemStack(entry.getKey(), entry.getValue()));
         }
     }

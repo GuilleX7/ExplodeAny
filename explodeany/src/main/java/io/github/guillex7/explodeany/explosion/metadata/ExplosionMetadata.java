@@ -11,8 +11,8 @@ public class ExplosionMetadata {
     public Map<Material, EntityMaterialConfiguration> materialConfigurations;
     public DropCollector dropCollector;
 
-    public ExplosionMetadata(Map<Material, EntityMaterialConfiguration> materialConfigurations,
-            DropCollector dropCollector) {
+    public ExplosionMetadata(final Map<Material, EntityMaterialConfiguration> materialConfigurations,
+            final DropCollector dropCollector) {
         this.materialConfigurations = materialConfigurations;
         this.dropCollector = dropCollector;
     }

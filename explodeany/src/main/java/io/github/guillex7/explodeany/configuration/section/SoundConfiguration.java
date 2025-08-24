@@ -5,6 +5,7 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.guillex7.explodeany.ExplodeAny;
+import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.util.MathUtils;
 
 public class SoundConfiguration {
@@ -13,41 +14,40 @@ public class SoundConfiguration {
     private static final String PITCH_PATH = "Pitch";
 
     private final Sound sound;
+    private final String soundName;
     private final double volume;
     private final double pitch;
 
     public static SoundConfiguration byDefault() {
-        return new SoundConfiguration(null, 1.0d, 1.0d);
+        return new SoundConfiguration(null, "", 1.0d, 1.0d);
     }
 
-    public static SoundConfiguration fromConfigurationSection(ConfigurationSection section) {
-        SoundConfiguration defaults = SoundConfiguration.byDefault();
+    public static SoundConfiguration fromConfigurationSection(final ConfigurationSection section) {
+        final SoundConfiguration defaults = SoundConfiguration.byDefault();
 
-        Sound sound;
-        String soundString = section.getString(NAME_PATH, "").toUpperCase();
-        try {
-            sound = Sound.valueOf(soundString);
-        } catch (Exception e) {
-            if (!soundString.equals("")) {
-                ExplodeAny.getInstance().getLogger()
-                        .warning(String.format("Invalid sound '%s' in configuration section '%s'. Using default value.",
-                                section.getString(NAME_PATH), section.getCurrentPath()));
-            }
-            sound = null;
+        final String soundName = section.getString(SoundConfiguration.NAME_PATH, "").toUpperCase();
+        final Sound sound = CompatibilityManager.getInstance().getApi().getSoundUtils().getSound(soundName);
+
+        if (sound == null && !"".equals(soundName)) {
+            ExplodeAny.getInstance().getLogger()
+                    .warning(String.format("Invalid sound '%s' in configuration section '%s'. Using default value.",
+                            section.getString(SoundConfiguration.NAME_PATH), section.getCurrentPath()));
         }
 
-        return new SoundConfiguration(sound,
-                MathUtils.ensureMin(section.getDouble(VOLUME_PATH, defaults.getVolume()), 0.0d),
-                MathUtils.ensureRange(section.getDouble(PITCH_PATH, defaults.getPitch()), 2.0d, 0.5d));
+        return new SoundConfiguration(sound, soundName,
+                MathUtils.ensureMin(section.getDouble(SoundConfiguration.VOLUME_PATH, defaults.getVolume()), 0.0d),
+                MathUtils.ensureRange(section.getDouble(SoundConfiguration.PITCH_PATH, defaults.getPitch()), 2.0d,
+                        0.5d));
     }
 
-    public SoundConfiguration(Sound sound, double volume, double pitch) {
+    public SoundConfiguration(final Sound sound, final String soundName, final double volume, final double pitch) {
         this.sound = sound;
+        this.soundName = soundName;
         this.volume = volume;
         this.pitch = pitch;
     }
 
-    public void playAt(Location location) {
+    public void playAt(final Location location) {
         location.getWorld().playSound(location, this.sound,
                 (float) this.volume,
                 (float) this.pitch);
@@ -58,15 +58,19 @@ public class SoundConfiguration {
     }
 
     public Sound getSound() {
-        return sound;
+        return this.sound;
+    }
+
+    public String getSoundName() {
+        return this.soundName;
     }
 
     public double getVolume() {
-        return volume;
+        return this.volume;
     }
 
     public double getPitch() {
-        return pitch;
+        return this.pitch;
     }
 
     @Override
@@ -75,14 +79,15 @@ public class SoundConfiguration {
             return "(None)";
         }
 
-        StringBuilder builder = new StringBuilder();
-        builder.append("Sound name: ").append(this.getSound().name()).append("\n");
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Sound name: ").append(this.getSoundName()).append("\n");
         builder.append("Volume: ").append(String.format("%.2f", this.getVolume())).append("\n");
         builder.append("Pitch: ").append(String.format("%.2f", this.getPitch()));
         return builder.toString();
     }
 
+    @Override
     public SoundConfiguration clone() {
-        return new SoundConfiguration(this.sound, this.volume, this.pitch);
+        return new SoundConfiguration(this.sound, this.soundName, this.volume, this.pitch);
     }
 }

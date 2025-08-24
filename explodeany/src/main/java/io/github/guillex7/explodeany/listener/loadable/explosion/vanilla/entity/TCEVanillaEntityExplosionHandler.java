@@ -33,13 +33,13 @@ public class TCEVanillaEntityExplosionHandler implements VanillaEntityExplosionH
     }
 
     @Override
-    public boolean isEventHandled(EntityExplodeEvent event) {
+    public boolean isEventHandled(final EntityExplodeEvent event) {
         return ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name())
                 && TCEApi.entityIsTCE(event.getEntity());
     }
 
     @Override
-    public void onEntityExplode(EntityExplodeEvent event) {
+    public void onEntityExplode(final EntityExplodeEvent event) {
         final Entity entity = event.getEntity();
 
         final ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);

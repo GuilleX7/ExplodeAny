@@ -33,7 +33,7 @@ public class EanyBlockExplosionListener implements LoadableListener {
     }
 
     private void loadHandlers() {
-        for (EanyBlockExplosionHandler handler : this.registeredHandlers) {
+        for (final EanyBlockExplosionHandler handler : this.registeredHandlers) {
             if (handler.shouldBeLoaded()) {
                 handler.load();
                 this.loadedHandlers.add(handler);
@@ -48,12 +48,12 @@ public class EanyBlockExplosionListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    public void onEanyBlockExplode(EanyBlockExplodeEvent event) {
+    public void onEanyBlockExplode(final EanyBlockExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
 
-        for (EanyBlockExplosionHandler handler : this.loadedHandlers) {
+        for (final EanyBlockExplosionHandler handler : this.loadedHandlers) {
             if (handler.isEventHandled(event)) {
                 handler.onBlockExplode(event);
                 break;
@@ -61,14 +61,14 @@ public class EanyBlockExplosionListener implements LoadableListener {
         }
     }
 
-    protected boolean isEventHandled(EanyBlockExplodeEvent event) {
+    protected boolean isEventHandled(final EanyBlockExplodeEvent event) {
         return !event.isCancelled() && event.getBlockLocation() != null
                 && !ConfigurationManager.getInstance().getDisabledWorlds()
                         .contains(event.getBlockLocation().getWorld().getName());
     }
 
     private void unloadHandlers() {
-        for (EanyBlockExplosionHandler handler : this.loadedHandlers) {
+        for (final EanyBlockExplosionHandler handler : this.loadedHandlers) {
             handler.unload();
         }
 

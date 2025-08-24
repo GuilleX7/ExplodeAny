@@ -11,31 +11,31 @@ public class Version implements Comparable<Version> {
 
     public int[] numbers;
 
-    public Version(int[] numbers) {
+    public Version(final int[] numbers) {
         this.numbers = numbers;
     }
 
-    public Version(int major, int minor, int patch) {
-        this.numbers = new int[]{major, minor, patch};
+    public Version(final int major, final int minor, final int patch) {
+        this.numbers = new int[] { major, minor, patch };
     }
 
-    public Version(int major, int minor) {
-        this.numbers = new int[]{major, minor};
+    public Version(final int major, final int minor) {
+        this.numbers = new int[] { major, minor };
     }
 
-    public Version(int major) {
-        this.numbers = new int[]{major};
+    public Version(final int major) {
+        this.numbers = new int[] { major };
     }
 
     public static Version invalid() {
-        return new Version(INVALID_MAJOR_VERSION);
+        return new Version(Version.INVALID_MAJOR_VERSION);
     }
 
-    public static Version fromString(String stringifiedVersion) {
-        Matcher versionMatcher = VERSION_PATTERN.matcher(stringifiedVersion);
+    public static Version fromString(final String stringifiedVersion) {
+        final Matcher versionMatcher = Version.VERSION_PATTERN.matcher(stringifiedVersion);
         if (versionMatcher.find()) {
-            String[] stringifiedNumbers = versionMatcher.group().split("\\.");
-            int[] numbers = new int[stringifiedNumbers.length];
+            final String[] stringifiedNumbers = versionMatcher.group().split("\\.");
+            final int[] numbers = new int[stringifiedNumbers.length];
             for (int i = 0; i < stringifiedNumbers.length; i++) {
                 numbers[i] = Integer.parseInt(stringifiedNumbers[i]);
             }
@@ -46,35 +46,35 @@ public class Version implements Comparable<Version> {
     }
 
     public boolean isValid() {
-        return this.numbers[0] != INVALID_MAJOR_VERSION;
+        return this.numbers[0] != Version.INVALID_MAJOR_VERSION;
     }
 
-    public boolean isBefore(Version version) {
+    public boolean isBefore(final Version version) {
         return this.compareTo(version) < 0;
     }
 
-    public boolean isEqualOrBefore(Version version) {
+    public boolean isEqualOrBefore(final Version version) {
         return this.compareTo(version) < 1;
     }
 
-    public boolean isEqualTo(Version version) {
+    public boolean isEqualTo(final Version version) {
         return this.compareTo(version) == 0;
     }
 
-    public boolean isEqualOrAfter(Version version) {
+    public boolean isEqualOrAfter(final Version version) {
         return this.compareTo(version) > -1;
     }
 
-    public boolean isAfter(Version version) {
+    public boolean isAfter(final Version version) {
         return this.compareTo(version) > 0;
     }
 
     @Override
-    public int compareTo(Version version) {
-        int length = Math.max(this.numbers.length, version.numbers.length);
+    public int compareTo(final Version version) {
+        final int length = Math.max(this.numbers.length, version.numbers.length);
         for (int i = 0; i < length; i++) {
-            int thisNumber = i < this.numbers.length ? this.numbers[i] : 0;
-            int thatNumber = i < version.numbers.length ? version.numbers[i] : 0;
+            final int thisNumber = i < this.numbers.length ? this.numbers[i] : 0;
+            final int thatNumber = i < version.numbers.length ? version.numbers[i] : 0;
 
             if (thisNumber < thatNumber) {
                 return -1;

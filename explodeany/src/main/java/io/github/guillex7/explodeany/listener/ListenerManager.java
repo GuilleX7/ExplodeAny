@@ -18,22 +18,22 @@ public class ListenerManager {
     }
 
     public static ListenerManager getInstance() {
-        if (instance == null) {
-            instance = new ListenerManager();
+        if (ListenerManager.instance == null) {
+            ListenerManager.instance = new ListenerManager();
         }
-        return instance;
+        return ListenerManager.instance;
     }
 
     public List<LoadableListener> getRegisteredListeners() {
-        return registeredListeners;
+        return this.registeredListeners;
     }
 
-    public void registerListener(LoadableListener explosionListener) {
+    public void registerListener(final LoadableListener explosionListener) {
         this.getRegisteredListeners().add(explosionListener);
     }
 
     public void loadAllListeners() {
-        for (LoadableListener listener : this.getRegisteredListeners()) {
+        for (final LoadableListener listener : this.getRegisteredListeners()) {
             if (!listener.shouldBeLoaded()) {
                 continue;
             }
@@ -44,7 +44,7 @@ public class ListenerManager {
     }
 
     public void unloadAllListeners() {
-        for (LoadableListener listener : this.getRegisteredListeners()) {
+        for (final LoadableListener listener : this.getRegisteredListeners()) {
             if (listener.shouldBeLoaded()) {
                 listener.unload();
             }

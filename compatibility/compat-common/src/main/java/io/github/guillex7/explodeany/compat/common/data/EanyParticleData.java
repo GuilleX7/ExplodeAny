@@ -10,7 +10,8 @@ public class EanyParticleData {
     private double size;
     private Material material;
 
-    public EanyParticleData(String name, int red, int green, int blue, double size, Material material) {
+    public EanyParticleData(final String name, final int red, final int green, final int blue, final double size,
+            final Material material) {
         this.name = name;
         this.red = red;
         this.green = green;
@@ -20,50 +21,50 @@ public class EanyParticleData {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
     public int getRed() {
-        return red;
+        return this.red;
     }
 
-    public void setRed(int red) {
+    public void setRed(final int red) {
         this.red = red;
     }
 
     public int getGreen() {
-        return green;
+        return this.green;
     }
 
-    public void setGreen(int green) {
+    public void setGreen(final int green) {
         this.green = green;
     }
 
     public int getBlue() {
-        return blue;
+        return this.blue;
     }
 
-    public void setBlue(int blue) {
+    public void setBlue(final int blue) {
         this.blue = blue;
     }
 
     public double getSize() {
-        return size;
+        return this.size;
     }
 
-    public void setSize(double size) {
+    public void setSize(final double size) {
         this.size = size;
     }
 
     public Material getMaterial() {
-        return material;
+        return this.material;
     }
 
-    public void setMaterial(Material material) {
+    public void setMaterial(final Material material) {
         this.material = material;
     }
 
@@ -72,6 +73,7 @@ public class EanyParticleData {
         return String.format("Name: %s\n"
                 + "R: %d G: %d B: %d\n"
                 + "Size: %.2f\n"
-                + "Material: %s", name, red, green, blue, size, material != null ? material.toString() : "(None)");
+                + "Material: %s", this.name, this.red, this.green, this.blue, this.size,
+                this.material != null ? this.material.toString() : "(None)");
     }
 }

@@ -7,7 +7,7 @@ import io.github.guillex7.explodeany.compat.common.api.IPlayerInventoryUtils;
 
 public class CPlayerInventoryUtils implements IPlayerInventoryUtils {
     @Override
-    public ItemStack getItemInMainHand(PlayerInventory inventory) {
+    public ItemStack getItemInMainHand(final PlayerInventory inventory) {
         return inventory.getItemInHand();
     }
 }

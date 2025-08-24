@@ -29,10 +29,10 @@ public class MagicVanillaEntityConfiguration extends LoadableConfigurationSectio
 
     @Override
     public boolean shouldBeLoaded() {
-        Plugin magicPlugin = Bukkit.getPluginManager().getPlugin("Magic");
+        final Plugin magicPlugin = Bukkit.getPluginManager().getPlugin("Magic");
         return magicPlugin != null && magicPlugin.isEnabled() && magicPlugin instanceof MagicAPI
                 && CompatibilityManager.getInstance().getApi().getMinimumSupportedBukkitVersion()
-                        .isEqualOrAfter(MINIMUM_SUPPORTED_BUKKIT_VERSION);
+                        .isEqualOrAfter(MagicVanillaEntityConfiguration.MINIMUM_SUPPORTED_BUKKIT_VERSION);
     }
 
     @Override
@@ -41,17 +41,17 @@ public class MagicVanillaEntityConfiguration extends LoadableConfigurationSectio
     }
 
     @Override
-    public String getEntityName(ExplodingVanillaEntity entity) {
+    public String getEntityName(final ExplodingVanillaEntity entity) {
         return entity.getName();
     }
 
     @Override
-    public ExplodingVanillaEntity getEntityFromName(String name) {
+    public ExplodingVanillaEntity getEntityFromName(final String name) {
         return ExplodingVanillaEntity.fromEntityTypeName(name);
     }
 
     @Override
-    public List<ExplodingVanillaEntity> getEntitiesFromPattern(Pattern pattern, String name) {
+    public List<ExplodingVanillaEntity> getEntitiesFromPattern(final Pattern pattern, final String name) {
         return Arrays.stream(ExplodingVanillaEntity.values())
                 .filter(entity -> pattern.matcher(entity.getName()).matches())
                 .collect(Collectors.toList());

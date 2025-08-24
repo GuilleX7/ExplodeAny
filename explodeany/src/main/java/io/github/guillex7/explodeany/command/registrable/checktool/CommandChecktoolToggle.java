@@ -29,12 +29,12 @@ public class CommandChecktoolToggle extends RegistrableCommand {
     }
 
     @Override
-    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
-        return REQUIRED_PERMISSIONS.stream().allMatch(permission -> sender.hasPermission(permission.getKey()));
+    public boolean isCommandSenderAllowedToUse(final CommandSender sender) {
+        return this.REQUIRED_PERMISSIONS.stream().allMatch(permission -> sender.hasPermission(permission.getKey()));
     }
 
     @Override
-    public boolean execute(CommandSender sender, String[] args) {
+    public boolean execute(final CommandSender sender, final String[] args) {
         if (sender == null) {
             return false;
         }
@@ -50,8 +50,8 @@ public class CommandChecktoolToggle extends RegistrableCommand {
 
             receiver = (Player) sender;
         } else if (sender.hasPermission(PermissionNode.CHECKTOOL_TOGGLE_OTHERS.getKey())) {
-            String receiverName = args[0];
-            Player possibleReceiver = Bukkit.getPlayer(receiverName);
+            final String receiverName = args[0];
+            final Player possibleReceiver = Bukkit.getPlayer(receiverName);
 
             if (possibleReceiver == null) {
                 sender.sendMessage(
@@ -113,7 +113,7 @@ public class CommandChecktoolToggle extends RegistrableCommand {
     }
 
     @Override
-    public void onTabComplete(CommandSender sender, String[] args, List<String> autocompletion) {
+    public void onTabComplete(final CommandSender sender, final String[] args, final List<String> autocompletion) {
         if (args.length == 1 && sender.hasPermission(PermissionNode.CHECKTOOL_TOGGLE_OTHERS.getKey())) {
             Bukkit.getOnlinePlayers().stream().filter(x -> x.getName().startsWith(args[0]))
                     .forEach(x -> autocompletion.add(x.getName()));

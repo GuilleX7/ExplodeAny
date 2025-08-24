@@ -69,10 +69,10 @@ public final class ConfigurationManager {
     }
 
     public static ConfigurationManager getInstance() {
-        if (instance == null) {
-            instance = new ConfigurationManager();
+        if (ConfigurationManager.instance == null) {
+            ConfigurationManager.instance = new ConfigurationManager();
         }
-        return instance;
+        return ConfigurationManager.instance;
     }
 
     public ExplodeAny getPlugin() {
@@ -84,7 +84,8 @@ public final class ConfigurationManager {
     }
 
     private void loadDoUseBlockDatabase() {
-        this.doUseBlockDatabase = this.getConfigurationFile().getConfig().getBoolean(USE_BLOCK_DATABASE_ITEM);
+        this.doUseBlockDatabase = this.getConfigurationFile().getConfig()
+                .getBoolean(ConfigurationManager.USE_BLOCK_DATABASE_ITEM);
     }
 
     public boolean doUseBlockDatabase() {
@@ -93,7 +94,7 @@ public final class ConfigurationManager {
 
     private void loadDoCheckBlockDatabaseAtStartup() {
         this.doCheckBlockDatabaseAtStartup = this.getConfigurationFile().getConfig()
-                .getBoolean(CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
+                .getBoolean(ConfigurationManager.CHECK_BLOCK_DATABASE_AT_STARTUP_ITEM);
     }
 
     public boolean doCheckBlockDatabaseAtStartup() {
@@ -102,7 +103,9 @@ public final class ConfigurationManager {
 
     private void loadGlobalBlockDurability() {
         this.globalBlockDurability = MathUtils
-                .ensureMin(this.getConfigurationFile().getConfig().getDouble(BLOCK_DURABILITY_ITEM), 1);
+                .ensureMin(
+                        this.getConfigurationFile().getConfig().getDouble(ConfigurationManager.BLOCK_DURABILITY_ITEM),
+                        1);
     }
 
     public double getGlobalBlockDurability() {
@@ -110,7 +113,8 @@ public final class ConfigurationManager {
     }
 
     private void loadDoEnableMetrics() {
-        this.doEnableMetrics = this.getConfigurationFile().getConfig().getBoolean(ENABLE_METRICS_ITEM);
+        this.doEnableMetrics = this.getConfigurationFile().getConfig()
+                .getBoolean(ConfigurationManager.ENABLE_METRICS_ITEM);
     }
 
     public boolean doEnableMetrics() {
@@ -118,7 +122,7 @@ public final class ConfigurationManager {
     }
 
     private void loadChecktoolConfiguration() {
-        ConfigurationSection checktoolSection = this.getConfigurationFile().getConfig()
+        final ConfigurationSection checktoolSection = this.getConfigurationFile().getConfig()
                 .getConfigurationSection(ChecktoolConfiguration.ROOT_PATH);
         this.checktoolConfiguration = checktoolSection == null ? ChecktoolConfiguration.byDefault()
                 : ChecktoolConfiguration.fromConfigurationSection(checktoolSection);
@@ -131,9 +135,9 @@ public final class ConfigurationManager {
     private void loadGroups() {
         this.groups.clear();
 
-        ConfigurationSection groupsSection = this.getConfigurationFile().getConfig()
-                .getConfigurationSection(GROUPS_SECTION_ITEM);
-        for (String groupName : groupsSection.getKeys(false)) {
+        final ConfigurationSection groupsSection = this.getConfigurationFile().getConfig()
+                .getConfigurationSection(ConfigurationManager.GROUPS_SECTION_ITEM);
+        for (final String groupName : groupsSection.getKeys(false)) {
             this.groups.put(groupName, groupsSection.getStringList(groupName));
         }
     }
@@ -142,7 +146,8 @@ public final class ConfigurationManager {
         return this.groups;
     }
 
-    public void registerLoadableConfigurationSection(LoadableConfigurationSection<?> loadableConfigurationSection) {
+    public void registerLoadableConfigurationSection(
+            final LoadableConfigurationSection<?> loadableConfigurationSection) {
         this.getRegisteredConfigurationSectionsByPath().put(loadableConfigurationSection.getSectionPath(),
                 loadableConfigurationSection);
     }
@@ -152,10 +157,10 @@ public final class ConfigurationManager {
     }
 
     public Map<String, LoadableConfigurationSection<?>> getRegisteredConfigurationSectionsByPath() {
-        return registeredConfigurationSectionsByPath;
+        return this.registeredConfigurationSectionsByPath;
     }
 
-    public LoadableConfigurationSection<?> getRegisteredConfigurationSectionByPath(String sectionPath) {
+    public LoadableConfigurationSection<?> getRegisteredConfigurationSectionByPath(final String sectionPath) {
         return this.getRegisteredConfigurationSectionsByPath().get(sectionPath);
     }
 
@@ -163,13 +168,13 @@ public final class ConfigurationManager {
         this.getHandledMaterials().clear();
         this.getLoadedConfigurationSectionPaths().clear();
 
-        for (LoadableConfigurationSection<?> loadableConfigurationSection : this
+        for (final LoadableConfigurationSection<?> loadableConfigurationSection : this
                 .getRegisteredConfigurationSectionsByPath()
                 .values()) {
             if (loadableConfigurationSection.shouldBeLoaded()) {
                 loadableConfigurationSection.clear();
                 loadableConfigurationSection.fetchFromConfiguration(this.getConfigurationFile().getConfig());
-                for (Map<Material, EntityMaterialConfiguration> map : loadableConfigurationSection
+                for (final Map<Material, EntityMaterialConfiguration> map : loadableConfigurationSection
                         .getEntityMaterialConfigurations().values()) {
                     this.getHandledMaterials().addAll(map.keySet());
                 }
@@ -183,10 +188,10 @@ public final class ConfigurationManager {
     }
 
     public Set<String> getLoadedConfigurationSectionPaths() {
-        return loadedConfigurationSectionPaths;
+        return this.loadedConfigurationSectionPaths;
     }
 
-    public boolean isConfigurationSectionLoaded(String sectionPath) {
+    public boolean isConfigurationSectionLoaded(final String sectionPath) {
         return this.getLoadedConfigurationSectionPaths().contains(sectionPath);
     }
 
@@ -199,7 +204,7 @@ public final class ConfigurationManager {
             return;
         }
 
-        for (String materialName : materialConfigurationsSection.getKeys(false)) {
+        for (final String materialName : materialConfigurationsSection.getKeys(false)) {
             final Set<Material> validMaterials = new HashSet<>();
             final Set<String> invalidMaterials = new HashSet<>();
             boolean doDefinitionHavePriority = true;
@@ -209,10 +214,10 @@ public final class ConfigurationManager {
                 validMaterials.addAll(materials);
             } else {
                 doDefinitionHavePriority = false;
-                List<String> group = ConfigurationManager.getInstance().getGroups().get(materialName);
+                final List<String> group = ConfigurationManager.getInstance().getGroups().get(materialName);
                 if (group != null) {
-                    for (String materialNameEntry : group) {
-                        List<Material> materialsForNameEntry = NamePatternUtils.getMaterialsFromNameOrPattern(
+                    for (final String materialNameEntry : group) {
+                        final List<Material> materialsForNameEntry = NamePatternUtils.getMaterialsFromNameOrPattern(
                                 materialNameEntry);
                         if (!materialsForNameEntry.isEmpty()) {
                             validMaterials.addAll(materialsForNameEntry);
@@ -246,17 +251,17 @@ public final class ConfigurationManager {
 
             final MaterialConfiguration materialConfiguration = MaterialConfiguration
                     .fromConfigurationSection(materialConfigurationSection);
-            for (Material material : validMaterials) {
+            for (final Material material : validMaterials) {
                 if (doDefinitionHavePriority) {
-                    materialConfigurations.put(material, materialConfiguration);
+                    this.materialConfigurations.put(material, materialConfiguration);
                 } else {
-                    materialConfigurations.putIfAbsent(material, materialConfiguration);
+                    this.materialConfigurations.putIfAbsent(material, materialConfiguration);
                 }
             }
         }
     }
 
-    public MaterialConfiguration getMaterialConfiguration(Material material) {
+    public MaterialConfiguration getMaterialConfiguration(final Material material) {
         return this.materialConfigurations.getOrDefault(material, this.defaultMaterialConfiguration);
     }
 
@@ -267,15 +272,15 @@ public final class ConfigurationManager {
     }
 
     public Set<Material> getHandledMaterials() {
-        return handledMaterials;
+        return this.handledMaterials;
     }
 
-    public boolean doHandlesBlock(Block block) {
+    public boolean doHandlesBlock(final Block block) {
         return this.getHandledMaterials().contains(block.getType());
     }
 
     public void loadLocalePrefix() {
-        this.localePrefix = this.getConfigurationFile().getConfig().getString(LOCALE_PREFIX_ITEM);
+        this.localePrefix = this.getConfigurationFile().getConfig().getString(ConfigurationManager.LOCALE_PREFIX_ITEM);
     }
 
     public String getLocalePrefix() {
@@ -286,10 +291,10 @@ public final class ConfigurationManager {
         this.localeStrings.clear();
 
         final ConfigurationSection localeSection = this.getConfigurationFile().getConfig()
-                .getConfigurationSection(LOCALE_SECTION_ITEM);
+                .getConfigurationSection(ConfigurationManager.LOCALE_SECTION_ITEM);
 
         if (localeSection != null) {
-            for (ConfigurationLocale localeKey : ConfigurationLocale.values()) {
+            for (final ConfigurationLocale localeKey : ConfigurationLocale.values()) {
                 final String key = localeKey.getKey();
                 final boolean skipPrefix = ConfigurationLocale.CHECKTOOL_USE_BOSS_BAR.getKey().equals(key);
 
@@ -300,14 +305,14 @@ public final class ConfigurationManager {
         }
     }
 
-    public String getLocale(ConfigurationLocale locale) {
+    public String getLocale(final ConfigurationLocale locale) {
         return this.getConfigurationFile().getConfig()
-                .getString(String.format("%s.%s", LOCALE_SECTION_ITEM, locale.getKey()));
+                .getString(String.format("%s.%s", ConfigurationManager.LOCALE_SECTION_ITEM, locale.getKey()));
     }
 
     public void loadDisabledWorlds() {
         this.disabledWorlds = new HashSet<>(
-                this.getConfigurationFile().getConfig().getStringList(DISABLED_WORLDS_ITEM));
+                this.getConfigurationFile().getConfig().getStringList(ConfigurationManager.DISABLED_WORLDS_ITEM));
     }
 
     public Set<String> getDisabledWorlds() {
@@ -317,11 +322,11 @@ public final class ConfigurationManager {
     public void loadWorldHoleProtections() {
         this.worldHoleProtections.clear();
 
-        ConfigurationSection worldHoleProtectionsSection = this.getConfigurationFile().getConfig()
-                .getConfigurationSection(WORLD_HOLE_PROTECTION_ITEM);
+        final ConfigurationSection worldHoleProtectionsSection = this.getConfigurationFile().getConfig()
+                .getConfigurationSection(ConfigurationManager.WORLD_HOLE_PROTECTION_ITEM);
         if (worldHoleProtectionsSection != null) {
-            for (String worldName : worldHoleProtectionsSection.getKeys(false)) {
-                if (!worldName.equals("default")) {
+            for (final String worldName : worldHoleProtectionsSection.getKeys(false)) {
+                if (!"default".equals(worldName)) {
                     this.worldHoleProtections.put(worldName,
                             WorldHoleProtection
                                     .fromConfigSection(worldHoleProtectionsSection.getConfigurationSection(worldName)));
@@ -333,7 +338,7 @@ public final class ConfigurationManager {
         }
     }
 
-    public WorldHoleProtection getWorldHoleProtection(String worldName) {
+    public WorldHoleProtection getWorldHoleProtection(final String worldName) {
         return this.worldHoleProtections.getOrDefault(worldName, this.defaultWorldHoleProtection);
     }
 

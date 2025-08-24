@@ -10,10 +10,10 @@ import org.bukkit.event.block.BlockEvent;
 public class EanyTNTPrimeEvent extends BlockEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private PrimeReason reason;
-    private Entity primerEntity;
+    private final PrimeReason reason;
+    private final Entity primerEntity;
 
-    public EanyTNTPrimeEvent(Block theBlock, PrimeReason reason, Entity primerEntity) {
+    public EanyTNTPrimeEvent(final Block theBlock, final PrimeReason reason, final Entity primerEntity) {
         super(theBlock);
         this.reason = reason;
         this.primerEntity = primerEntity;
@@ -62,17 +62,17 @@ public class EanyTNTPrimeEvent extends BlockEvent implements Cancellable {
      *               cancelled or not
      */
     @Override
-    public void setCancelled(boolean cancel) {
+    public void setCancelled(final boolean cancel) {
         this.cancelled = cancel;
     }
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
+        return EanyTNTPrimeEvent.handlers;
     }
 
     public static HandlerList getHandlerList() {
-        return handlers;
+        return EanyTNTPrimeEvent.handlers;
     }
 
     public enum PrimeReason {

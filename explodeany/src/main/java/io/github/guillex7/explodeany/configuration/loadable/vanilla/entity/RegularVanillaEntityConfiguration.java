@@ -33,29 +33,29 @@ public class RegularVanillaEntityConfiguration extends LoadableConfigurationSect
     }
 
     @Override
-    public String getEntityName(ExplodingVanillaEntity entity) {
+    public String getEntityName(final ExplodingVanillaEntity entity) {
         return entity.getName();
     }
 
     @Override
-    public ExplodingVanillaEntity getEntityFromName(String name) {
+    public ExplodingVanillaEntity getEntityFromName(final String name) {
         return ExplodingVanillaEntity.fromEntityTypeName(name);
     }
 
     @Override
-    public List<ExplodingVanillaEntity> getEntitiesFromPattern(Pattern pattern, String name) {
+    public List<ExplodingVanillaEntity> getEntitiesFromPattern(final Pattern pattern, final String name) {
         return Arrays.stream(ExplodingVanillaEntity.values())
                 .filter(entity -> pattern.matcher(entity.getName()).matches())
                 .collect(Collectors.toList());
     }
 
     @Override
-    protected EntityConfiguration fetchSpecificEntityConfiguration(ExplodingVanillaEntity entity,
-            EntityConfiguration entityConfiguration,
-            ConfigurationSection propertiesSection) {
+    protected EntityConfiguration fetchSpecificEntityConfiguration(final ExplodingVanillaEntity entity,
+            final EntityConfiguration entityConfiguration,
+            final ConfigurationSection propertiesSection) {
         switch (entity) {
             case PRIMED_TNT:
-                EntityConfiguration finalEntityConfiguration = entityConfiguration.clone();
+                final EntityConfiguration finalEntityConfiguration = entityConfiguration.clone();
                 finalEntityConfiguration
                         .setSpecificConfiguration(
                                 TNTSpecificEntityConfiguration.fromConfigurationSection(propertiesSection));

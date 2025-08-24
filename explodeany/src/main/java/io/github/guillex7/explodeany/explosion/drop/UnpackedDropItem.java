@@ -7,7 +7,7 @@ public class UnpackedDropItem {
     public Material material;
     public Location location;
 
-    public UnpackedDropItem(Material material, Location location) {
+    public UnpackedDropItem(final Material material, final Location location) {
         this.material = material;
         this.location = location;
     }

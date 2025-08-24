@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.guillex7</groupId>
+        <artifactId>explodeany-parent</artifactId>
+        <version>1.13.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>io.github.guillex7.explodeany</groupId>
+    <artifactId>compat-v1_21_paper</artifactId>
+    <name>Compatibility for v1.21+ (Paper)</name>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-common</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_20</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21-R0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Tested for -->
+        <!-- <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21-R0.1-SNAPSHOT</version>
+        </dependency> -->
+        <!-- <dependency>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
+        </dependency> -->
+        <!-- <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
+        </dependency> -->
+        <!-- <dependency>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
+        </dependency> -->
+    </dependencies>
+</project>

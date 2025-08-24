@@ -8,8 +8,8 @@
     <parent>
         <groupId>io.github.guillex7</groupId>
         <artifactId>explodeany-parent</artifactId>
-        <version>1.13.0-dev.2</version>
-        <relativePath>../..</relativePath>
+        <version>1.13.0-dev.3</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>io.github.guillex7.explodeany</groupId>
@@ -24,5 +24,37 @@
             <artifactId>spigot-api</artifactId>
             <version>1.8-R0.1-SNAPSHOT</version>
         </dependency>
+
+        <!-- Tested for -->
+        <!--<dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.9.4-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
+        </dependency>-->
     </dependencies>
 </project>

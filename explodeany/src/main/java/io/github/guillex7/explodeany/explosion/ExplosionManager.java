@@ -51,10 +51,10 @@ public class ExplosionManager {
     }
 
     public static ExplosionManager getInstance() {
-        if (instance == null) {
-            instance = new ExplosionManager();
+        if (ExplosionManager.instance == null) {
+            ExplosionManager.instance = new ExplosionManager();
         }
-        return instance;
+        return ExplosionManager.instance;
     }
 
     public void removeHandledBlocksFromList(final Map<Material, EntityMaterialConfiguration> materialConfigurations,
@@ -65,14 +65,14 @@ public class ExplosionManager {
         final Iterator<Block> iterator = blockList.iterator();
         if (!worldHoleProtection.doProtectUnhandledBlocks()) {
             while (iterator.hasNext()) {
-                Block block = iterator.next();
+                final Block block = iterator.next();
                 if (materialConfigurations.containsKey(block.getType())) {
                     iterator.remove();
                 }
             }
         } else {
             while (iterator.hasNext()) {
-                Block block = iterator.next();
+                final Block block = iterator.next();
                 if (materialConfigurations.containsKey(block.getType())
                         || worldHoleProtection.isHeightProtected(block.getY())) {
                     iterator.remove();
@@ -84,19 +84,20 @@ public class ExplosionManager {
     private void attachExplosionManagerMetadataToEntity(final Entity entity,
             final Map<Material, EntityMaterialConfiguration> materialConfigurations,
             final DropCollector dropCollector) {
-        entity.setMetadata(EXPLOSION_MANAGER_SPAWNED_TAG,
+        entity.setMetadata(ExplosionManager.EXPLOSION_MANAGER_SPAWNED_TAG,
                 new FixedMetadataValue(ExplodeAny.getInstance(), true));
-        entity.setMetadata(EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG,
+        entity.setMetadata(ExplosionManager.EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG,
                 new FixedMetadataValue(ExplodeAny.getInstance(),
                         new ExplosionMetadata(materialConfigurations, dropCollector)));
     }
 
-    public final boolean isEntitySpawnedByExplosionManager(Entity entity) {
-        return entity.hasMetadata(EXPLOSION_MANAGER_SPAWNED_TAG);
+    public final boolean isEntitySpawnedByExplosionManager(final Entity entity) {
+        return entity.hasMetadata(ExplosionManager.EXPLOSION_MANAGER_SPAWNED_TAG);
     }
 
-    public final ExplosionMetadata getExplosionManagerMetadataFromEntity(Entity entity) {
-        List<MetadataValue> metadataValueList = entity.getMetadata(EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG);
+    public final ExplosionMetadata getExplosionManagerMetadataFromEntity(final Entity entity) {
+        final List<MetadataValue> metadataValueList = entity
+                .getMetadata(ExplosionManager.EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG);
 
         if (!metadataValueList.isEmpty()) {
             return (ExplosionMetadata) metadataValueList.get(0).value();
@@ -288,8 +289,8 @@ public class ExplosionManager {
     }
 
     private BiConsumer<Block, Boolean> getWaterloggedBlockConsumer(
-            EntityBehavioralConfiguration entityBehavioralConfiguration,
-            boolean isSourceLocationUnderwater) {
+            final EntityBehavioralConfiguration entityBehavioralConfiguration,
+            final boolean isSourceLocationUnderwater) {
         if (entityBehavioralConfiguration
                 .doesExplosionRemoveNearbyWaterloggedBlocks()) {
             final boolean doSurfaceRulesApply = entityBehavioralConfiguration

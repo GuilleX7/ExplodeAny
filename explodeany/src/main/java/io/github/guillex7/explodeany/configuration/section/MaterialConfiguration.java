@@ -19,22 +19,23 @@ public class MaterialConfiguration {
         return new MaterialConfiguration(Duration.zero(), Duration.zero());
     }
 
-    public static MaterialConfiguration fromConfigurationSection(ConfigurationSection section) {
-        final Duration timeToFullRegeneration = Duration.parse(section.getString(TIME_TO_FULL_REGENERATION_PATH));
+    public static MaterialConfiguration fromConfigurationSection(final ConfigurationSection section) {
+        final Duration timeToFullRegeneration = Duration
+                .parse(section.getString(MaterialConfiguration.TIME_TO_FULL_REGENERATION_PATH));
         final Duration delayBeforeStartRegenerating = Duration
-                .parse(section.getString(DELAY_BEFORE_START_REGENERATING_PATH));
+                .parse(section.getString(MaterialConfiguration.DELAY_BEFORE_START_REGENERATING_PATH));
 
         return new MaterialConfiguration(
                 timeToFullRegeneration,
                 delayBeforeStartRegenerating);
     }
 
-    private MaterialConfiguration(Duration timeToFullRegeneration, Duration delayBeforeStartRegenerating) {
+    private MaterialConfiguration(final Duration timeToFullRegeneration, final Duration delayBeforeStartRegenerating) {
         this.timeToFullRegeneration = timeToFullRegeneration;
         this.delayBeforeStartRegenerating = delayBeforeStartRegenerating;
         this.durabilityRegenerationPerMillisecond = !timeToFullRegeneration.isZero()
                 ? ConfigurationManager.getInstance().getGlobalBlockDurability()
-                / (double) timeToFullRegeneration.asMilliseconds()
+                        / (double) timeToFullRegeneration.asMilliseconds()
                 : 0.0d;
     }
 
@@ -43,28 +44,28 @@ public class MaterialConfiguration {
     }
 
     public Duration getTimeToFullRegeneration() {
-        return timeToFullRegeneration;
+        return this.timeToFullRegeneration;
     }
 
     public Duration getDelayBeforeRegeneration() {
-        return delayBeforeStartRegenerating;
+        return this.delayBeforeStartRegenerating;
     }
 
     public double getDurabilityRegenerationPerMillisecond() {
-        return durabilityRegenerationPerMillisecond;
+        return this.durabilityRegenerationPerMillisecond;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("&7<Regeneration>\n");
 
-        if (!timeToFullRegeneration.isZero()) {
+        if (!this.timeToFullRegeneration.isZero()) {
             builder.append(String.format(
                     "&fTime to full regeneration: %s\n"
-                    + "&fDelay before start regenerating: %s\n",
-                    timeToFullRegeneration.toString(),
-                    delayBeforeStartRegenerating.toString()));
+                            + "&fDelay before start regenerating: %s\n",
+                    this.timeToFullRegeneration.toString(),
+                    this.delayBeforeStartRegenerating.toString()));
         } else {
             builder.append("&f(Disabled)\n");
         }

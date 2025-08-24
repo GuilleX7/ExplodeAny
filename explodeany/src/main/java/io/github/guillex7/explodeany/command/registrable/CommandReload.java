@@ -19,12 +19,12 @@ public class CommandReload extends RegistrableCommand {
     }
 
     @Override
-    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
-        return REQUIRED_PERMISSIONS.stream().allMatch(permission -> sender.hasPermission(permission.getKey()));
+    public boolean isCommandSenderAllowedToUse(final CommandSender sender) {
+        return this.REQUIRED_PERMISSIONS.stream().allMatch(permission -> sender.hasPermission(permission.getKey()));
     }
 
     @Override
-    public boolean execute(CommandSender sender, String[] args) {
+    public boolean execute(final CommandSender sender, final String[] args) {
         ExplodeAny.getInstance().onDisable();
         ExplodeAny.getInstance().onEnable();
         sender.sendMessage(ConfigurationManager.getInstance().getLocale(ConfigurationLocale.RELOADED));

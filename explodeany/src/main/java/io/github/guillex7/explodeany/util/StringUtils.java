@@ -4,7 +4,7 @@ public class StringUtils {
     private StringUtils() {
     }
 
-    public static String beautifyName(String name) {
+    public static String beautifyName(final String name) {
         if (name.length() < 1) {
             return name;
         }

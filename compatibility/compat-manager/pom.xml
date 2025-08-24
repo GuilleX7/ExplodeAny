@@ -8,8 +8,8 @@
     <parent>
         <groupId>io.github.guillex7</groupId>
         <artifactId>explodeany-parent</artifactId>
-        <version>1.13.0-dev.2</version>
-        <relativePath>../..</relativePath>
+        <version>1.13.0-dev.3</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>io.github.guillex7.explodeany</groupId>
@@ -23,6 +23,12 @@
             <groupId>io.github.guillex7.explodeany</groupId>
             <artifactId>compat-common</artifactId>
             <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
@@ -30,8 +36,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -41,8 +47,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -52,8 +58,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -63,8 +69,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -74,8 +80,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.destroystokyo.paper</groupId>
-                    <artifactId>paper-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -85,8 +91,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -96,8 +102,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.destroystokyo.paper</groupId>
-                    <artifactId>paper-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -107,8 +113,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -118,8 +124,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.destroystokyo.paper</groupId>
-                    <artifactId>paper-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -129,8 +135,8 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>io.papermc.paper</groupId>
-                    <artifactId>paper-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -140,10 +146,58 @@
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>io.github.guillex7.explodeany</groupId>
+            <artifactId>compat-v1_21_paper</artifactId>
+            <version>${explodeany.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8-R0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Tested for -->
+        <!--<dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.9.4-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
+        </dependency>-->
     </dependencies>
 </project>

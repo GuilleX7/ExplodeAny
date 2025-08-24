@@ -2,6 +2,8 @@ package io.github.guillex7.explodeany.compat.v1_8.api;
 
 import io.github.guillex7.explodeany.compat.common.api.IBukkitListenerUtils;
 import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
+import io.github.guillex7.explodeany.compat.v1_8.listener.CBlockExplodeListener;
+import io.github.guillex7.explodeany.compat.v1_8.listener.CTNTPrimeListener;
 
 public class CBukkitListenerUtils implements IBukkitListenerUtils {
     @Override

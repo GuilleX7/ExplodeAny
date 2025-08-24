@@ -11,8 +11,8 @@ public enum QualityArmoryExplosive {
     private final String name;
     private final double explosionRadius;
 
-    public static QualityArmoryExplosive fromName(String name) {
-        for (QualityArmoryExplosive explosive : values()) {
+    public static QualityArmoryExplosive fromName(final String name) {
+        for (final QualityArmoryExplosive explosive : QualityArmoryExplosive.values()) {
             if (explosive.getName().equalsIgnoreCase(name)) {
                 return explosive;
             }
@@ -21,7 +21,7 @@ public enum QualityArmoryExplosive {
         return null;
     }
 
-    private QualityArmoryExplosive(String name, double explosionRadius) {
+    QualityArmoryExplosive(final String name, final double explosionRadius) {
         this.name = name;
         this.explosionRadius = explosionRadius;
     }

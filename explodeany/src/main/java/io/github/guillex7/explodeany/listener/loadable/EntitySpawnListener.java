@@ -36,7 +36,7 @@ public class EntitySpawnListener implements LoadableListener {
         }
 
         if (tntConfiguration.getSpecificConfiguration() instanceof TNTSpecificEntityConfiguration) {
-            TNTSpecificEntityConfiguration specificConfig = (TNTSpecificEntityConfiguration) tntConfiguration
+            final TNTSpecificEntityConfiguration specificConfig = (TNTSpecificEntityConfiguration) tntConfiguration
                     .getSpecificConfiguration();
             this.doTagPrimedTnt = specificConfig.getMinimumDistanceToDamageBlocksUnderwater() > 0.0;
             this.doResetPrimedTntVelocity = specificConfig.doSnapToBlockGridOnPriming();
@@ -44,13 +44,13 @@ public class EntitySpawnListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
-    public void onEntitySpawn(EntitySpawnEvent event) {
+    public void onEntitySpawn(final EntitySpawnEvent event) {
         final Entity entity = event.getEntity();
         final ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
 
         if (explodingEntity == ExplodingVanillaEntity.PRIMED_TNT) {
             if (this.doTagPrimedTnt) {
-                entity.setMetadata(TNT_PRIMED_LOCATION_TAG,
+                entity.setMetadata(EntitySpawnListener.TNT_PRIMED_LOCATION_TAG,
                         new FixedMetadataValue(ExplodeAny.getInstance(), event.getLocation()));
             }
 

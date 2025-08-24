@@ -23,12 +23,12 @@ public enum ExplodingVanillaEntity {
     private final String name;
     private final double explosionRadius;
 
-    public static boolean isEntityNameValid(String entityName) {
+    public static boolean isEntityNameValid(final String entityName) {
         return ExplodingVanillaEntity.fromEntityTypeName(entityName) != null;
     }
 
-    public static ExplodingVanillaEntity fromEntityTypeName(String entityTypeName) {
-        String uppercasedEntityTypeName = entityTypeName.toUpperCase();
+    public static ExplodingVanillaEntity fromEntityTypeName(final String entityTypeName) {
+        final String uppercasedEntityTypeName = entityTypeName.toUpperCase();
 
         switch (uppercasedEntityTypeName) {
             case "TNT":
@@ -46,28 +46,28 @@ public enum ExplodingVanillaEntity {
         }
     }
 
-    public static ExplodingVanillaEntity fromEntity(Entity entity) {
+    public static ExplodingVanillaEntity fromEntity(final Entity entity) {
         String entityTypeName = entity.getType().toString();
-        EntityType entityType = entity.getType();
+        final EntityType entityType = entity.getType();
 
-        if (entityType.equals(EntityType.CREEPER) && ((Creeper) entity).isPowered()
-                || entityType.equals(EntityType.WITHER_SKULL) && ((WitherSkull) entity).isCharged()) {
+        if (EntityType.CREEPER.equals(entityType) && ((Creeper) entity).isPowered()
+                || EntityType.WITHER_SKULL.equals(entityType) && ((WitherSkull) entity).isCharged()) {
             entityTypeName = "CHARGED_".concat(entityTypeName);
         }
 
         return ExplodingVanillaEntity.fromEntityTypeName(entityTypeName);
     }
 
-    private ExplodingVanillaEntity(String name, double explosionRadius) {
+    ExplodingVanillaEntity(final String name, final double explosionRadius) {
         this.name = name;
         this.explosionRadius = explosionRadius;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public double getExplosionRadius() {
-        return explosionRadius;
+        return this.explosionRadius;
     }
 }

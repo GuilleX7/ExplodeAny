@@ -19,11 +19,11 @@ public enum PermissionNode {
 
     private final String key;
 
-    private PermissionNode(String key) {
+    PermissionNode(final String key) {
         this.key = key;
     }
 
     public String getKey() {
-        return key;
+        return this.key;
     }
 }

@@ -39,33 +39,33 @@ public class MagicVanillaEntityExplosionHandler implements VanillaEntityExplosio
         this.magicPlugin = Bukkit.getPluginManager().getPlugin("Magic");
     }
 
-    private boolean isEntitySpawnedByMagic(Entity entity) {
-        return magicPlugin != null
+    private boolean isEntitySpawnedByMagic(final Entity entity) {
+        return this.magicPlugin != null
                 && CompatibilityManager.getInstance().getApi().getPersistentStorageUtils().getForEntity(entity)
-                        .has(magicPlugin, MAGIC_SPAWNED_KEY, EanyMetaPersistentDataType.BYTE);
+                        .has(this.magicPlugin, this.MAGIC_SPAWNED_KEY, EanyMetaPersistentDataType.BYTE);
     }
 
     @Override
-    public boolean isEventHandled(EntityExplodeEvent event) {
+    public boolean isEventHandled(final EntityExplodeEvent event) {
         return ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name())
                 && this.isEntitySpawnedByMagic(event.getEntity());
     }
 
     @Override
-    public void onEntityExplode(EntityExplodeEvent event) {
-        Entity entity = event.getEntity();
+    public void onEntityExplode(final EntityExplodeEvent event) {
+        final Entity entity = event.getEntity();
 
-        ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
-        double explosionRadius = explodingEntity.getExplosionRadius();
+        final ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity.fromEntity(entity);
+        final double explosionRadius = explodingEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected Magic entity explosion. Entity type: {0}",
                     explodingEntity.getName());
         }
 
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(explodingEntity);
-        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
+        final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(explodingEntity);
 
         if (materialConfigurations == null || entityConfiguration == null || explosionRadius == 0d) {

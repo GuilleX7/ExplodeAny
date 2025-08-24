@@ -44,12 +44,12 @@ public class QualityArmoryExplosionListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    public void onQualityArmoryProjectileExplode(QAProjectileExplodeEvent event) {
+    public void onQualityArmoryProjectileExplode(final QAProjectileExplodeEvent event) {
         if (event.isCancelled()) {
             return;
         }
 
-        QualityArmoryExplosive explosive = QualityArmoryExplosive.fromName(event.getProjectile().getName());
+        final QualityArmoryExplosive explosive = QualityArmoryExplosive.fromName(event.getProjectile().getName());
         if (explosive == null) {
             return;
         }
@@ -63,7 +63,7 @@ public class QualityArmoryExplosionListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    public void onQualityArmoryThrowableExplode(QAThrowableExplodeEvent event) {
+    public void onQualityArmoryThrowableExplode(final QAThrowableExplodeEvent event) {
         if (event.isCancelled()) {
             return;
         }
@@ -91,15 +91,16 @@ public class QualityArmoryExplosionListener implements LoadableListener {
         this.handleExplosive(explosive, event.getLocation(), event);
     }
 
-    private void handleExplosive(QualityArmoryExplosive explosive, Location location, Cancellable event) {
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+    private void handleExplosive(final QualityArmoryExplosive explosive, final Location location,
+            final Cancellable event) {
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(explosive);
-        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations().get(explosive);
+        final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations().get(explosive);
         if (materialConfigurations == null || entityConfiguration == null) {
             return;
         }
 
-        EnumSet<ExplosionFlag> flags = EnumSet.noneOf(ExplosionFlag.class);
+        final EnumSet<ExplosionFlag> flags = EnumSet.noneOf(ExplosionFlag.class);
         if (BlockLiquidDetector.isLocationSurroundedByLiquid(location)) {
             flags.add(ExplosionFlag.FORCE_IS_SOURCE_LOCATION_UNDERWATER);
         }

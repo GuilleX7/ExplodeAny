@@ -39,8 +39,9 @@ public class CustomVanillaEntityConfiguration extends LoadableConfigurationSecti
     }
 
     @Override
-    protected boolean areEntityAndMaterialConfigurationsValid(String entity, EntityConfiguration entityConfiguration,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations) {
+    protected boolean areEntityAndMaterialConfigurationsValid(final String entity,
+            final EntityConfiguration entityConfiguration,
+            final Map<Material, EntityMaterialConfiguration> materialConfigurations) {
         if (entityConfiguration.getExplosionRadius() <= 0) {
             this.getPlugin().getLogger().log(Level.WARNING,
                     "Invalid configuration for custom entity {0}: explosion radius must be explicitly set to a positive value.",
@@ -52,18 +53,18 @@ public class CustomVanillaEntityConfiguration extends LoadableConfigurationSecti
     }
 
     @Override
-    public String getEntityName(String entity) {
+    public String getEntityName(final String entity) {
         return entity;
     }
 
     @Override
-    public String getEntityFromName(String name) {
-        String uppercasedName = name.toUpperCase();
+    public String getEntityFromName(final String name) {
+        final String uppercasedName = name.toUpperCase();
         return ExplodingVanillaEntity.fromEntityTypeName(uppercasedName) == null ? uppercasedName : null;
     }
 
     @Override
-    public List<String> getEntitiesFromPattern(Pattern pattern, String name) {
+    public List<String> getEntitiesFromPattern(final Pattern pattern, final String name) {
         return Arrays.asList(name);
     }
 }

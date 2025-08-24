@@ -56,20 +56,20 @@ public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSe
     }
 
     @Override
-    public String getEntityName(QualityArmoryExplosive entity) {
+    public String getEntityName(final QualityArmoryExplosive entity) {
         return entity.getName();
     }
 
     @Override
-    public QualityArmoryExplosive getEntityFromName(String name) {
+    public QualityArmoryExplosive getEntityFromName(final String name) {
         return QualityArmoryExplosive.fromName(name);
     }
 
     @Override
-    public List<QualityArmoryExplosive> getEntitiesFromPattern(Pattern pattern, String name) {
-        List<QualityArmoryExplosive> matchedEntities = new ArrayList<>();
+    public List<QualityArmoryExplosive> getEntitiesFromPattern(final Pattern pattern, final String name) {
+        final List<QualityArmoryExplosive> matchedEntities = new ArrayList<>();
 
-        for (QualityArmoryExplosive entity : QualityArmoryExplosive.values()) {
+        for (final QualityArmoryExplosive entity : QualityArmoryExplosive.values()) {
             if (pattern.matcher(entity.getName()).matches()) {
                 matchedEntities.add(entity);
             }

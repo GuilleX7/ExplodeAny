@@ -14,42 +14,42 @@ public class NamePatternUtils {
     private NamePatternUtils() {
     }
 
-    public static Pattern getPatternFromNamePattern(String namePattern, boolean isCaseSensitive) {
+    public static Pattern getPatternFromNamePattern(String namePattern, final boolean isCaseSensitive) {
         namePattern = namePattern.replace("*", ".*");
 
         try {
             return Pattern.compile(namePattern, isCaseSensitive ? 0 : Pattern.CASE_INSENSITIVE);
-        } catch (Exception e) {
-            ExplodeAny.getInstance().getLogger().
-                    warning(String.format("Couldn't parse the name pattern: %s", namePattern));
+        } catch (final Exception e) {
+            ExplodeAny.getInstance().getLogger()
+                    .warning(String.format("Couldn't parse the name pattern: %s", namePattern));
             return null;
         }
     }
 
-    public static boolean isNamePattern(String name) {
+    public static boolean isNamePattern(final String name) {
         return name.contains("*");
     }
 
-    public static final Material getMaterialFromName(String name) {
-        Material material = Material.getMaterial(name.toUpperCase());
+    public static final Material getMaterialFromName(final String name) {
+        final Material material = Material.getMaterial(name.toUpperCase());
         return material;
     }
 
-    public static List<Material> getMaterialsFromPattern(Pattern pattern) {
+    public static List<Material> getMaterialsFromPattern(final Pattern pattern) {
         return Arrays.stream(Material.values()).filter(material -> pattern.matcher(material.name()).matches())
                 .collect(Collectors.toList());
     }
 
-    public static List<Material> getMaterialsFromNameOrPattern(String nameOrPattern) {
+    public static List<Material> getMaterialsFromNameOrPattern(final String nameOrPattern) {
         if (NamePatternUtils.isNamePattern(nameOrPattern)) {
-            Pattern pattern = NamePatternUtils.getPatternFromNamePattern(nameOrPattern, false);
+            final Pattern pattern = NamePatternUtils.getPatternFromNamePattern(nameOrPattern, false);
             if (pattern == null) {
                 return new ArrayList<>();
             }
 
             return NamePatternUtils.getMaterialsFromPattern(pattern);
         } else {
-            Material material = NamePatternUtils.getMaterialFromName(nameOrPattern);
+            final Material material = NamePatternUtils.getMaterialFromName(nameOrPattern);
             return material != null ? Arrays.asList(material) : new ArrayList<>();
         }
     }

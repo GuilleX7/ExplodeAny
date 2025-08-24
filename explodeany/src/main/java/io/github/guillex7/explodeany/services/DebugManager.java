@@ -10,17 +10,17 @@ public final class DebugManager {
     }
 
     public static DebugManager getInstance() {
-        if (instance == null) {
-            instance = new DebugManager();
+        if (DebugManager.instance == null) {
+            DebugManager.instance = new DebugManager();
         }
-        return instance;
+        return DebugManager.instance;
     }
 
     public boolean isDebugEnabled() {
-        return isDebugEnabled;
+        return this.isDebugEnabled;
     }
 
-    public void setIsDebugEnabled(boolean isDebugEnabled) {
+    public void setIsDebugEnabled(final boolean isDebugEnabled) {
         this.isDebugEnabled = isDebugEnabled;
     }
 }

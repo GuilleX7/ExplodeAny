@@ -35,7 +35,7 @@ public class VanillaEntityExplosionListener implements LoadableListener {
     }
 
     private void loadHandlers() {
-        for (VanillaEntityExplosionHandler handler : this.registeredHandlers) {
+        for (final VanillaEntityExplosionHandler handler : this.registeredHandlers) {
             if (handler.shouldBeLoaded()) {
                 handler.load();
                 this.loadedHandlers.add(handler);
@@ -50,12 +50,12 @@ public class VanillaEntityExplosionListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    public void onEntityExplode(EntityExplodeEvent event) {
+    public void onEntityExplode(final EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
 
-        for (VanillaEntityExplosionHandler handler : this.loadedHandlers) {
+        for (final VanillaEntityExplosionHandler handler : this.loadedHandlers) {
             if (handler.isEventHandled(event)) {
                 handler.onEntityExplode(event);
                 break;
@@ -63,7 +63,7 @@ public class VanillaEntityExplosionListener implements LoadableListener {
         }
     }
 
-    protected boolean isEventHandled(EntityExplodeEvent event) {
+    protected boolean isEventHandled(final EntityExplodeEvent event) {
         return !event.isCancelled() && event.getEntity() != null
                 && !ExplosionManager.getInstance().isEntitySpawnedByExplosionManager(event.getEntity())
                 && !ConfigurationManager.getInstance().getDisabledWorlds()
@@ -71,7 +71,7 @@ public class VanillaEntityExplosionListener implements LoadableListener {
     }
 
     private void unloadHandlers() {
-        for (VanillaEntityExplosionHandler handler : this.loadedHandlers) {
+        for (final VanillaEntityExplosionHandler handler : this.loadedHandlers) {
             handler.unload();
         }
 

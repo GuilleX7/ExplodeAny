@@ -25,17 +25,17 @@ public class CommandManager implements TabExecutor {
     }
 
     public static CommandManager getInstance() {
-        if (instance == null) {
-            instance = new CommandManager();
+        if (CommandManager.instance == null) {
+            CommandManager.instance = new CommandManager();
         }
-        return instance;
+        return CommandManager.instance;
     }
 
     public Map<String, RegistrableCommand> getRegisteredCommands() {
-        return registeredCommands;
+        return this.registeredCommands;
     }
 
-    public void registerCommand(RegistrableCommand command) {
+    public void registerCommand(final RegistrableCommand command) {
         this.registeredCommands.put(command.getName(), command);
     }
 
@@ -44,16 +44,17 @@ public class CommandManager implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command command, final String label,
+            final String[] args) {
         RegistrableCommand rootCommand = this.getRegisteredCommands().get(command.getName());
         if (rootCommand == null) {
             return true;
         }
-        StringBuilder breadcrumbsBuilder = new StringBuilder(rootCommand.getName());
+        final StringBuilder breadcrumbsBuilder = new StringBuilder(rootCommand.getName());
 
         int i;
         for (i = 0; i < args.length; i++) {
-            RegistrableCommand subcommand = rootCommand.getMappedSubcommands().get(args[i]);
+            final RegistrableCommand subcommand = rootCommand.getMappedSubcommands().get(args[i]);
             if (subcommand == null) {
                 break;
             }
@@ -93,8 +94,9 @@ public class CommandManager implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> autocompletion = new ArrayList<>();
+    public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias,
+            final String[] args) {
+        final List<String> autocompletion = new ArrayList<>();
 
         RegistrableCommand rootCommand = this.getRegisteredCommands().get(command.getName());
         if (rootCommand == null) {
@@ -119,7 +121,7 @@ public class CommandManager implements TabExecutor {
         if (!rootCommand.isTerminal()) {
             final String lastWrittenSubcommand = args[i];
 
-            for (RegistrableCommand subcommand : rootCommand.getSubcommands()) {
+            for (final RegistrableCommand subcommand : rootCommand.getSubcommands()) {
                 if (subcommand.isCommandSenderAllowedToUse(sender)) {
                     subcommand.getAllNames().stream().filter(x -> x.startsWith(lastWrittenSubcommand))
                             .forEach(autocompletion::add);

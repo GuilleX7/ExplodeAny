@@ -37,27 +37,27 @@ public final class CannonProjectileExplosionListener implements LoadableListener
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    public void onProjectileImpact(ProjectileImpactEvent event) {
+    public void onProjectileImpact(final ProjectileImpactEvent event) {
         if (event.isCancelled() || ConfigurationManager.getInstance().getDisabledWorlds()
                 .contains(event.getImpactLocation().getWorld().getName())) {
             return;
         }
 
-        Projectile projectile = event.getProjectile();
+        final Projectile projectile = event.getProjectile();
         if (projectile == null) {
             return;
         }
 
-        String projectileId = event.getProjectile().getProjectileId();
+        final String projectileId = event.getProjectile().getProjectileId();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO,
                     "Detected Cannons projectile explosion. Projectile ID: {0}", projectileId);
         }
 
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(projectileId);
-        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
+        final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(projectileId);
 
         if (materialConfigurations == null || entityConfiguration == null) {
@@ -71,27 +71,27 @@ public final class CannonProjectileExplosionListener implements LoadableListener
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
-    public void onProjectilePiercing(ProjectilePiercingEvent event) {
+    public void onProjectilePiercing(final ProjectilePiercingEvent event) {
         if (ConfigurationManager.getInstance().getDisabledWorlds()
                 .contains(event.getImpactLocation().getWorld().getName())) {
             return;
         }
 
-        Projectile projectile = event.getProjectile();
+        final Projectile projectile = event.getProjectile();
         if (projectile == null) {
             return;
         }
 
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations()
                 .get(projectile.getProjectileId());
         if (materialConfigurations == null) {
             return;
         }
 
-        Iterator<Block> iterator = event.getBlockList().iterator();
+        final Iterator<Block> iterator = event.getBlockList().iterator();
         while (iterator.hasNext()) {
-            Block block = iterator.next();
+            final Block block = iterator.next();
             if (materialConfigurations.containsKey(block.getType())) {
                 // First handled block, stop here
                 event.setImpactLocation(block.getLocation());

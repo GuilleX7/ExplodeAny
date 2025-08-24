@@ -38,11 +38,11 @@ public abstract class LoadableConfigurationSection<T extends Object> {
     }
 
     public final Map<T, Map<Material, EntityMaterialConfiguration>> getEntityMaterialConfigurations() {
-        return entityMaterialConfigurations;
+        return this.entityMaterialConfigurations;
     }
 
     public final Map<T, EntityConfiguration> getEntityConfigurations() {
-        return entityConfigurations;
+        return this.entityConfigurations;
     }
 
     public final void clear() {
@@ -54,8 +54,8 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         return this.getEntityConfigurations().keySet().stream().map(this::getEntityName).collect(Collectors.toSet());
     }
 
-    public final String reifyEntityName(String entityName) {
-        T entity = this.getEntityFromName(entityName);
+    public final String reifyEntityName(final String entityName) {
+        final T entity = this.getEntityFromName(entityName);
         if (entity != null) {
             return this.getEntityName(entity);
         } else {
@@ -63,8 +63,8 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         }
     }
 
-    public final void fetchFromConfiguration(FileConfiguration configuration) {
-        ConfigurationSection configurationSection = configuration.getConfigurationSection(this.getSectionPath());
+    public final void fetchFromConfiguration(final FileConfiguration configuration) {
+        final ConfigurationSection configurationSection = configuration.getConfigurationSection(this.getSectionPath());
         if (configurationSection == null) {
             return;
         }
@@ -72,21 +72,21 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         this.fetchEntities(configurationSection);
     }
 
-    private void fetchEntities(ConfigurationSection entitiesSection) {
-        for (String entityName : entitiesSection.getKeys(false)) {
-            Set<T> validEntities = new HashSet<>();
-            Set<String> invalidEntities = new HashSet<>();
+    private void fetchEntities(final ConfigurationSection entitiesSection) {
+        for (final String entityName : entitiesSection.getKeys(false)) {
+            final Set<T> validEntities = new HashSet<>();
+            final Set<String> invalidEntities = new HashSet<>();
             boolean doesDefinitionHavePriority = true;
 
-            List<T> entities = this.getEntitiesFromNameOrPattern(entityName);
+            final List<T> entities = this.getEntitiesFromNameOrPattern(entityName);
             if (!entities.isEmpty()) {
                 validEntities.addAll(entities);
             } else {
                 doesDefinitionHavePriority = false;
-                List<String> group = ConfigurationManager.getInstance().getGroups().get(entityName);
+                final List<String> group = ConfigurationManager.getInstance().getGroups().get(entityName);
                 if (group != null) {
-                    for (String entityNameEntry : group) {
-                        List<T> entitiesForNameEntry = this.getEntitiesFromNameOrPattern(entityNameEntry);
+                    for (final String entityNameEntry : group) {
+                        final List<T> entitiesForNameEntry = this.getEntitiesFromNameOrPattern(entityNameEntry);
                         if (!entitiesForNameEntry.isEmpty()) {
                             validEntities.addAll(entitiesForNameEntry);
                         } else {
@@ -108,7 +108,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
                                 entityName, this.getSectionPath(), String.join(", ", invalidEntities)));
             }
 
-            ConfigurationSection entitySection = entitiesSection.getConfigurationSection(entityName);
+            final ConfigurationSection entitySection = entitiesSection.getConfigurationSection(entityName);
             if (entitySection == null) {
                 this.getPlugin().getLogger().warning(
                         String.format("%s.%s section is invalid and won't be loaded", this.getSectionPath(),
@@ -118,8 +118,10 @@ public abstract class LoadableConfigurationSection<T extends Object> {
 
             Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
             EntityConfiguration entityConfiguration = EntityConfiguration.byDefault();
-            ConfigurationSection materialsSection = entitySection.getConfigurationSection(MATERIALS_SECTION);
-            ConfigurationSection propertiesSection = entitySection.getConfigurationSection(PROPERTIES_SECTION);
+            final ConfigurationSection materialsSection = entitySection
+                    .getConfigurationSection(LoadableConfigurationSection.MATERIALS_SECTION);
+            final ConfigurationSection propertiesSection = entitySection
+                    .getConfigurationSection(LoadableConfigurationSection.PROPERTIES_SECTION);
             boolean hasSections = false;
 
             if (materialsSection != null) {
@@ -138,7 +140,7 @@ public abstract class LoadableConfigurationSection<T extends Object> {
                 materialConfigurations = this.fetchMaterials(entitySection);
             }
 
-            for (T fetchedEntity : validEntities) {
+            for (final T fetchedEntity : validEntities) {
                 if (propertiesSection != null) {
                     entityConfiguration = this.fetchSpecificEntityConfiguration(fetchedEntity,
                             entityConfiguration, propertiesSection);
@@ -155,23 +157,23 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         }
     }
 
-    private Map<Material, EntityMaterialConfiguration> fetchMaterials(ConfigurationSection entitySection) {
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
+    private Map<Material, EntityMaterialConfiguration> fetchMaterials(final ConfigurationSection entitySection) {
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = new HashMap<>();
 
-        for (String materialName : entitySection.getKeys(false)) {
-            Set<Material> validMaterials = new HashSet<>();
-            Set<String> invalidMaterials = new HashSet<>();
+        for (final String materialName : entitySection.getKeys(false)) {
+            final Set<Material> validMaterials = new HashSet<>();
+            final Set<String> invalidMaterials = new HashSet<>();
             boolean doDefinitionHavePriority = true;
 
-            List<Material> materials = NamePatternUtils.getMaterialsFromNameOrPattern(materialName);
+            final List<Material> materials = NamePatternUtils.getMaterialsFromNameOrPattern(materialName);
             if (!materials.isEmpty()) {
                 validMaterials.addAll(materials);
             } else {
                 doDefinitionHavePriority = false;
-                List<String> group = ConfigurationManager.getInstance().getGroups().get(materialName);
+                final List<String> group = ConfigurationManager.getInstance().getGroups().get(materialName);
                 if (group != null) {
-                    for (String materialNameEntry : group) {
-                        List<Material> materialsForNameEntry = NamePatternUtils
+                    for (final String materialNameEntry : group) {
+                        final List<Material> materialsForNameEntry = NamePatternUtils
                                 .getMaterialsFromNameOrPattern(materialNameEntry);
                         if (!materialsForNameEntry.isEmpty()) {
                             validMaterials.addAll(materialsForNameEntry);
@@ -194,17 +196,17 @@ public abstract class LoadableConfigurationSection<T extends Object> {
                                 materialName, String.join(", ", invalidMaterials)));
             }
 
-            ConfigurationSection materialSection = entitySection.getConfigurationSection(materialName);
+            final ConfigurationSection materialSection = entitySection.getConfigurationSection(materialName);
             if (materialSection == null) {
                 this.getPlugin().getLogger().warning(String.format("%s.%s.%s is invalid and won't be loaded",
-                        getSectionPath(), entitySection.getName(), materialName));
+                        this.getSectionPath(), entitySection.getName(), materialName));
                 continue;
             }
 
-            EntityMaterialConfiguration entityMaterialConfiguration = EntityMaterialConfiguration
+            final EntityMaterialConfiguration entityMaterialConfiguration = EntityMaterialConfiguration
                     .fromConfigurationSection(materialSection);
 
-            for (Material fetchedMaterial : validMaterials) {
+            for (final Material fetchedMaterial : validMaterials) {
                 this.putAndMergeMaterialConfigurations(materialConfigurations, fetchedMaterial,
                         entityMaterialConfiguration,
                         doDefinitionHavePriority);
@@ -214,22 +216,23 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         return materialConfigurations;
     }
 
-    private void putAndMergeEntityMaterialConfigurations(T entity,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations, boolean definitionHasPriority) {
+    private void putAndMergeEntityMaterialConfigurations(final T entity,
+            final Map<Material, EntityMaterialConfiguration> materialConfigurations,
+            final boolean definitionHasPriority) {
         if (!this.getEntityMaterialConfigurations().containsKey(entity)) {
             this.getEntityMaterialConfigurations().put(entity, new HashMap<>());
             this.getEntityMaterialConfigurations().get(entity).putAll(materialConfigurations);
         } else if (definitionHasPriority) {
             this.getEntityMaterialConfigurations().get(entity).putAll(materialConfigurations);
         } else {
-            for (Entry<Material, EntityMaterialConfiguration> entry : materialConfigurations.entrySet()) {
+            for (final Entry<Material, EntityMaterialConfiguration> entry : materialConfigurations.entrySet()) {
                 this.getEntityMaterialConfigurations().get(entity).putIfAbsent(entry.getKey(), entry.getValue());
             }
         }
     }
 
-    private void putAndMergeEntityConfigurations(T entity, EntityConfiguration entityConfiguration,
-            boolean definitionHasPriority) {
+    private void putAndMergeEntityConfigurations(final T entity, final EntityConfiguration entityConfiguration,
+            final boolean definitionHasPriority) {
         if (definitionHasPriority) {
             this.getEntityConfigurations().put(entity, entityConfiguration);
         } else {
@@ -238,8 +241,8 @@ public abstract class LoadableConfigurationSection<T extends Object> {
     }
 
     private void putAndMergeMaterialConfigurations(
-            Map<Material, EntityMaterialConfiguration> materialConfigurations, Material material,
-            EntityMaterialConfiguration entityMaterialConfiguration, boolean definitionHasPriority) {
+            final Map<Material, EntityMaterialConfiguration> materialConfigurations, final Material material,
+            final EntityMaterialConfiguration entityMaterialConfiguration, final boolean definitionHasPriority) {
         if (definitionHasPriority) {
             materialConfigurations.put(material, entityMaterialConfiguration);
         } else {
@@ -247,9 +250,9 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         }
     }
 
-    private List<T> getEntitiesFromNameOrPattern(String nameOrPattern) {
+    private List<T> getEntitiesFromNameOrPattern(final String nameOrPattern) {
         if (NamePatternUtils.isNamePattern(nameOrPattern)) {
-            Pattern pattern = NamePatternUtils.getPatternFromNamePattern(nameOrPattern,
+            final Pattern pattern = NamePatternUtils.getPatternFromNamePattern(nameOrPattern,
                     this.isEntityNameCaseSensitive());
             if (pattern == null) {
                 return new ArrayList<>();
@@ -257,13 +260,14 @@ public abstract class LoadableConfigurationSection<T extends Object> {
 
             return this.getEntitiesFromPattern(pattern, nameOrPattern);
         } else {
-            T entity = this.getEntityFromName(nameOrPattern);
+            final T entity = this.getEntityFromName(nameOrPattern);
             return entity != null ? Arrays.asList(entity) : new ArrayList<>();
         }
     }
 
-    protected boolean areEntityAndMaterialConfigurationsValid(T entity, EntityConfiguration entityConfiguration,
-            Map<Material, EntityMaterialConfiguration> materialConfigurations) {
+    protected boolean areEntityAndMaterialConfigurationsValid(final T entity,
+            final EntityConfiguration entityConfiguration,
+            final Map<Material, EntityMaterialConfiguration> materialConfigurations) {
         return true;
     }
 
@@ -271,8 +275,9 @@ public abstract class LoadableConfigurationSection<T extends Object> {
         return false;
     }
 
-    protected EntityConfiguration fetchSpecificEntityConfiguration(T entity, EntityConfiguration entityConfiguration,
-            ConfigurationSection propertiesSection) {
+    protected EntityConfiguration fetchSpecificEntityConfiguration(final T entity,
+            final EntityConfiguration entityConfiguration,
+            final ConfigurationSection propertiesSection) {
         return entityConfiguration;
     }
 

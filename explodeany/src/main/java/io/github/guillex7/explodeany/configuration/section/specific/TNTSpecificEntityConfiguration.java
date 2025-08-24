@@ -18,18 +18,22 @@ public class TNTSpecificEntityConfiguration implements SpecificEntityConfigurati
         return new TNTSpecificEntityConfiguration(0.0, false, false);
     }
 
-    public static TNTSpecificEntityConfiguration fromConfigurationSection(ConfigurationSection section) {
-        TNTSpecificEntityConfiguration defaults = TNTSpecificEntityConfiguration.byDefault();
+    public static TNTSpecificEntityConfiguration fromConfigurationSection(final ConfigurationSection section) {
+        final TNTSpecificEntityConfiguration defaults = TNTSpecificEntityConfiguration.byDefault();
 
         return new TNTSpecificEntityConfiguration(
-                MathUtils.ensureMin(section.getDouble(minimumDistanceToDamageBlocksUnderwaterPath,
-                        defaults.getMinimumDistanceToDamageBlocksUnderwater()), 0.0),
-                section.getBoolean(doSnapToBlockGridOnPrimingPath, defaults.doSnapToBlockGridOnPriming()),
-                section.getBoolean(doDisableExplosionChainingPath, defaults.doDisableExplosionChaining()));
+                MathUtils.ensureMin(
+                        section.getDouble(TNTSpecificEntityConfiguration.minimumDistanceToDamageBlocksUnderwaterPath,
+                                defaults.getMinimumDistanceToDamageBlocksUnderwater()),
+                        0.0),
+                section.getBoolean(TNTSpecificEntityConfiguration.doSnapToBlockGridOnPrimingPath,
+                        defaults.doSnapToBlockGridOnPriming()),
+                section.getBoolean(TNTSpecificEntityConfiguration.doDisableExplosionChainingPath,
+                        defaults.doDisableExplosionChaining()));
     }
 
-    private TNTSpecificEntityConfiguration(double minimumDistanceToDamageBlocksUnderwater,
-            boolean doSnapToBlockGridOnPriming, boolean doDisableExplosionChaining) {
+    private TNTSpecificEntityConfiguration(final double minimumDistanceToDamageBlocksUnderwater,
+            final boolean doSnapToBlockGridOnPriming, final boolean doDisableExplosionChaining) {
         this.minimumDistanceToDamageBlocksUnderwater = minimumDistanceToDamageBlocksUnderwater;
         this.minimumSquaredDistanceToDamageBlocksUnderwater = minimumDistanceToDamageBlocksUnderwater
                 * minimumDistanceToDamageBlocksUnderwater;
@@ -38,24 +42,24 @@ public class TNTSpecificEntityConfiguration implements SpecificEntityConfigurati
     }
 
     public double getMinimumDistanceToDamageBlocksUnderwater() {
-        return minimumDistanceToDamageBlocksUnderwater;
+        return this.minimumDistanceToDamageBlocksUnderwater;
     }
 
     public double getMinimumSquaredDistanceToDamageBlocksUnderwater() {
-        return minimumSquaredDistanceToDamageBlocksUnderwater;
+        return this.minimumSquaredDistanceToDamageBlocksUnderwater;
     }
 
     public boolean doSnapToBlockGridOnPriming() {
-        return doSnapToBlockGridOnPriming;
+        return this.doSnapToBlockGridOnPriming;
     }
 
     public boolean doDisableExplosionChaining() {
-        return doDisableExplosionChaining;
+        return this.doDisableExplosionChaining;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("&fMin. distance travelled to damage blocks underwater: ");
         if (this.getMinimumDistanceToDamageBlocksUnderwater() > 0.0) {
             builder.append(String.format("%.2f", this.getMinimumDistanceToDamageBlocksUnderwater())).append("\n");

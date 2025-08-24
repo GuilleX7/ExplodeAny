@@ -26,11 +26,11 @@ public enum ConfigurationLocale {
 
     private final String key;
 
-    private ConfigurationLocale(String key) {
+    ConfigurationLocale(final String key) {
         this.key = key;
     }
 
     public String getKey() {
-        return key;
+        return this.key;
     }
 }

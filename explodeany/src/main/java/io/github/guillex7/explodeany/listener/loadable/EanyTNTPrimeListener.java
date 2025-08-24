@@ -29,15 +29,15 @@ public class EanyTNTPrimeListener implements LoadableListener {
         }
 
         if (tntConfiguration.getSpecificConfiguration() instanceof TNTSpecificEntityConfiguration) {
-            TNTSpecificEntityConfiguration specificConfig = (TNTSpecificEntityConfiguration) tntConfiguration
+            final TNTSpecificEntityConfiguration specificConfig = (TNTSpecificEntityConfiguration) tntConfiguration
                     .getSpecificConfiguration();
             this.doPreventExplosionChaining = specificConfig.doDisableExplosionChaining();
         }
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
-    public void onTNTPrime(EanyTNTPrimeEvent event) {
-        if (event.getReason() == EanyTNTPrimeEvent.PrimeReason.EXPLOSION && doPreventExplosionChaining) {
+    public void onTNTPrime(final EanyTNTPrimeEvent event) {
+        if (event.getReason() == EanyTNTPrimeEvent.PrimeReason.EXPLOSION && this.doPreventExplosionChaining) {
             event.setCancelled(true);
         }
     }

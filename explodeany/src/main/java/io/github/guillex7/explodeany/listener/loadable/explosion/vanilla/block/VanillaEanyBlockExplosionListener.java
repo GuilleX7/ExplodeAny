@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
@@ -29,23 +30,23 @@ public class VanillaEanyBlockExplosionListener implements EanyBlockExplosionHand
     }
 
     @Override
-    public void onBlockExplode(EanyBlockExplodeEvent event) {
+    public void onBlockExplode(final EanyBlockExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
 
-        ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity
+        final ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity
                 .fromEntityTypeName(event.getBlockMaterial());
-        double explosionRadius = explodingEntity.getExplosionRadius();
+        final double explosionRadius = explodingEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected vanilla block explosion. Block ID: {0}",
                     explodingEntity.getName());
         }
 
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(explodingEntity);
-        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
+        final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(explodingEntity);
 
         if (materialConfigurations == null || entityConfiguration == null || explosionRadius == 0d) {
@@ -62,7 +63,7 @@ public class VanillaEanyBlockExplosionListener implements EanyBlockExplosionHand
     }
 
     @Override
-    public boolean isEventHandled(EanyBlockExplodeEvent event) {
+    public boolean isEventHandled(final EanyBlockExplodeEvent event) {
         return event.getBlockMaterial() != null
                 && ExplodingVanillaEntity.isEntityNameValid(event.getBlockMaterial());
     }

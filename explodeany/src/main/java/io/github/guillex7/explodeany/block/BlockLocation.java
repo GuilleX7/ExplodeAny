@@ -12,11 +12,11 @@ public class BlockLocation {
     private final int y;
     private final int z;
 
-    public static BlockLocation fromBlock(Block block) {
+    public static BlockLocation fromBlock(final Block block) {
         return new BlockLocation(block.getWorld().getUID(), block.getX(), block.getY(), block.getZ());
     }
 
-    public BlockLocation(UUID worldUuid, int x, int y, int z) {
+    public BlockLocation(final UUID worldUuid, final int x, final int y, final int z) {
         this.worldUuid = worldUuid;
         this.x = x;
         this.y = y;
@@ -28,7 +28,7 @@ public class BlockLocation {
     }
 
     public Block toBlock() {
-        World world = this.getWorld();
+        final World world = this.getWorld();
         if (world == null) {
             return null;
         }
@@ -36,58 +36,58 @@ public class BlockLocation {
     }
 
     public UUID getWorldUuid() {
-        return worldUuid;
+        return this.worldUuid;
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public int getZ() {
-        return z;
+        return this.z;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((worldUuid == null) ? 0 : worldUuid.hashCode());
-        result = prime * result + x;
-        result = prime * result + y;
-        result = prime * result + z;
+        result = prime * result + ((this.worldUuid == null) ? 0 : this.worldUuid.hashCode());
+        result = prime * result + this.x;
+        result = prime * result + this.y;
+        result = prime * result + this.z;
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
-        BlockLocation other = (BlockLocation) obj;
-        if (worldUuid == null) {
+        final BlockLocation other = (BlockLocation) obj;
+        if (this.worldUuid == null) {
             if (other.worldUuid != null) {
                 return false;
             }
-        } else if (!worldUuid.equals(other.worldUuid)) {
+        } else if (!this.worldUuid.equals(other.worldUuid)) {
             return false;
         }
-        if (x != other.x) {
+        if (this.x != other.x) {
             return false;
         }
-        if (y != other.y) {
+        if (this.y != other.y) {
             return false;
         }
-        if (z != other.z) {
+        if (this.z != other.z) {
             return false;
         }
         return true;

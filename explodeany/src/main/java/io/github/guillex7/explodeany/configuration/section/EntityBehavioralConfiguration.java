@@ -36,35 +36,43 @@ public class EntityBehavioralConfiguration {
                 true);
     }
 
-    public static EntityBehavioralConfiguration fromConfigurationSection(ConfigurationSection section) {
-        EntityBehavioralConfiguration defaults = EntityBehavioralConfiguration.byDefault();
+    public static EntityBehavioralConfiguration fromConfigurationSection(final ConfigurationSection section) {
+        final EntityBehavioralConfiguration defaults = EntityBehavioralConfiguration.byDefault();
 
         return new EntityBehavioralConfiguration(
-                section.getBoolean(EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS_PATH,
+                section.getBoolean(
+                        EntityBehavioralConfiguration.EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS_PATH,
                         defaults.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()),
-                section.getBoolean(EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS_SURFACE_PATH,
+                section.getBoolean(
+                        EntityBehavioralConfiguration.EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS_SURFACE_PATH,
                         defaults.doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface()),
-                section.getBoolean(EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS_UNDERWATER_PATH,
+                section.getBoolean(
+                        EntityBehavioralConfiguration.EXPLOSION_REMOVE_WATERLOGGED_STATE_FROM_NEARBY_BLOCKS_UNDERWATER_PATH,
                         defaults.doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater()),
-                section.getBoolean(EXPLOSION_REMOVE_NEARBY_LIQUIDS_PATH, defaults.doesExplosionRemoveNearbyLiquids()),
-                section.getBoolean(EXPLOSION_REMOVE_NEARBY_LIQUIDS_SURFACE_PATH,
+                section.getBoolean(EntityBehavioralConfiguration.EXPLOSION_REMOVE_NEARBY_LIQUIDS_PATH,
+                        defaults.doesExplosionRemoveNearbyLiquids()),
+                section.getBoolean(EntityBehavioralConfiguration.EXPLOSION_REMOVE_NEARBY_LIQUIDS_SURFACE_PATH,
                         defaults.doesExplosionRemoveNearbyLiquidsSurface()),
-                section.getBoolean(EXPLOSION_REMOVE_NEARBY_LIQUIDS_UNDERWATER_PATH,
+                section.getBoolean(EntityBehavioralConfiguration.EXPLOSION_REMOVE_NEARBY_LIQUIDS_UNDERWATER_PATH,
                         defaults.doesExplosionRemoveNearbyLiquidsUnderwater()),
-                section.getBoolean(EXPLOSION_REMOVE_NEARBY_WATERLOGGED_BLOCKS_PATH,
+                section.getBoolean(EntityBehavioralConfiguration.EXPLOSION_REMOVE_NEARBY_WATERLOGGED_BLOCKS_PATH,
                         defaults.doesExplosionRemoveNearbyWaterloggedBlocks()),
-                section.getBoolean(EXPLOSION_REMOVE_NEARBY_WATERLOGGED_BLOCKS_SURFACE_PATH,
+                section.getBoolean(
+                        EntityBehavioralConfiguration.EXPLOSION_REMOVE_NEARBY_WATERLOGGED_BLOCKS_SURFACE_PATH,
                         defaults.doesExplosionRemoveNearbyWaterloggedBlocksSurface()),
-                section.getBoolean(EXPLOSION_REMOVE_NEARBY_WATERLOGGED_BLOCKS_UNDERWATER_PATH,
+                section.getBoolean(
+                        EntityBehavioralConfiguration.EXPLOSION_REMOVE_NEARBY_WATERLOGGED_BLOCKS_UNDERWATER_PATH,
                         defaults.doesExplosionRemoveNearbyWaterloggedBlocksUnderwater()));
     }
 
-    public EntityBehavioralConfiguration(boolean explosionRemoveWaterloggedStateFromNearbyBlocks,
-            boolean explosionRemoveWaterloggedStateFromNearbyBlocksSurface,
-            boolean explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater, boolean explosionRemoveNearbyLiquids,
-            boolean explosionRemoveNearbyLiquidsSurface, boolean explosionRemoveNearbyLiquidsUnderwater,
-            boolean explosionRemoveNearbyWaterloggedBlocks, boolean explosionRemoveNearbyWaterloggedBlocksSurface,
-            boolean explosionRemoveNearbyWaterloggedBlocksUnderwater) {
+    public EntityBehavioralConfiguration(final boolean explosionRemoveWaterloggedStateFromNearbyBlocks,
+            final boolean explosionRemoveWaterloggedStateFromNearbyBlocksSurface,
+            final boolean explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater,
+            final boolean explosionRemoveNearbyLiquids,
+            final boolean explosionRemoveNearbyLiquidsSurface, final boolean explosionRemoveNearbyLiquidsUnderwater,
+            final boolean explosionRemoveNearbyWaterloggedBlocks,
+            final boolean explosionRemoveNearbyWaterloggedBlocksSurface,
+            final boolean explosionRemoveNearbyWaterloggedBlocksUnderwater) {
         this.explosionRemoveWaterloggedStateFromNearbyBlocks = explosionRemoveWaterloggedStateFromNearbyBlocks;
         this.explosionRemoveWaterloggedStateFromNearbyBlocksSurface = explosionRemoveWaterloggedStateFromNearbyBlocksSurface;
         this.explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater = explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater;
@@ -77,72 +85,73 @@ public class EntityBehavioralConfiguration {
     }
 
     public boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocks() {
-        return explosionRemoveWaterloggedStateFromNearbyBlocks;
+        return this.explosionRemoveWaterloggedStateFromNearbyBlocks;
     }
 
     public boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocksSurface() {
-        return explosionRemoveWaterloggedStateFromNearbyBlocksSurface;
+        return this.explosionRemoveWaterloggedStateFromNearbyBlocksSurface;
     }
 
     public boolean doesExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater() {
-        return explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater;
+        return this.explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater;
     }
 
     public boolean doesExplosionRemoveNearbyLiquids() {
-        return explosionRemoveNearbyLiquids;
+        return this.explosionRemoveNearbyLiquids;
     }
 
     public boolean doesExplosionRemoveNearbyLiquidsSurface() {
-        return explosionRemoveNearbyLiquidsSurface;
+        return this.explosionRemoveNearbyLiquidsSurface;
     }
 
     public boolean doesExplosionRemoveNearbyLiquidsUnderwater() {
-        return explosionRemoveNearbyLiquidsUnderwater;
+        return this.explosionRemoveNearbyLiquidsUnderwater;
     }
 
     public boolean doesExplosionRemoveNearbyWaterloggedBlocks() {
-        return explosionRemoveNearbyWaterloggedBlocks;
+        return this.explosionRemoveNearbyWaterloggedBlocks;
     }
 
     public boolean doesExplosionRemoveNearbyWaterloggedBlocksSurface() {
-        return explosionRemoveNearbyWaterloggedBlocksSurface;
+        return this.explosionRemoveNearbyWaterloggedBlocksSurface;
     }
 
     public boolean doesExplosionRemoveNearbyWaterloggedBlocksUnderwater() {
-        return explosionRemoveNearbyWaterloggedBlocksUnderwater;
+        return this.explosionRemoveNearbyWaterloggedBlocksUnderwater;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
         builder.append(String.format("Remove nearby waterlogged blocks: %s",
-                explosionRemoveNearbyWaterloggedBlocks ? "\n" : "false\n"));
-        if (explosionRemoveNearbyWaterloggedBlocks) {
+                this.explosionRemoveNearbyWaterloggedBlocks ? "\n" : "false\n"));
+        if (this.explosionRemoveNearbyWaterloggedBlocks) {
             builder.append(String.format(" - On surface: %s\n - Underwater: %s\n",
-                    explosionRemoveNearbyWaterloggedBlocksSurface,
-                    explosionRemoveNearbyWaterloggedBlocksUnderwater));
+                    this.explosionRemoveNearbyWaterloggedBlocksSurface,
+                    this.explosionRemoveNearbyWaterloggedBlocksUnderwater));
         }
 
         builder.append(String.format("Remove nearby waterlogged state: %s",
-                explosionRemoveWaterloggedStateFromNearbyBlocks ? "\n" : "false\n"));
-        if (explosionRemoveWaterloggedStateFromNearbyBlocks) {
+                this.explosionRemoveWaterloggedStateFromNearbyBlocks ? "\n" : "false\n"));
+        if (this.explosionRemoveWaterloggedStateFromNearbyBlocks) {
             builder.append(String.format(" - On surface: %s\n - Underwater: %s\n",
-                    explosionRemoveWaterloggedStateFromNearbyBlocksSurface,
-                    explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater));
+                    this.explosionRemoveWaterloggedStateFromNearbyBlocksSurface,
+                    this.explosionRemoveWaterloggedStateFromNearbyBlocksUnderwater));
         }
 
         builder.append(String.format("Remove nearby liquids: %s",
-                explosionRemoveNearbyLiquids ? "\n" : "false\n"));
-        if (explosionRemoveNearbyLiquids) {
+                this.explosionRemoveNearbyLiquids ? "\n" : "false\n"));
+        if (this.explosionRemoveNearbyLiquids) {
             builder.append(String.format(" - On surface: %s\n - Underwater: %s\n",
-                    explosionRemoveNearbyLiquidsSurface,
-                    explosionRemoveNearbyLiquidsUnderwater));
+                    this.explosionRemoveNearbyLiquidsSurface,
+                    this.explosionRemoveNearbyLiquidsUnderwater));
         }
 
         return builder.toString();
     }
 
+    @Override
     public EntityBehavioralConfiguration clone() {
         return new EntityBehavioralConfiguration(
                 this.explosionRemoveWaterloggedStateFromNearbyBlocks,

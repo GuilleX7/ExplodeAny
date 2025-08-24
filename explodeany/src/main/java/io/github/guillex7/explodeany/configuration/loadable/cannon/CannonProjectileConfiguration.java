@@ -23,12 +23,12 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
 
     @Override
     public boolean shouldBeLoaded() {
-        Plugin cannonsPlugin = Bukkit.getPluginManager().getPlugin("Cannons");
+        final Plugin cannonsPlugin = Bukkit.getPluginManager().getPlugin("Cannons");
         return cannonsPlugin != null && cannonsPlugin.isEnabled() && cannonsPlugin instanceof Cannons;
     }
 
     @Override
-    public String getEntityName(String entity) {
+    public String getEntityName(final String entity) {
         return entity;
     }
 
@@ -38,12 +38,12 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
     }
 
     @Override
-    public String getEntityFromName(String name) {
+    public String getEntityFromName(final String name) {
         return ProjectileStorage.getProjectile(name) != null ? name : null;
     }
 
     @Override
-    public List<String> getEntitiesFromPattern(Pattern pattern, String name) {
+    public List<String> getEntitiesFromPattern(final Pattern pattern, final String name) {
         return ProjectileStorage.getProjectileIds().stream()
                 .filter(projectileId -> pattern.matcher(projectileId).matches())
                 .collect(Collectors.toList());

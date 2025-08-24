@@ -31,34 +31,34 @@ public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosi
     }
 
     @Override
-    public boolean isEventHandled(EntityExplodeEvent event) {
+    public boolean isEventHandled(final EntityExplodeEvent event) {
         return true;
     }
 
     @Override
-    public void onEntityExplode(EntityExplodeEvent event) {
+    public void onEntityExplode(final EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
 
-        EntityType entityType = event.getEntityType();
-        String entityTypeName = entityType.toString();
+        final EntityType entityType = event.getEntityType();
+        final String entityTypeName = entityType.toString();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected custom entity explosion. Entity type: {0}",
                     entityTypeName);
         }
 
-        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(entityTypeName);
-        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
+        final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(entityTypeName);
 
         if (materialConfigurations == null || entityConfiguration == null) {
             return;
         }
 
-        double explosionRadius = entityConfiguration.getExplosionRadius();
+        final double explosionRadius = entityConfiguration.getExplosionRadius();
 
         if (explosionRadius == 0d) {
             return;

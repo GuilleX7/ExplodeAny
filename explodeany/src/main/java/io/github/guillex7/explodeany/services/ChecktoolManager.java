@@ -21,7 +21,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.api.IBossBar;
+import io.github.guillex7.explodeany.compat.common.data.IBossBar;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.data.Duration;
 import io.github.guillex7.explodeany.util.StringUtils;
@@ -41,7 +41,7 @@ public final class ChecktoolManager {
 
     private ChecktoolManager() {
         this.checktool = this.getDefaultChecktool();
-        this.checktoolFile = new File(this.getPlugin().getDataFolder(), CHECKTOOL_DUMP_FILENAME);
+        this.checktoolFile = new File(this.getPlugin().getDataFolder(), ChecktoolManager.CHECKTOOL_DUMP_FILENAME);
         this.checktoolStateByPlayer = new HashMap<>();
         this.checktoolBossBarByPlayer = new HashMap<>();
         this.checktoolBossBarTaskByPlayer = new HashMap<>();
@@ -50,17 +50,17 @@ public final class ChecktoolManager {
     }
 
     public static ChecktoolManager getInstance() {
-        if (instance == null) {
-            instance = new ChecktoolManager();
+        if (ChecktoolManager.instance == null) {
+            ChecktoolManager.instance = new ChecktoolManager();
         }
-        return instance;
+        return ChecktoolManager.instance;
     }
 
     private ExplodeAny getPlugin() {
         return ExplodeAny.getInstance();
     }
 
-    public boolean isPlayerUsingChecktool(Player player) {
+    public boolean isPlayerUsingChecktool(final Player player) {
         if (this.configurationManager.getChecktoolConfiguration().isAlwaysEnabled()) {
             return true;
         }
@@ -69,7 +69,7 @@ public final class ChecktoolManager {
                 this.configurationManager.getChecktoolConfiguration().isEnabledByDefault());
     }
 
-    public void setPlayerIsUsingChecktool(Player player, boolean isUsingChecktool) {
+    public void setPlayerIsUsingChecktool(final Player player, final boolean isUsingChecktool) {
         if (this.configurationManager.getChecktoolConfiguration().isAlwaysEnabled()) {
             return;
         }
@@ -83,11 +83,12 @@ public final class ChecktoolManager {
 
     public void loadChecktool() {
         if (this.checktoolFile.exists() && this.checktoolFile.canRead()) {
-            Logger configurationSerializationLogger = Logger.getLogger(ConfigurationSerialization.class.getName());
-            Level previousConfigurationSerializationLevel = configurationSerializationLogger.getLevel();
+            final Logger configurationSerializationLogger = Logger
+                    .getLogger(ConfigurationSerialization.class.getName());
+            final Level previousConfigurationSerializationLevel = configurationSerializationLogger.getLevel();
 
-            try (InputStream inputStream = new FileInputStream(this.checktoolFile);
-                 BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(inputStream)) {
+            try (final InputStream inputStream = new FileInputStream(this.checktoolFile);
+                    final BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(inputStream)) {
                 configurationSerializationLogger.setLevel(Level.OFF);
                 this.checktool = (ItemStack) objectInputStream.readObject();
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);
@@ -98,13 +99,13 @@ public final class ChecktoolManager {
                 } else {
                     throw new ClassNotFoundException();
                 }
-            } catch (ClassNotFoundException | IOException e) {
+            } catch (final ClassNotFoundException | IOException e) {
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);
                 this.checktool = this.getDefaultChecktool();
                 this.getPlugin().getLogger()
                         .warning(
                                 "Couldn't load checktool item! The item might belong to a higher Minecraft version or might be corrupted");
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 configurationSerializationLogger.setLevel(previousConfigurationSerializationLevel);
                 this.checktool = this.getDefaultChecktool();
                 this.getPlugin().getLogger().warning("Couldn't load checktool item! Unknown issue");
@@ -117,16 +118,16 @@ public final class ChecktoolManager {
 
         try {
             this.checktoolFile.createNewFile();
-        } catch (IOException | SecurityException e) {
+        } catch (final IOException | SecurityException e) {
             checktoolWasPersistedSuccessfully = false;
         }
 
         if (this.checktoolFile.exists() && this.checktoolFile.canWrite()) {
-            try (OutputStream outputStream = new FileOutputStream(this.checktoolFile);
-                 BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(outputStream)) {
+            try (final OutputStream outputStream = new FileOutputStream(this.checktoolFile);
+                    final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(outputStream)) {
                 objectOutputStream.writeObject(this.checktool);
                 checktoolWasPersistedSuccessfully = true;
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 checktoolWasPersistedSuccessfully = false;
             }
         }
@@ -135,10 +136,10 @@ public final class ChecktoolManager {
     }
 
     public ItemStack getChecktool() {
-        return checktool;
+        return this.checktool;
     }
 
-    public boolean setChecktool(ItemStack item) {
+    public boolean setChecktool(final ItemStack item) {
         this.checktool = item;
 
         if (this.persistChecktool()) {
@@ -150,13 +151,13 @@ public final class ChecktoolManager {
         }
     }
 
-    public void hideChecktoolBossBarForPlayer(Player player) {
-        BukkitTask task = this.checktoolBossBarTaskByPlayer.get(player);
+    public void hideChecktoolBossBarForPlayer(final Player player) {
+        final BukkitTask task = this.checktoolBossBarTaskByPlayer.get(player);
         if (task != null) {
             task.cancel();
         }
 
-        IBossBar bossBar = this.checktoolBossBarByPlayer.get(player);
+        final IBossBar bossBar = this.checktoolBossBarByPlayer.get(player);
         if (bossBar != null) {
             bossBar.removePlayer(player);
         }
@@ -165,13 +166,14 @@ public final class ChecktoolManager {
         this.checktoolBossBarTaskByPlayer.remove(player);
     }
 
-    public void setChecktoolBossBarForPlayer(Player player, IBossBar bossBar, Duration bossBarDuration) {
-        BukkitTask oldTask = this.checktoolBossBarTaskByPlayer.get(player);
+    public void setChecktoolBossBarForPlayer(final Player player, final IBossBar bossBar,
+            final Duration bossBarDuration) {
+        final BukkitTask oldTask = this.checktoolBossBarTaskByPlayer.get(player);
         if (oldTask != null) {
             oldTask.cancel();
         }
 
-        IBossBar oldBossBar = this.checktoolBossBarByPlayer.get(player);
+        final IBossBar oldBossBar = this.checktoolBossBarByPlayer.get(player);
         if (oldBossBar != null) {
             oldBossBar.removePlayer(player);
         }

@@ -15,7 +15,7 @@ public class WorldHoleProtection {
     private final Set<Integer> heights;
     private final boolean protectUnhandledBlocks;
 
-    public static WorldHoleProtection of(Set<Integer> heights, boolean protectUnhandledBlocks) {
+    public static WorldHoleProtection of(final Set<Integer> heights, final boolean protectUnhandledBlocks) {
         return new WorldHoleProtection(heights, protectUnhandledBlocks);
     }
 
@@ -23,37 +23,37 @@ public class WorldHoleProtection {
         return new WorldHoleProtection(SetUtils.createHashSetOf(), false);
     }
 
-    public static WorldHoleProtection fromConfigSection(ConfigurationSection section) {
+    public static WorldHoleProtection fromConfigSection(final ConfigurationSection section) {
         final WorldHoleProtection defaults = WorldHoleProtection.byDefault();
 
-        return new WorldHoleProtection(new HashSet<>(section.getIntegerList(HEIGHTS_PATH)),
-                section.getBoolean(PROTECT_UNHANDLED_BLOCKS_PATH, defaults.protectUnhandledBlocks));
+        return new WorldHoleProtection(new HashSet<>(section.getIntegerList(WorldHoleProtection.HEIGHTS_PATH)),
+                section.getBoolean(WorldHoleProtection.PROTECT_UNHANDLED_BLOCKS_PATH, defaults.protectUnhandledBlocks));
     }
 
-    private WorldHoleProtection(Set<Integer> heights, boolean protectUnhandledBlocks) {
+    private WorldHoleProtection(final Set<Integer> heights, final boolean protectUnhandledBlocks) {
         this.heights = heights;
         this.protectUnhandledBlocks = protectUnhandledBlocks;
     }
 
-    public boolean isHeightProtected(int height) {
-        return heights.contains(height);
+    public boolean isHeightProtected(final int height) {
+        return this.heights.contains(height);
     }
 
     public boolean doProtectUnhandledBlocks() {
-        return protectUnhandledBlocks;
+        return this.protectUnhandledBlocks;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("&fHeights: ");
-        if (!heights.isEmpty()) {
-            builder.append(heights.stream().map(Object::toString).collect(Collectors.joining(", ")));
+        if (!this.heights.isEmpty()) {
+            builder.append(this.heights.stream().map(Object::toString).collect(Collectors.joining(", ")));
         } else {
             builder.append("none");
         }
         builder.append("\n");
-        builder.append("Protect unhandled blocks: ").append(protectUnhandledBlocks);
+        builder.append("Protect unhandled blocks: ").append(this.protectUnhandledBlocks);
         return builder.toString();
     }
 }

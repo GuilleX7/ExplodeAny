@@ -20,19 +20,19 @@ public class EanyTaggedExplosionListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
-    public void onEntityExplode(EntityExplodeEvent event) {
+    public void onEntityExplode(final EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
         }
 
-        ExplosionMetadata explosionMetadata = ExplosionManager.getInstance()
+        final ExplosionMetadata explosionMetadata = ExplosionManager.getInstance()
                 .getExplosionManagerMetadataFromEntity(event.getEntity());
         ExplosionManager.getInstance().removeHandledBlocksFromList(explosionMetadata.materialConfigurations,
                 event.blockList(), event.getLocation());
         explosionMetadata.dropCollector.dropCollectedItems(event.getLocation());
     }
 
-    private boolean isEventHandled(EntityExplodeEvent event) {
+    private boolean isEventHandled(final EntityExplodeEvent event) {
         return !event.isCancelled() && event.getEntity() != null
                 && ExplosionManager.getInstance().isEntitySpawnedByExplosionManager(event.getEntity());
     }

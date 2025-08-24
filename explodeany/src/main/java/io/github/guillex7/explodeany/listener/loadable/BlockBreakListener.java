@@ -25,7 +25,7 @@ public final class BlockBreakListener implements LoadableListener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onBlockBreak(final BlockBreakEvent event) {
         this.blockDatabase.removeBlockStatus(event.getBlock());
     }
 

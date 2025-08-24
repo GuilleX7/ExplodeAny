@@ -7,8 +7,8 @@ public class ItemStackUtils {
     private ItemStackUtils() {
     }
 
-    public static boolean areItemStacksSimilar(ItemStack itemA, ItemStack itemB) {
-        if (itemA.getType().equals(Material.AIR) && itemB.getType().equals(Material.AIR)) {
+    public static boolean areItemStacksSimilar(final ItemStack itemA, final ItemStack itemB) {
+        if (Material.AIR.equals(itemA.getType()) && Material.AIR.equals(itemB.getType())) {
             return true;
         } else {
             return itemA.isSimilar(itemB);

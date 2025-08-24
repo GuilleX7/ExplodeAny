@@ -31,40 +31,41 @@ public class EntityMaterialConfiguration {
 
     public static EntityMaterialConfiguration byDefault() {
         return new EntityMaterialConfiguration(
-                /* damage */ ConfigurationManager.getInstance().getGlobalBlockDurability(),
-                /* dropChance */ 0.0d,
-                /* dropMaterial */ null,
-                /* distanceAttenuationFactor */ 0.0d,
-                /* underwaterDamageFactor */ 0.5d,
-                /* fancyUnderwaterDetection */ false,
-                /* onBreakSoundConfiguration */ SoundConfiguration.byDefault(),
-                /* onHitSoundConfiguration */ SoundConfiguration.byDefault(),
-                /* onBreakParticleConfiguration */ ParticleConfiguration.byDefault(),
-                /* onHitParticleConfiguration */ ParticleConfiguration.byDefault());
+                ConfigurationManager.getInstance().getGlobalBlockDurability(),
+                0.0d,
+                null,
+                0.0d,
+                0.5d,
+                false,
+                SoundConfiguration.byDefault(),
+                SoundConfiguration.byDefault(),
+                ParticleConfiguration.byDefault(),
+                ParticleConfiguration.byDefault());
     }
 
-    public static EntityMaterialConfiguration fromConfigurationSection(ConfigurationSection section) {
-        EntityMaterialConfiguration defaults = EntityMaterialConfiguration.byDefault();
+    public static EntityMaterialConfiguration fromConfigurationSection(final ConfigurationSection section) {
+        final EntityMaterialConfiguration defaults = EntityMaterialConfiguration.byDefault();
 
         Material dropMaterial;
         String dropMaterialString = "";
         try {
-            dropMaterialString = section.getString(DROP_MATERIAL_PATH, "");
+            dropMaterialString = section.getString(EntityMaterialConfiguration.DROP_MATERIAL_PATH, "");
             dropMaterial = Material.valueOf(dropMaterialString.toUpperCase());
             // Hint: some materials are not valid for ItemStack
-            @SuppressWarnings("unused")
-            ItemStack item = new ItemStack(dropMaterial, 1);
-        } catch (Exception e) {
-            if (!dropMaterialString.equals("")) {
+            new ItemStack(dropMaterial, 1);
+        } catch (final Exception e) {
+            if (!"".equals(dropMaterialString)) {
                 ExplodeAny.getInstance().getLogger()
                         .warning(String.format(
                                 "Invalid drop material '%s' in configuration section '%s'. Using default value.",
-                                section.getString(DROP_MATERIAL_PATH), section.getCurrentPath()));
+                                section.getString(EntityMaterialConfiguration.DROP_MATERIAL_PATH),
+                                section.getCurrentPath()));
             }
             dropMaterial = defaults.getDropMaterial();
         }
 
-        ConfigurationSection soundConfigurationSection = section.getConfigurationSection(SOUND_PATH);
+        final ConfigurationSection soundConfigurationSection = section
+                .getConfigurationSection(EntityMaterialConfiguration.SOUND_PATH);
         SoundConfiguration onBreakSoundConfiguration = SoundConfiguration.byDefault();
         SoundConfiguration onHitSoundConfiguration = SoundConfiguration.byDefault();
         if (soundConfigurationSection != null) {
@@ -84,8 +85,8 @@ public class EntityMaterialConfiguration {
             }
         }
 
-        ConfigurationSection particleConfigurationSection = section
-                .getConfigurationSection(PARTICLES_PATH);
+        final ConfigurationSection particleConfigurationSection = section
+                .getConfigurationSection(EntityMaterialConfiguration.PARTICLES_PATH);
         ParticleConfiguration onBreakParticleConfiguration = ParticleConfiguration.byDefault();
         ParticleConfiguration onHitParticleConfiguration = ParticleConfiguration.byDefault();
         if (particleConfigurationSection != null) {
@@ -107,29 +108,36 @@ public class EntityMaterialConfiguration {
         }
 
         return new EntityMaterialConfiguration(
-                /* damage */ MathUtils.ensureMin(section.getDouble(DAMAGE_PATH, defaults.getDamage()), 0.0d),
-                /* dropChance */ MathUtils.ensureRange(section.getDouble(DROP_CHANCE_PATH, defaults.getDropChance()),
+                MathUtils.ensureMin(
+                        section.getDouble(EntityMaterialConfiguration.DAMAGE_PATH, defaults.getDamage()), 0.0d),
+                MathUtils.ensureRange(
+                        section.getDouble(EntityMaterialConfiguration.DROP_CHANCE_PATH, defaults.getDropChance()),
                         100.0d,
                         0.0d) / 100.0d,
-                /* dropMaterial */ dropMaterial,
-                /* distanceAttenuationFactor */ MathUtils.ensureRange(
-                        section.getDouble(DISTANCE_ATTENUATION_FACTOR_PATH, defaults.getDistanceAttenuationFactor()),
+                dropMaterial,
+                MathUtils.ensureRange(
+                        section.getDouble(EntityMaterialConfiguration.DISTANCE_ATTENUATION_FACTOR_PATH,
+                                defaults.getDistanceAttenuationFactor()),
                         1.0d, 0.0d),
-                /* underwaterDamageFactor */ MathUtils.ensureMin(
-                        section.getDouble(UNDERWATER_DAMAGE_FACTOR_PATH, defaults.getUnderwaterDamageFactor()), 0.0d),
-                /* fancyUnderwaterDetection */ section.getBoolean(FANCY_UNDERWATER_DETECTION_PATH,
+                MathUtils.ensureMin(
+                        section.getDouble(EntityMaterialConfiguration.UNDERWATER_DAMAGE_FACTOR_PATH,
+                                defaults.getUnderwaterDamageFactor()),
+                        0.0d),
+                section.getBoolean(
+                        EntityMaterialConfiguration.FANCY_UNDERWATER_DETECTION_PATH,
                         defaults.isFancyUnderwaterDetection()),
-                /* onBreakSoundConfiguration */ onBreakSoundConfiguration,
-                /* onHitSoundConfiguration */ onHitSoundConfiguration,
-                /* onBreakParticleConfiguration */ onBreakParticleConfiguration,
-                /* onHitParticleConfiguration */ onHitParticleConfiguration);
+                onBreakSoundConfiguration,
+                onHitSoundConfiguration,
+                onBreakParticleConfiguration,
+                onHitParticleConfiguration);
     }
 
-    public EntityMaterialConfiguration(double damage, double dropChance, Material dropMaterial,
-            double distanceAttenuationFactor,
-            double underwaterDamageFactor, boolean fancyUnderwaterDetection,
-            SoundConfiguration onBreakSoundConfiguration, SoundConfiguration onHitSoundConfiguration,
-            ParticleConfiguration onBreakParticleConfiguration, ParticleConfiguration onHitParticleConfiguration) {
+    public EntityMaterialConfiguration(final double damage, final double dropChance, final Material dropMaterial,
+            final double distanceAttenuationFactor,
+            final double underwaterDamageFactor, final boolean fancyUnderwaterDetection,
+            final SoundConfiguration onBreakSoundConfiguration, final SoundConfiguration onHitSoundConfiguration,
+            final ParticleConfiguration onBreakParticleConfiguration,
+            final ParticleConfiguration onHitParticleConfiguration) {
         this.damage = damage;
         this.dropChance = dropChance;
         this.dropMaterial = dropMaterial;
@@ -143,11 +151,11 @@ public class EntityMaterialConfiguration {
     }
 
     public double getDamage() {
-        return damage;
+        return this.damage;
     }
 
     public double getDropChance() {
-        return dropChance;
+        return this.dropChance;
     }
 
     public double getDropChancePercentage() {
@@ -159,15 +167,15 @@ public class EntityMaterialConfiguration {
     }
 
     public Material getDropMaterial() {
-        return dropMaterial;
+        return this.dropMaterial;
     }
 
     public double getDistanceAttenuationFactor() {
-        return distanceAttenuationFactor;
+        return this.distanceAttenuationFactor;
     }
 
     public double getUnderwaterDamageFactor() {
-        return underwaterDamageFactor;
+        return this.underwaterDamageFactor;
     }
 
     public boolean isUnderwaterAffected() {
@@ -175,28 +183,28 @@ public class EntityMaterialConfiguration {
     }
 
     public boolean isFancyUnderwaterDetection() {
-        return fancyUnderwaterDetection;
+        return this.fancyUnderwaterDetection;
     }
 
     public SoundConfiguration getOnBreakSoundConfiguration() {
-        return onBreakSoundConfiguration;
+        return this.onBreakSoundConfiguration;
     }
 
     public ParticleConfiguration getOnBreakParticleConfiguration() {
-        return onBreakParticleConfiguration;
+        return this.onBreakParticleConfiguration;
     }
 
     public SoundConfiguration getOnHitSoundConfiguration() {
-        return onHitSoundConfiguration;
+        return this.onHitSoundConfiguration;
     }
 
     public ParticleConfiguration getOnHitParticleConfiguration() {
-        return onHitParticleConfiguration;
+        return this.onHitParticleConfiguration;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("&7<General>\n");
         builder.append("&fDamage: ").append(String.format("%.2f", this.getDamage())).append("\n");
         builder.append("&fDrop chance: ").append(String.format("%.2f", this.getDropChancePercentage())).append("%%\n");

@@ -16,15 +16,15 @@ public class BlockStatus {
     private final double maximumDurability;
     private final MaterialConfiguration materialConfiguration;
 
-    public static BlockStatus defaultForBlock(Block block) {
+    public static BlockStatus defaultForBlock(final Block block) {
         return new BlockStatus(block.getType(), ConfigurationManager.getInstance().getGlobalBlockDurability(), -1);
     }
 
-    public static BlockStatus of(Material material, double durability, long lastDamaged) {
+    public static BlockStatus of(final Material material, final double durability, final long lastDamaged) {
         return new BlockStatus(material, durability, lastDamaged);
     }
 
-    private BlockStatus(Material material, double durability, long lastDamaged) {
+    private BlockStatus(final Material material, final double durability, final long lastDamaged) {
         this.material = material;
         this.durability = durability;
         this.lastDamaged = lastDamaged;
@@ -34,22 +34,24 @@ public class BlockStatus {
     }
 
     public Material getMaterial() {
-        return material;
+        return this.material;
     }
 
     public double getRawDurability() {
-        return durability;
+        return this.durability;
     }
 
-    public double getDurability(long currentTime) {
+    public double getDurability(final long currentTime) {
         double currentDurability = this.durability;
 
         if (this.lastDamaged != -1) {
             final long elapsedTimeForRegeneration = currentTime - this.lastDamaged
                     - this.materialConfiguration.getDelayBeforeRegeneration().asMilliseconds();
             if (elapsedTimeForRegeneration > 0) {
-                currentDurability = Math.min(this.durability + elapsedTimeForRegeneration * this.materialConfiguration.
-                        getDurabilityRegenerationPerMillisecond(), this.maximumDurability);
+                currentDurability = Math.min(
+                        this.durability + elapsedTimeForRegeneration
+                                * this.materialConfiguration.getDurabilityRegenerationPerMillisecond(),
+                        this.maximumDurability);
             }
         }
 
@@ -61,18 +63,18 @@ public class BlockStatus {
     }
 
     public long getLastDamaged() {
-        return lastDamaged;
+        return this.lastDamaged;
     }
 
     public MaterialConfiguration getMaterialConfiguration() {
-        return materialConfiguration;
+        return this.materialConfiguration;
     }
 
-    public boolean isCongruentWith(Block block) {
+    public boolean isCongruentWith(final Block block) {
         return block.getType().equals(this.material);
     }
 
-    public boolean damage(double damage, long currentTime) {
+    public boolean damage(final double damage, final long currentTime) {
         this.durability = this.getDurability(currentTime) - damage;
         this.lastDamaged = currentTime;
         return this.shouldBreak();

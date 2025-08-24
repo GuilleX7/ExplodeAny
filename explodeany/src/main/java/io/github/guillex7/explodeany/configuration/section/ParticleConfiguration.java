@@ -5,8 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.api.IParticle;
 import io.github.guillex7.explodeany.compat.common.data.EanyParticleData;
+import io.github.guillex7.explodeany.compat.common.data.IParticle;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.util.MathUtils;
 
@@ -36,36 +36,38 @@ public class ParticleConfiguration {
         return new ParticleConfiguration(null, 1.0d, 1.0d, 1.0d, 1000, 1.0d, false);
     }
 
-    public static ParticleConfiguration fromConfigurationSection(ConfigurationSection section) {
-        ParticleConfiguration defaults = ParticleConfiguration.byDefault();
+    public static ParticleConfiguration fromConfigurationSection(final ConfigurationSection section) {
+        final ParticleConfiguration defaults = ParticleConfiguration.byDefault();
 
-        String name = section.getString(NAME_PATH, "").toUpperCase();
-        int red = MathUtils.ensureRange(section.getInt(RED_PATH, 0), 255, 0);
-        int green = MathUtils.ensureRange(section.getInt(GREEN_PATH, 0), 255, 0);
-        int blue = MathUtils.ensureRange(section.getInt(BLUE_PATH, 0), 255, 0);
-        double size = MathUtils.ensureMin(section.getDouble(SIZE_PATH, 1), 0);
+        final String name = section.getString(ParticleConfiguration.NAME_PATH, "").toUpperCase();
+        final int red = MathUtils.ensureRange(section.getInt(ParticleConfiguration.RED_PATH, 0), 255, 0);
+        final int green = MathUtils.ensureRange(section.getInt(ParticleConfiguration.GREEN_PATH, 0), 255, 0);
+        final int blue = MathUtils.ensureRange(section.getInt(ParticleConfiguration.BLUE_PATH, 0), 255, 0);
+        final double size = MathUtils.ensureMin(section.getDouble(ParticleConfiguration.SIZE_PATH, 1), 0);
 
-        String materialString = section.getString(MATERIAL_PATH, "").toUpperCase();
-        Material material = Material.getMaterial(materialString);
-        if (material == null && !materialString.equals("")) {
+        final String materialName = section.getString(ParticleConfiguration.MATERIAL_PATH, "").toUpperCase();
+        final Material material = Material.getMaterial(materialName);
+        if (material == null && !"".equals(materialName)) {
             ExplodeAny.getInstance().getLogger()
                     .warning(String.format("Invalid material '%s' in configuration section '%s'. Using default value.",
-                            section.getString(MATERIAL_PATH), section.getCurrentPath()));
+                            section.getString(ParticleConfiguration.MATERIAL_PATH), section.getCurrentPath()));
         }
 
-        IParticle particle = CompatibilityManager.getInstance().getApi().getParticleUtils()
+        final IParticle particle = CompatibilityManager.getInstance().getApi().getParticleUtils()
                 .createParticle(new EanyParticleData(name, red, green, blue, size, material));
 
-        return new ParticleConfiguration(particle, section.getDouble(DELTA_X_PATH, defaults.getDeltaX()),
-                section.getDouble(DELTA_Y_PATH, defaults.getDeltaY()),
-                section.getDouble(DELTA_Z_PATH, defaults.getDeltaZ()),
-                MathUtils.ensureMin(section.getInt(AMOUNT_PATH, defaults.getAmount()), 0),
-                MathUtils.ensureMin(section.getDouble(SPEED_PATH, defaults.getSpeed()), 0),
-                section.getBoolean(FORCE_PATH, defaults.isForce()));
+        return new ParticleConfiguration(particle,
+                section.getDouble(ParticleConfiguration.DELTA_X_PATH, defaults.getDeltaX()),
+                section.getDouble(ParticleConfiguration.DELTA_Y_PATH, defaults.getDeltaY()),
+                section.getDouble(ParticleConfiguration.DELTA_Z_PATH, defaults.getDeltaZ()),
+                MathUtils.ensureMin(section.getInt(ParticleConfiguration.AMOUNT_PATH, defaults.getAmount()), 0),
+                MathUtils.ensureMin(section.getDouble(ParticleConfiguration.SPEED_PATH, defaults.getSpeed()), 0),
+                section.getBoolean(ParticleConfiguration.FORCE_PATH, defaults.isForce()));
     }
 
-    public ParticleConfiguration(IParticle particle, double deltaX, double deltaY, double deltaZ, int amount,
-            double speed, boolean force) {
+    public ParticleConfiguration(final IParticle particle, final double deltaX, final double deltaY,
+            final double deltaZ, final int amount,
+            final double speed, final boolean force) {
         this.particle = particle;
         this.deltaX = deltaX;
         this.deltaY = deltaY;
@@ -75,7 +77,7 @@ public class ParticleConfiguration {
         this.force = force;
     }
 
-    public void spawnAt(Location location) {
+    public void spawnAt(final Location location) {
         if (this.isValid()) {
             this.particle.spawn(location.getWorld(), location.getX(), location.getY(), location.getZ(), this.amount,
                     this.deltaX, this.deltaY, this.deltaZ, this.speed, this.force);
@@ -87,31 +89,31 @@ public class ParticleConfiguration {
     }
 
     public IParticle getParticle() {
-        return particle;
+        return this.particle;
     }
 
     public double getDeltaX() {
-        return deltaX;
+        return this.deltaX;
     }
 
     public double getDeltaY() {
-        return deltaY;
+        return this.deltaY;
     }
 
     public double getDeltaZ() {
-        return deltaZ;
+        return this.deltaZ;
     }
 
     public int getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public double getSpeed() {
-        return speed;
+        return this.speed;
     }
 
     public boolean isForce() {
-        return force;
+        return this.force;
     }
 
     @Override
@@ -120,7 +122,7 @@ public class ParticleConfiguration {
             return "(None)";
         }
 
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append(this.getParticle().toString()).append("\n");
         builder.append("dX: ").append(String.format("%.2f", this.getDeltaX()))
                 .append(" dY: ").append(String.format("%.2f", this.getDeltaY()))
@@ -131,6 +133,7 @@ public class ParticleConfiguration {
         return builder.toString();
     }
 
+    @Override
     public ParticleConfiguration clone() {
         return new ParticleConfiguration(this.particle, this.deltaX, this.deltaY, this.deltaZ, this.amount, this.speed,
                 this.force);

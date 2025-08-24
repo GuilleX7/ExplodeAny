@@ -16,7 +16,7 @@ public class ConfigurationFile {
     private final File file;
     private FileConfiguration fileConfiguration;
 
-    public ConfigurationFile(JavaPlugin plugin, String fileName) {
+    public ConfigurationFile(final JavaPlugin plugin, final String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
         this.file = new File(plugin.getDataFolder(), fileName);
@@ -30,20 +30,20 @@ public class ConfigurationFile {
         } catch (IOException | IllegalArgumentException exception) {
             this.plugin.getLogger()
                     .severe(String.format("Could not load configuration file (%s), does it exist?", this.fileName));
-        } catch (InvalidConfigurationException exception) {
+        } catch (final InvalidConfigurationException exception) {
             this.plugin.getLogger().severe(
                     String.format("Configuration file seems to be invalid, please check below for more details:\n%s",
                             exception.getMessage()));
         }
 
         try (InputStream defaultFileStream = this.plugin.getResource(this.fileName);
-             InputStreamReader defaultFileStreamReader = new InputStreamReader(defaultFileStream)) {
+                InputStreamReader defaultFileStreamReader = new InputStreamReader(defaultFileStream)) {
             if (defaultFileStream != null) {
-                YamlConfiguration defaultConfig = YamlConfiguration
+                final YamlConfiguration defaultConfig = YamlConfiguration
                         .loadConfiguration(defaultFileStreamReader);
                 this.fileConfiguration.setDefaults(defaultConfig);
             }
-        } catch (Exception exception) {
+        } catch (final Exception exception) {
             this.plugin.getLogger().warning(
                     String.format("Could not load default configuration file (%s), defaults won't be applied",
                             this.fileName));

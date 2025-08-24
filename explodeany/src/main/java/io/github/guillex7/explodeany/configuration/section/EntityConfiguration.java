@@ -29,22 +29,23 @@ public class EntityConfiguration {
     private SpecificEntityConfiguration specificConfiguration = null;
 
     public static EntityConfiguration byDefault() {
-        return new EntityConfiguration(/* explosionRadius */ 0.0d,
-                /* explosionFactor */ 1.0d,
-                /* replaceOriginalExplosion */ false,
-                /* underwaterExplosionFactor */ 0.5d,
-                /* explosionDamageBlocksUnderwater */ false,
-                /* replaceOriginalExplosionWhenUnderwater */ true,
-                /* packDroppedItems */ false,
-                /* entityBehavioralConfiguration */ EntityBehavioralConfiguration.byDefault(),
-                /* soundConfiguration */ SoundConfiguration.byDefault(),
-                /* particleConfiguration */ ParticleConfiguration.byDefault());
+        return new EntityConfiguration(0.0d,
+                1.0d,
+                false,
+                0.5d,
+                false,
+                true,
+                false,
+                EntityBehavioralConfiguration.byDefault(),
+                SoundConfiguration.byDefault(),
+                ParticleConfiguration.byDefault());
     }
 
-    public static EntityConfiguration fromConfigurationSection(ConfigurationSection section) {
-        EntityConfiguration defaults = EntityConfiguration.byDefault();
+    public static EntityConfiguration fromConfigurationSection(final ConfigurationSection section) {
+        final EntityConfiguration defaults = EntityConfiguration.byDefault();
 
-        ConfigurationSection soundConfigurationSection = section.getConfigurationSection(SOUND_PATH);
+        final ConfigurationSection soundConfigurationSection = section
+                .getConfigurationSection(EntityConfiguration.SOUND_PATH);
         SoundConfiguration onExplodeSoundConfiguration = SoundConfiguration.byDefault();
         if (soundConfigurationSection != null) {
             boolean hasSoundSections = false;
@@ -58,8 +59,8 @@ public class EntityConfiguration {
             }
         }
 
-        ConfigurationSection particleConfigurationSection = section
-                .getConfigurationSection(PARTICLES_PATH);
+        final ConfigurationSection particleConfigurationSection = section
+                .getConfigurationSection(EntityConfiguration.PARTICLES_PATH);
         ParticleConfiguration onExplodeParticleConfiguration = ParticleConfiguration.byDefault();
         if (particleConfigurationSection != null) {
             boolean hasParticleSections = false;
@@ -75,37 +76,35 @@ public class EntityConfiguration {
         }
 
         return new EntityConfiguration(
-                // explosionRadius
-                MathUtils.ensureMin(section.getDouble(EXPLOSION_RADIUS_PATH, defaults.getExplosionRadius()), 0.0d),
-                // explosionFactor
-                MathUtils.ensureMin(section.getDouble(EXPLOSION_FACTOR_PATH, defaults.getExplosionFactor()), 0.0d),
-                // replaceOriginalExplosion
-                section.getBoolean(REPLACE_ORIGINAL_EXPLOSION_PATH, defaults.doReplaceOriginalExplosion()),
-                // underwaterExplosionFactor
                 MathUtils.ensureMin(
-                        section.getDouble(UNDERWATER_EXPLOSION_FACTOR_PATH, defaults.getUnderwaterExplosionFactor()),
+                        section.getDouble(EntityConfiguration.EXPLOSION_RADIUS_PATH, defaults.getExplosionRadius()),
                         0.0d),
-                // explosionDamageBlocksUnderwater
-                section.getBoolean(EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH,
+                MathUtils.ensureMin(
+                        section.getDouble(EntityConfiguration.EXPLOSION_FACTOR_PATH, defaults.getExplosionFactor()),
+                        0.0d),
+                section.getBoolean(EntityConfiguration.REPLACE_ORIGINAL_EXPLOSION_PATH,
+                        defaults.doReplaceOriginalExplosion()),
+                MathUtils.ensureMin(
+                        section.getDouble(EntityConfiguration.UNDERWATER_EXPLOSION_FACTOR_PATH,
+                                defaults.getUnderwaterExplosionFactor()),
+                        0.0d),
+                section.getBoolean(EntityConfiguration.EXPLOSION_DAMAGE_BLOCKS_UNDERWATER_PATH,
                         defaults.doesExplosionDamageBlocksUnderwater()),
-                // replaceOriginalExplosionWhenUnderwater
-                section.getBoolean(REPLACE_ORIGINAL_EXPLOSION_WHEN_UNDERWATER_PATH,
+                section.getBoolean(EntityConfiguration.REPLACE_ORIGINAL_EXPLOSION_WHEN_UNDERWATER_PATH,
                         defaults.doReplaceOriginalExplosionWhenUnderwater()),
-                // packDroppedItems
-                section.getBoolean(PACK_DROPPED_ITEMS_PATH, defaults.doPackDroppedItems()),
-                // entityBehavioralConfiguration
+                section.getBoolean(EntityConfiguration.PACK_DROPPED_ITEMS_PATH, defaults.doPackDroppedItems()),
                 EntityBehavioralConfiguration.fromConfigurationSection(section),
-                // onExplodeSoundConfiguration
                 onExplodeSoundConfiguration,
-                // onExplodeParticleConfiguration
                 onExplodeParticleConfiguration);
     }
 
-    public EntityConfiguration(double explosionRadius, double explosionFactor, boolean replaceOriginalExplosion,
-            double underwaterExplosionFactor, boolean explosionDamageBlocksUnderwater,
-            boolean replaceOriginalExplosionWhenUnderwater,
-            boolean packDroppedItems, EntityBehavioralConfiguration entityBehavioralConfiguration,
-            SoundConfiguration onExplodeSoundConfiguration, ParticleConfiguration onExplodeParticleConfiguration) {
+    public EntityConfiguration(final double explosionRadius, final double explosionFactor,
+            final boolean replaceOriginalExplosion,
+            final double underwaterExplosionFactor, final boolean explosionDamageBlocksUnderwater,
+            final boolean replaceOriginalExplosionWhenUnderwater,
+            final boolean packDroppedItems, final EntityBehavioralConfiguration entityBehavioralConfiguration,
+            final SoundConfiguration onExplodeSoundConfiguration,
+            final ParticleConfiguration onExplodeParticleConfiguration) {
         this.explosionRadius = explosionRadius;
         this.explosionFactor = explosionFactor;
         this.replaceOriginalExplosion = replaceOriginalExplosion;
@@ -119,7 +118,7 @@ public class EntityConfiguration {
     }
 
     public double getExplosionRadius() {
-        return explosionRadius;
+        return this.explosionRadius;
     }
 
     public boolean isExplosionRadiusOverridden() {
@@ -127,46 +126,46 @@ public class EntityConfiguration {
     }
 
     public double getExplosionFactor() {
-        return explosionFactor;
+        return this.explosionFactor;
     }
 
     public boolean doReplaceOriginalExplosion() {
-        return replaceOriginalExplosion;
+        return this.replaceOriginalExplosion;
     }
 
     public double getUnderwaterExplosionFactor() {
-        return underwaterExplosionFactor;
+        return this.underwaterExplosionFactor;
     }
 
     public boolean doesExplosionDamageBlocksUnderwater() {
-        return explosionDamageBlocksUnderwater;
+        return this.explosionDamageBlocksUnderwater;
     }
 
     public boolean doReplaceOriginalExplosionWhenUnderwater() {
-        return replaceOriginalExplosionWhenUnderwater;
+        return this.replaceOriginalExplosionWhenUnderwater;
     }
 
     public boolean doPackDroppedItems() {
-        return packDroppedItems;
+        return this.packDroppedItems;
     }
 
     public EntityBehavioralConfiguration getEntityBehavioralConfiguration() {
-        return entityBehavioralConfiguration;
+        return this.entityBehavioralConfiguration;
     }
 
     public SoundConfiguration getOnExplodeSoundConfiguration() {
-        return onExplodeSoundConfiguration;
+        return this.onExplodeSoundConfiguration;
     }
 
     public ParticleConfiguration getOnExplodeParticleConfiguration() {
-        return onExplodeParticleConfiguration;
+        return this.onExplodeParticleConfiguration;
     }
 
     public SpecificEntityConfiguration getSpecificConfiguration() {
-        return specificConfiguration;
+        return this.specificConfiguration;
     }
 
-    public void setSpecificConfiguration(SpecificEntityConfiguration specificConfiguration) {
+    public void setSpecificConfiguration(final SpecificEntityConfiguration specificConfiguration) {
         this.specificConfiguration = specificConfiguration;
     }
 
@@ -176,7 +175,7 @@ public class EntityConfiguration {
                 ? String.format("%.2f blocks", this.getExplosionRadius())
                 : "default";
 
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("&7<General>\n");
         builder.append("&fExplosion radius: ").append(explosionRadiusString).append("\n");
         builder.append("&fExplosion factor: x").append(String.format("%.2f", this.getExplosionFactor())).append("\n");
@@ -200,6 +199,7 @@ public class EntityConfiguration {
         return builder.toString();
     }
 
+    @Override
     public EntityConfiguration clone() {
         return new EntityConfiguration(this.explosionRadius, this.explosionFactor, this.replaceOriginalExplosion,
                 this.underwaterExplosionFactor, this.explosionDamageBlocksUnderwater,

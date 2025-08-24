@@ -26,7 +26,7 @@ public abstract class RegistrableCommand {
         return "";
     }
 
-    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
+    public boolean isCommandSenderAllowedToUse(final CommandSender sender) {
         return this.getSubcommands().stream().anyMatch(subcommand -> subcommand.isCommandSenderAllowedToUse(sender));
     }
 
@@ -34,14 +34,12 @@ public abstract class RegistrableCommand {
         return new ArrayList<>();
     }
 
-    public boolean execute(CommandSender sender, String[] args) {
+    public boolean execute(final CommandSender sender, final String[] args) {
         return false;
     }
 
-    public void onTabComplete(CommandSender sender, String[] args, List<String> autocompletion) {
-        /**
-         * Nothing to do
-         */
+    public void onTabComplete(final CommandSender sender, final String[] args, final List<String> autocompletion) {
+        // Nothing to do
     }
 
     public abstract String getName();
@@ -51,11 +49,11 @@ public abstract class RegistrableCommand {
     }
 
     public final Map<String, RegistrableCommand> getMappedSubcommands() {
-        return mappedSubcommands;
+        return this.mappedSubcommands;
     }
 
     public final Set<String> getAllNames() {
-        return allNames;
+        return this.allNames;
     }
 
     private void mapSubcommands() {
@@ -65,9 +63,9 @@ public abstract class RegistrableCommand {
             this.mappedSubcommands.clear();
         }
 
-        for (RegistrableCommand subcommand : this.getSubcommands()) {
+        for (final RegistrableCommand subcommand : this.getSubcommands()) {
             this.mappedSubcommands.put(subcommand.getName(), subcommand);
-            for (String subcommandAlias : subcommand.getAliases()) {
+            for (final String subcommandAlias : subcommand.getAliases()) {
                 this.mappedSubcommands.put(subcommandAlias, subcommand);
             }
         }

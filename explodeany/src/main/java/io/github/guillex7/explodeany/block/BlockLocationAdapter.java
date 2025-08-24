@@ -9,14 +9,14 @@ import com.google.gson.stream.JsonWriter;
 
 public class BlockLocationAdapter extends TypeAdapter<BlockLocation> {
     @Override
-    public void write(JsonWriter out, BlockLocation value) throws IOException {
+    public void write(final JsonWriter out, final BlockLocation value) throws IOException {
         out.value(String.format("%s:%d:%d:%d", value.getWorldUuid().toString(), value.getX(), value.getY(),
                 value.getZ()));
     }
 
     @Override
-    public BlockLocation read(JsonReader in) throws IOException {
-        String parts[] = in.nextString().split(":");
+    public BlockLocation read(final JsonReader in) throws IOException {
+        final String parts[] = in.nextString().split(":");
         return new BlockLocation(UUID.fromString(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]),
                 Integer.parseInt(parts[3]));
     }

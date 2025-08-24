@@ -50,14 +50,15 @@ public class ChecktoolConfiguration {
                 Duration.ofTicks(30));
     }
 
-    public static ChecktoolConfiguration fromConfigurationSection(ConfigurationSection section) {
-        ChecktoolConfiguration defaults = ChecktoolConfiguration.byDefault();
+    public static ChecktoolConfiguration fromConfigurationSection(final ConfigurationSection section) {
+        final ChecktoolConfiguration defaults = ChecktoolConfiguration.byDefault();
 
         EanyBossBarColor bossBarColor;
-        String bossBarColorString = section.getString(BOSS_BAR_COLOR, defaults.bossBarColor.name());
+        final String bossBarColorString = section.getString(ChecktoolConfiguration.BOSS_BAR_COLOR,
+                defaults.bossBarColor.name());
         try {
             bossBarColor = EanyBossBarColor.valueOf(bossBarColorString);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             ExplodeAny.getInstance().getLogger().warning(String.format(
                     "Invalid boss bar color '%s' in configuration section '%s'. Using default value '%s'.",
                     bossBarColorString, section.getCurrentPath(), defaults.bossBarColor.name()));
@@ -65,47 +66,49 @@ public class ChecktoolConfiguration {
         }
 
         EanyBossBarStyle bossBarStyle;
-        String bossBarStyleString = section.getString(BOSS_BAR_STYLE, defaults.bossBarStyle.name());
+        final String bossBarStyleString = section.getString(ChecktoolConfiguration.BOSS_BAR_STYLE,
+                defaults.bossBarStyle.name());
         try {
             bossBarStyle = EanyBossBarStyle.valueOf(bossBarStyleString);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             ExplodeAny.getInstance().getLogger().warning(String.format(
                     "Invalid boss bar style '%s' in configuration section '%s'. Using default value '%s'.",
                     bossBarStyleString, section.getCurrentPath(), defaults.bossBarStyle.name()));
             bossBarStyle = defaults.bossBarStyle;
         }
 
-        Duration bossBarDuration = Duration.parse(section.getString(BOSS_BAR_DURATION));
+        Duration bossBarDuration = Duration.parse(section.getString(ChecktoolConfiguration.BOSS_BAR_DURATION));
         if (bossBarDuration.isZero()) {
             bossBarDuration = defaults.bossBarDuration;
         }
 
         return new ChecktoolConfiguration(
-                section.getBoolean(ALWAYS_ENABLED_PATH, defaults.alwaysEnabled),
-                section.getBoolean(ENABLED_BY_DEFAULT_PATH, defaults.enabledByDefault),
-                section.getBoolean(PREVENT_ACTION_WHEN_CHECKING_HANDLED_BLOCKS,
+                section.getBoolean(ChecktoolConfiguration.ALWAYS_ENABLED_PATH, defaults.alwaysEnabled),
+                section.getBoolean(ChecktoolConfiguration.ENABLED_BY_DEFAULT_PATH, defaults.enabledByDefault),
+                section.getBoolean(ChecktoolConfiguration.PREVENT_ACTION_WHEN_CHECKING_HANDLED_BLOCKS,
                         defaults.preventActionWhenCheckingHandledBlocks),
-                section.getBoolean(PREVENT_ACTION_WHEN_CHECKING_NON_HANDLED_BLOCKS,
+                section.getBoolean(ChecktoolConfiguration.PREVENT_ACTION_WHEN_CHECKING_NON_HANDLED_BLOCKS,
                         defaults.preventActionWhenCheckingNonHandledBlocks),
-                section.getBoolean(SILENT_WHEN_CHECKING_ON_DISABLED_WORLDS_PATH,
+                section.getBoolean(ChecktoolConfiguration.SILENT_WHEN_CHECKING_ON_DISABLED_WORLDS_PATH,
                         defaults.silentWhenCheckingOnDisabledWorlds),
-                section.getBoolean(SILENT_WHEN_CHECKING_WITHOUT_PERMISSIONS_PATH,
+                section.getBoolean(ChecktoolConfiguration.SILENT_WHEN_CHECKING_WITHOUT_PERMISSIONS_PATH,
                         defaults.silentWhenCheckingWithoutPermissions),
-                section.getBoolean(SILENT_WHEN_CHECKING_NONHANDLED_BLOCKS_PATH,
+                section.getBoolean(ChecktoolConfiguration.SILENT_WHEN_CHECKING_NONHANDLED_BLOCKS_PATH,
                         defaults.silentWhenCheckingNonHandledBlocks),
-                section.getBoolean(SILENT_WHEN_CHECKING_HANDLED_BLOCKS_PATH,
+                section.getBoolean(ChecktoolConfiguration.SILENT_WHEN_CHECKING_HANDLED_BLOCKS_PATH,
                         defaults.silentWhenCheckingHandledBlocks),
-                section.getBoolean(SHOW_BOSS_BAR, defaults.showBossBar),
+                section.getBoolean(ChecktoolConfiguration.SHOW_BOSS_BAR, defaults.showBossBar),
                 bossBarColor, bossBarStyle, bossBarDuration);
     }
 
-    public ChecktoolConfiguration(boolean alwaysEnabled, boolean enabledByDefault,
-            boolean preventActionWhenCheckingHandledBlocks,
-            boolean preventActionWhenCheckingNonHandledBlocks,
-            boolean silentWhenCheckingOnDisabledWorlds,
-            boolean silentWhenCheckingWithoutPermissions, boolean silentWhenCheckingNonHandledBlocks,
-            boolean silentWhenCheckingHandledBlocks, boolean showBossBar, EanyBossBarColor bossBarColor,
-            EanyBossBarStyle bossBarStyle, Duration bossBarDuration) {
+    public ChecktoolConfiguration(final boolean alwaysEnabled, final boolean enabledByDefault,
+            final boolean preventActionWhenCheckingHandledBlocks,
+            final boolean preventActionWhenCheckingNonHandledBlocks,
+            final boolean silentWhenCheckingOnDisabledWorlds,
+            final boolean silentWhenCheckingWithoutPermissions, final boolean silentWhenCheckingNonHandledBlocks,
+            final boolean silentWhenCheckingHandledBlocks, final boolean showBossBar,
+            final EanyBossBarColor bossBarColor,
+            final EanyBossBarStyle bossBarStyle, final Duration bossBarDuration) {
         this.alwaysEnabled = alwaysEnabled;
         this.enabledByDefault = enabledByDefault;
         this.preventActionWhenCheckingHandledBlocks = preventActionWhenCheckingHandledBlocks;
@@ -121,73 +124,75 @@ public class ChecktoolConfiguration {
     }
 
     public boolean isAlwaysEnabled() {
-        return alwaysEnabled;
+        return this.alwaysEnabled;
     }
 
     public boolean isEnabledByDefault() {
-        return enabledByDefault;
+        return this.enabledByDefault;
     }
 
     public boolean doPreventActionWhenCheckingHandledBlocks() {
-        return preventActionWhenCheckingHandledBlocks;
+        return this.preventActionWhenCheckingHandledBlocks;
     }
 
     public boolean doPreventActionWhenCheckingNonHandledBlocks() {
-        return preventActionWhenCheckingNonHandledBlocks;
+        return this.preventActionWhenCheckingNonHandledBlocks;
     }
 
     public boolean isSilentWhenCheckingOnDisabledWorlds() {
-        return silentWhenCheckingOnDisabledWorlds;
+        return this.silentWhenCheckingOnDisabledWorlds;
     }
 
     public boolean isSilentWhenCheckingWithoutPermissions() {
-        return silentWhenCheckingWithoutPermissions;
+        return this.silentWhenCheckingWithoutPermissions;
     }
 
     public boolean isSilentWhenCheckingNonHandledBlocks() {
-        return silentWhenCheckingNonHandledBlocks;
+        return this.silentWhenCheckingNonHandledBlocks;
     }
 
     public boolean isSilentWhenCheckingHandledBlocks() {
-        return silentWhenCheckingHandledBlocks;
+        return this.silentWhenCheckingHandledBlocks;
     }
 
     public boolean doShowBossBar() {
-        return showBossBar;
+        return this.showBossBar;
     }
 
     public EanyBossBarColor getBossBarColor() {
-        return bossBarColor;
+        return this.bossBarColor;
     }
 
     public EanyBossBarStyle getBossBarStyle() {
-        return bossBarStyle;
+        return this.bossBarStyle;
     }
 
     public Duration getBossBarDuration() {
-        return bossBarDuration;
+        return this.bossBarDuration;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Always enabled: ").append(alwaysEnabled).append("\n");
-        builder.append("Enabled by default: ").append(enabledByDefault).append("\n");
-        builder.append("Prevent action when checking handled blocks: ").append(preventActionWhenCheckingHandledBlocks)
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Always enabled: ").append(this.alwaysEnabled).append("\n");
+        builder.append("Enabled by default: ").append(this.enabledByDefault).append("\n");
+        builder.append("Prevent action when checking handled blocks: ")
+                .append(this.preventActionWhenCheckingHandledBlocks)
                 .append("\n");
         builder.append("Prevent action when checking non handled blocks: ")
-                .append(preventActionWhenCheckingNonHandledBlocks).append("\n");
-        builder.append("Silent when checking on disabled worlds: ").append(silentWhenCheckingOnDisabledWorlds)
+                .append(this.preventActionWhenCheckingNonHandledBlocks).append("\n");
+        builder.append("Silent when checking on disabled worlds: ").append(this.silentWhenCheckingOnDisabledWorlds)
                 .append("\n");
-        builder.append("Silent when checking without permissions: ").append(silentWhenCheckingWithoutPermissions)
+        builder.append("Silent when checking without permissions: ").append(this.silentWhenCheckingWithoutPermissions)
                 .append("\n");
-        builder.append("Silent when checking non handled blocks: ").append(silentWhenCheckingNonHandledBlocks)
+        builder.append("Silent when checking non handled blocks: ").append(this.silentWhenCheckingNonHandledBlocks)
                 .append("\n");
-        builder.append("Silent when checking handled blocks: ").append(silentWhenCheckingHandledBlocks).append("\n");
-        builder.append("Show boss bar: ").append(showBossBar).append("\n");
-        builder.append("Boss bar color: ").append(bossBarColor).append("\n");
-        builder.append("Boss bar style: ").append(bossBarStyle).append("\n");
-        builder.append("Boss bar duration: ").append(bossBarDuration);
+        builder.append("Silent when checking handled blocks: ").append(this.silentWhenCheckingHandledBlocks)
+                .append("\n");
+        builder.append("Show boss bar: ").append(this.showBossBar).append("\n");
+        builder.append("Boss bar color: ").append(this.bossBarColor).append("\n");
+        builder.append("Boss bar style: ").append(this.bossBarStyle).append("\n");
+        builder.append("Boss bar duration: ").append(this.bossBarDuration);
         return builder.toString();
     }
 }

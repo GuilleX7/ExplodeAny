@@ -13,12 +13,12 @@ public class CommandAbout extends RegistrableCommand {
     }
 
     @Override
-    public boolean isCommandSenderAllowedToUse(CommandSender sender) {
+    public boolean isCommandSenderAllowedToUse(final CommandSender sender) {
         return true;
     }
 
     @Override
-    public boolean execute(CommandSender sender, String[] args) {
+    public boolean execute(final CommandSender sender, final String[] args) {
         final PluginDescriptionFile description = ExplodeAny.getInstance().getDescription();
         sender.sendMessage(
                 MessageFormatter.colorize(String.format("&f%s\n&7Developed by %s\n&7%s", description.getFullName(),
