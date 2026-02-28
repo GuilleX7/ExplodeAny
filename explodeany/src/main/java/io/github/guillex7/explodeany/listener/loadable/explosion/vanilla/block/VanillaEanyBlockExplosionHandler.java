@@ -8,16 +8,15 @@ import org.bukkit.Material;
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
+import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
-public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandler {
-    private static final String UNKNOWN_BLOCK_NAME = "UNKNOWN";
-
-    private CustomVanillaEntityConfiguration configuration;
+public class VanillaEanyBlockExplosionHandler implements EanyBlockExplosionHandler {
+    private RegularVanillaEntityConfiguration configuration;
 
     @Override
     public boolean shouldBeLoaded() {
@@ -26,8 +25,8 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
 
     @Override
     public void load() {
-        this.configuration = (CustomVanillaEntityConfiguration) ConfigurationManager.getInstance()
-                .getRegisteredConfigurationSectionByPath(CustomVanillaEntityConfiguration.getConfigurationId());
+        this.configuration = (RegularVanillaEntityConfiguration) ConfigurationManager.getInstance()
+                .getRegisteredConfigurationSectionByPath(RegularVanillaEntityConfiguration.getConfigurationId());
     }
 
     @Override
@@ -36,27 +35,21 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
             return;
         }
 
-        final String entityBlockName = event.getBlockMaterial() == null
-                ? CustomEanyBlockExplosionListener.UNKNOWN_BLOCK_NAME
-                : event.getBlockMaterial();
+        final ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity
+                .fromEntityTypeName(event.getBlockMaterial());
+        final double explosionRadius = explodingEntity.getExplosionRadius();
 
         if (DebugManager.getInstance().isDebugEnabled()) {
-            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected custom block explosion. Block type: {0}",
-                    entityBlockName);
+            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected vanilla block explosion. Block ID: {0}",
+                    explodingEntity.getName());
         }
 
         final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
-                .getEntityMaterialConfigurations().get(entityBlockName);
+                .getEntityMaterialConfigurations().get(explodingEntity);
         final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
-                .get(entityBlockName);
+                .get(explodingEntity);
 
-        if (materialConfigurations == null || entityConfiguration == null) {
-            return;
-        }
-
-        final double explosionRadius = entityConfiguration.getExplosionRadius();
-
-        if (explosionRadius == 0d) {
+        if (materialConfigurations == null || entityConfiguration == null || explosionRadius == 0d) {
             return;
         }
 
@@ -64,14 +57,15 @@ public class CustomEanyBlockExplosionListener implements EanyBlockExplosionHandl
                 event.getBlockLocation(), explosionRadius)) {
             event.setCancelled(true);
         } else {
-            ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.getBlockList(),
-                    event.getBlockLocation());
+            ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations,
+                    event.getBlockList(), event.getBlockLocation());
         }
     }
 
     @Override
     public boolean isEventHandled(final EanyBlockExplodeEvent event) {
-        return true;
+        return event.getBlockMaterial() != null
+                && ExplodingVanillaEntity.isEntityNameValid(event.getBlockMaterial());
     }
 
     @Override

@@ -28,8 +28,8 @@ public class EanyBlockExplosionListener implements LoadableListener {
     }
 
     private void registerHandlers() {
-        this.registeredHandlers.add(new VanillaEanyBlockExplosionListener());
-        this.registeredHandlers.add(new CustomEanyBlockExplosionListener());
+        this.registeredHandlers.add(new VanillaEanyBlockExplosionHandler());
+        this.registeredHandlers.add(new CustomEanyBlockExplosionHandler());
     }
 
     private void loadHandlers() {
