@@ -47,8 +47,7 @@ public class MagicVanillaEntityExplosionHandler implements VanillaEntityExplosio
 
     @Override
     public boolean isEventHandled(final EntityExplodeEvent event) {
-        return ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name())
-                && this.isEntitySpawnedByMagic(event.getEntity());
+        return this.isEntitySpawnedByMagic(event.getEntity());
     }
 
     @Override

@@ -22,7 +22,6 @@ import io.github.guillex7.explodeany.listener.loadable.BlockBreakListener;
 import io.github.guillex7.explodeany.listener.loadable.EanyTNTPrimeListener;
 import io.github.guillex7.explodeany.listener.loadable.EntitySpawnListener;
 import io.github.guillex7.explodeany.listener.loadable.PlayerInteractListener;
-import io.github.guillex7.explodeany.listener.loadable.explosion.EanyTaggedExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.cannon.CannonProjectileExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.qualityarmory.QualityArmoryExplosionListener;
 import io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.block.EanyBlockExplosionListener;
@@ -107,8 +106,6 @@ public class ExplodeAny extends JavaPlugin {
         this.listenerManager.registerListener(new PlayerInteractListener());
         this.listenerManager.registerListener(new EntitySpawnListener());
         this.listenerManager.registerListener(new EanyTNTPrimeListener());
-        /* Explosion Manager */
-        this.listenerManager.registerListener(new EanyTaggedExplosionListener());
         /* Compatibility */
         this.listenerManager.registerListener(
                 this.compatibilityManager.getApi().getBukkitListenerUtils().createBlockExplodeListener());

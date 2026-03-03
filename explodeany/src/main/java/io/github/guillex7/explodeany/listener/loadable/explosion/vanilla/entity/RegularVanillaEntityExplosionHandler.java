@@ -38,7 +38,7 @@ public class RegularVanillaEntityExplosionHandler implements VanillaEntityExplos
 
     @Override
     public boolean isEventHandled(final EntityExplodeEvent event) {
-        return ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name());
+        return true;
     }
 
     @Override

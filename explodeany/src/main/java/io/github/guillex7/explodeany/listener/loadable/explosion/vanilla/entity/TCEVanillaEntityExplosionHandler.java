@@ -34,8 +34,7 @@ public class TCEVanillaEntityExplosionHandler implements VanillaEntityExplosionH
 
     @Override
     public boolean isEventHandled(final EntityExplodeEvent event) {
-        return ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name())
-                && TCEApi.entityIsTCE(event.getEntity());
+        return TCEApi.entityIsTCE(event.getEntity());
     }
 
     @Override

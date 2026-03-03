@@ -1,14 +1,11 @@
-package io.github.guillex7.explodeany.listener.loadable.explosion;
+package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.entity;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.explosion.metadata.ExplosionMetadata;
 
-public class EanyTaggedExplosionListener implements LoadableListener {
+public class EanyVanillaEntityExplosionHandler implements VanillaEntityExplosionHandler {
     @Override
     public boolean shouldBeLoaded() {
         return true;
@@ -19,7 +16,12 @@ public class EanyTaggedExplosionListener implements LoadableListener {
         /* Nothing to do */
     }
 
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.NORMAL)
+    @Override
+    public boolean isEventHandled(final EntityExplodeEvent event) {
+        return ExplosionManager.getInstance().isEntitySpawnedByExplosionManager(event.getEntity());
+    }
+
+    @Override
     public void onEntityExplode(final EntityExplodeEvent event) {
         if (!this.isEventHandled(event)) {
             return;
@@ -32,13 +34,8 @@ public class EanyTaggedExplosionListener implements LoadableListener {
         explosionMetadata.dropCollector.dropCollectedItems(event.getLocation());
     }
 
-    private boolean isEventHandled(final EntityExplodeEvent event) {
-        return !event.isCancelled() && event.getEntity() != null
-                && ExplosionManager.getInstance().isEntitySpawnedByExplosionManager(event.getEntity());
-    }
-
     @Override
     public void unload() {
-        EntityExplodeEvent.getHandlerList().unregister(this);
+        /* Do nothing */
     }
 }

@@ -28,10 +28,18 @@ public class VanillaEntityExplosionListener implements LoadableListener {
     }
 
     private void registerHandlers() {
-        this.registeredHandlers.add(new MagicVanillaEntityExplosionHandler());
-        this.registeredHandlers.add(new TCEVanillaEntityExplosionHandler());
-        this.registeredHandlers.add(new RegularVanillaEntityExplosionHandler());
+        // entity == null
+        this.registeredHandlers.add(new UnknownVanillaEntityExplosionHandler());
+        // entity != null && !isVanilla(entity)
         this.registeredHandlers.add(new CustomVanillaEntityExplosionHandler());
+        // entity != null && isVanilla(entity) && isEMTagged(entity)
+        this.registeredHandlers.add(new EanyVanillaEntityExplosionHandler());
+        // entity != null && isVanilla(entity) && !isEMTagged(entity) && isMagic(entity)
+        this.registeredHandlers.add(new MagicVanillaEntityExplosionHandler());
+        // entity != null && isVanilla(entity) && !isEMTagged(entity) && !isMagic(entity) && isTCETagged(entity)
+        this.registeredHandlers.add(new TCEVanillaEntityExplosionHandler());
+        // entity != null && isVanilla(entity) && !isEMTagged(entity) && !isMagic(entity) && !isTCETagged(entity)
+        this.registeredHandlers.add(new RegularVanillaEntityExplosionHandler());
     }
 
     private void loadHandlers() {

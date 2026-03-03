@@ -30,11 +30,12 @@ public class VanillaEanyBlockExplosionHandler implements EanyBlockExplosionHandl
     }
 
     @Override
-    public void onBlockExplode(final EanyBlockExplodeEvent event) {
-        if (!this.isEventHandled(event)) {
-            return;
-        }
+    public boolean isEventHandled(final EanyBlockExplodeEvent event) {
+        return true;
+    }
 
+    @Override
+    public void onBlockExplode(final EanyBlockExplodeEvent event) {
         final ExplodingVanillaEntity explodingEntity = ExplodingVanillaEntity
                 .fromEntityTypeName(event.getBlockMaterial());
         final double explosionRadius = explodingEntity.getExplosionRadius();
@@ -60,12 +61,6 @@ public class VanillaEanyBlockExplosionHandler implements EanyBlockExplosionHandl
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations,
                     event.getBlockList(), event.getBlockLocation());
         }
-    }
-
-    @Override
-    public boolean isEventHandled(final EanyBlockExplodeEvent event) {
-        return event.getBlockMaterial() != null
-                && ExplodingVanillaEntity.isEntityNameValid(event.getBlockMaterial());
     }
 
     @Override

@@ -28,10 +28,14 @@ public class EanyBlockExplosionListener implements LoadableListener {
     }
 
     private void registerHandlers() {
-        this.registeredHandlers.add(new VanillaEanyBlockExplosionHandler());
+        // blockMaterial == null
+        this.registeredHandlers.add(new UnknownEanyBlockExplosionHandler());
+        // blockMaterial != null && !isVanilla(blockMaterial)
         this.registeredHandlers.add(new CustomEanyBlockExplosionHandler());
+        // blockMaterial != null && isVanilla(blockMaterial)
+        this.registeredHandlers.add(new VanillaEanyBlockExplosionHandler());
     }
-
+    
     private void loadHandlers() {
         for (final EanyBlockExplosionHandler handler : this.registeredHandlers) {
             if (handler.shouldBeLoaded()) {

@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import io.github.guillex7.explodeany.ExplodeAny;
@@ -12,11 +11,13 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
-import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
-public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosionHandler {
+public class UnknownVanillaEntityExplosionHandler implements VanillaEntityExplosionHandler {
+    private static final String UNKNOWN_ENTITY_NAME = "UNKNOWN_ENTITY";
+    private static final String UNKNOWN_NAME = "UNKNOWN";
+
     private CustomVanillaEntityConfiguration configuration;
 
     @Override
@@ -33,26 +34,31 @@ public class CustomVanillaEntityExplosionHandler implements VanillaEntityExplosi
 
     @Override
     public boolean isEventHandled(final EntityExplodeEvent event) {
-        return !ExplodingVanillaEntity.isEntityNameValid(event.getEntityType().name());
+        return event.getEntity() == null;
     }
 
     @Override
     public void onEntityExplode(final EntityExplodeEvent event) {
-        final EntityType entityType = event.getEntityType();
-        final String entityTypeName = entityType.toString();
+        final String entityTypeName = UNKNOWN_ENTITY_NAME;
 
         if (DebugManager.getInstance().isDebugEnabled()) {
-            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected custom entity explosion. Entity type: {0}",
-                    entityTypeName);
+            ExplodeAny.getInstance().getLogger().log(Level.INFO,
+                    "Detected custom entity explosion. Entity type: {0} (also known as {1})",
+                    new Object[] { entityTypeName, UNKNOWN_NAME });
         }
 
-        final Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
+        Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
                 .getEntityMaterialConfigurations().get(entityTypeName);
-        final EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
+        EntityConfiguration entityConfiguration = this.configuration.getEntityConfigurations()
                 .get(entityTypeName);
 
         if (materialConfigurations == null || entityConfiguration == null) {
-            return;
+            materialConfigurations = this.configuration.getEntityMaterialConfigurations().get(UNKNOWN_NAME);
+            entityConfiguration = this.configuration.getEntityConfigurations().get(UNKNOWN_NAME);
+
+            if (materialConfigurations == null || entityConfiguration == null) {
+                return;
+            }
         }
 
         final double explosionRadius = entityConfiguration.getExplosionRadius();
