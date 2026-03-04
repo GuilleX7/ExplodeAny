@@ -13,8 +13,8 @@
     </parent>
 
     <groupId>io.github.guillex7.explodeany</groupId>
-    <artifactId>compat-v1_20</artifactId>
-    <name>Compatibility for v1.20+</name>
+    <artifactId>compat-v1-13</artifactId>
+    <name>Compatibility for v1.13+</name>
 
     <packaging>jar</packaging>
 
@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_16_1</artifactId>
+            <artifactId>compat-v1-9</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -44,30 +44,30 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
+            <version>1.13-R0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- Tested for -->
         <!-- <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
+            <version>1.13-R0.1-SNAPSHOT</version>
         </dependency> -->
         <!-- <dependency>
-            <groupId>io.papermc.paper</groupId>
+            <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
+            <version>1.13-R0.1-SNAPSHOT</version>
         </dependency> -->
         <!-- <dependency>
             <groupId>dev.folia</groupId>
             <artifactId>folia-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
         </dependency> -->
-        <!-- <dependency>
+        <!--<dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.21.8-R0.1-SNAPSHOT</version>
-        </dependency> -->
+        </dependency>-->
         <!-- <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>

@@ -13,7 +13,7 @@
     </parent>
 
     <groupId>io.github.guillex7.explodeany</groupId>
-    <artifactId>compat-v1_21_paper</artifactId>
+    <artifactId>compat-v1-21_paper</artifactId>
     <name>Compatibility for v1.21+ (Paper)</name>
 
     <packaging>jar</packaging>
@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_20</artifactId>
+            <artifactId>compat-v1-20</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>

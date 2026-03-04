@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_8</artifactId>
+            <artifactId>compat-v1-8</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -43,7 +43,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_8_3</artifactId>
+            <artifactId>compat-v1-8-3</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -54,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_9</artifactId>
+            <artifactId>compat-v1-9</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -65,7 +65,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_13</artifactId>
+            <artifactId>compat-v1-13</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -76,7 +76,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_13_paper</artifactId>
+            <artifactId>compat-v1-13_paper</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -87,7 +87,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_14</artifactId>
+            <artifactId>compat-v1-14</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -98,7 +98,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_14_paper</artifactId>
+            <artifactId>compat-v1-14_paper</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -109,7 +109,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_16_1</artifactId>
+            <artifactId>compat-v1-16-1</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -120,7 +120,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_16_1_paper</artifactId>
+            <artifactId>compat-v1-16-1-paper</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -131,7 +131,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_19_4_paper</artifactId>
+            <artifactId>compat-v1-19-4-paper</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -142,7 +142,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_20</artifactId>
+            <artifactId>compat-v1-20</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -153,7 +153,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_21_paper</artifactId>
+            <artifactId>compat-v1-21_paper</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>

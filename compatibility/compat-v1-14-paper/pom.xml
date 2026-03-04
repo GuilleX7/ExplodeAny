@@ -13,8 +13,8 @@
     </parent>
 
     <groupId>io.github.guillex7.explodeany</groupId>
-    <artifactId>compat-v1_14</artifactId>
-    <name>Compatibility for v1.14+</name>
+    <artifactId>compat-v1-14_paper</artifactId>
+    <name>Compatibility for v1.14+ (Paper)</name>
 
     <packaging>jar</packaging>
 
@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.guillex7.explodeany</groupId>
-            <artifactId>compat-v1_13</artifactId>
+            <artifactId>compat-v1-14</artifactId>
             <version>${explodeany.version}</version>
             <exclusions>
                 <exclusion>
@@ -42,17 +42,12 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
             <version>1.14-R0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- Tested for -->
-        <!-- <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.14-R0.1-SNAPSHOT</version>
-        </dependency> -->
         <!-- <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -63,11 +58,6 @@
             <artifactId>folia-api</artifactId>
             <version>1.19.4-R0.1-SNAPSHOT</version>
         </dependency> -->
-        <!--<dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.21.8-R0.1-SNAPSHOT</version>
-        </dependency>-->
         <!-- <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
