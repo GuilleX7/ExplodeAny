@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
-import io.github.guillex7.explodeany.compat.common.data.IBossBar;
-import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.bukkit.data.IBossBar;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationLocale;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
@@ -49,11 +49,11 @@ public final class PlayerInteractListener implements LoadableListener {
         final Player player = event.getPlayer();
 
         if (Action.RIGHT_CLICK_BLOCK.equals(event.getAction())
-                && this.compatibilityManager.getApi().getPlayerInteractionEventUtils()
+                && this.compatibilityManager.getBukkitApi().getPlayerInteractionEventUtils()
                         .doesInteractionUseMainHand(event)
                 && this.checktoolManager.isPlayerUsingChecktool(player)) {
             final ItemStack itemInHand = new ItemStack(
-                    this.compatibilityManager.getApi().getPlayerInventoryUtils()
+                    this.compatibilityManager.getBukkitApi().getPlayerInventoryUtils()
                             .getItemInMainHand(player.getInventory()));
             final ItemStack checktool = this.checktoolManager.getChecktool();
 
@@ -152,7 +152,7 @@ public final class PlayerInteractListener implements LoadableListener {
                             .replace("%MATERIAL%", materialName)
                             .replace("%PRETTY_MATERIAL%", prettyMaterialName);
 
-                    final IBossBar checktoolBossBar = this.compatibilityManager.getApi()
+                    final IBossBar checktoolBossBar = this.compatibilityManager.getBukkitApi()
                             .getBukkitUtils()
                             .createBossBar(
                                     formattedBossBarTitle,

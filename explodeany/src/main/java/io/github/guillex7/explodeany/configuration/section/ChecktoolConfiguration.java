@@ -3,8 +3,8 @@ package io.github.guillex7.explodeany.configuration.section;
 import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.data.EanyBossBarColor;
-import io.github.guillex7.explodeany.compat.common.data.EanyBossBarStyle;
+import io.github.guillex7.explodeany.compat.common.bukkit.data.EanyBossBarColor;
+import io.github.guillex7.explodeany.compat.common.bukkit.data.EanyBossBarStyle;
 import io.github.guillex7.explodeany.data.Duration;
 
 public class ChecktoolConfiguration {

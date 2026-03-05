@@ -1,6 +1,6 @@
 package io.github.guillex7.explodeany.listener.loadable.explosion.vanilla.block;
 
-import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
+import io.github.guillex7.explodeany.compat.common.bukkit.event.EanyBlockExplodeEvent;
 
 public interface EanyBlockExplosionHandler {
     boolean shouldBeLoaded();

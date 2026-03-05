@@ -26,7 +26,7 @@ public class SoundConfiguration {
         final SoundConfiguration defaults = SoundConfiguration.byDefault();
 
         final String soundName = section.getString(SoundConfiguration.NAME_PATH, "").toUpperCase();
-        final Sound sound = CompatibilityManager.getInstance().getApi().getSoundUtils().getSound(soundName);
+        final Sound sound = CompatibilityManager.getInstance().getBukkitApi().getSoundUtils().getSound(soundName);
 
         if (sound == null && !"".equals(soundName)) {
             ExplodeAny.getInstance().getLogger()

@@ -6,11 +6,12 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
+import io.github.guillex7.explodeany.compat.common.bukkit.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.explosion.ExplosionContext;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
@@ -38,11 +39,12 @@ public class UnknownEanyBlockExplosionHandler implements EanyBlockExplosionHandl
 
     @Override
     public void onBlockExplode(final EanyBlockExplodeEvent event) {
-        final String entityBlockName = UnknownEanyBlockExplosionHandler.UNKNOWN_BLOCK_NAME;
+        String entityBlockName = UnknownEanyBlockExplosionHandler.UNKNOWN_BLOCK_NAME;
 
         if (DebugManager.getInstance().isDebugEnabled()) {
-            ExplodeAny.getInstance().getLogger().log(Level.INFO, "Detected custom block explosion. Block type: {0} (also known as {1})",
-                    new Object[]{entityBlockName, UnknownEanyBlockExplosionHandler.UNKNOWN_NAME});
+            ExplodeAny.getInstance().getLogger().log(Level.INFO,
+                    "Detected custom block explosion. Block type: {0} (also known as {1})",
+                    new Object[] { entityBlockName, UnknownEanyBlockExplosionHandler.UNKNOWN_NAME });
         }
 
         Map<Material, EntityMaterialConfiguration> materialConfigurations = this.configuration
@@ -51,8 +53,7 @@ public class UnknownEanyBlockExplosionHandler implements EanyBlockExplosionHandl
                 .get(entityBlockName);
 
         if (materialConfigurations == null || entityConfiguration == null) {
-            // If there is no configuration for the unknown block, try to get the
-            // configuration for the generic unknown
+            entityBlockName = UnknownEanyBlockExplosionHandler.UNKNOWN_NAME;
             materialConfigurations = this.configuration
                     .getEntityMaterialConfigurations().get(UnknownEanyBlockExplosionHandler.UNKNOWN_NAME);
             entityConfiguration = this.configuration.getEntityConfigurations()
@@ -68,8 +69,11 @@ public class UnknownEanyBlockExplosionHandler implements EanyBlockExplosionHandl
             return;
         }
 
-        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getBlockLocation(), explosionRadius)) {
+        final ExplosionContext explosionContext = ExplosionContext.of(materialConfigurations, entityConfiguration,
+                event.getBlockLocation(), explosionRadius);
+        explosionContext.setCoreProtectEntityIdentifier(String.format("#%s", entityBlockName.toLowerCase()));
+
+        if (ExplosionManager.getInstance().manageExplosion(explosionContext)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.getBlockList(),

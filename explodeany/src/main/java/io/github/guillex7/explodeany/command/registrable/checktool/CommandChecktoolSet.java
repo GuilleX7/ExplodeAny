@@ -40,8 +40,9 @@ public class CommandChecktoolSet extends RegistrableCommand {
         }
 
         final Player player = (Player) sender;
-        final ItemStack newTool = new ItemStack(CompatibilityManager.getInstance().getApi().getPlayerInventoryUtils()
-                .getItemInMainHand(player.getInventory()));
+        final ItemStack newTool = new ItemStack(
+                CompatibilityManager.getInstance().getBukkitApi().getPlayerInventoryUtils()
+                        .getItemInMainHand(player.getInventory()));
         newTool.setAmount(1);
 
         final ConfigurationLocale senderLocaleMessage = ChecktoolManager.getInstance().setChecktool(newTool)

@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.LoadableListener;
 
 public class ListenerManager {
     private static ListenerManager instance;
@@ -39,7 +39,7 @@ public class ListenerManager {
             }
 
             listener.load();
-            Bukkit.getServer().getPluginManager().registerEvents(listener, ExplodeAny.getInstance());
+            Bukkit.getPluginManager().registerEvents(listener, ExplodeAny.getInstance());
         }
     }
 

@@ -24,7 +24,12 @@ public final class CannonProjectileConfiguration extends LoadableConfigurationSe
     @Override
     public boolean shouldBeLoaded() {
         final Plugin cannonsPlugin = Bukkit.getPluginManager().getPlugin("Cannons");
-        return cannonsPlugin != null && cannonsPlugin.isEnabled() && cannonsPlugin instanceof Cannons;
+        try {
+            return cannonsPlugin != null && cannonsPlugin.isEnabled() && cannonsPlugin instanceof Cannons
+                    && ProjectileStorage.getProjectileIds() != null;
+        } catch (final NoClassDefFoundError e) {
+            return false;
+        }
     }
 
     @Override

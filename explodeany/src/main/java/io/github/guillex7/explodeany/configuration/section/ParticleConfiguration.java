@@ -5,8 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.data.EanyParticleData;
-import io.github.guillex7.explodeany.compat.common.data.IParticle;
+import io.github.guillex7.explodeany.compat.common.bukkit.data.EanyParticleData;
+import io.github.guillex7.explodeany.compat.common.bukkit.data.IParticle;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.util.MathUtils;
 
@@ -53,7 +53,7 @@ public class ParticleConfiguration {
                             section.getString(ParticleConfiguration.MATERIAL_PATH), section.getCurrentPath()));
         }
 
-        final IParticle particle = CompatibilityManager.getInstance().getApi().getParticleUtils()
+        final IParticle particle = CompatibilityManager.getInstance().getBukkitApi().getParticleUtils()
                 .createParticle(new EanyParticleData(name, red, green, blue, size, material));
 
         return new ParticleConfiguration(particle,

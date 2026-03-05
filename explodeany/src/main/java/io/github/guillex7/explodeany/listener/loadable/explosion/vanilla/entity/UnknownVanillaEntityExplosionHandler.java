@@ -11,6 +11,7 @@ import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.explosion.ExplosionContext;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
@@ -39,7 +40,7 @@ public class UnknownVanillaEntityExplosionHandler implements VanillaEntityExplos
 
     @Override
     public void onEntityExplode(final EntityExplodeEvent event) {
-        final String entityTypeName = UNKNOWN_ENTITY_NAME;
+        String entityTypeName = UNKNOWN_ENTITY_NAME;
 
         if (DebugManager.getInstance().isDebugEnabled()) {
             ExplodeAny.getInstance().getLogger().log(Level.INFO,
@@ -53,6 +54,7 @@ public class UnknownVanillaEntityExplosionHandler implements VanillaEntityExplos
                 .get(entityTypeName);
 
         if (materialConfigurations == null || entityConfiguration == null) {
+            entityTypeName = UNKNOWN_NAME;
             materialConfigurations = this.configuration.getEntityMaterialConfigurations().get(UNKNOWN_NAME);
             entityConfiguration = this.configuration.getEntityConfigurations().get(UNKNOWN_NAME);
 
@@ -62,13 +64,15 @@ public class UnknownVanillaEntityExplosionHandler implements VanillaEntityExplos
         }
 
         final double explosionRadius = entityConfiguration.getExplosionRadius();
-
         if (explosionRadius == 0d) {
             return;
         }
 
-        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getLocation(), explosionRadius)) {
+        final ExplosionContext explosionContext = ExplosionContext.of(materialConfigurations, entityConfiguration,
+                event.getLocation(), explosionRadius);
+        explosionContext.setCoreProtectEntityIdentifier(String.format("#%s", entityTypeName.toLowerCase()));
+
+        if (ExplosionManager.getInstance().manageExplosion(explosionContext)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList(),

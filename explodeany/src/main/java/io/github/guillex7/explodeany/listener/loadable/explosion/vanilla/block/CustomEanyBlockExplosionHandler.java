@@ -6,12 +6,13 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
+import io.github.guillex7.explodeany.compat.common.bukkit.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.CustomVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
+import io.github.guillex7.explodeany.explosion.ExplosionContext;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
@@ -57,8 +58,11 @@ public class CustomEanyBlockExplosionHandler implements EanyBlockExplosionHandle
             return;
         }
 
-        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getBlockLocation(), explosionRadius)) {
+        final ExplosionContext explosionContext = ExplosionContext.of(materialConfigurations, entityConfiguration,
+                event.getBlockLocation(), explosionRadius);
+        explosionContext.setCoreProtectEntityIdentifier(String.format("#%s", entityBlockName.toLowerCase()));
+
+        if (ExplosionManager.getInstance().manageExplosion(explosionContext)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.getBlockList(),

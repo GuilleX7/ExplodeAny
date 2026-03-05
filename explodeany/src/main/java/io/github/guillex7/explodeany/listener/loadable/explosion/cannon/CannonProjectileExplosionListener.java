@@ -13,11 +13,12 @@ import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import at.pavlov.cannons.projectile.Projectile;
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.LoadableListener;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.cannon.CannonProjectileConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
+import io.github.guillex7.explodeany.explosion.ExplosionContext;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
@@ -64,8 +65,11 @@ public final class CannonProjectileExplosionListener implements LoadableListener
             return;
         }
 
-        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getImpactLocation(), projectile.getExplosionPower())) {
+        final ExplosionContext explosionContext = ExplosionContext.of(materialConfigurations, entityConfiguration,
+                event.getImpactLocation(), projectile.getExplosionPower());
+        explosionContext.setCoreProtectEntityIdentifier(String.format("#%s", projectileId));
+        
+        if (ExplosionManager.getInstance().manageExplosion(explosionContext)) {
             event.setCancelled(true);
         }
     }

@@ -7,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import io.github.guillex7.explodeany.compat.common.event.EanyBlockExplodeEvent;
-import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.bukkit.event.EanyBlockExplodeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 
 public class EanyBlockExplosionListener implements LoadableListener {
@@ -35,7 +35,7 @@ public class EanyBlockExplosionListener implements LoadableListener {
         // blockMaterial != null && isVanilla(blockMaterial)
         this.registeredHandlers.add(new VanillaEanyBlockExplosionHandler());
     }
-    
+
     private void loadHandlers() {
         for (final EanyBlockExplosionHandler handler : this.registeredHandlers) {
             if (handler.shouldBeLoaded()) {

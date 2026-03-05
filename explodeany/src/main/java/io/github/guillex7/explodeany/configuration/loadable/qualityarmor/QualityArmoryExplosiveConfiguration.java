@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.compat.common.Version;
@@ -15,6 +14,8 @@ import io.github.guillex7.explodeany.data.QualityArmoryExplosive;
 import me.zombie_striker.qg.QAMain;
 
 public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSection<QualityArmoryExplosive> {
+    final Version minimumSupportedQualityArmoryVersion = new Version(2, 0, 10);
+
     public static String getConfigurationId() {
         return "QualityArmory";
     }
@@ -30,20 +31,21 @@ public class QualityArmoryExplosiveConfiguration extends LoadableConfigurationSe
 
     @Override
     public boolean shouldBeLoaded() {
-        final PluginManager pluginManager = Bukkit.getPluginManager();
-        final Plugin qualityArmoryPlugin = pluginManager.getPlugin("QualityArmory");
-        if (qualityArmoryPlugin == null || !qualityArmoryPlugin.isEnabled()
-                || !(qualityArmoryPlugin instanceof QAMain)) {
+        final Plugin qualityArmoryPlugin = Bukkit.getPluginManager().getPlugin("QualityArmory");
+        try {
+            if (qualityArmoryPlugin == null || !qualityArmoryPlugin.isEnabled()
+                    || !(qualityArmoryPlugin instanceof QAMain)) {
+                return false;
+            }
+        } catch (final NoClassDefFoundError e) {
             return false;
         }
 
         final Version qualityArmoryVersion = Version.fromString(qualityArmoryPlugin.getDescription().getVersion());
-        final Version minimumSupportedQualityArmoryVersion = new Version(2, 0, 10);
-
-        if (qualityArmoryVersion.isBefore(minimumSupportedQualityArmoryVersion)) {
+        if (qualityArmoryVersion.isBefore(this.minimumSupportedQualityArmoryVersion)) {
             this.getPlugin().getLogger()
                     .warning(String.format("QualityArmory version %s is not supported. Minimum supported version is %s",
-                            qualityArmoryVersion, minimumSupportedQualityArmoryVersion));
+                            qualityArmoryVersion, this.minimumSupportedQualityArmoryVersion));
             return false;
         }
 

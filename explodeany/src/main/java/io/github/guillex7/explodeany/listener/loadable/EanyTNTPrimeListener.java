@@ -3,8 +3,8 @@ package io.github.guillex7.explodeany.listener.loadable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import io.github.guillex7.explodeany.compat.common.event.EanyTNTPrimeEvent;
-import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.bukkit.event.EanyTNTPrimeEvent;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.RegularVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;

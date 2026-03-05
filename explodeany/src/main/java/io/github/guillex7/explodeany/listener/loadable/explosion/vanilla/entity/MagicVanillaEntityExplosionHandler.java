@@ -10,13 +10,14 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.plugin.Plugin;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.data.EanyMetaPersistentDataType;
+import io.github.guillex7.explodeany.compat.common.bukkit.data.EanyMetaPersistentDataType;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.MagicVanillaEntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
+import io.github.guillex7.explodeany.explosion.ExplosionContext;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
@@ -41,7 +42,7 @@ public class MagicVanillaEntityExplosionHandler implements VanillaEntityExplosio
 
     private boolean isEntitySpawnedByMagic(final Entity entity) {
         return this.magicPlugin != null
-                && CompatibilityManager.getInstance().getApi().getPersistentStorageUtils().getForEntity(entity)
+                && CompatibilityManager.getInstance().getBukkitApi().getPersistentStorageUtils().getForEntity(entity)
                         .has(this.magicPlugin, this.MAGIC_SPAWNED_KEY, EanyMetaPersistentDataType.BYTE);
     }
 
@@ -71,8 +72,11 @@ public class MagicVanillaEntityExplosionHandler implements VanillaEntityExplosio
             return;
         }
 
-        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getLocation(), explosionRadius)) {
+        final ExplosionContext explosionContext = ExplosionContext.of(materialConfigurations, entityConfiguration,
+                event.getLocation(), explosionRadius);
+        explosionContext.setCoreProtectEntityIdentifier(explodingEntity.getCoreProtectIdentifier());
+
+        if (ExplosionManager.getInstance().manageExplosion(explosionContext)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList(),

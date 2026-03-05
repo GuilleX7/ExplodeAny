@@ -16,6 +16,7 @@ import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.configuration.section.specific.TNTSpecificEntityConfiguration;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
+import io.github.guillex7.explodeany.explosion.ExplosionContext;
 import io.github.guillex7.explodeany.explosion.ExplosionFlag;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.listener.loadable.EntitySpawnListener;
@@ -78,8 +79,11 @@ public class RegularVanillaEntityExplosionHandler implements VanillaEntityExplos
             }
         }
 
-        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getLocation(), explosionRadius, explosionFlags)) {
+        final ExplosionContext explosionContext = ExplosionContext.of(materialConfigurations, entityConfiguration,
+                event.getLocation(), explosionRadius, explosionFlags);
+        explosionContext.setCoreProtectEntityIdentifier(explodingEntity.getCoreProtectIdentifier());
+
+        if (ExplosionManager.getInstance().manageExplosion(explosionContext)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList(),

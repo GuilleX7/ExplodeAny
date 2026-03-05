@@ -5,7 +5,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import io.github.guillex7.explodeany.block.BlockDatabase;
-import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.LoadableListener;
 
 public final class BlockBreakListener implements LoadableListener {
     private final BlockDatabase blockDatabase;

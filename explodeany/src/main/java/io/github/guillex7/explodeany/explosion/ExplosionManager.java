@@ -20,7 +20,11 @@ import org.bukkit.metadata.MetadataValue;
 import io.github.guillex7.explodeany.ExplodeAny;
 import io.github.guillex7.explodeany.block.BlockDatabase;
 import io.github.guillex7.explodeany.block.BlockStatus;
-import io.github.guillex7.explodeany.compat.common.api.IBlockDataUtils;
+import io.github.guillex7.explodeany.compat.common.bukkit.api.IBlockDataUtils;
+import io.github.guillex7.explodeany.compat.common.coreprotect.ICoreProtectApi;
+import io.github.guillex7.explodeany.compat.common.factions.IFactionsApi;
+import io.github.guillex7.explodeany.compat.common.worldguard.IWorldGuardApi;
+import io.github.guillex7.explodeany.compat.common.worldguard.data.IWorldGuardLocationChecker;
 import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.section.EntityBehavioralConfiguration;
@@ -37,15 +41,23 @@ import io.github.guillex7.explodeany.explosion.metadata.ExplosionMetadata;
 public class ExplosionManager {
     private static ExplosionManager instance;
 
+    public static final String EXPLOSION_MANAGER_CORE_PROTECT_IDENTIFIER = "#explodeany";
     public static final String EXPLOSION_MANAGER_SPAWNED_TAG = "eany-em-spawned";
     public static final String EXPLOSION_MANAGER_EXPLOSION_METADATA_TAG = "eany-em-explosion-metadata";
 
-    private final IBlockDataUtils blockDataUtils;
     private final BlockDatabase blockDatabase;
     private final ConfigurationManager configurationManager;
+    private final IBlockDataUtils blockDataUtils;
+    private final ICoreProtectApi coreProtectApi;
+    private final IWorldGuardApi worldGuardApi;
+    private final IFactionsApi factionsApi;
 
     private ExplosionManager() {
-        this.blockDataUtils = CompatibilityManager.getInstance().getApi().getBlockDataUtils();
+        this.blockDataUtils = CompatibilityManager.getInstance().getBukkitApi().getBlockDataUtils();
+        this.coreProtectApi = CompatibilityManager.getInstance().getCoreProtectApi();
+        this.worldGuardApi = CompatibilityManager.getInstance().getWorldGuardApi();
+        this.factionsApi = CompatibilityManager.getInstance().getFactionsApi();
+
         this.blockDatabase = BlockDatabase.getInstance();
         this.configurationManager = ConfigurationManager.getInstance();
     }
@@ -107,20 +119,18 @@ public class ExplosionManager {
         }
     }
 
-    public final boolean manageExplosion(final Map<Material, EntityMaterialConfiguration> materialConfigurations,
-            final EntityConfiguration entityConfiguration, final Location sourceLocation,
-            final double originalRawExplosionRadius) {
-        return this.manageExplosion(materialConfigurations, entityConfiguration, sourceLocation,
-                originalRawExplosionRadius, EnumSet.noneOf(ExplosionFlag.class));
-    }
+    public final boolean manageExplosion(final ExplosionContext explosionContext) {
+        final long currentTime = System.currentTimeMillis();
 
-    public final boolean manageExplosion(final Map<Material, EntityMaterialConfiguration> materialConfigurations,
-            final EntityConfiguration entityConfiguration, final Location sourceLocation,
-            final double originalRawExplosionRadius,
-            final EnumSet<ExplosionFlag> flags) {
+        final Map<Material, EntityMaterialConfiguration> materialConfigurations = explosionContext
+                .getMaterialConfigurations();
+        final EntityConfiguration entityConfiguration = explosionContext.getEntityConfiguration();
+        final Location sourceLocation = explosionContext.getSourceLocation();
+        final EnumSet<ExplosionFlag> flags = explosionContext.getFlags();
+
         double rawExplosionRadius = entityConfiguration.getExplosionRadius() != 0d
                 ? entityConfiguration.getExplosionRadius()
-                : originalRawExplosionRadius;
+                : explosionContext.getOriginalRawExplosionRadius();
 
         final boolean isSourceLocationUnderwater = BlockLiquidDetector.isLocationLiquidlike(sourceLocation)
                 || flags.contains(ExplosionFlag.FORCE_IS_SOURCE_LOCATION_UNDERWATER);
@@ -142,6 +152,8 @@ public class ExplosionManager {
         final World sourceWorld = sourceLocation.getWorld();
         final String sourceWorldName = sourceWorld.getName();
         final Location sourceBlockLocation = new Location(sourceWorld, cx, cy, cz);
+        final IWorldGuardLocationChecker worldGuardLocationChecker = this.worldGuardApi
+                .getLocationChecker(sourceBlockLocation);
 
         final EntityBehavioralConfiguration entityBehavioralConfiguration = entityConfiguration
                 .getEntityBehavioralConfiguration();
@@ -159,8 +171,6 @@ public class ExplosionManager {
         if (!materialConfigurations.isEmpty() || entityBehavioralConfiguration.doesExplosionRemoveNearbyLiquids()
                 || entityBehavioralConfiguration.doesExplosionRemoveWaterloggedStateFromNearbyBlocks()
                 || entityBehavioralConfiguration.doesExplosionRemoveNearbyWaterloggedBlocks()) {
-            final long currentTime = System.currentTimeMillis();
-
             for (int y = cy - explosionRadius; y <= cypr; y++) {
                 if (worldHoleProtection.isHeightProtected(y)) {
                     continue;
@@ -192,11 +202,13 @@ public class ExplosionManager {
                             liquidBlockConsumer.accept(block);
                         }
 
-                        if (!isBlockHandled) {
+                        final Location targetLocation = block.getLocation();
+                        if (!isBlockHandled || !worldGuardLocationChecker.canBreakAtLocation(targetLocation)
+                                || !this.factionsApi.canBreakAtLocation(targetLocation)) {
                             continue;
                         }
 
-                        this.damageBlock(materialConfiguration, block, sourceBlockLocation,
+                        this.damageBlock(explosionContext, materialConfiguration, block, sourceBlockLocation,
                                 explosionRadius, squaredExplosionRadius,
                                 squaredDistance, isSourceLocationUnderwater, dropCollector, currentTime);
                     }
@@ -209,10 +221,11 @@ public class ExplosionManager {
 
         if (entityConfiguration.doesExplosionDamageBlocksUnderwater() && isSourceLocationUnderwater) {
             if (!flags.contains(ExplosionFlag.FORCE_DISABLE_VANILLA_UNDERWATER_DAMAGE)) {
-                if (sourceLocation.getBlock().isLiquid()) {
-                    sourceLocation.getBlock().setType(Material.AIR);
+                final Block sourceLocationBlock = sourceLocation.getBlock();
+                if (sourceLocationBlock.isLiquid()) {
+                    sourceLocationBlock.setType(Material.AIR);
                 } else {
-                    this.blockDataUtils.setIsBlockWaterlogged(sourceLocation.getBlock(), false);
+                    this.blockDataUtils.setIsBlockWaterlogged(sourceLocationBlock, false);
                 }
             }
 
@@ -240,7 +253,8 @@ public class ExplosionManager {
         explosiveEntity.setYield((float) explosionRadius);
     }
 
-    private void damageBlock(final EntityMaterialConfiguration materialConfiguration, final Block targetBlock,
+    private void damageBlock(final ExplosionContext explosionContext,
+            final EntityMaterialConfiguration materialConfiguration, final Block targetBlock,
             final Location sourceBlockLocation, final int explosionRadius, final double squaredExplosionRadius,
             final double squaredDistance,
             final boolean isSourceLocationUnderwater, final DropCollector dropCollector, final long currentTime) {
@@ -266,8 +280,11 @@ public class ExplosionManager {
             materialConfiguration.getOnBreakParticleConfiguration().spawnAt(targetBlockLocation);
 
             final Material targetBlockMaterial = targetBlock.getType();
+            this.coreProtectApi.logRemoval(explosionContext.getCoreProtectEntityIdentifier(), targetBlock);
+
             targetBlock.setType(Material.AIR);
             this.blockDatabase.removeBlockStatus(targetBlock);
+
             if (materialConfiguration.shouldBeDropped()) {
                 dropCollector.collect(materialConfiguration.getDropMaterial() == null ? targetBlockMaterial
                         : materialConfiguration.getDropMaterial(), targetBlockLocation);

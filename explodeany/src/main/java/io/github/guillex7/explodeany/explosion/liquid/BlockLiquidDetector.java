@@ -12,7 +12,7 @@ public class BlockLiquidDetector {
     }
 
     public static boolean isBlockLiquidlike(final Block block) {
-        return block.isLiquid() || CompatibilityManager.getInstance().getApi().getBlockDataUtils()
+        return block.isLiquid() || CompatibilityManager.getInstance().getBukkitApi().getBlockDataUtils()
                 .isBlockWaterlogged(block);
     }
 

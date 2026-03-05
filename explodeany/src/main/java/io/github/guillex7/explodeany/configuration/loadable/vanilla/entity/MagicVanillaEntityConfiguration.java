@@ -10,13 +10,13 @@ import org.bukkit.plugin.Plugin;
 
 import com.elmakers.mine.bukkit.api.magic.MagicAPI;
 
+import io.github.guillex7.explodeany.compat.common.Environment;
 import io.github.guillex7.explodeany.compat.common.Version;
-import io.github.guillex7.explodeany.compat.manager.CompatibilityManager;
 import io.github.guillex7.explodeany.configuration.loadable.LoadableConfigurationSection;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
 
 public class MagicVanillaEntityConfiguration extends LoadableConfigurationSection<ExplodingVanillaEntity> {
-    private static final Version MINIMUM_SUPPORTED_BUKKIT_VERSION = new Version(1, 16);
+    private final Version minimumSupportedBukkitVersion = new Version(1, 16);
 
     public static String getConfigurationId() {
         return "MagicEntity";
@@ -31,8 +31,8 @@ public class MagicVanillaEntityConfiguration extends LoadableConfigurationSectio
     public boolean shouldBeLoaded() {
         final Plugin magicPlugin = Bukkit.getPluginManager().getPlugin("Magic");
         return magicPlugin != null && magicPlugin.isEnabled() && magicPlugin instanceof MagicAPI
-                && CompatibilityManager.getInstance().getApi().getMinimumSupportedBukkitVersion()
-                        .isEqualOrAfter(MagicVanillaEntityConfiguration.MINIMUM_SUPPORTED_BUKKIT_VERSION);
+                && Environment.getBukkitVersion()
+                        .isEqualOrAfter(this.minimumSupportedBukkitVersion);
     }
 
     @Override

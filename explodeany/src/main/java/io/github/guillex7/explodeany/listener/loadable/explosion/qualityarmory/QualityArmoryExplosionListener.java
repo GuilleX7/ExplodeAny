@@ -11,12 +11,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.listener.LoadableListener;
+import io.github.guillex7.explodeany.compat.common.LoadableListener;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.configuration.loadable.qualityarmor.QualityArmoryExplosiveConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.QualityArmoryExplosive;
+import io.github.guillex7.explodeany.explosion.ExplosionContext;
 import io.github.guillex7.explodeany.explosion.ExplosionFlag;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.explosion.liquid.BlockLiquidDetector;
@@ -105,8 +106,11 @@ public class QualityArmoryExplosionListener implements LoadableListener {
             flags.add(ExplosionFlag.FORCE_IS_SOURCE_LOCATION_UNDERWATER);
         }
 
-        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                location, explosive.getExplosionRadius(), flags)) {
+        final ExplosionContext explosionContext = ExplosionContext.of(materialConfigurations, entityConfiguration,
+                location, explosive.getExplosionRadius(), flags);
+        explosionContext.setCoreProtectEntityIdentifier(explosive.getCoreProtectIdentifier());
+
+        if (ExplosionManager.getInstance().manageExplosion(explosionContext)) {
             event.setCancelled(true);
         }
     }

@@ -14,6 +14,7 @@ import io.github.guillex7.explodeany.configuration.loadable.vanilla.entity.TCEVa
 import io.github.guillex7.explodeany.configuration.section.EntityConfiguration;
 import io.github.guillex7.explodeany.configuration.section.EntityMaterialConfiguration;
 import io.github.guillex7.explodeany.data.ExplodingVanillaEntity;
+import io.github.guillex7.explodeany.explosion.ExplosionContext;
 import io.github.guillex7.explodeany.explosion.ExplosionManager;
 import io.github.guillex7.explodeany.services.DebugManager;
 
@@ -59,8 +60,11 @@ public class TCEVanillaEntityExplosionHandler implements VanillaEntityExplosionH
             return;
         }
 
-        if (ExplosionManager.getInstance().manageExplosion(materialConfigurations, entityConfiguration,
-                event.getLocation(), explosionRadius)) {
+        final ExplosionContext explosionContext = ExplosionContext.of(materialConfigurations, entityConfiguration,
+                event.getLocation(), explosionRadius);
+        explosionContext.setCoreProtectEntityIdentifier(explodingEntity.getCoreProtectIdentifier());
+
+        if (ExplosionManager.getInstance().manageExplosion(explosionContext)) {
             event.setCancelled(true);
         } else {
             ExplosionManager.getInstance().removeHandledBlocksFromList(materialConfigurations, event.blockList(),

@@ -23,20 +23,24 @@
     </developers>
 
     <modules>
-        <module>compatibility/compat-common</module>
-        <module>compatibility/compat-manager</module>
-        <module>compatibility/compat-v1-8</module>
-        <module>compatibility/compat-v1-8-3</module>
-        <module>compatibility/compat-v1-9</module>
-        <module>compatibility/compat-v1-13</module>
-        <module>compatibility/compat-v1-13-paper</module>
-        <module>compatibility/compat-v1-14</module>
-        <module>compatibility/compat-v1-14-paper</module>
-        <module>compatibility/compat-v1-16-1</module>
-        <module>compatibility/compat-v1-16-1-paper</module>
-        <module>compatibility/compat-v1-19-4-paper</module>
-        <module>compatibility/compat-v1-20</module>
-        <module>compatibility/compat-v1-21-paper</module>
+        <module>compatibility/common</module>
+        <module>compatibility/manager</module>
+        <module>compatibility/bukkit/v1-8</module>
+        <module>compatibility/bukkit/v1-8-3</module>
+        <module>compatibility/bukkit/v1-9</module>
+        <module>compatibility/bukkit/v1-13</module>
+        <module>compatibility/bukkit/v1-13-paper</module>
+        <module>compatibility/bukkit/v1-14</module>
+        <module>compatibility/bukkit/v1-14-paper</module>
+        <module>compatibility/bukkit/v1-16-1</module>
+        <module>compatibility/bukkit/v1-16-1-paper</module>
+        <module>compatibility/bukkit/v1-19-4-paper</module>
+        <module>compatibility/bukkit/v1-20</module>
+        <module>compatibility/bukkit/v1-21-paper</module>
+        <module>compatibility/coreprotect/api-v7</module>
+        <module>compatibility/worldguard/api-v6</module>
+        <module>compatibility/worldguard/api-v7</module>
+        <module>compatibility/factions/api-v3</module>
         <module>explodeany</module>
     </modules>
 
@@ -53,22 +57,100 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.15.0</version>
             </plugin>
+
+            <!-- Install dev.pixelmania.throwablecreepereggs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.2</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>install-dev-pixelmania-throwablecreepereggs</id>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>dev.pixelmania</groupId>
+                            <artifactId>throwablecreepereggs</artifactId>
+                            <version>2.3.0</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/dev.pixelmania.throwablecreepereggs-2.3.0.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>install-com-massivecraft-factions-Factions</id>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>com.massivecraft.factions</groupId>
+                            <artifactId>Factions</artifactId>
+                            <version>3.4.0-alpha-1</version>
+                            <packaging>jar</packaging>
+                            <file>
+                                ${basedir}/lib/com.massivecraft.factions.Factions-3.4.0-alpha-1.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>install-com-massivecraft-massivecore-MassiveCore</id>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>com.massivecraft.massivecore</groupId>
+                            <artifactId>MassiveCore</artifactId>
+                            <version>3.4.0-alpha-1</version>
+                            <packaging>jar</packaging>
+                            <file>
+                                ${basedir}/lib/com.massivecraft.massivecore.MassiveCore-3.4.0-alpha-1.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <repositories>
+        <!-- org.spigotmc.spigot-api -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <!-- com.destroystokyo.paper.paper-api, dev.folia.folia-api -->
         <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
+        <!-- me.zombie_striker.QualityHarmory -->
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
+        <!-- net.coreprotect.coreprotect -->
+        <repository>
+            <id>playpro</id>
+            <url>https://maven.playpro.com</url>
+        </repository>
+        <!-- com.sk89q.worldguard.worldguard-bukkit -->
+        <repository>
+            <id>enginehub</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+        <!-- me.clip.placeholderapi -->
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.helpch.at/releases/</url>
+        </repository>
+        <!-- com.github.DerPavlov.Cannons -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>

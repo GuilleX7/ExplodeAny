@@ -21,7 +21,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import io.github.guillex7.explodeany.ExplodeAny;
-import io.github.guillex7.explodeany.compat.common.data.IBossBar;
+import io.github.guillex7.explodeany.compat.common.bukkit.data.IBossBar;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
 import io.github.guillex7.explodeany.data.Duration;
 import io.github.guillex7.explodeany.util.StringUtils;

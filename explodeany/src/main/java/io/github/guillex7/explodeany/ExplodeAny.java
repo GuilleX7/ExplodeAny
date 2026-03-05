@@ -52,7 +52,6 @@ public class ExplodeAny extends JavaPlugin {
                 String.format("%s v%s is loading now!", this.getDescription().getName(),
                         this.getDescription().getVersion()));
         this.loadCompatibilityLayer();
-        this.announceCompatibility();
         this.loadConfiguration();
         this.loadDatabase();
         this.registerListeners();
@@ -74,13 +73,7 @@ public class ExplodeAny extends JavaPlugin {
     }
 
     public void loadCompatibilityLayer() {
-        this.compatibilityManager.loadMaximumApiForEnvironment();
-    }
-
-    public void announceCompatibility() {
-        this.getLogger().info(String.format("Compatibility layer for %s (detected Bukkit version: v%s)",
-                this.compatibilityManager.getApi().getFullName(),
-                this.compatibilityManager.getBukkitVersion()));
+        this.compatibilityManager.load(this.getLogger());
     }
 
     public void loadConfiguration() {
@@ -108,8 +101,8 @@ public class ExplodeAny extends JavaPlugin {
         this.listenerManager.registerListener(new EanyTNTPrimeListener());
         /* Compatibility */
         this.listenerManager.registerListener(
-                this.compatibilityManager.getApi().getBukkitListenerUtils().createBlockExplodeListener());
-        this.listenerManager.registerListener(this.compatibilityManager.getApi()
+                this.compatibilityManager.getBukkitApi().getBukkitListenerUtils().createBlockExplodeListener());
+        this.listenerManager.registerListener(this.compatibilityManager.getBukkitApi()
                 .getBukkitListenerUtils().createTNTPrimeEventListener());
         /* Vanilla explosions */
         this.listenerManager.registerListener(new VanillaEntityExplosionListener());
@@ -133,6 +126,10 @@ public class ExplodeAny extends JavaPlugin {
             this.metrics = new Metrics(this, this.getMetricsPluginId());
             this.getLogger().info("Metrics have been enabled, thanks for your support!");
         }
+    }
+
+    public void unloadCompatibility() {
+        this.compatibilityManager.unload();
     }
 
     public void unloadConfiguration() {

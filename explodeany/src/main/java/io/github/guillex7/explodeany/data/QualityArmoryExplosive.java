@@ -1,15 +1,16 @@
 package io.github.guillex7.explodeany.data;
 
 public enum QualityArmoryExplosive {
-    RPG("RPG", 4.0),
-    HOMING_RPG("HomingRPG", 4.0),
-    MINI_NUKE("MiniNuke", 10.0),
-    GRENADE("Grenade", 3.0),
-    STICKY_GRENADE("StickyGrenade", 3.0),
-    PROXY_MINE("ProxyMine", 3.0);
+    RPG("RPG", 4.0, "#rpg"),
+    HOMING_RPG("HomingRPG", 4.0, "#homingrpg"),
+    MINI_NUKE("MiniNuke", 10.0, "#mininuke"),
+    GRENADE("Grenade", 3.0, "#grenade"),
+    STICKY_GRENADE("StickyGrenade", 3.0, "#stickygrenade"),
+    PROXY_MINE("ProxyMine", 3.0, "#proxymine");
 
     private final String name;
     private final double explosionRadius;
+    private final String coreProtectIdentifier;
 
     public static QualityArmoryExplosive fromName(final String name) {
         for (final QualityArmoryExplosive explosive : QualityArmoryExplosive.values()) {
@@ -21,9 +22,10 @@ public enum QualityArmoryExplosive {
         return null;
     }
 
-    QualityArmoryExplosive(final String name, final double explosionRadius) {
+    QualityArmoryExplosive(final String name, final double explosionRadius, final String coreProtectIdentifier) {
         this.name = name;
         this.explosionRadius = explosionRadius;
+        this.coreProtectIdentifier = coreProtectIdentifier;
     }
 
     public String getName() {
@@ -32,5 +34,9 @@ public enum QualityArmoryExplosive {
 
     public double getExplosionRadius() {
         return this.explosionRadius;
+    }
+
+    public String getCoreProtectIdentifier() {
+        return this.coreProtectIdentifier;
     }
 }
