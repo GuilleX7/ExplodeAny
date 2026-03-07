@@ -9,7 +9,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 import io.github.guillex7.explodeany.compat.common.LoadableListener;
 import io.github.guillex7.explodeany.configuration.ConfigurationManager;
-import io.github.guillex7.explodeany.explosion.ExplosionManager;
 
 public class VanillaEntityExplosionListener implements LoadableListener {
     private final List<VanillaEntityExplosionHandler> registeredHandlers;
@@ -36,9 +35,11 @@ public class VanillaEntityExplosionListener implements LoadableListener {
         this.registeredHandlers.add(new EanyVanillaEntityExplosionHandler());
         // entity != null && isVanilla(entity) && !isEMTagged(entity) && isMagic(entity)
         this.registeredHandlers.add(new MagicVanillaEntityExplosionHandler());
-        // entity != null && isVanilla(entity) && !isEMTagged(entity) && !isMagic(entity) && isTCETagged(entity)
+        // entity != null && isVanilla(entity) && !isEMTagged(entity) &&
+        // !isMagic(entity) && isTCETagged(entity)
         this.registeredHandlers.add(new TCEVanillaEntityExplosionHandler());
-        // entity != null && isVanilla(entity) && !isEMTagged(entity) && !isMagic(entity) && !isTCETagged(entity)
+        // entity != null && isVanilla(entity) && !isEMTagged(entity) &&
+        // !isMagic(entity) && !isTCETagged(entity)
         this.registeredHandlers.add(new RegularVanillaEntityExplosionHandler());
     }
 
@@ -72,10 +73,8 @@ public class VanillaEntityExplosionListener implements LoadableListener {
     }
 
     protected boolean isEventHandled(final EntityExplodeEvent event) {
-        return !event.isCancelled() && event.getEntity() != null
-                && !ExplosionManager.getInstance().isEntitySpawnedByExplosionManager(event.getEntity())
-                && !ConfigurationManager.getInstance().getDisabledWorlds()
-                        .contains(event.getLocation().getWorld().getName());
+        return !event.isCancelled() && !ConfigurationManager.getInstance().getDisabledWorlds()
+                .contains(event.getLocation().getWorld().getName());
     }
 
     private void unloadHandlers() {

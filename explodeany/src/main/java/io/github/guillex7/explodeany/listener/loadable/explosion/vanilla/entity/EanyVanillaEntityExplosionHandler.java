@@ -23,10 +23,6 @@ public class EanyVanillaEntityExplosionHandler implements VanillaEntityExplosion
 
     @Override
     public void onEntityExplode(final EntityExplodeEvent event) {
-        if (!this.isEventHandled(event)) {
-            return;
-        }
-
         final ExplosionMetadata explosionMetadata = ExplosionManager.getInstance()
                 .getExplosionManagerMetadataFromEntity(event.getEntity());
         ExplosionManager.getInstance().removeHandledBlocksFromList(explosionMetadata.materialConfigurations,
