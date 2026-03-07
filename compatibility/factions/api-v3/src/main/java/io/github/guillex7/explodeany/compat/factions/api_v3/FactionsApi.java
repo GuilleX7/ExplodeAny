@@ -2,8 +2,11 @@ package io.github.guillex7.explodeany.compat.factions.api_v3;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
 
+import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.massivecore.ps.PS;
 
@@ -18,7 +21,12 @@ public class FactionsApi implements IFactionsApi {
 
     @Override
     public boolean isEnvironmentSuitable(final Version bukkitVersion) {
-        return true;
+        final Plugin plugin = Bukkit.getPluginManager().getPlugin("Factions");
+        try {
+            return plugin != null && plugin.isEnabled() && plugin instanceof Factions && BoardColl.get() != null;
+        } catch (final NoClassDefFoundError e) {
+            return false;
+        }
     }
 
     @Override
