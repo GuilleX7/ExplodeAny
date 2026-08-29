@@ -1,5 +1,7 @@
 package io.github.guillex7.explodeany.configuration.section;
 
+import java.util.Locale;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -46,15 +48,19 @@ public class EntityMaterialConfiguration {
     public static EntityMaterialConfiguration fromConfigurationSection(final ConfigurationSection section) {
         final EntityMaterialConfiguration defaults = EntityMaterialConfiguration.byDefault();
 
-        Material dropMaterial;
-        String dropMaterialString = "";
-        try {
-            dropMaterialString = section.getString(EntityMaterialConfiguration.DROP_MATERIAL_PATH, "");
-            dropMaterial = Material.valueOf(dropMaterialString.toUpperCase());
-            // Hint: some materials are not valid for ItemStack
-            new ItemStack(dropMaterial, 1);
-        } catch (final Exception e) {
-            if (!"".equals(dropMaterialString)) {
+        final String configuredDropMaterial = section.getString(EntityMaterialConfiguration.DROP_MATERIAL_PATH, "");
+        final String dropMaterialString = configuredDropMaterial == null ? "" : configuredDropMaterial;
+        Material dropMaterial = Material.getMaterial(dropMaterialString.toUpperCase(Locale.ROOT));
+        if (dropMaterial != null) {
+            try {
+                // Some materials are not valid for ItemStack on older Bukkit versions.
+                new ItemStack(dropMaterial, 1);
+            } catch (final IllegalArgumentException e) {
+                dropMaterial = null;
+            }
+        }
+        if (dropMaterial == null) {
+            if (!dropMaterialString.isEmpty()) {
                 ExplodeAny.getInstance().getLogger()
                         .warning(String.format(
                                 "Invalid drop material '%s' in configuration section '%s'. Using default value.",
