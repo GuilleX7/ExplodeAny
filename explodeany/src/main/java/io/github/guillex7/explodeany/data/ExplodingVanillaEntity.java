@@ -5,6 +5,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.WitherSkull;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 public enum ExplodingVanillaEntity {
     WITHER("WITHER", 7d, "#wither"),
     ENDER_CRYSTAL("ENDER_CRYSTAL", 6d, "#ender_crystal"),
@@ -24,27 +29,32 @@ public enum ExplodingVanillaEntity {
     private final double explosionRadius;
     private final String coreProtectIdentifier;
 
+    private static final Map<String, ExplodingVanillaEntity> VALUES_BY_ENTITY_TYPE_NAME;
+
+    static {
+        final Map<String, ExplodingVanillaEntity> valuesByEntityTypeName = new HashMap<>();
+
+        for (final ExplodingVanillaEntity value : ExplodingVanillaEntity.values()) {
+            valuesByEntityTypeName.put(value.name(), value);
+        }
+
+        valuesByEntityTypeName.put("TNT", ExplodingVanillaEntity.PRIMED_TNT);
+        valuesByEntityTypeName.put("TNT_MINECART", ExplodingVanillaEntity.MINECART_TNT);
+        valuesByEntityTypeName.put("END_CRYSTAL", ExplodingVanillaEntity.ENDER_CRYSTAL);
+
+        VALUES_BY_ENTITY_TYPE_NAME = Collections.unmodifiableMap(valuesByEntityTypeName);
+    }
+
     public static boolean isEntityNameValid(final String entityName) {
         return ExplodingVanillaEntity.fromEntityTypeName(entityName) != null;
     }
 
     public static ExplodingVanillaEntity fromEntityTypeName(final String entityTypeName) {
-        final String uppercasedEntityTypeName = entityTypeName.toUpperCase();
-
-        switch (uppercasedEntityTypeName) {
-            case "TNT":
-                return ExplodingVanillaEntity.PRIMED_TNT;
-            case "TNT_MINECART":
-                return ExplodingVanillaEntity.MINECART_TNT;
-            case "END_CRYSTAL":
-                return ExplodingVanillaEntity.ENDER_CRYSTAL;
-            default:
-                try {
-                    return ExplodingVanillaEntity.valueOf(uppercasedEntityTypeName);
-                } catch (IllegalArgumentException | NullPointerException e) {
-                    return null;
-                }
+        if (entityTypeName == null) {
+            return null;
         }
+
+        return VALUES_BY_ENTITY_TYPE_NAME.get(entityTypeName.toUpperCase(Locale.ROOT));
     }
 
     public static ExplodingVanillaEntity fromEntity(final Entity entity) {
