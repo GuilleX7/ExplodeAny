@@ -53,24 +53,32 @@ public class ChecktoolConfiguration {
     public static ChecktoolConfiguration fromConfigurationSection(final ConfigurationSection section) {
         final ChecktoolConfiguration defaults = ChecktoolConfiguration.byDefault();
 
-        EanyBossBarColor bossBarColor;
+        EanyBossBarColor bossBarColor = null;
         final String bossBarColorString = section.getString(ChecktoolConfiguration.BOSS_BAR_COLOR,
                 defaults.bossBarColor.name());
-        try {
-            bossBarColor = EanyBossBarColor.valueOf(bossBarColorString);
-        } catch (final IllegalArgumentException e) {
+        for (final EanyBossBarColor color : EanyBossBarColor.values()) {
+            if (color.name().equals(bossBarColorString)) {
+                bossBarColor = color;
+                break;
+            }
+        }
+        if (bossBarColor == null) {
             ExplodeAny.getInstance().getLogger().warning(String.format(
                     "Invalid boss bar color '%s' in configuration section '%s'. Using default value '%s'.",
                     bossBarColorString, section.getCurrentPath(), defaults.bossBarColor.name()));
             bossBarColor = defaults.bossBarColor;
         }
 
-        EanyBossBarStyle bossBarStyle;
+        EanyBossBarStyle bossBarStyle = null;
         final String bossBarStyleString = section.getString(ChecktoolConfiguration.BOSS_BAR_STYLE,
                 defaults.bossBarStyle.name());
-        try {
-            bossBarStyle = EanyBossBarStyle.valueOf(bossBarStyleString);
-        } catch (final IllegalArgumentException e) {
+        for (final EanyBossBarStyle style : EanyBossBarStyle.values()) {
+            if (style.name().equals(bossBarStyleString)) {
+                bossBarStyle = style;
+                break;
+            }
+        }
+        if (bossBarStyle == null) {
             ExplodeAny.getInstance().getLogger().warning(String.format(
                     "Invalid boss bar style '%s' in configuration section '%s'. Using default value '%s'.",
                     bossBarStyleString, section.getCurrentPath(), defaults.bossBarStyle.name()));

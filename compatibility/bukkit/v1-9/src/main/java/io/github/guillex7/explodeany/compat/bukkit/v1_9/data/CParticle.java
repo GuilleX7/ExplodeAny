@@ -48,11 +48,12 @@ public class CParticle extends io.github.guillex7.explodeany.compat.bukkit.v1_8.
     }
 
     protected Particle getParticleFromParticleData(final EanyParticleData particleData) {
-        try {
-            return Particle.valueOf(particleData.getName());
-        } catch (final Exception e) {
-            return null;
+        for (final Particle particle : Particle.values()) {
+            if (particle.name().equals(particleData.getName())) {
+                return particle;
+            }
         }
+        return null;
     }
 
     protected ItemStack getItemStackFromMaterial(final Material material) {

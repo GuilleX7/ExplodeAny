@@ -7,10 +7,11 @@ import io.github.guillex7.explodeany.compat.common.bukkit.api.ISoundUtils;
 public class CSoundUtils implements ISoundUtils {
     @Override
     public Sound getSound(final String name) {
-        try {
-            return Sound.valueOf(name);
-        } catch (final Exception e) {
-            return null;
+        for (final Sound sound : Sound.values()) {
+            if (sound.name().equals(name)) {
+                return sound;
+            }
         }
+        return null;
     }
 }
